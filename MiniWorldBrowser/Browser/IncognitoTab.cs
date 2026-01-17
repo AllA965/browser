@@ -24,6 +24,7 @@ public class IncognitoTab : IDisposable
     public string Url { get; private set; } = "about:blank";
     public bool IsLoading { get; private set; }
     public bool IsSecure { get; private set; }
+    public bool IsTranslated { get; set; }
     public string? FaviconUrl { get; private set; }
     public DateTime LastActiveTime { get; set; } = DateTime.Now;
     
@@ -40,6 +41,7 @@ public class IncognitoTab : IDisposable
     public event Action<IncognitoTab, string>? StatusTextChanged;
     public event Action<IncognitoTab, CoreWebView2DownloadStartingEventArgs>? DownloadStarting;
     public event Action<IncognitoTab, double>? ZoomChanged;
+    public event Action<IncognitoTab>? TranslationRequested; // 翻译请求事件
     
     private readonly Panel _container;
     private readonly ISettingsService _settingsService;
@@ -251,6 +253,7 @@ public class IncognitoTab : IDisposable
     {
         try
         {
+            IsTranslated = false;
             IsLoading = true;
             LoadingStateChanged?.Invoke(this);
         }
@@ -362,6 +365,42 @@ public class IncognitoTab : IDisposable
                         "", null, CoreWebView2ContextMenuItemKind.Separator);
                     menuItems.Insert(1, separator);
                 }
+            }
+
+            // 3. 处理翻译菜单 (Edge 风格)
+            var translateItem = WebView.CoreWebView2.Environment.CreateContextMenuItem(
+                "翻译为中文",
+                null, 
+                CoreWebView2ContextMenuItemKind.Command);
+
+            translateItem.CustomItemSelected += (s, args) =>
+            {
+                TranslationRequested?.Invoke(this);
+            };
+
+            // 寻找“全选”后的位置插入翻译选项
+            int insertIndex = menuItems.Count;
+            for (int i = 0; i < menuItems.Count; i++)
+            {
+                if (menuItems[i].Name == "selectAll")
+                {
+                    insertIndex = i + 1;
+                    break;
+                }
+            }
+            
+            var transSeparator = WebView.CoreWebView2.Environment.CreateContextMenuItem(
+                string.Empty, null, CoreWebView2ContextMenuItemKind.Separator);
+            
+            if (insertIndex < menuItems.Count)
+            {
+                menuItems.Insert(insertIndex, transSeparator);
+                menuItems.Insert(insertIndex + 1, translateItem);
+            }
+            else
+            {
+                menuItems.Add(transSeparator);
+                menuItems.Add(translateItem);
             }
         }
         catch { }

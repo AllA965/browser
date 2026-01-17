@@ -39,6 +39,7 @@ public class BrowserTabManager
     public event Action<BrowserTab>? TabSecurityStateChanged;
     public event Action<BrowserTab, string>? TabStatusTextChanged;
     public event Action<BrowserTab, double>? TabZoomChanged;
+    public event Action<BrowserTab>? TabTranslationRequested;
     public event Action<string>? NewWindowRequested;
     public event Action<string, object>? SettingChanged;
     public event Action<MiniWorldBrowser.Models.DownloadItem>? DownloadStarted;
@@ -404,6 +405,7 @@ public class BrowserTabManager
         tab.SecurityStateChanged += t => OnTabSecurityStateChanged(t);
         tab.StatusTextChanged += (t, text) => OnTabStatusTextChanged(t, text);
         tab.ZoomChanged += (t, zoom) => OnTabZoomChanged(t, zoom);
+        tab.TranslationRequested += t => TabTranslationRequested?.Invoke(t);
         tab.DownloadStarting += OnDownloadStarting;
         tab.PasswordDetected += (t, host, username, password) => ShowSavePasswordPrompt(t, host, username, password);
         
@@ -511,6 +513,7 @@ public class BrowserTabManager
             tab.SecurityStateChanged += t => OnTabSecurityStateChanged(t);
             tab.StatusTextChanged += (t, text) => OnTabStatusTextChanged(t, text);
             tab.ZoomChanged += (t, zoom) => OnTabZoomChanged(t, zoom);
+            tab.TranslationRequested += t => TabTranslationRequested?.Invoke(t);
             tab.DownloadStarting += OnDownloadStarting;
             tab.PasswordDetected += (t, host, username, password) => ShowSavePasswordPrompt(t, host, username, password);
             
@@ -1442,6 +1445,7 @@ public class BrowserTabManager
     
     private static string GenerateFontSettingsScript(Models.BrowserSettings settings)
     {
+        // 强制使用 Chrome 风格字体栈作为后备
         return $@"
             (function() {{
                 var style = document.getElementById('miniworld-font-settings');
@@ -1452,13 +1456,15 @@ public class BrowserTabManager
                 }}
                 style.textContent = `
                     html, body {{
-                        font-family: '{settings.StandardFont}', '{settings.SerifFont}', '{settings.SansSerifFont}', sans-serif !important;
+                        font-family: '{settings.StandardFont}', 'Segoe UI', 'Microsoft YaHei', sans-serif !important;
+                        -webkit-font-smoothing: antialiased !important;
+                        text-rendering: optimizeLegibility !important;
                     }}
                     body {{
                         font-size: {settings.StandardFontSize}px !important;
                     }}
                     code, pre, kbd, samp, tt {{
-                        font-family: '{settings.FixedWidthFont}', monospace !important;
+                        font-family: '{settings.FixedWidthFont}', 'Consolas', 'Monaco', monospace !important;
                     }}
                 `;
             }})();";

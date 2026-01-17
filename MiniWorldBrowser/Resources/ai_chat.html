@@ -8,200 +8,481 @@
     <link href="css/github.min.css" rel="stylesheet">
     <script src="js/highlight.min.js"></script>
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+        }
+
         body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            font-family: "Segoe UI", "Microsoft YaHei", "Segoe UI Emoji", "Segoe UI Symbol", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             height: 100vh;
-            background: radial-gradient(circle at top, #fdfdfd 0, #f5f7fb 40%, #f3f4f6 100%);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
+
+        /* 统一输入框和按钮字体 */
+        input, textarea, button, select {
+            font-family: inherit;
+            letter-spacing: -0.01em;
+            word-spacing: normal;
+        }
+
+        /* Header Styles */
         #header {
-            padding: 12px 14px 8px 14px;
-            border-bottom: 1px solid rgba(0,0,0,0.04);
-            background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(246,248,252,0.98));
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+
         #mode-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            color: #2563eb;
-            background: rgba(37,99,235,0.06);
-            border: 1px solid rgba(37,99,235,0.12);
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
+
         #mode-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 999px;
-            background: radial-gradient(circle at 30% 30%, #60a5fa, #2563eb);
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
         }
+
+        #mode-select {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            background-color: white;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        #mode-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Chat Container */
         #chat-container {
             flex: 1;
             overflow-y: auto;
-            padding: 12px 14px 14px 14px;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 1.5rem;
+            scroll-behavior: smooth;
         }
+
+        /* Message Bubbles */
         .message {
             max-width: 85%;
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 14px;
-            line-height: 1.5;
-            word-wrap: break-word;
+            padding: 1rem 1.25rem;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .user-message {
             align-self: flex-end;
-            background-color: #0078d4;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
             color: white;
-            border-bottom-right-radius: 2px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
+
         .ai-message {
             align-self: flex-start;
-            background-color: #ffffff;
-            color: #333;
-            border-bottom-left-radius: 2px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid #eee;
+            background-color: white;
+            color: var(--text-primary);
+            border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 0;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
         }
+
         .system-message {
             align-self: center;
-            background-color: rgba(0,0,0,0.05);
-            color: #64748b;
-            font-size: 12px;
-            padding: 6px 12px;
-            border-radius: 999px;
-            box-shadow: none;
-            border: none;
-            margin: 8px 0;
+            background-color: rgba(0, 0, 0, 0.04);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            margin: 0.5rem 0;
         }
-        #input-container {
-            padding: 10px 12px 12px 12px;
-            background: linear-gradient(to top, rgba(15,23,42,0.04), rgba(255,255,255,0.98));
-            border-top: 1px solid rgba(148,163,184,0.35);
+
+        /* Input Container Styles */
+        #input-outer-container {
+            padding: 1rem;
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        #input-wrapper {
+            background-color: white;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 0.6rem 1rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
-            gap: 10px;
+            flex-direction: column;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
         }
-        #user-input {
-            flex: 1;
-            padding: 10px 11px;
-            border: 1px solid rgba(148,163,184,0.7);
-            border-radius: 10px;
-            outline: none;
-            font-size: 14px;
-            resize: none;
-            height: 40px;
-            max-height: 120px;
+
+        #input-wrapper:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1), var(--shadow-md);
         }
-        #user-input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 1px rgba(37,99,235,0.06);
+
+        #file-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed var(--border-color);
+            display: none;
         }
-        #send-btn {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+
+        .file-preview-item {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+        }
+
+        .file-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .file-preview-item .file-icon {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .file-preview-item .remove-btn {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 18px;
+            height: 18px;
+            background: rgba(0,0,0,0.5);
             color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 0 16px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 4px;
-            box-shadow: 0 10px 18px rgba(37,99,235,0.35);
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            z-index: 1;
         }
-        #send-btn:disabled {
-            background: #cbd5f5;
-            cursor: not-allowed;
-            box-shadow: none;
+
+        .file-preview-item .remove-btn:hover {
+            background: rgba(239, 68, 68, 0.8);
         }
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(0,0,0,.1);
+
+        #user-input {
+            width: 100%;
+            border: none;
+            resize: none;
+            outline: none;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            max-height: 200px;
+            padding: 2px 0;
+            margin: 0;
+            background: transparent;
+            letter-spacing: -0.015em;
+        }
+
+        #user-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .input-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.1rem;
+        }
+
+        .controls-left {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .controls-right {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            border-top-color: #0078d4;
-            animation: spin 1s ease-in-out infinite;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+
+        .icon-btn:hover {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
         }
+
+        #send-btn, #stop-btn {
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        #send-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        #send-btn:hover {
+            background-color: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        #send-btn:disabled {
+            background-color: #e2e8f0;
+            color: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #stop-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .footer-disclaimer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        #input-wrapper.drag-over {
+            border-color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.02);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+        }
+
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(30, 41, 59, 0.9);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Markdown & Code Blocks */
         pre {
-            background-color: #f4f4f4;
-            padding: 10px;
-            border-radius: 4px;
-            overflow-x: auto;
-            font-family: Consolas, monospace;
-            font-size: 13px;
+            background-color: #f1f5f9 !important;
+            padding: 1rem !important;
+            border-radius: 0.5rem;
+            margin: 0.75rem 0;
+            border: 1px solid var(--border-color);
         }
+        
         code {
-            font-family: Consolas, monospace;
-            background-color: #f4f4f4;
-            padding: 2px 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85em;
+        }
+
+        p { margin: 0.5rem 0; }
+        p:first-child { margin-top: 0; }
+        p:last-child { margin-bottom: 0; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
             border-radius: 3px;
         }
-        /* Markdown 表格样式 */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 10px 0;
-            font-size: 14px;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
-        th, td {
-            border: 1px solid #e1e4e8;
-            padding: 6px 13px;
+
+        /* Loading Animation */
+        .loading-dots {
+            display: flex;
+            gap: 4px;
         }
-        th {
-            background-color: #f6f8fa;
-            font-weight: 600;
+        .loading-dots div {
+            width: 6px;
+            height: 6px;
+            background-color: var(--text-secondary);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
         }
-        tr:nth-child(2n) {
-            background-color: #f8f8f8;
+        .loading-dots div:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots div:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
         }
-        blockquote {
-            margin: 0;
-            padding-left: 1em;
-            border-left: 4px solid #ddd;
-            color: #666;
+
+        /* Status Bar */
+        #status-bar {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
     </style>
 </head>
 <body>
     <div id="header">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div id="mode-badge">
-                <span id="mode-dot"></span>
-                <span id="mode-text">AI 扩展增强模式 · 已就绪</span>
-            </div>
-            <select id="mode-select" style="font-size: 12px; padding: 4px; border-radius: 4px; border: 1px solid #ccc; background: white;">
-                <option value="tool">工具模式 (慢速/可操作)</option>
-                <option value="chat">对话模式 (极速/纯文本)</option>
-            </select>
+        <div id="mode-badge">
+            <span id="mode-dot"></span>
+            <span id="mode-text">AI 助手就绪</span>
+        </div>
+        <select id="mode-select">
+            <option value="tool">工具模式</option>
+            <option value="chat">对话模式</option>
+        </select>
+    </div>
+    
+    <div id="chat-container">
+        <div class="message ai-message">
+            你好！我是你的智能浏览器助手。我可以帮你总结网页、回答问题，或者执行浏览器操作。
         </div>
     </div>
-    <div id="chat-container"></div>
-    <div id="status-bar" style="display:none; padding: 8px 14px; background: rgba(255,255,255,0.8); backdrop-filter: blur(5px); border-top: 1px solid rgba(0,0,0,0.05); font-size: 12px; color: #64748b; align-items: center; gap: 8px;">
-        <div class="loading" style="width: 12px; height: 12px; border-width: 2px;"></div>
-        <span id="status-text">正在执行操作...</span>
+
+    <div id="status-bar" style="display:none;">
+        <div class="loading-dots" style="transform: scale(0.6);">
+            <div></div><div></div><div></div>
+        </div>
+        <span id="status-text">正在处理...</span>
     </div>
-    <div id="input-container">
-        <textarea id="user-input" placeholder="输入消息..." rows="1"></textarea>
-        <button id="send-btn"><span>发送</span></button>
-        <button id="stop-btn" style="display:none; background: #ef4444; color: white; border: none; border-radius: 10px; padding: 0 16px; cursor: pointer; font-weight: bold; font-size: 14px; align-items: center; gap: 4px; box-shadow: 0 10px 18px rgba(239,68,68,0.35);">
-            <span>停止</span>
-        </button>
+
+    <div id="input-outer-container">
+        <div id="input-wrapper">
+            <div id="file-preview-container"></div>
+            <textarea id="user-input" placeholder="给 鲲穹 AI 发送消息" rows="1"></textarea>
+            
+            <div class="input-controls">
+                <div class="controls-left">
+                    <input type="file" id="file-input" multiple style="display: none;" onchange="handleFileSelect(this)">
+                    <button class="icon-btn" title="上传附件" onclick="document.getElementById('file-input').click()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.51a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    </button>
+                </div>
+                
+                <div class="controls-right">
+                    <button id="send-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                    </button>
+                    
+                    <button id="stop-btn" style="display:none;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div id="toast"></div>
 
     <script>
         const chatContainer = document.getElementById('chat-container');
+        const inputWrapper = document.getElementById('input-wrapper');
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
         const stopBtn = document.getElementById('stop-btn');
@@ -209,6 +490,275 @@
         const statusBar = document.getElementById('status-bar');
         const statusText = document.getElementById('status-text');
         const modeSelect = document.getElementById('mode-select');
+        const filePreviewContainer = document.getElementById('file-preview-container');
+        const fileInput = document.getElementById('file-input');
+        const toast = document.getElementById('toast');
+
+        let selectedFiles = [];
+
+        // 支持的文件类型
+        const SUPPORTED_TYPES = {
+            'image/': '图片',
+            'application/pdf': 'PDF',
+            'application/msword': 'Word',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word',
+            'application/vnd.ms-excel': 'Excel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Excel',
+            'application/vnd.ms-powerpoint': 'PPT',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'PPT',
+            'text/plain': '文本',
+            'text/markdown': 'Markdown',
+            'application/zip': '压缩包',
+            'application/x-zip-compressed': '压缩包',
+            'application/x-rar-compressed': '压缩包'
+        };
+
+        function showToast(message, duration = 3000) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        function validateFile(file) {
+            const isSupported = Object.keys(SUPPORTED_TYPES).some(type => {
+                if (type.endsWith('/')) {
+                    return file.type.startsWith(type);
+                }
+                return file.type === type;
+            });
+
+            // 补充通过扩展名判断（针对某些系统识别不准的情况）
+            const ext = file.name.split('.').pop().toLowerCase();
+            const supportedExts = ['txt', 'md', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'zip', 'rar', '7z', 'jpg', 'jpeg', 'png', 'gif', 'webp'];
+            
+            if (!isSupported && !supportedExts.includes(ext)) {
+                return false;
+            }
+            return true;
+        }
+
+        function handleFiles(files) {
+            let hasUnsupported = false;
+            Array.from(files).forEach(file => {
+                if (validateFile(file)) {
+                    if (!selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                        selectedFiles.push(file);
+                        addFilePreview(file);
+                    }
+                } else {
+                    hasUnsupported = true;
+                }
+            });
+
+            if (hasUnsupported) {
+                showToast('存在不支持的文件类型，已跳过');
+            }
+            updateFilePreviewVisibility();
+        }
+
+        function handleFileSelect(input) {
+            handleFiles(input.files);
+            input.value = ''; 
+        }
+
+        // 拖拽上传逻辑
+        inputWrapper.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            inputWrapper.classList.add('drag-over');
+        });
+
+        inputWrapper.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            inputWrapper.classList.remove('drag-over');
+        });
+
+        inputWrapper.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            inputWrapper.classList.remove('drag-over');
+            
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        });
+
+        function addFilePreview(file) {
+            const item = document.createElement('div');
+            item.className = 'file-preview-item';
+            
+            const removeBtn = document.createElement('div');
+            removeBtn.className = 'remove-btn';
+            removeBtn.innerHTML = '×';
+            removeBtn.onclick = () => removeFile(file, item);
+            item.appendChild(removeBtn);
+
+            if (file.type.startsWith('image/')) {
+                const img = document.createElement('img');
+                const reader = new FileReader();
+                reader.onload = (e) => img.src = e.target.result;
+                reader.readAsDataURL(file);
+                item.appendChild(img);
+            } else {
+                const icon = document.createElement('div');
+                icon.className = 'file-icon';
+                icon.innerHTML = getFileIcon(file.name);
+                item.appendChild(icon);
+            }
+
+            filePreviewContainer.appendChild(item);
+        }
+
+        function getFileIcon(fileName) {
+            const ext = fileName.split('.').pop().toLowerCase();
+            const icons = {
+                pdf: '📄',
+                doc: '📝',
+                docx: '📝',
+                xls: '📊',
+                xlsx: '📊',
+                txt: '📄',
+                zip: '📦',
+                rar: '📦'
+            };
+            return icons[ext] || '📎';
+        }
+
+        function removeFile(file, element) {
+            selectedFiles = selectedFiles.filter(f => f !== file);
+            element.remove();
+            updateFilePreviewVisibility();
+        }
+
+        function updateFilePreviewVisibility() {
+            filePreviewContainer.style.display = selectedFiles.length > 0 ? 'flex' : 'none';
+        }
+
+        // Auto-resize textarea
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            if (this.value === '') this.style.height = '24px';
+        });
+
+        async function sendMessage(overrideText = null, silent = false) {
+            const text = overrideText || userInput.value.trim();
+            if (!text && selectedFiles.length === 0) return;
+
+            if (!overrideText) {
+                userInput.value = '';
+                userInput.style.height = '24px';
+            }
+            
+            showStatus(null);
+            
+            if (!silent) {
+                addMessage(text, 'user');
+            } else {
+                addMessage("正在分析页面内容...", 'system');
+            }
+
+            // 处理文件数据
+            const fileData = await Promise.all(selectedFiles.map(async file => {
+                try {
+                    return {
+                        name: file.name,
+                        type: file.type,
+                        data: await fileToBase64(file)
+                    };
+                } catch (e) {
+                    console.error('File conversion failed:', e);
+                    return null;
+                }
+            })).then(files => files.filter(f => f !== null));
+
+            // 清空已选文件和预览
+            selectedFiles = [];
+            filePreviewContainer.innerHTML = '';
+            updateFilePreviewVisibility();
+
+            // Loading placeholder
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message ai-message loading-placeholder';
+            loadingDiv.innerHTML = '<div class="loading-dots"><div></div><div></div><div></div></div>';
+            chatContainer.appendChild(loadingDiv);
+            scrollToBottom();
+            
+            sendBtn.style.display = 'none';
+            stopBtn.style.display = 'flex';
+            sendBtn.disabled = true;
+
+            let isStreaming = false;
+
+            try {
+                if (window.chrome && window.chrome.webview && window.chrome.webview.hostObjects && window.chrome.webview.hostObjects.bridge) {
+                    const bridge = window.chrome.webview.hostObjects.bridge;
+                    const mode = modeSelect.value;
+                    
+                    // 使用 SendMessage 以支持文件上传
+                    const response = await bridge.SendMessage(text, JSON.stringify(fileData), mode);
+                    
+                    if (response === '__STREAMING__') {
+                        isStreaming = true;
+                        return; 
+                    }
+
+                    if (loadingDiv.parentNode) chatContainer.removeChild(loadingDiv);
+                    
+                    if (response && response.startsWith('__STATUS__:')) {
+                        const statusMsg = response.replace('__STATUS__:', '');
+                        showStatus(statusMsg);
+                    } else {
+                        showStatus(null);
+                        addMessage(response, 'ai');
+                    }
+                } else {
+                    if (loadingDiv.parentNode) chatContainer.removeChild(loadingDiv);
+                    // 模拟回复 (用于开发调试)
+                    setTimeout(() => {
+                        addMessage("开发模式：未连接到宿主程序。", 'ai');
+                        sendBtn.style.display = 'flex';
+                        stopBtn.style.display = 'none';
+                        sendBtn.disabled = false;
+                    }, 1000);
+                }
+            } catch (error) {
+                if (loadingDiv.parentNode) chatContainer.removeChild(loadingDiv);
+                addMessage("错误: " + error.message, 'ai');
+            } finally {
+                if (!isStreaming) {
+                     sendBtn.style.display = 'flex';
+                     stopBtn.style.display = 'none';
+                     sendBtn.disabled = false;
+                }
+            }
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        stopBtn.addEventListener('click', () => {
+            if (window.chrome && window.chrome.webview && window.chrome.webview.hostObjects && window.chrome.webview.hostObjects.bridge) {
+                window.chrome.webview.hostObjects.bridge.StopGeneration();
+            }
+        });
 
         // 监听流式消息
         let currentAiMessageDiv = null;
@@ -223,7 +773,7 @@
                     // 开始新消息
                     currentFullText = "";
                     currentAiMessageDiv = addMessage("", 'ai');
-                    // 移除 loading 占位符（如果存在）
+                    // 移除 loading 占位符
                     const loadings = document.getElementsByClassName('loading-placeholder');
                     while(loadings.length > 0){
                         loadings[0].parentNode.removeChild(loadings[0]);
@@ -236,13 +786,19 @@
                         if (typeof marked !== 'undefined') {
                             try {
                                 currentAiMessageDiv.innerHTML = marked.parse(currentFullText);
+                                // Highlight code blocks
+                                if (typeof hljs !== 'undefined') {
+                                    currentAiMessageDiv.querySelectorAll('pre code').forEach((block) => {
+                                        hljs.highlightElement(block);
+                                    });
+                                }
                             } catch {
                                 currentAiMessageDiv.innerText = currentFullText;
                             }
                         } else {
                             currentAiMessageDiv.innerText = currentFullText;
                         }
-                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                        scrollToBottom();
                     }
                 } else if (data.type === 'done') {
                     currentAiMessageDiv = null;
@@ -251,6 +807,13 @@
                     stopBtn.style.display = 'none';
                     sendBtn.disabled = false;
                 }
+            });
+        }
+
+        function scrollToBottom() {
+            chatContainer.scrollTo({
+                top: chatContainer.scrollHeight,
+                behavior: 'smooth'
             });
         }
 
@@ -265,7 +828,6 @@
             if (text) {
                 statusText.innerText = text;
                 statusBar.style.display = 'flex';
-                // 如果设置了时长，则自动隐藏
                 if (duration > 0) {
                     statusTimeout = setTimeout(() => {
                         statusBar.style.display = 'none';
@@ -283,7 +845,7 @@
                     const bridge = window.chrome.webview.hostObjects.bridge;
                     const modelName = await bridge.GetModelName();
                     if (modelName) {
-                        modeText.innerText = `自定义 API 模式 · 已连接 ${modelName}`;
+                        modeText.innerText = `已连接 ${modelName}`;
                     }
                 }
             } catch (error) {
@@ -295,19 +857,10 @@
         window.addEventListener('DOMContentLoaded', function() {
             window.updateModelName();
 
-            // 配置 marked 和 highlight.js (安全包装)
+            // 配置 marked
             if (typeof marked !== 'undefined') {
                 try {
                     marked.setOptions({
-                        highlight: function(code, lang) {
-                            if (typeof hljs !== 'undefined' && lang && hljs.getLanguage(lang)) {
-                                return hljs.highlight(code, { language: lang }).value;
-                            }
-                            if (typeof hljs !== 'undefined') {
-                                return hljs.highlightAuto(code).value;
-                            }
-                            return code;
-                        },
                         breaks: true
                     });
                 } catch (e) {
@@ -321,100 +874,22 @@
             div.className = `message ${role}-message`;
             
             if (role === 'ai') {
-                // 尝试使用 marked 渲染 AI 回复，如果失败则回退到纯文本
-                if (typeof marked !== 'undefined') {
+                if (typeof marked !== 'undefined' && text) {
                     try {
                         div.innerHTML = marked.parse(text);
                     } catch (e) {
-                        console.warn('Markdown parsing failed:', e);
                         div.innerText = text;
                     }
                 } else {
                     div.innerText = text;
                 }
             } else {
-                // 用户消息保持纯文本，防止 XSS，但保留换行
                 div.innerText = text;
             }
             
             chatContainer.appendChild(div);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            scrollToBottom();
             return div;
-        }
-
-        async function sendMessage(overrideText = null, silent = false) {
-            const text = overrideText || userInput.value.trim();
-            if (!text) return;
-
-            if (!overrideText) {
-                userInput.value = '';
-                userInput.style.height = '40px';
-            }
-            
-            // 清除之前的状态显示
-            showStatus(null);
-            
-            if (!silent) {
-                addMessage(text, 'user');
-            } else {
-                addMessage("正在总结当前网页内容...", 'system');
-            }
-
-            // 创建一个临时 loading 消息
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message ai-message loading-placeholder';
-            loadingDiv.innerHTML = '<div class="loading"></div>';
-            chatContainer.appendChild(loadingDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-            
-            sendBtn.style.display = 'none';
-            stopBtn.style.display = 'flex';
-
-            let isStreaming = false;
-
-            try {
-                // 调用 C# 注入的对象
-                if (window.chrome && window.chrome.webview && window.chrome.webview.hostObjects && window.chrome.webview.hostObjects.bridge) {
-                    const bridge = window.chrome.webview.hostObjects.bridge;
-                    const mode = modeSelect.value;
-                    
-                    // 注意：这里是同步等待完整响应。如果需要流式，需要 C# 端支持事件推送。
-                    const response = await bridge.CallAiApi(text, mode);
-                    
-                    if (response === '__STREAMING__') {
-                        isStreaming = true;
-                        // 流式模式，loadingDiv 会在 'start' 事件中被移除
-                        // 按钮状态会在 'done' 事件中恢复
-                        return; 
-                    }
-
-                    // 移除 loading
-                    if (loadingDiv.parentNode) chatContainer.removeChild(loadingDiv);
-                    
-                    if (response && response.startsWith('__STATUS__:')) {
-                        const statusMsg = response.replace('__STATUS__:', '');
-                        showStatus(statusMsg);
-                        // 状态消息不显示在对话框中
-                    } else {
-                        // 只有非状态消息才清除状态栏并显示对话
-                        showStatus(null);
-                        addMessage(response, 'ai');
-                    }
-                } else {
-                    if (loadingDiv.parentNode) chatContainer.removeChild(loadingDiv);
-                    addMessage("错误：未找到 API 桥接器。请检查设置。", 'ai');
-                }
-            } catch (error) {
-                if (loadingDiv.parentNode) chatContainer.removeChild(loadingDiv);
-                addMessage("错误: " + error.message, 'ai');
-            } finally {
-                if (!isStreaming) {
-                     sendBtn.style.display = 'flex';
-                     stopBtn.style.display = 'none';
-                     sendBtn.disabled = false;
-                     chatContainer.scrollTop = chatContainer.scrollHeight;
-                }
-            }
         }
 
         sendBtn.onclick = () => sendMessage();
@@ -425,7 +900,6 @@
                     const bridge = window.chrome.webview.hostObjects.bridge;
                     await bridge.CancelGeneration();
                     showStatus("正在停止...", 0);
-                    // 按钮状态会在 sendMessage 的 finally 块中恢复
                 }
             } catch (error) {
                 console.error("Failed to cancel:", error);
@@ -437,11 +911,6 @@
                 e.preventDefault();
                 sendMessage();
             }
-        };
-
-        userInput.oninput = () => {
-            userInput.style.height = 'auto';
-            userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
         };
 
         window.setAiPrompt = (prompt, silent = false) => {

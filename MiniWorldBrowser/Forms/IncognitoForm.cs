@@ -56,8 +56,9 @@ public partial class IncognitoForm : Form
     private Button _minimizeBtn = null!, _maximizeBtn = null!, _closeBtn = null!;
     private Panel _toolbar = null!;
     private NavigationButton _backBtn = null!, _forwardBtn = null!, _refreshBtn = null!, _stopBtn = null!, _homeBtn = null!;  // 使用 NavigationButton
-    private TextBox _addressBar = null!;
+    private Controls.ChromeAddressBar _addressBar = null!;
     private SecurityIcon _securityIcon = null!;
+    private Button _translateBtn = null!;  // 翻译按钮
     private AnimatedBookmarkButton _bookmarkBtn = null!;  // 使用 AnimatedBookmarkButton
     private Button _zoomBtn = null!;  // 放大镜图标按钮
     private DownloadButton _downloadBtn = null!;  // 使用 DownloadButton
@@ -364,14 +365,32 @@ public partial class IncognitoForm : Form
         };
         _securityIcon.SecurityInfoRequested += OnSecurityInfoRequested;
         
-        _addressBar = new TextBox
+        _addressBar = new Controls.ChromeAddressBar
         {
             Height = 22,
             Font = new Font("Segoe UI", 9.5F, FontStyle.Regular),
             BorderStyle = BorderStyle.None,
             BackColor = DarkAddressBar,
+            ForeColor = DarkText,
+            IsDarkMode = true // 隐身模式强制开启暗色模式
+        };
+
+        _translateBtn = new Button
+        {
+            Size = new Size(32, 28),
+            FlatStyle = FlatStyle.Flat,
+            BackColor = Color.Transparent,
+            Text = "🌐",
+            Font = new Font("Segoe UI Emoji", 12F),
+            Cursor = Cursors.Hand,
+            Visible = false,
+            Margin = new Padding(2, 0, 2, 0),
             ForeColor = DarkText
         };
+        _translateBtn.FlatAppearance.BorderSize = 0;
+        _translateBtn.FlatAppearance.MouseOverBackColor = DarkHover;
+        _translateBtn.Click += OnTranslateButtonClick;
+        new ToolTip().SetToolTip(_translateBtn, "翻译此页面");
         
         // 使用 AnimatedBookmarkButton - 与 MainForm 相同
         _bookmarkBtn = new AnimatedBookmarkButton
@@ -478,9 +497,10 @@ public partial class IncognitoForm : Form
         
         _securityIcon.Dock = DockStyle.Left;
         _bookmarkBtn.Dock = DockStyle.Right;
+        _translateBtn.Dock = DockStyle.Right;
         _addressBar.Dock = DockStyle.Fill;
         
-        addressPanel.Controls.AddRange(new Control[] { _addressBar, _bookmarkBtn, _securityIcon });
+        addressPanel.Controls.AddRange(new Control[] { _addressBar, _bookmarkBtn, _translateBtn, _securityIcon });
         addressContainer.Controls.Add(addressPanel);
         
         toolPanel.Controls.AddRange(new Control[] { addressContainer, navPanel, menuPanel });
@@ -568,6 +588,7 @@ public partial class IncognitoForm : Form
             return tabs;
         };
         _addressDropdown.RequestFocusRestore += () => BeginInvoke(() => _addressBar.Focus());
+        _addressDropdown.DropdownHidden += () => _addressBar.IsDropdownOpen = false;
     }
     
     private void InitializeManagers()
@@ -591,6 +612,18 @@ public partial class IncognitoForm : Form
         _tabManager.PasswordKeyButtonRequested += OnPasswordKeyButtonRequested;
         _tabManager.BookmarkAllTabsRequested += OnBookmarkAllTabsRequested;
         _tabManager.SettingChanged += OnSettingChanged;
+        
+        // 处理翻译请求
+        _tabManager.TabTranslationRequested += tab => {
+            if (tab == _tabManager.ActiveTab)
+            {
+                // 隐身模式下右键翻译默认使用百度翻译（暂无 AI 侧边栏）
+                string translateUrl = $"https://fanyi.baidu.com/transpage?query={Uri.EscapeDataString(tab.Url)}&from=auto&to=zh&source=url&render=1";
+                tab.IsTranslated = true;
+                _translateBtn.Visible = true;
+                tab.Navigate(translateUrl);
+            }
+        };
         
         _mouseGesture = new MouseGesture(this);
         _mouseGesture.Enabled = _settingsService.Settings.EnableMouseGesture;
@@ -824,6 +857,7 @@ public partial class IncognitoForm : Form
         _addressBar.Text = tab.Url ?? "";
         Text = $"🕵️ {tab.Title ?? "新标签页"} - InPrivate";
         UpdateSecurityIcon(tab.IsSecure);
+        _translateBtn.Visible = tab.IsTranslated; // 更新翻译按钮可见性
         UpdateNavigationButtons();
         _refreshBtn.Visible = !tab.IsLoading;
         _stopBtn.Visible = tab.IsLoading;
@@ -849,9 +883,10 @@ public partial class IncognitoForm : Form
     {
         if (tab != _tabManager.ActiveTab) return;
         _progressBar.Visible = tab.IsLoading;
-        _statusLabel.Text = tab.IsLoading ? "加载中..." : "InPrivate - 您的浏览活动不会保存到此设备";
+        _statusLabel.Text = tab.IsLoading ? "加载中..." : (string.IsNullOrEmpty(tab.WebView.CoreWebView2?.StatusBarText) ? "InPrivate - 您的浏览活动不会保存到此设备" : tab.WebView.CoreWebView2.StatusBarText);
         _refreshBtn.Visible = !tab.IsLoading;
         _stopBtn.Visible = tab.IsLoading;
+        _translateBtn.Visible = tab.IsTranslated; // 导航状态变化时更新翻译按钮
         UpdateNavigationButtons();
     }
     
@@ -907,11 +942,11 @@ public partial class IncognitoForm : Form
     private void ShowAddressDropdown()
     {
         var text = _addressBar.Text.Trim();
-        var addressPanel = _addressBar.Parent;
-        if (addressPanel != null)
+        if (_addressBar != null)
         {
+            _addressBar.IsDropdownOpen = true;
             _addressDropdown.SearchEngine = _settingsService.Settings.SearchEngine;
-            _addressDropdown.Show(addressPanel, text, _urlHistory);
+            _addressDropdown.Show(_addressBar, text, _urlHistory);
         }
     }
     
@@ -1727,6 +1762,40 @@ public partial class IncognitoForm : Form
     
     #region 登录相关
     
+    private void OnTranslateButtonClick(object? sender, EventArgs e)
+    {
+        if (_tabManager.ActiveTab == null) return;
+        
+        var currentUrl = _tabManager.ActiveTab.Url;
+        if (string.IsNullOrEmpty(currentUrl) || currentUrl.StartsWith("about:") || currentUrl.StartsWith("data:"))
+        {
+            MessageBox.Show("当前页面不支持翻译。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
+        // 创建翻译选项菜单
+        var menu = new ContextMenuStrip();
+        
+        var baiduItem = new ToolStripMenuItem("百度网页翻译", null, (s, ev) => {
+             string translateUrl = $"https://fanyi.baidu.com/transpage?query={Uri.EscapeDataString(currentUrl)}&from=auto&to=zh&source=url&render=1";
+             _tabManager.ActiveTab.IsTranslated = true;
+             _translateBtn.Visible = true;
+             _tabManager.ActiveTab.Navigate(translateUrl);
+         });
+ 
+         var bingItem = new ToolStripMenuItem("微软必应翻译", null, (s, ev) => {
+             string translateUrl = $"https://www.bing.com/translator/?to=zh-Hans&url={Uri.EscapeDataString(currentUrl)}";
+             _tabManager.ActiveTab.IsTranslated = true;
+             _translateBtn.Visible = true;
+             _tabManager.ActiveTab.Navigate(translateUrl);
+         });
+
+        menu.Items.Add(baiduItem);
+        menu.Items.Add(bingItem);
+
+        menu.Show(_translateBtn, new Point(0, _translateBtn.Height));
+    }
+
     private void RefreshLoginStatus()
     {
         if (InvokeRequired)

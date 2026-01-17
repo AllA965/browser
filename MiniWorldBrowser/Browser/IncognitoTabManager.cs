@@ -52,6 +52,7 @@ public class IncognitoTabManager : IDisposable
     public event Action? BookmarkAllTabsRequested;
     public event Action<string, string, string>? PasswordKeyButtonRequested; // host, username, password
     public event Action<string, object>? SettingChanged;
+    public event Action<IncognitoTab>? TabTranslationRequested; // 翻译请求事件
     
     private readonly List<MiniWorldBrowser.Models.DownloadItem> _downloads = new();
     private readonly Stack<string> _closedTabUrls = new();
@@ -390,6 +391,7 @@ public class IncognitoTabManager : IDisposable
         tab.SecurityStateChanged += t => OnTabSecurityStateChanged(t);
         tab.StatusTextChanged += (t, text) => OnTabStatusTextChanged(t, text);
         tab.ZoomChanged += (t, zoom) => OnTabZoomChanged(t, zoom);
+        tab.TranslationRequested += t => TabTranslationRequested?.Invoke(t);
         tab.DownloadStarting += OnDownloadStarting;
         
         if (_adBlockService?.Enabled == true)
@@ -512,6 +514,7 @@ public class IncognitoTabManager : IDisposable
             tab.SecurityStateChanged += t => OnTabSecurityStateChanged(t);
             tab.StatusTextChanged += (t, text) => OnTabStatusTextChanged(t, text);
             tab.ZoomChanged += (t, zoom) => OnTabZoomChanged(t, zoom);
+            tab.TranslationRequested += t => TabTranslationRequested?.Invoke(t);
             tab.DownloadStarting += OnDownloadStarting;
             
             _tabs.Add(tab);

@@ -110,20 +110,69 @@ public class AddressBarDropdown : Form
             return;
         }
         
-        // 计算位置和大小
-        var screenPos = anchor.PointToScreen(new Point(0, anchor.Height));
-        Location = screenPos;
-        Width = anchor.Width;
+        // 计算位置和大小 - 仿 Chrome MD3 悬浮风格
+        // 获取 anchor 在屏幕上的位置
+        var anchorScreenPos = anchor.PointToScreen(Point.Empty);
         
-        int suggestionHeight = Math.Min(_suggestions.Count * 40, 320);
+        // 宽度跟随着地址栏，但如果是全屏模式或者特别宽，可能需要限制最大宽度？
+        // Chrome 的逻辑是：下拉框宽度 = 地址栏宽度。
+        // 但是为了“悬浮感”，我们确保它不超出屏幕边界，并且可能有微小的内缩（可选）
+        int targetWidth = anchor.Width;
+        
+        // 计算 X 坐标
+        int x = anchorScreenPos.X;
+        
+        // 边界检查：防止超出屏幕右侧
+        var screen = Screen.FromControl(anchor);
+        if (x + targetWidth > screen.WorkingArea.Right)
+        {
+            targetWidth = screen.WorkingArea.Right - x - 4;
+        }
+        if (x < screen.WorkingArea.Left)
+        {
+            x = screen.WorkingArea.Left + 4;
+            targetWidth -= 4;
+        }
+
+        // Y 坐标：地址栏下方，不留间距以实现一体化效果
+        int y = anchorScreenPos.Y + anchor.Height; 
+
+        Location = new Point(x, y);
+        Width = targetWidth;
+        
+        int suggestionHeight = Math.Min(_suggestions.Count * 40, 480); // 增加最大高度限制
         Height = suggestionHeight + _actionPanel.Height + 8;
         
         _selectedIndex = -1;
-        _suggestionPanel.Invalidate();
+        
+        // 确保窗口区域圆角正确
+        UpdateRegion();
         
         // 显示下拉框
-        base.Show();
+        if (!Visible)
+        {
+            base.Show();
+        }
         _suggestionPanel.Invalidate();
+    }
+
+    private void UpdateRegion()
+    {
+        if (Width > 0 && Height > 0)
+        {
+            // 一体化风格：顶部直角，底部圆角 (12px)
+            using var path = new GraphicsPath();
+            int radius = 12;
+            int d = radius * 2;
+            Rectangle rect = new Rectangle(0, 0, Width, Height);
+
+            path.AddLine(0, 0, Width, 0); // 顶部直线
+            path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90); // 右下角
+            path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90); // 左下角
+            path.CloseFigure();
+            
+            Region = new Region(path);
+        }
     }
     
     private void UpdateSuggestions(string text, List<string> urlHistory)
@@ -456,9 +505,18 @@ public class AddressBarDropdown : Form
     {
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
         
-        // 绘制圆角边框
+        // 绘制圆角边框 (顶部不画边框，因为与地址栏相连)
         var rect = new Rectangle(0, 0, Width - 1, Height - 1);
-        using var path = CreateRoundedRect(rect, 8);
+        int radius = 12;
+        int d = radius * 2;
+        
+        using var path = new GraphicsPath();
+        path.AddLine(0, 0, 0, rect.Bottom - radius); // 左侧线
+        path.AddArc(rect.X, rect.Bottom - d, d, d, 180, -90); // 左下角
+        path.AddLine(rect.X + radius, rect.Bottom, rect.Right - radius, rect.Bottom); // 底部线
+        path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 90, -90); // 右下角
+        path.AddLine(rect.Right, rect.Bottom - radius, rect.Right, 0); // 右侧线
+        
         using var pen = new Pen(_borderColor);
         e.Graphics.DrawPath(pen, path);
     }
@@ -467,56 +525,67 @@ public class AddressBarDropdown : Form
     {
         base.OnResize(e);
         // 设置圆角窗口区域
-        if (Width > 0 && Height > 0)
-        {
-            using var path = CreateRoundedRect(new Rectangle(0, 0, Width, Height), 8);
-            Region = new Region(path);
-        }
+        UpdateRegion();
     }
     
     public new void Hide()
     {
         _isInteracting = false;  // 隐藏时重置交互标志
         _selectedIndex = -1;     // 重置选中索引
+        
+        // 通知地址栏关闭状态
+        if (Parent is Form parentForm)
+        {
+            // 通过反射或寻找 MainForm 中的地址栏来设置状态
+            // 这种方式比较 hack，更好的方式是事件
+        }
+        
+        DropdownHidden?.Invoke();
         base.Hide();
     }
+    
+    public event Action? DropdownHidden;
     
     private void OnSuggestionPanelPaint(object? sender, PaintEventArgs e)
     {
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
         e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
         
-        int y = 4;
-        int itemHeight = 40;
+        int y = 8; // Top padding inside the panel
+        int itemHeight = 36; // Chrome standard height for suggestion items
         
         for (int i = 0; i < _suggestions.Count; i++)
         {
             var item = _suggestions[i];
-            var itemRect = new Rectangle(4, y, _suggestionPanel.Width - 8, itemHeight);
+            // Chrome style: rounded rectangle selection, with side padding
+            var itemRect = new Rectangle(10, y, _suggestionPanel.Width - 20, itemHeight);
             
             // 背景
             if (i == _selectedIndex)
             {
                 using var brush = new SolidBrush(_selectedColor);
-                using var path = CreateRoundedRect(itemRect, 4);
+                using var path = CreateRoundedRect(itemRect, 18); // 18px radius for full rounding effect
                 e.Graphics.FillPath(brush, path);
             }
             
             // 图标
-            var iconRect = new Rectangle(itemRect.X + 12, itemRect.Y + 8, 24, 24);
+            var iconRect = new Rectangle(itemRect.X + 14, itemRect.Y + (itemHeight - 20) / 2, 20, 20);
             using (var iconBrush = new SolidBrush(_iconColor))
             {
-                var iconFont = new Font("Segoe UI Emoji", 12F);
-                e.Graphics.DrawString(item.Icon, iconFont, iconBrush, iconRect.X, iconRect.Y);
+                // Use Segoe UI Emoji or Symbol for better icon rendering
+                var iconFont = new Font("Segoe UI Emoji", 11F);
+                // Center icon
+                var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+                e.Graphics.DrawString(item.Icon, iconFont, iconBrush, iconRect, format);
             }
             
             // 文本
-            var textRect = new Rectangle(iconRect.Right + 8, itemRect.Y + 4, itemRect.Width - 80, itemHeight - 8);
+            var textRect = new Rectangle(iconRect.Right + 12, itemRect.Y, itemRect.Width - 80, itemHeight);
             var displayText = item.DisplayText ?? item.Text;
             
             using (var textBrush = new SolidBrush(_textColor))
             {
-                var textFont = new Font("Microsoft YaHei UI", 9.5F);
+                var textFont = new Font("Segoe UI", 10F); // Chrome font
                 var format = new StringFormat
                 {
                     LineAlignment = StringAlignment.Center,
@@ -529,10 +598,12 @@ public class AddressBarDropdown : Form
             // 删除按钮（仅历史记录显示）
             if (item.Type == SuggestionType.History && i == _selectedIndex)
             {
-                var deleteRect = new Rectangle(itemRect.Right - 32, itemRect.Y + 10, 20, 20);
+                var deleteRect = new Rectangle(itemRect.Right - 32, itemRect.Y + (itemHeight - 20) / 2, 20, 20);
+                // Draw 'X'
                 using var deleteBrush = new SolidBrush(_secondaryTextColor);
-                var deleteFont = new Font("Segoe UI", 10F);
-                e.Graphics.DrawString("✕", deleteFont, deleteBrush, deleteRect.X, deleteRect.Y);
+                using var deleteFont = new Font("Segoe UI", 9F);
+                 var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+                e.Graphics.DrawString("✕", deleteFont, deleteBrush, deleteRect, format);
             }
             
             y += itemHeight;

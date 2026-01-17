@@ -44,6 +44,7 @@ namespace MiniWorldBrowser.Helpers
 2. **禁止 Markdown**：输出 JSON 时，不要使用 ```json 或 ``` 包裹，直接输出纯 JSON 字符串。
 3. **任务结束**：当任务完成或只是闲聊时，请直接用自然语言回答用户，不要包含 Thought/Action 格式。
     4. **知识/规划类任务**：对于“旅游攻略”、“解释概念”等可以通过内部知识或简单搜索回答的问题，**优先直接回答**或使用 `search` 指令，**严禁**执行复杂的“导航->输入->点击”流程，除非用户明确要求。
+5. **特殊模式标识**：如果用户输入包含 `[深度思考模式]`，请进行更深层次的逻辑推导和详细分析；如果包含 `[联网搜索模式]`，请优先使用 `search` 指令获取最新信息。
 
     支持的操作指令格式：
 1. 搜索: { ""command"": ""search"", ""content"": ""关键词"" }
@@ -136,6 +137,75 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
             {
                 Debug.WriteLine($"取消任务失败: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// 由 JavaScript 调用，发送消息（包含可选的文件数据）
+        /// </summary>
+        public async Task<string> SendMessage(string message, string fileJson = "[]", string mode = "chat")
+        {
+            try
+            {
+                var settings = _settingsService.Settings;
+
+                // 如果有文件，在消息中加入文件描述
+                if (!string.IsNullOrEmpty(fileJson) && fileJson != "[]")
+                {
+                    try
+                    {
+                        var files = JsonSerializer.Deserialize<List<FileData>>(fileJson);
+                        if (files != null && files.Count > 0)
+                        {
+                            var fileDesc = new StringBuilder("\n\n[用户上传了以下文件]:\n");
+                            foreach (var file in files)
+                            {
+                                fileDesc.AppendLine($"- 文件名: {file.Name} (类型: {file.Type})");
+                                
+                                // 如果是文本文件，尝试读取内容并附加
+                                if (file.Type.StartsWith("text/") || file.Name.EndsWith(".txt") || file.Name.EndsWith(".md") || file.Name.EndsWith(".json") || file.Name.EndsWith(".js") || file.Name.EndsWith(".py") || file.Name.EndsWith(".cs"))
+                                {
+                                    try
+                                    {
+                                        if (!string.IsNullOrEmpty(file.Data))
+                                        {
+                                            string content = Encoding.UTF8.GetString(Convert.FromBase64String(file.Data));
+                                            fileDesc.AppendLine($"  内容摘要:\n```\n{content}\n```");
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        fileDesc.AppendLine($"  (无法读取内容: {ex.Message})");
+                                    }
+                                }
+                                else if (file.Type.StartsWith("image/"))
+                                {
+                                    fileDesc.AppendLine($"  (图片文件，已上传至上下文)");
+                                    // 注意：这里可以根据 API 是否支持多模态来进一步处理，
+                                    // 目前先简单告知 AI 已有图片。
+                                }
+                            }
+                            message += fileDesc.ToString();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"解析上传文件 JSON 失败: {ex.Message}");
+                    }
+                }
+
+                return await CallAiApi(message, mode);
+            }
+            catch (Exception ex)
+            {
+                return $"发送失败: {ex.Message}";
+            }
+        }
+
+        public class FileData
+        {
+            public string Name { get; set; } = "";
+            public string Type { get; set; } = "";
+            public string Data { get; set; } = ""; // Base64
         }
 
         /// <summary>

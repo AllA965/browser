@@ -16,26 +16,16 @@ public partial class MainForm
     {
         switch (e.KeyCode)
         {
-            case Keys.Enter:
+            case Keys.Escape:
                 if (_addressDropdown.Visible)
                 {
-                    var selected = _addressDropdown.GetSelectedText();
-                    if (selected != null)
-                    {
-                        _addressBar.Text = selected;
-                    }
                     _addressDropdown.Hide();
+                    e.SuppressKeyPress = true;
                 }
-                NavigateToAddress();
-                e.SuppressKeyPress = true;
-                break;
-                
-            case Keys.Escape:
-                if (_addressDropdown.Visible) 
-                    _addressDropdown.Hide();
-                else 
-                    _addressBar.Text = _tabManager.ActiveTab?.Url ?? "";
-                e.SuppressKeyPress = true;
+                else
+                {
+                    _tabManager.ActiveTab?.Stop();
+                }
                 break;
                 
             case Keys.Down:
@@ -46,6 +36,7 @@ public partial class MainForm
                     if (selected != null)
                     {
                         _addressBar.Text = selected;
+                        // ChromeAddressBar now has SelectionStart property
                         _addressBar.SelectionStart = _addressBar.Text.Length;
                     }
                     e.SuppressKeyPress = true;
@@ -105,12 +96,11 @@ public partial class MainForm
     {
         var text = _addressBar.Text.Trim();
         
-        // 获取地址栏的父容器（带圆角边框的Panel）
-        var addressPanel = _addressBar.Parent;
-        if (addressPanel != null)
+        if (_addressBar != null)
         {
+            _addressBar.IsDropdownOpen = true;
             _addressDropdown.SearchEngine = _settingsService.Settings.SearchEngine;
-            _addressDropdown.Show(addressPanel, text, _urlHistory);
+            _addressDropdown.Show(_addressBar, text, _urlHistory);
         }
     }
     

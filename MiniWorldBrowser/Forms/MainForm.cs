@@ -43,11 +43,13 @@ public partial class MainForm : Form
     private Button _minimizeBtn = null!, _maximizeBtn = null!, _closeBtn = null!;
     private Panel _toolbar = null!;
     private NavigationButton _backBtn = null!, _forwardBtn = null!, _refreshBtn = null!, _stopBtn = null!, _homeBtn = null!;
-    private TextBox _addressBar = null!;
+    private Controls.ChromeAddressBar _addressBar = null!; // 使用新的自定义控件
     private SecurityIcon _securityIcon = null!;
+
     private AnimatedBookmarkButton _bookmarkBtn = null!;
     private Button _passwordKeyBtn = null!; // 钥匙图标按钮
     private Button _zoomBtn = null!; // 放大镜图标按钮
+    private Button _translateBtn = null!; // 翻译按钮
     private DownloadButton _downloadBtn = null!;
     private RoundedButton _settingsBtn = null!;
     private UserButton _userBtn = null!;
@@ -89,6 +91,7 @@ public partial class MainForm : Form
     private System.Windows.Forms.Timer? _linkAnimationTimer;
     private int _linkAnimOffset = 0;
     private const int MaxLinkAnimOffset = 4;
+    private bool _isAddressBarHovered = false; // 已废弃，由 ChromeAddressBar 自行处理
     
     #endregion
     
@@ -270,7 +273,7 @@ public partial class MainForm : Form
         {
             Dock = DockStyle.Top,
             Height = 36,
-            BackColor = Color.FromArgb(230, 230, 230)
+            BackColor = Color.FromArgb(223, 225, 229) // Chrome style gray
         };
         _tabBar.MouseDown += OnTitleBarMouseDown;
 
@@ -386,77 +389,18 @@ public partial class MainForm : Form
         _toolbar = new Panel
         {
             Dock = DockStyle.Top,
-            Height = 40,
-            BackColor = Color.FromArgb(250, 250, 250),
-            Padding = new Padding(4, 0, 4, 0)
+            Height = 44,
+            BackColor = Color.White,
+            Padding = new Padding(4, 4, 4, 4)
         };
         
         _backBtn = CreateNavigationButton(NavigationButtonType.Back, "后退 (Alt+Left)");
         _forwardBtn = CreateNavigationButton(NavigationButtonType.Forward, "前进 (Alt+Right)");
         _refreshBtn = CreateNavigationButton(NavigationButtonType.Refresh, "刷新 (F5)");
         _stopBtn = CreateNavigationButton(NavigationButtonType.Stop, "停止 (Esc)");
-        _stopBtn.Visible = false;
-        
         _homeBtn = CreateNavigationButton(NavigationButtonType.Home, "主页 (Alt+Home)");
-        _homeBtn.Visible = _settingsService.Settings.ShowHomeButton;
         
-        _securityIcon = new SecurityIcon
-        {
-            Size = new Size(22, 22),
-            BackColor = Color.White
-        };
-        _securityIcon.SecurityInfoRequested += OnSecurityInfoRequested;
-        
-        _addressBar = new TextBox
-        {
-            Height = 22,
-            Font = new Font("Segoe UI", 9.5F, FontStyle.Regular),
-            BorderStyle = BorderStyle.None,
-            BackColor = Color.White,
-            ForeColor = Color.FromArgb(60, 60, 60)
-        };
-        _addressBar.Resize += (s, e) => _addressBar.Invalidate(); // 尺寸改变时强制重绘，消除波浪纹残影
-        
-        _bookmarkBtn = new AnimatedBookmarkButton
-        {
-            Size = new Size(28, 28),
-            BackColor = Color.Transparent
-        };
-        new ToolTip().SetToolTip(_bookmarkBtn, "添加到收藏夹 (Ctrl+D)");
-        
-        // 钥匙图标按钮（用于密码保存提示，放在下载按钮左边）
-        _passwordKeyBtn = new Button
-        {
-            Size = new Size(32, 32),
-            FlatStyle = FlatStyle.Flat,
-            BackColor = Color.Transparent,
-            Text = "🔑",
-            Font = new Font("Segoe UI Emoji", 12F),
-            Cursor = Cursors.Hand,
-            Visible = false,
-            Margin = new Padding(2)
-        };
-        _passwordKeyBtn.FlatAppearance.BorderSize = 0;
-        _passwordKeyBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 220, 220);
-        _passwordKeyBtn.Click += OnPasswordKeyButtonClick;
-        new ToolTip().SetToolTip(_passwordKeyBtn, "保存密码");
-        
-        // 放大镜图标按钮（缩放不是100%时显示）
-        _zoomBtn = new Button
-        {
-            Size = new Size(32, 32),
-            FlatStyle = FlatStyle.Flat,
-            BackColor = Color.Transparent,
-            Text = "🔍",
-            Font = new Font("Segoe UI Emoji", 11F),
-            Cursor = Cursors.Hand,
-            Visible = false,
-            Margin = new Padding(2)
-        };
-        _zoomBtn.FlatAppearance.BorderSize = 0;
-        _zoomBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 220, 220);
-        _zoomBtn.Click += (s, e) => ShowZoomPopup();
-        new ToolTip().SetToolTip(_zoomBtn, "缩放");
+        _stopBtn.Visible = false;
         
         _downloadBtn = new DownloadButton
         {
@@ -470,33 +414,27 @@ public partial class MainForm : Form
         new ToolTip().SetToolTip(_userBtn, "用户/登录");
         _userBtn.Click += OnUserButtonClick;
         
-        // 增加鼠标进入和离开时的重绘触发，确保 Hover 效果实时更新
         _userBtn.MouseEnter += (s, e) => _userBtn.Invalidate();
         _userBtn.MouseLeave += (s, e) => _userBtn.Invalidate();
 
         _settingsBtn = CreateToolButton("☰", "菜单");
         
         _aiBtn = CreateToolButton(string.Empty, "鲲穹 AI 助手");
+        _aiBtn.UseGrayscale = true;
         try
         {
-            string iconPath = @"c:\Users\admin\Desktop\ff\鲲穹AI浏览器源码\鲲穹01.ico";
-            if (!File.Exists(iconPath))
-            {
-                iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "鲲穹01.ico");
-            }
+            string iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "鲲穹01.ico");
             if (File.Exists(iconPath))
             {
                 using var icon = new Icon(iconPath, 16, 16);
                 _aiBtn.IconImage = icon.ToBitmap();
             }
         }
-        catch
-        {
-        }
+        catch { }
         _aiBtn.Click += (s, e) => ToggleAISidePanel();
-        
+
         // 布局
-        var toolPanel = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(250, 250, 250) };
+        var toolPanel = new Panel { Dock = DockStyle.Fill, BackColor = Color.White };
         
         var navPanel = new FlowLayoutPanel
         {
@@ -523,47 +461,112 @@ public partial class MainForm : Form
             AutoSize = true,
             Padding = new Padding(0, 4, 4, 4)
         };
-        menuPanel.Controls.Add(_passwordKeyBtn); // 钥匙图标
-        menuPanel.Controls.Add(_zoomBtn); // 放大镜图标在下载按钮左边
+        // 注意：这里不再重复添加 _passwordKeyBtn 和 _zoomBtn 到 menuPanel，因为它们被移动到了地址栏内部
         menuPanel.Controls.Add(_aiBtn); // AI 助手按钮
         menuPanel.Controls.Add(_userBtn);
         menuPanel.Controls.Add(_downloadBtn);
         menuPanel.Controls.Add(_settingsBtn);
         
-        var addressContainer = new Panel
+        // 3. Address Bar Container (The "Omnibox")
+        _addressBar = new Controls.ChromeAddressBar
         {
             Dock = DockStyle.Fill,
-            Padding = new Padding(8, 6, 8, 6),
-            BackColor = Color.FromArgb(250, 250, 250)
+            TabIndex = 0
         };
-        
-        var addressPanel = new Panel
+
+        // Inner controls inside the address bar (Icons)
+        _securityIcon = new SecurityIcon { Size = new Size(28, 20), BackColor = Color.Transparent, Padding = new Padding(4,0,0,0), Cursor = Cursors.Hand };
+        _securityIcon.SecurityInfoRequested += OnSecurityInfoRequested;
+        UpdateSecurityIcon(false);
+
+        _translateBtn = new Button
         {
-            Dock = DockStyle.Fill,
-            BackColor = Color.White,
-            Padding = new Padding(6, 5, 4, 3)
+            Size = new Size(32, 28),
+            FlatStyle = FlatStyle.Flat,
+            BackColor = Color.Transparent,
+            Text = "🌐",
+            Font = new Font("Segoe UI Emoji", 12F),
+            Cursor = Cursors.Hand,
+            Visible = false,
+            Margin = new Padding(2, 0, 2, 0)
         };
-        // 开启双缓冲优化，减少重绘闪烁
-        typeof(Control).GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(addressPanel, true);
-        addressPanel.Resize += (s, e) => addressPanel.Invalidate(); // 解决拉伸残影
-        addressPanel.Paint += (s, e) =>
+        _translateBtn.FlatAppearance.BorderSize = 0;
+        _translateBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 220, 220);
+        _translateBtn.Click += OnTranslateButtonClick;
+        new ToolTip().SetToolTip(_translateBtn, "翻译此页面");
+        
+        _bookmarkBtn = new AnimatedBookmarkButton { Size = new Size(28, 24), BackColor = Color.Transparent, Margin = new Padding(2,0,2,0) };
+        
+        _zoomBtn = new Button
         {
-            var rect = new Rectangle(0, 0, addressPanel.Width - 1, addressPanel.Height - 1);
-            using var path = ControlExtensions.CreateRoundedRectangle(rect, 4);
-            using var pen = new Pen(Color.FromArgb(200, 200, 200), 1);
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            e.Graphics.DrawPath(pen, path);
+            Size = new Size(32, 28),
+            FlatStyle = FlatStyle.Flat,
+            BackColor = Color.Transparent,
+            Text = "🔍",
+            Font = new Font("Segoe UI Emoji", 10F),
+            Cursor = Cursors.Hand,
+            Visible = false,
+            Margin = new Padding(2, 0, 2, 0)
         };
+        _zoomBtn.FlatAppearance.BorderSize = 0;
+        _zoomBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 220, 220);
+        _zoomBtn.Click += (s, e) => ShowZoomPopup();
+        new ToolTip().SetToolTip(_zoomBtn, "缩放");
+
+        _passwordKeyBtn = new Button
+        {
+            Size = new Size(32, 28),
+            FlatStyle = FlatStyle.Flat,
+            BackColor = Color.Transparent,
+            Text = "🔑",
+            Font = new Font("Segoe UI Emoji", 10F),
+            Cursor = Cursors.Hand,
+            Visible = false,
+            Margin = new Padding(2, 0, 2, 0)
+        };
+        _passwordKeyBtn.FlatAppearance.BorderSize = 0;
+        _passwordKeyBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 220, 220);
+        _passwordKeyBtn.Click += OnPasswordKeyButtonClick;
+        new ToolTip().SetToolTip(_passwordKeyBtn, "管理密码");
+
+        // Add icons to the custom address bar's internal container mechanism
+        var rightIconPanel = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Right,
+            AutoSize = true,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            BackColor = Color.Transparent,
+            Padding = new Padding(0, 4, 0, 0) // Center vertically
+        };
+        rightIconPanel.Controls.Add(_passwordKeyBtn);
+        rightIconPanel.Controls.Add(_zoomBtn);
+        rightIconPanel.Controls.Add(_translateBtn);
+        rightIconPanel.Controls.Add(_bookmarkBtn);
+
+        _addressBar.Controls.Add(rightIconPanel);
+        _addressBar.Controls.Add(_securityIcon);
+        _securityIcon.Dock = DockStyle.Left; // Security icon on the left
         
-        _securityIcon.Dock = DockStyle.Left;
-        _bookmarkBtn.Dock = DockStyle.Right;
-        _addressBar.Dock = DockStyle.Fill;
+        // Event wiring
+        _addressBar.EnterKeyPressed += (s, e) => NavigateToAddress();
+        _addressBar.Click += (s, e) => _addressBar.SelectAll();
         
-        addressPanel.Controls.AddRange(new Control[] { _addressBar, _bookmarkBtn, _securityIcon });
-        addressContainer.Controls.Add(addressPanel);
+        // Layout the main toolbar
+        _toolbar.Controls.Add(_addressBar); // Fill
+        _toolbar.Controls.Add(navPanel);    // Left
+        _toolbar.Controls.Add(menuPanel);   // Right
         
-        toolPanel.Controls.AddRange(new Control[] { addressContainer, navPanel, menuPanel });
-        _toolbar.Controls.Add(toolPanel);
+        // Fix Z-order for Docking
+        menuPanel.SendToBack();
+        navPanel.SendToBack();
+        _addressBar.BringToFront();
+    }
+    
+    // Adaptor for the event handler
+    private void OnAddressBarKeyDown(object? sender, EventArgs e)
+    {
+        NavigateToAddress();
     }
     
     private void CreateBookmarkBar()
@@ -680,25 +683,13 @@ public partial class MainForm : Form
         try
         {
             // 使用用户指定的图标路径
-            string iconPath = @"c:\Users\admin\Desktop\ff\鲲穹AI浏览器源码\鲲穹01.ico";
+            string iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "鲲穹01.ico");
 
             if (File.Exists(iconPath))
             {
                 using (Icon icon = new Icon(iconPath))
                 {
                     _iconPictureBox.Image = icon.ToBitmap();
-                }
-            }
-            else
-            {
-                // 如果绝对路径不存在，尝试从资源目录加载
-                string resourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "鲲穹01.ico");
-                if (File.Exists(resourcePath))
-                {
-                    using (Icon icon = new Icon(resourcePath))
-                    {
-                        _iconPictureBox.Image = icon.ToBitmap();
-                    }
                 }
             }
         }
@@ -778,6 +769,12 @@ public partial class MainForm : Form
             return tabs;
         };
         
+        // 当下拉框隐藏时，重置地址栏状态
+        _addressDropdown.DropdownHidden += () =>
+        {
+            _addressBar.IsDropdownOpen = false;
+        };
+
         // 当下拉框按钮被点击后，恢复地址栏焦点
         _addressDropdown.RequestFocusRestore += () =>
         {
@@ -820,7 +817,7 @@ public partial class MainForm : Form
         _aiSidePanel = new Panel
         {
             Dock = DockStyle.Right,
-            Width = 350,
+            Width = 380,
             BackColor = Color.FromArgb(250, 250, 250),
             Visible = false,
             BorderStyle = BorderStyle.None
@@ -843,16 +840,24 @@ public partial class MainForm : Form
         var topPanel = new Panel
         {
             Dock = DockStyle.Top,
-            Height = 40,
-            BackColor = Color.FromArgb(245, 245, 245),
-            Padding = new Padding(10, 0, 10, 0)
+            Height = 45,
+            BackColor = Color.FromArgb(250, 251, 252),
+            Padding = new Padding(12, 0, 8, 0)
+        };
+
+        // 添加底部边框线
+        topPanel.Paint += (s, e) => {
+            using (var pen = new Pen(Color.FromArgb(230, 233, 237), 1))
+            {
+                e.Graphics.DrawLine(pen, 0, topPanel.Height - 1, topPanel.Width, topPanel.Height - 1);
+            }
         };
 
         var titleLabel = new Label
         {
             Text = "鲲穹 AI 助手",
             Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold),
-            ForeColor = Color.FromArgb(60, 60, 60),
+            ForeColor = Color.FromArgb(45, 55, 72),
             Dock = DockStyle.Left,
             TextAlign = ContentAlignment.MiddleLeft,
             AutoSize = true
@@ -862,30 +867,126 @@ public partial class MainForm : Form
         {
             Text = "📝 总结此页",
             Font = new Font("Microsoft YaHei UI", 9F),
-            Size = new Size(80, 30),
+            Size = new Size(90, 32),
             FlatStyle = FlatStyle.Flat,
             Dock = DockStyle.Right,
             Cursor = Cursors.Hand,
-            Margin = new Padding(0, 5, 5, 5),
-            AutoSize = true
+            Margin = new Padding(0, 6, 4, 6),
+            BackColor = Color.Transparent,
+            ForeColor = Color.FromArgb(74, 85, 104)
         };
         summarizeBtn.FlatAppearance.BorderSize = 0;
-        summarizeBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 220, 220);
+        summarizeBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(237, 242, 247);
+        summarizeBtn.FlatAppearance.MouseDownBackColor = Color.FromArgb(226, 232, 240);
+        summarizeBtn.MouseEnter += (s, e) => summarizeBtn.ForeColor = Color.FromArgb(37, 99, 235);
+        summarizeBtn.MouseLeave += (s, e) => summarizeBtn.ForeColor = Color.FromArgb(74, 85, 104);
         summarizeBtn.Click += (s, e) => SummarizeCurrentPage();
 
         var closeBtn = new Button
         {
-            Text = "✕",
-            Font = new Font("Segoe UI", 9F),
-            Size = new Size(30, 30),
+            Text = "", // 不直接使用文本，改用 Paint 绘制
+            Size = new Size(32, 32),
             FlatStyle = FlatStyle.Flat,
             Dock = DockStyle.Right,
             Cursor = Cursors.Hand,
-            Margin = new Padding(0, 5, 0, 5)
+            Margin = new Padding(4, 6, 4, 6),
+            BackColor = Color.Transparent
         };
         closeBtn.FlatAppearance.BorderSize = 0;
-        closeBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(232, 17, 35);
-        closeBtn.FlatAppearance.MouseDownBackColor = Color.FromArgb(200, 15, 30);
+        closeBtn.FlatAppearance.MouseOverBackColor = Color.Transparent; // 禁用自带的悬停背景
+        closeBtn.FlatAppearance.MouseDownBackColor = Color.Transparent;
+
+        float rotationAngle = 0;
+        float targetRotation = 0;
+        int backgroundAlpha = 0;
+        int targetAlpha = 0;
+        var animTimer = new System.Windows.Forms.Timer { Interval = 15 };
+
+        closeBtn.Paint += (s, e) => {
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            
+            // 确保绘制的是正圆：取宽高的最小值作为直径
+            int size = Math.Min(closeBtn.Width, closeBtn.Height) - 12;
+            int x = (closeBtn.Width - size) / 2;
+            int y = (closeBtn.Height - size) / 2;
+            Rectangle circleRect = new Rectangle(x, y, size, size);
+
+            // 绘制圆形背景
+            if (backgroundAlpha > 0)
+            {
+                // 使用更高级的渐变红或纯色
+                using (var brush = new SolidBrush(Color.FromArgb(backgroundAlpha, 239, 68, 68))) // Tailwind Red 500
+                {
+                    e.Graphics.FillEllipse(brush, circleRect);
+                }
+            }
+
+            // 绘制 X 图标
+            e.Graphics.TranslateTransform(closeBtn.Width / 2f, closeBtn.Height / 2f);
+            e.Graphics.RotateTransform(rotationAngle);
+            
+            // 图标缩放动画效果：悬停时稍微放大
+            float scale = 1.0f + (backgroundAlpha / 255f) * 0.2f;
+            e.Graphics.ScaleTransform(scale, scale);
+            
+            Color iconColor = backgroundAlpha > 150 ? Color.White : Color.FromArgb(100, 116, 139); // Slate 500
+            using (var pen = new Pen(iconColor, 2f))
+            {
+                pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+                pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+                float iconSize = 4.5f;
+                e.Graphics.DrawLine(pen, -iconSize, -iconSize, iconSize, iconSize);
+                e.Graphics.DrawLine(pen, iconSize, -iconSize, -iconSize, iconSize);
+            }
+            e.Graphics.ResetTransform();
+        };
+
+        animTimer.Tick += (s, e) => {
+            bool changed = false;
+            
+            // 角度动画
+            if (Math.Abs(rotationAngle - targetRotation) > 0.1f)
+            {
+                rotationAngle += (targetRotation - rotationAngle) * 0.3f;
+                changed = true;
+            }
+
+            // 背景透明度动画
+            if (backgroundAlpha != targetAlpha)
+            {
+                int step = 25;
+                if (backgroundAlpha < targetAlpha) backgroundAlpha = Math.Min(targetAlpha, backgroundAlpha + step);
+                else backgroundAlpha = Math.Max(targetAlpha, backgroundAlpha - step);
+                changed = true;
+            }
+
+            if (changed) closeBtn.Invalidate();
+            else if (targetAlpha == 0 && Math.Abs(rotationAngle) < 0.1f) animTimer.Stop();
+        };
+
+        closeBtn.MouseEnter += (s, e) => {
+            targetRotation = 90f;
+            targetAlpha = 40; // 悬停时的透明度
+            animTimer.Start();
+        };
+
+        closeBtn.MouseDown += (s, e) => {
+            targetAlpha = 200; // 按下时加深
+            closeBtn.Invalidate();
+        };
+
+        closeBtn.MouseUp += (s, e) => {
+            targetAlpha = 40;
+            closeBtn.Invalidate();
+        };
+
+        closeBtn.MouseLeave += (s, e) => {
+            targetRotation = 0f;
+            targetAlpha = 0;
+            animTimer.Start();
+        };
+        
         closeBtn.Click += (s, e) => ToggleAISidePanel();
 
         topPanel.Controls.Add(titleLabel);
@@ -980,11 +1081,35 @@ public partial class MainForm : Form
 
     private void ToggleAISidePanel()
     {
-        _aiSidePanel.Visible = !_aiSidePanel.Visible;
-        _aiSplitter.Visible = _aiSidePanel.Visible;
-        
         if (_aiSidePanel.Visible)
         {
+            _aiSidePanel.Visible = false;
+            _aiSplitter.Visible = false;
+        }
+        else
+        {
+            // 设置初始状态用于动画
+            int targetWidth = 380;
+            _aiSidePanel.Width = 0;
+            _aiSidePanel.Visible = true;
+            _aiSplitter.Visible = true;
+
+            var animTimer = new System.Windows.Forms.Timer { Interval = 10 };
+            animTimer.Tick += (s, e) => {
+                if (_aiSidePanel.Width < targetWidth)
+                {
+                    _aiSidePanel.Width += 38;
+                    if (_aiSidePanel.Width > targetWidth) _aiSidePanel.Width = targetWidth;
+                }
+                else
+                {
+                    _aiSidePanel.Width = targetWidth;
+                    animTimer.Stop();
+                    animTimer.Dispose();
+                }
+            };
+            animTimer.Start();
+
             if (_aiWebView.CoreWebView2 == null)
             {
                 InitializeAIWebView();
@@ -1038,9 +1163,12 @@ public partial class MainForm : Form
             string prompt = $"请帮我总结一下这个网页的主要内容：\\n\\n{text.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "")}";
             
             // 确保 AI 侧边栏显示
-            if (!_aiSidePanel.Visible) ToggleAISidePanel();
-            
-            var settings = _settingsService.Settings;
+             if (!_aiSidePanel.Visible) ToggleAISidePanel();
+             
+             _tabManager.ActiveTab.IsTranslated = true;
+             _translateBtn.Visible = true;
+             
+             var settings = _settingsService.Settings;
             if (settings.AiServiceMode == 0) // 网页模式 (针对 DeepSeek)
             {
                 string aiScript = $@"
@@ -1101,6 +1229,7 @@ public partial class MainForm : Form
         _tabManager.TabSecurityStateChanged += t => { if (t == _tabManager.ActiveTab) UpdateSecurityIcon(t.IsSecure); };
         _tabManager.TabStatusTextChanged += (t, text) => { if (t == _tabManager.ActiveTab) _statusLabel.Text = string.IsNullOrEmpty(text) ? "就绪" : text; };
         _tabManager.TabZoomChanged += OnTabZoomChanged;
+        _tabManager.TabTranslationRequested += t => { if (t == _tabManager.ActiveTab) TranslateCurrentPageWithAI(); };
         _tabManager.NewWindowRequested += url => _ = _tabManager.CreateTabAsync(url, _settingsService.Settings.OpenLinksInBackground);
         _tabManager.SettingChanged += OnSettingChanged;
         _tabManager.WebViewClicked += ClosePopups;
@@ -1266,21 +1395,23 @@ public partial class MainForm : Form
         MouseMove += OnFormMouseMove;
         
         // 导航按钮
-        _backBtn.Click += (s, e) => _tabManager.ActiveTab?.GoBack();
-        _forwardBtn.Click += (s, e) => _tabManager.ActiveTab?.GoForward();
-        _refreshBtn.Click += (s, e) => _tabManager.ActiveTab?.Refresh();
-        _stopBtn.Click += (s, e) => _tabManager.ActiveTab?.Stop();
-        _homeBtn.Click += (s, e) => _tabManager.ActiveTab?.Navigate(_settingsService.Settings.HomePage);
+        _backBtn.Click += (s, e) => _tabManager?.ActiveTab?.GoBack();
+        _forwardBtn.Click += (s, e) => _tabManager?.ActiveTab?.GoForward();
+        _refreshBtn.Click += (s, e) => _tabManager?.ActiveTab?.Refresh();
+        _stopBtn.Click += (s, e) => _tabManager?.ActiveTab?.Stop();
+        _homeBtn.Click += (s, e) => _tabManager?.ActiveTab?.Navigate(_settingsService.Settings.HomePage);
         _downloadBtn.Click += (s, e) => OpenDownloadDialog();
         _settingsBtn.Click += (s, e) => ShowMainMenu();
         _bookmarkBtn.BookmarkClicked += (s, e) => ToggleBookmark();
-        _newTabButton.Click += async (s, e) => await _tabManager.CreateTabAsync("about:newtab");
+        _newTabButton.Click += async (s, e) => {
+            if (_tabManager != null)
+                await _tabManager.CreateTabAsync("about:newtab");
+        };
         
         // 地址栏
-        _addressBar.KeyDown += OnAddressBarKeyDown;
+        _addressBar.EnterKeyPressed += (s, e) => NavigateToAddress();
         _addressBar.TextChanged += (s, e) => { if (_addressBar.Focused) ShowAddressDropdown(); };
         _addressBar.GotFocus += (s, e) => { _addressBar.SelectAll(); ShowAddressDropdown(); };
-        _addressBar.MouseDown += (s, e) => { if (e.Button == MouseButtons.Left) ShowAddressDropdown(); };
         _addressBar.LostFocus += (s, e) => 
         {
             // 延迟检查，给按钮点击事件足够时间处理
@@ -1774,7 +1905,7 @@ public partial class MainForm : Form
     private void UpdateSecurityIcon(bool isSecure)
     {
         _securityIcon.IsSecure = isSecure;
-        _securityIcon.CurrentUrl = _tabManager.ActiveTab?.Url ?? "";
+        _securityIcon.CurrentUrl = _tabManager?.ActiveTab?.Url ?? "";
     }
     
     private void OnSecurityInfoRequested(object? sender, EventArgs e)
@@ -1830,12 +1961,23 @@ public partial class MainForm : Form
         _refreshBtn.Visible = !tab.IsLoading;
         _stopBtn.Visible = tab.IsLoading;
         _progressBar.Visible = tab.IsLoading;
+        _translateBtn.Visible = tab.IsTranslated;
     }
     
     private void OnTabUrlChanged(BrowserTab tab)
     {
         if (tab != _tabManager.ActiveTab) return;
         
+        // URL 变化时，如果不是翻译后的 URL，重置翻译状态
+        // 百度/必应翻译的 URL 通常包含其域名
+        if (!string.IsNullOrEmpty(tab.Url) && 
+            !tab.Url.Contains("fanyi.baidu.com") && 
+            !tab.Url.Contains("bing.com/translator"))
+        {
+            tab.IsTranslated = false;
+        }
+
+        _translateBtn.Visible = tab.IsTranslated;
         _addressBar.Text = tab.Url ?? "";
         if (!string.IsNullOrEmpty(tab.Url) && !_urlHistory.Contains(tab.Url))
         {
@@ -1849,6 +1991,9 @@ public partial class MainForm : Form
         
         // URL 变化时隐藏钥匙图标
         HidePasswordKeyButton();
+        
+        // URL 变化时根据状态显示/隐藏翻译按钮
+        _translateBtn.Visible = tab.IsTranslated;
     }
     
     private void OnTabLoadingStateChanged(BrowserTab tab)
@@ -2021,6 +2166,130 @@ public partial class MainForm : Form
                 // 显示主页按钮
                 _homeBtn.Visible = (bool)value;
                 break;
+        }
+    }
+    
+    private void OnTranslateButtonClick(object? sender, EventArgs e)
+    {
+        if (_tabManager.ActiveTab == null) return;
+        
+        var currentUrl = _tabManager.ActiveTab.Url;
+        if (string.IsNullOrEmpty(currentUrl) || currentUrl.StartsWith("about:") || currentUrl.StartsWith("data:"))
+        {
+            ShowModernMessage("提示", "当前页面不支持翻译。", ModernDialogIcon.Info);
+            return;
+        }
+
+        // 创建翻译选项菜单
+        var menu = new ContextMenuStrip();
+        
+        var aiItem = new ToolStripMenuItem("AI 智能翻译 (推荐)", null, (s, ev) => TranslateCurrentPageWithAI());
+        aiItem.Font = new Font(aiItem.Font, FontStyle.Bold);
+        
+        var baiduItem = new ToolStripMenuItem("百度网页翻译", null, (s, ev) => {
+             string translateUrl = $"https://fanyi.baidu.com/transpage?query={Uri.EscapeDataString(currentUrl)}&from=auto&to=zh&source=url&render=1";
+             _tabManager.ActiveTab.IsTranslated = true;
+             _translateBtn.Visible = true;
+             _tabManager.ActiveTab.Navigate(translateUrl);
+         });
+ 
+         var bingItem = new ToolStripMenuItem("微软必应翻译", null, (s, ev) => {
+             string translateUrl = $"https://www.bing.com/translator/?to=zh-Hans&url={Uri.EscapeDataString(currentUrl)}";
+             _tabManager.ActiveTab.IsTranslated = true;
+             _translateBtn.Visible = true;
+             _tabManager.ActiveTab.Navigate(translateUrl);
+         });
+
+        menu.Items.Add(aiItem);
+        menu.Items.Add(new ToolStripSeparator());
+        menu.Items.Add(baiduItem);
+        menu.Items.Add(bingItem);
+
+        menu.Show(_translateBtn, new Point(0, _translateBtn.Height));
+    }
+    
+    private async void TranslateCurrentPageWithAI()
+    {
+        if (_tabManager.ActiveTab == null) return;
+        
+        _tabManager.ActiveTab.IsTranslated = true;
+        _translateBtn.Visible = true;
+        
+        try
+        {
+            // 获取网页主要文本
+            string script = @"
+                (function() {
+                    // 尝试获取主要内容，优先正文
+                    const article = document.querySelector('article');
+                    if (article) return article.innerText;
+                    
+                    const main = document.querySelector('main');
+                    if (main) return main.innerText;
+                    
+                    return document.body.innerText;
+                })()";
+            
+            string text = await _tabManager.ActiveTab.WebView.ExecuteScriptAsync(script);
+            
+            // 处理返回的 JSON 字符串
+            if (text.StartsWith("\"") && text.EndsWith("\""))
+            {
+                text = System.Text.RegularExpressions.Regex.Unescape(text.Substring(1, text.Length - 2));
+            }
+
+            // 如果文本太长，截断一下，防止注入失败
+            if (text.Length > 3000) text = text.Substring(0, 3000) + "...";
+
+            // 构造 AI 提示词
+            string prompt = $"请帮我翻译一下这个网页的主要内容为中文：\\n\\n{text.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "")}";
+            
+            // 确保 AI 侧边栏显示
+             if (!_aiSidePanel.Visible) ToggleAISidePanel();
+             
+             _tabManager.ActiveTab.IsTranslated = true;
+             _translateBtn.Visible = true;
+             
+             var settings = _settingsService.Settings;
+            if (settings.AiServiceMode == 0) // 网页模式
+            {
+                string aiScript = $@"
+                    (function() {{
+                        const textarea = document.querySelector('textarea');
+                        if (textarea) {{
+                            textarea.value = ""{prompt}"";
+                            textarea.dispatchEvent(new Event('input', {{ bubbles: true }}));
+                            
+                            setTimeout(() => {{
+                                const sendBtn = document.querySelector('div[role=""button""][aria-label=""Send""]') || 
+                                              document.querySelector('button[type=""submit""]') ||
+                                              document.querySelector('.send-button');
+                                if (sendBtn) sendBtn.click();
+                            }}, 500);
+                        }}
+                    }})()";
+                
+                await _aiWebView.ExecuteScriptAsync(aiScript);
+            }
+            else // API 模式
+            {
+                string aiScript = $@"
+                    (function() {{
+                        function trySetPrompt(count) {{
+                            if (window.setAiPrompt) {{
+                                window.setAiPrompt(""{prompt}"", true);
+                            }} else if (count > 0) {{
+                                setTimeout(() => trySetPrompt(count - 1), 500);
+                            }}
+                        }}
+                        trySetPrompt(10);
+                    }})()";
+                await _aiWebView.ExecuteScriptAsync(aiScript);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"AI 翻译失败: {ex.Message}");
         }
     }
     

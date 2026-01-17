@@ -11,6 +11,13 @@ public class RoundedButton : Control
     private bool _isPressed;
     private int _cornerRadius = 6;
     private Image? _iconImage;
+    private bool _useGrayscale = false;
+
+    public bool UseGrayscale
+    {
+        get => _useGrayscale;
+        set { _useGrayscale = value; Invalidate(); }
+    }
     
     public int CornerRadius
     {
@@ -74,7 +81,26 @@ public class RoundedButton : Control
             int y = (Height - targetSize) / 2;
             var destRect = new Rectangle(x, y, targetSize, targetSize);
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            g.DrawImage(_iconImage, destRect);
+
+            if (_useGrayscale && !_isHovered)
+             {
+                 using var attributes = new System.Drawing.Imaging.ImageAttributes();
+                 // 使用高亮度灰阶矩阵，让图标看起来更“灰白”
+                 var matrix = new System.Drawing.Imaging.ColorMatrix(new float[][]
+                 {
+                     new float[] {.3f, .3f, .3f, 0, 0},
+                     new float[] {.59f, .59f, .59f, 0, 0},
+                     new float[] {.11f, .11f, .11f, 0, 0},
+                     new float[] {0, 0, 0, 1, 0},
+                     new float[] {0.2f, 0.2f, 0.2f, 0, 1} // 增加亮度偏移
+                 });
+                 attributes.SetColorMatrix(matrix);
+                 g.DrawImage(_iconImage, destRect, 0, 0, _iconImage.Width, _iconImage.Height, GraphicsUnit.Pixel, attributes);
+             }
+            else
+            {
+                g.DrawImage(_iconImage, destRect);
+            }
         }
         else if (!string.IsNullOrEmpty(Text))
         {
