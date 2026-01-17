@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>Resources\鲲穹AI浏览器.ico</ApplicationIcon>
+    <AssemblyName>鲲穹AI浏览器</AssemblyName>
+    <RootNamespace>MiniWorldBrowser</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    
+    <!-- 自包含发布 - 内置 .NET 运行时 -->
+    <SelfContained>true</SelfContained>
+    <PublishTrimmed>false</PublishTrimmed>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    
+    <Version>1.0.0</Version>
+    <Product>鲲穹AI浏览器</Product>
+    <Authors>鲲穹AI</Authors>
+    <Description>鲲穹AI浏览器 - 轻量、快速、智能</Description>
+    <PackageProjectUrl>https://github.com/yourusername/kunqiong-browser</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2210.55" />
+    <!-- 打包 WebView2 Runtime，用户无需单独安装 -->
+    <PackageReference Include="WebView2.Runtime.X64" Version="130.0.2849.56" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\**\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
+</Project>

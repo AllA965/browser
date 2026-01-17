@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "KunQiong AI Assistant",
+  "version": "1.0",
+  "description": "AI capabilities for MiniWorldBrowser",
+  "permissions": ["activeTab", "scripting"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

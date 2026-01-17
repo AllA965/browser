@@ -1,0 +1,85 @@
+using System.Runtime.InteropServices;
+
+namespace MiniWorldBrowser.Helpers;
+
+/// <summary>
+/// Win32 API 封装
+/// </summary>
+public static class Win32Helper
+{
+    #region DLL Imports
+    
+    [DllImport("user32.dll")]
+    public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+    
+    [DllImport("user32.dll")]
+    public static extern bool ReleaseCapture();
+    
+    [DllImport("user32.dll")]
+    public static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc callback, IntPtr hInstance, uint threadId);
+    
+    [DllImport("user32.dll")]
+    public static extern bool UnhookWindowsHookEx(IntPtr hInstance);
+    
+    [DllImport("user32.dll")]
+    public static extern IntPtr CallNextHookEx(IntPtr idHook, int nCode, IntPtr wParam, IntPtr lParam);
+    
+    [DllImport("kernel32.dll")]
+    public static extern IntPtr GetModuleHandle(string? lpModuleName);
+    
+    [DllImport("user32.dll")]
+    public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+    
+    [DllImport("user32.dll")]
+    public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+    
+    [DllImport("user32.dll")]
+    public static extern bool PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+    
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetForegroundWindow();
+    
+    [DllImport("user32.dll")]
+    public static extern IntPtr GetParent(IntPtr hWnd);
+    
+    #endregion
+    
+    public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
+    
+    /// <summary>
+    /// 启用窗口拖动
+    /// </summary>
+    public static void EnableWindowDrag(IntPtr handle)
+    {
+        ReleaseCapture();
+        SendMessage(handle, Constants.Win32Constants.WM_NCLBUTTONDOWN, Constants.Win32Constants.HT_CAPTION, 0);
+    }
+    
+    /// <summary>
+    /// 处理窗口边框调整大小的命中测试
+    /// </summary>
+    public static IntPtr HandleResizeHitTest(Form form, Point cursorPosition)
+    {
+        var cursor = form.PointToClient(cursorPosition);
+        int border = Constants.Win32Constants.BorderWidth;
+        
+        if (cursor.Y < border)
+        {
+            if (cursor.X < border) return (IntPtr)Constants.Win32Constants.HTTOPLEFT;
+            if (cursor.X > form.Width - border) return (IntPtr)Constants.Win32Constants.HTTOPRIGHT;
+            return (IntPtr)Constants.Win32Constants.HTTOP;
+        }
+        
+        if (cursor.Y > form.Height - border)
+        {
+            if (cursor.X < border) return (IntPtr)Constants.Win32Constants.HTBOTTOMLEFT;
+            if (cursor.X > form.Width - border) return (IntPtr)Constants.Win32Constants.HTBOTTOMRIGHT;
+            return (IntPtr)Constants.Win32Constants.HTBOTTOM;
+        }
+        
+        if (cursor.X < border) return (IntPtr)Constants.Win32Constants.HTLEFT;
+        if (cursor.X > form.Width - border) return (IntPtr)Constants.Win32Constants.HTRIGHT;
+        
+        return IntPtr.Zero;
+    }
+}
