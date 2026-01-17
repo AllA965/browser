@@ -11,7 +11,6 @@ namespace MiniWorldBrowser.Controls;
 
 /// <summary>
 /// 标签页溢出面板 - 类似 Edge 的标签页下拉面板
-/// 支持 BrowserTab 和 IncognitoTab
 /// </summary>
 public class TabOverflowPanel : Control
 {
@@ -122,7 +121,6 @@ public class TabOverflowPanel : Control
         return tab switch
         {
             BrowserTab bt => bt.TabButton,
-            IncognitoTab it => it.TabButton,
             _ => null
         };
     }
@@ -312,11 +310,6 @@ internal class TabOverflowItem : Control
         {
             title = !string.IsNullOrEmpty(bt.Title) ? bt.Title : "新标签页";
             url = bt.Url ?? "";
-        }
-        else if (_tab is IncognitoTab it)
-        {
-            title = !string.IsNullOrEmpty(it.Title) ? it.Title : "新标签页";
-            url = it.Url ?? "";
         }
         
         _titleLabel.Text = TruncateText(title, 180);

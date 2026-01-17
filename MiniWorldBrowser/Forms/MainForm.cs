@@ -18,6 +18,12 @@ namespace MiniWorldBrowser.Forms;
 /// </summary>
 public partial class MainForm : Form
 {
+    #region 常量
+    
+    private static readonly Color IncognitoAccent = Color.FromArgb(138, 180, 248);
+    
+    #endregion
+    
     #region 服务和管理器
     
     private readonly ISettingsService _settingsService;
@@ -26,6 +32,8 @@ public partial class MainForm : Form
     private readonly IHistoryService _historyService;
     private readonly ILoginService _loginService;
     private readonly IAdService _adService;
+    private readonly bool _isIncognito;
+    private readonly string? _incognitoDataFolder;
     private BrowserTabManager _tabManager = null!;
     private MouseGesture _mouseGesture = null!;
     private BossKey? _bossKey;
@@ -36,6 +44,7 @@ public partial class MainForm : Form
     #region UI 控件
     
     private Panel _tabBar = null!;
+    private Panel _incognitoIndicator = null!;
     private FlowLayoutPanel _tabContainer = null!;
     private NewTabButton _newTabButton = null!;
     private Button _tabOverflowBtn = null!; // 标签溢出按钮
@@ -119,8 +128,16 @@ public partial class MainForm : Form
     
     #endregion
     
-    public MainForm()
+    public MainForm(bool isIncognito = false)
     {
+        _isIncognito = isIncognito;
+        if (_isIncognito)
+        {
+            _incognitoDataFolder = Path.Combine(
+                Path.GetTempPath(),
+                "MiniWorld_Incognito_" + Guid.NewGuid().ToString("N")[..8]);
+        }
+
         // 开启双缓冲，解决窗口拉伸时的闪烁和残影问题
         this.DoubleBuffered = true;
         this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
@@ -134,7 +151,9 @@ public partial class MainForm : Form
             Mode = _settingsService.Settings.AdBlockMode
         };
         _adBlockService.SetExceptions(_settingsService.Settings.AdBlockExceptions);
-        _historyService = new HistoryService();
+        
+        // 隐身模式使用独立的内存历史服务
+        _historyService = _isIncognito ? new HistoryService(false) : new HistoryService(); 
         _loginService = new LoginService(_settingsService);
         _adService = new AdService();
         
@@ -150,70 +169,79 @@ public partial class MainForm : Form
         Shown += async (s, e) =>
         {
             RefreshAllControls();
-            _adCarousel.BringToFront(); // 再次确保广告在最上层
+            _adCarousel?.BringToFront(); // 再次确保广告在最上层
             
             // 检查登录状态
-            await _loginService.CheckLoginAsync();
+            if (_loginService != null)
+            {
+                await _loginService.CheckLoginAsync();
+            }
             
             try
             {
-                // 根据 StartupBehavior 决定启动时打开什么页面
-                // 0 = 打开新标签页, 1 = 继续上次浏览, 2 = 打开特定网页
-                var startupBehavior = _settingsService?.Settings?.StartupBehavior ?? 0;
-                string startupUrl;
-                
                 if (_tabManager == null)
                 {
                     throw new Exception("TabManager 未初始化");
                 }
-                
-                switch (startupBehavior)
+
+                if (_isIncognito)
                 {
-                    case 0: // 打开新标签页
-                        startupUrl = "about:newtab";
-                        await _tabManager.CreateTabAsync(startupUrl);
-                        break;
-                        
-                    case 1: // 继续上次浏览
-                        var lastUrls = _settingsService?.Settings?.LastSessionUrls;
-                        if (lastUrls != null && lastUrls.Count > 0)
-                        {
-                            foreach (var url in lastUrls)
-                            {
-                                await _tabManager.CreateTabAsync(url);
-                            }
-                        }
-                        else
-                        {
+                    // 隐身模式直接打开主页
+                    var homePage = _settingsService?.Settings?.HomePage ?? "about:newtab";
+                    await _tabManager.CreateTabAsync(homePage);
+                }
+                else
+                {
+                    // 根据 StartupBehavior 决定启动时打开什么页面
+                    // 0 = 打开新标签页, 1 = 继续上次浏览, 2 = 打开特定网页
+                    var startupBehavior = _settingsService?.Settings?.StartupBehavior ?? 0;
+                    
+                    switch (startupBehavior)
+                    {
+                        case 0: // 打开新标签页
                             await _tabManager.CreateTabAsync("about:newtab");
-                        }
-                        break;
-                        
-                    case 2: // 打开特定网页
-                        var startupPages = _settingsService?.Settings?.StartupPages;
-                        if (startupPages != null && startupPages.Count > 0)
-                        {
-                            foreach (var url in startupPages)
+                            break;
+                            
+                        case 1: // 继续上次浏览
+                            var lastUrls = _settingsService?.Settings?.LastSessionUrls;
+                            if (lastUrls != null && lastUrls.Count > 0)
                             {
-                                await _tabManager.CreateTabAsync(url);
+                                foreach (var url in lastUrls)
+                                {
+                                    await _tabManager.CreateTabAsync(url);
+                                }
                             }
-                        }
-                        else
-                        {
-                            // 如果没有设置特定网页，则打开主页
-                            startupUrl = _settingsService?.Settings?.HomePage ?? "about:newtab";
-                            if (string.IsNullOrEmpty(startupUrl) || startupUrl == "about:newtab")
+                            else
                             {
-                                startupUrl = "about:newtab";
+                                await _tabManager.CreateTabAsync("about:newtab");
                             }
-                            await _tabManager.CreateTabAsync(startupUrl);
-                        }
-                        break;
-                        
-                    default:
-                        startupUrl = "about:newtab";
-                        await _tabManager.CreateTabAsync(startupUrl);
-                        break;
+                            break;
+                            
+                        case 2: // 打开特定网页
+                            var startupPages = _settingsService?.Settings?.StartupPages;
+                            if (startupPages != null && startupPages.Count > 0)
+                            {
+                                foreach (var url in startupPages)
+                                {
+                                    await _tabManager.CreateTabAsync(url);
+                                }
+                            }
+                            else
+                            {
+                                // 如果没有设置特定网页，则打开主页
+                                var startupUrl = _settingsService?.Settings?.HomePage ?? "about:newtab";
+                                if (string.IsNullOrEmpty(startupUrl) || startupUrl == "about:newtab")
+                                {
+                                    startupUrl = "about:newtab";
+                                }
+                                await _tabManager.CreateTabAsync(startupUrl);
+                            }
+                            break;
+                            
+                        default:
+                            await _tabManager.CreateTabAsync("about:newtab");
+                            break;
+                    }
                 }
                 
                 // 强制刷新标签容器
@@ -232,11 +260,11 @@ public partial class MainForm : Form
     
     private void InitializeUI()
     {
-        Text = AppConstants.AppName;
+        Text = _isIncognito ? "InPrivate - " + AppConstants.AppName : AppConstants.AppName;
         Size = new Size(1200, 800);
         MinimumSize = new Size(800, 600);
         StartPosition = FormStartPosition.CenterScreen;
-        BackColor = Color.FromArgb(240, 240, 240);
+        BackColor = _isIncognito ? Color.FromArgb(53, 54, 58) : Color.FromArgb(240, 240, 240);
         FormBorderStyle = FormBorderStyle.None;
         
         // 设置窗口图标
@@ -249,7 +277,10 @@ public partial class MainForm : Form
         CreateBrowserContainer();
         CreateStatusBar();
         CreateAddressDropdown();
-        CreateAdCarousel();
+        if (!_isIncognito)
+        {
+            CreateAdCarousel();
+        }
         CreateAISidePanel();
         
         // 注意：WinForms 中后 Add 的控件默认在最上层
@@ -262,9 +293,12 @@ public partial class MainForm : Form
         Controls.Add(_toolbar);
         Controls.Add(_tabBar);
         
-        // 最后添加广告控件并强制置顶，防止被浏览器容器等遮挡
-        Controls.Add(_adCarousel);
-        _adCarousel.BringToFront();
+        // 隐身模式不显示广告
+        if (!_isIncognito)
+        {
+            Controls.Add(_adCarousel);
+            _adCarousel.BringToFront();
+        }
     }
     
     private void CreateTabBar()
@@ -273,7 +307,7 @@ public partial class MainForm : Form
         {
             Dock = DockStyle.Top,
             Height = 36,
-            BackColor = Color.FromArgb(223, 225, 229) // Chrome style gray
+            BackColor = _isIncognito ? Color.FromArgb(20, 20, 20) : Color.FromArgb(223, 225, 229)
         };
         _tabBar.MouseDown += OnTitleBarMouseDown;
 
@@ -314,14 +348,20 @@ public partial class MainForm : Form
         _closeBtn = CreateWindowControlButton("✕");
         _closeBtn.Click += (s, e) => Close();
         _closeBtn.MouseEnter += (s, e) => { _closeBtn.BackColor = Color.FromArgb(232, 17, 35); _closeBtn.ForeColor = Color.White; };
-        _closeBtn.MouseLeave += (s, e) => { _closeBtn.BackColor = Color.Transparent; _closeBtn.ForeColor = Color.Black; };
+        _closeBtn.MouseLeave += (s, e) => { _closeBtn.BackColor = Color.Transparent; _closeBtn.ForeColor = _isIncognito ? Color.White : Color.Black; };
         
         windowControlPanel.Controls.Add(_minimizeBtn);
         windowControlPanel.Controls.Add(_maximizeBtn);
         windowControlPanel.Controls.Add(_closeBtn);
         
+        // 隐身模式标识
+        if (_isIncognito)
+        {
+            _incognitoIndicator = CreateIncognitoIndicator();
+        }
+
         // 新标签按钮
-        _newTabButton = new NewTabButton(false)
+        _newTabButton = new NewTabButton(_isIncognito)
         {
             Size = new Size(28, 28),
             Margin = new Padding(0, 4, 0, 0) // 调整边距使其对齐
@@ -351,12 +391,13 @@ public partial class MainForm : Form
             BackColor = Color.Transparent,
             Text = "﹀", // 或者使用 unicode 字符
             Font = new Font("Segoe UI Symbol", 9F),
+            ForeColor = _isIncognito ? Color.White : Color.Black,
             Cursor = Cursors.Hand,
             Visible = false, // 默认隐藏
             Margin = new Padding(0)
         };
         _tabOverflowBtn.FlatAppearance.BorderSize = 0;
-        _tabOverflowBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 220, 220);
+        _tabOverflowBtn.FlatAppearance.MouseOverBackColor = _isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(220, 220, 220);
         new ToolTip().SetToolTip(_tabOverflowBtn, "搜索标签页"); // Edge 提示文案
 
         var tabStripHostPanel = new Panel
@@ -370,7 +411,60 @@ public partial class MainForm : Form
 
         _tabBar.Controls.Add(tabStripHostPanel);
         _tabBar.Controls.Add(_titleBarIcon);
+        if (_isIncognito)
+        {
+            _tabBar.Controls.Add(_incognitoIndicator);
+        }
         _tabBar.Controls.Add(windowControlPanel);
+    }
+
+    private Panel CreateIncognitoIndicator()
+    {
+        var panel = new Panel
+        {
+            Dock = DockStyle.Right,
+            Width = 90,
+            BackColor = Color.Transparent,
+            Cursor = Cursors.Hand
+        };
+        
+        var label = new Label
+        {
+            Text = "🕵️ InPrivate",
+            Dock = DockStyle.Fill,
+            TextAlign = ContentAlignment.MiddleCenter,
+            Font = new Font("Segoe UI", 9F),
+            ForeColor = IncognitoAccent,
+            BackColor = Color.Transparent,
+            Cursor = Cursors.Hand
+        };
+        
+        label.Click += (s, e) => ShowIncognitoInfo();
+        panel.Click += (s, e) => ShowIncognitoInfo();
+        label.MouseEnter += (s, e) => label.ForeColor = Color.FromArgb(150, 180, 255);
+        label.MouseLeave += (s, e) => label.ForeColor = IncognitoAccent;
+        
+        panel.Controls.Add(label);
+        return panel;
+    }
+    
+    private void ShowIncognitoInfo()
+    {
+        MessageBox.Show(
+            "您正在使用 InPrivate 浏览模式\n\n" +
+            "✓ InPrivate 浏览的功能：\n" +
+            "  • 不保存浏览历史记录\n" +
+            "  • 不保存 Cookie 和网站数据\n" +
+            "  • 不保存表单数据\n" +
+            "  • 独立的会话环境\n\n" +
+            "✗ InPrivate 浏览不会：\n" +
+            "  • 对网络管理员隐藏浏览活动\n" +
+            "  • 对 Internet 服务提供商隐藏活动\n" +
+            "  • 阻止网站获取您的 IP 地址\n\n" +
+            "注意：下载的文件和创建的书签会保留。",
+            "InPrivate 浏览",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information);
     }
 
     private void CreateTabOverflowPanel()
@@ -390,7 +484,7 @@ public partial class MainForm : Form
         {
             Dock = DockStyle.Top,
             Height = 44,
-            BackColor = Color.White,
+            BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.White,
             Padding = new Padding(4, 4, 4, 4)
         };
         
@@ -406,16 +500,19 @@ public partial class MainForm : Form
         {
             Size = new Size(32, 32),
             Margin = new Padding(2),
-            IconColor = Color.FromArgb(80, 80, 80)
+            IconColor = _isIncognito ? Color.FromArgb(200, 200, 200) : Color.FromArgb(80, 80, 80)
         };
         new ToolTip().SetToolTip(_downloadBtn, "下载 (Ctrl+J)");
 
-        _userBtn = new UserButton { Margin = new Padding(2) };
-        new ToolTip().SetToolTip(_userBtn, "用户/登录");
-        _userBtn.Click += OnUserButtonClick;
-        
-        _userBtn.MouseEnter += (s, e) => _userBtn.Invalidate();
-        _userBtn.MouseLeave += (s, e) => _userBtn.Invalidate();
+        _userBtn = new UserButton { Margin = new Padding(2), Visible = !_isIncognito };
+        if (!_isIncognito)
+        {
+            new ToolTip().SetToolTip(_userBtn, "用户/登录");
+            _userBtn.Click += OnUserButtonClick;
+            
+            _userBtn.MouseEnter += (s, e) => _userBtn.Invalidate();
+            _userBtn.MouseLeave += (s, e) => _userBtn.Invalidate();
+        }
 
         _settingsBtn = CreateToolButton("☰", "菜单");
         
@@ -434,7 +531,7 @@ public partial class MainForm : Form
         _aiBtn.Click += (s, e) => ToggleAISidePanel();
 
         // 布局
-        var toolPanel = new Panel { Dock = DockStyle.Fill, BackColor = Color.White };
+        var toolPanel = new Panel { Dock = DockStyle.Fill, BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.White };
         
         var navPanel = new FlowLayoutPanel
         {
@@ -471,7 +568,8 @@ public partial class MainForm : Form
         _addressBar = new Controls.ChromeAddressBar
         {
             Dock = DockStyle.Fill,
-            TabIndex = 0
+            TabIndex = 0,
+            IsDarkMode = _isIncognito
         };
 
         // Inner controls inside the address bar (Icons)
@@ -488,10 +586,11 @@ public partial class MainForm : Form
             Font = new Font("Segoe UI Emoji", 12F),
             Cursor = Cursors.Hand,
             Visible = false,
-            Margin = new Padding(2, 0, 2, 0)
+            Margin = new Padding(2, 0, 2, 0),
+            ForeColor = _isIncognito ? Color.White : Color.Black
         };
         _translateBtn.FlatAppearance.BorderSize = 0;
-        _translateBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 220, 220);
+        _translateBtn.FlatAppearance.MouseOverBackColor = _isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(220, 220, 220);
         _translateBtn.Click += OnTranslateButtonClick;
         new ToolTip().SetToolTip(_translateBtn, "翻译此页面");
         
@@ -506,10 +605,11 @@ public partial class MainForm : Form
             Font = new Font("Segoe UI Emoji", 10F),
             Cursor = Cursors.Hand,
             Visible = false,
-            Margin = new Padding(2, 0, 2, 0)
+            Margin = new Padding(2, 0, 2, 0),
+            ForeColor = _isIncognito ? Color.White : Color.Black
         };
         _zoomBtn.FlatAppearance.BorderSize = 0;
-        _zoomBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 220, 220);
+        _zoomBtn.FlatAppearance.MouseOverBackColor = _isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(220, 220, 220);
         _zoomBtn.Click += (s, e) => ShowZoomPopup();
         new ToolTip().SetToolTip(_zoomBtn, "缩放");
 
@@ -522,10 +622,11 @@ public partial class MainForm : Form
             Font = new Font("Segoe UI Emoji", 10F),
             Cursor = Cursors.Hand,
             Visible = false,
-            Margin = new Padding(2, 0, 2, 0)
+            Margin = new Padding(2, 0, 2, 0),
+            ForeColor = _isIncognito ? Color.White : Color.Black
         };
         _passwordKeyBtn.FlatAppearance.BorderSize = 0;
-        _passwordKeyBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 220, 220);
+        _passwordKeyBtn.FlatAppearance.MouseOverBackColor = _isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(220, 220, 220);
         _passwordKeyBtn.Click += OnPasswordKeyButtonClick;
         new ToolTip().SetToolTip(_passwordKeyBtn, "管理密码");
 
@@ -572,8 +673,10 @@ public partial class MainForm : Form
     private void CreateBookmarkBar()
     {
         _bookmarkBar = new BookmarkBar(_bookmarkService);
-        // 事件绑定移到 InitializeManagers 之后，避免空引用
-    }
+        _bookmarkBar.IsIncognito = _isIncognito;
+        _bookmarkBar.BackColor = _isIncognito ? Color.FromArgb(53, 54, 58) : Color.White;
+        _bookmarkBar.ForeColor = _isIncognito ? Color.FromArgb(200, 200, 200) : Color.FromArgb(60, 60, 60);
+    }    // 事件绑定移到 InitializeManagers 之后，避免空引用
     
     private void SetupBookmarkBarEvents()
     {
@@ -593,7 +696,7 @@ public partial class MainForm : Form
         {
             Dock = DockStyle.Bottom,
             Height = 22,
-            BackColor = Color.FromArgb(240, 240, 240)
+            BackColor = _isIncognito ? Color.FromArgb(41, 42, 45) : Color.FromArgb(240, 240, 240)
         };
         
         _statusLabel = new Label
@@ -602,7 +705,8 @@ public partial class MainForm : Form
             AutoSize = true,
             Padding = new Padding(4, 3, 0, 0),
             Font = new Font("Microsoft YaHei UI", 8F),
-            Text = "就绪"
+            ForeColor = _isIncognito ? Color.FromArgb(150, 150, 150) : Color.Black,
+            Text = _isIncognito ? "InPrivate - 您的浏览活动不会保存到此设备" : "就绪"
         };
 
         _brandLabel = new Label
@@ -611,7 +715,7 @@ public partial class MainForm : Form
             AutoSize = true,
             Padding = new Padding(0, 3, 10, 0),
             Font = new Font("Microsoft YaHei UI", 8.5F),
-            ForeColor = Color.FromArgb(120, 120, 120),
+            ForeColor = _isIncognito ? Color.FromArgb(100, 150, 255) : Color.FromArgb(120, 120, 120),
             Text = "鲲穹AI旗下产品"
         };
 
@@ -622,9 +726,9 @@ public partial class MainForm : Form
             Padding = new Padding(0, 3, 15, 0),
             Font = new Font("Microsoft YaHei UI", 8.5F),
             Text = "我要软件定制",
-            LinkColor = Color.Black,
-            ActiveLinkColor = Color.FromArgb(64, 64, 64),
-            VisitedLinkColor = Color.Black,
+            LinkColor = _isIncognito ? Color.FromArgb(200, 200, 200) : Color.Black,
+            ActiveLinkColor = _isIncognito ? Color.White : Color.FromArgb(64, 64, 64),
+            VisitedLinkColor = _isIncognito ? Color.FromArgb(200, 200, 200) : Color.Black,
             LinkBehavior = LinkBehavior.NeverUnderline,
             TextAlign = ContentAlignment.MiddleLeft,
             Cursor = Cursors.Hand
@@ -742,7 +846,7 @@ public partial class MainForm : Form
     
     private void CreateAddressDropdown()
     {
-        _addressDropdown = new AddressBarDropdown(_historyService, _bookmarkService);
+        _addressDropdown = new AddressBarDropdown(_historyService, _bookmarkService, _isIncognito);
         _addressDropdown.SearchEngine = _settingsService.Settings.SearchEngine;
         _addressDropdown.ItemSelected += url =>
         {
@@ -1218,16 +1322,32 @@ public partial class MainForm : Form
     {
         _tabManager = new BrowserTabManager(
             _browserContainer, _tabContainer, _newTabButton, _tabOverflowBtn,
-            _settingsService, _adBlockService, _historyService, _bookmarkService);
+            _settingsService, _adBlockService, _historyService, _bookmarkService,
+            _incognitoDataFolder);
         
         _tabManager.SetOverflowPanel(_tabOverflowPanel);
         
         _tabManager.ActiveTabChanged += OnActiveTabChanged;
-        _tabManager.TabTitleChanged += t => { if (t == _tabManager.ActiveTab) Text = $"{t.Title} - {AppConstants.AppName}"; };
+        _tabManager.TabTitleChanged += t => { 
+            if (t == _tabManager.ActiveTab) 
+                Text = _isIncognito ? $"InPrivate - {t.Title} - {AppConstants.AppName}" : $"{t.Title} - {AppConstants.AppName}"; 
+        };
         _tabManager.TabUrlChanged += OnTabUrlChanged;
         _tabManager.TabLoadingStateChanged += OnTabLoadingStateChanged;
         _tabManager.TabSecurityStateChanged += t => { if (t == _tabManager.ActiveTab) UpdateSecurityIcon(t.IsSecure); };
-        _tabManager.TabStatusTextChanged += (t, text) => { if (t == _tabManager.ActiveTab) _statusLabel.Text = string.IsNullOrEmpty(text) ? "就绪" : text; };
+        _tabManager.TabStatusTextChanged += (t, text) => { 
+            if (t == _tabManager.ActiveTab) 
+            {
+                if (string.IsNullOrEmpty(text))
+                {
+                    _statusLabel.Text = _isIncognito ? "InPrivate - 您的浏览活动不会保存到此设备" : "就绪";
+                }
+                else
+                {
+                    _statusLabel.Text = text;
+                }
+            }
+        };
         _tabManager.TabZoomChanged += OnTabZoomChanged;
         _tabManager.TabTranslationRequested += t => { if (t == _tabManager.ActiveTab) TranslateCurrentPageWithAI(); };
         _tabManager.NewWindowRequested += url => _ = _tabManager.CreateTabAsync(url, _settingsService.Settings.OpenLinksInBackground);
@@ -1340,6 +1460,9 @@ public partial class MainForm : Form
         {
             try
             {
+                // 隐身模式不保存会话
+                if (_isIncognito) return;
+
                 // 保存当前所有标签页的URL（用于"继续浏览上次"功能）
                 if (_tabManager != null && _settingsService?.Settings != null)
                 {
@@ -1357,6 +1480,22 @@ public partial class MainForm : Form
         
         FormClosed += (s, e) =>
         {
+            if (_isIncognito && !string.IsNullOrEmpty(_incognitoDataFolder))
+            {
+                // 尝试清理隐身模式数据目录
+                // 注意：WebView2 进程可能还未完全退出，所以可能无法立即删除
+                // 这里我们只是尽力而为，或者可以注册一个延迟清理任务
+                Task.Run(async () => {
+                    await Task.Delay(1000); // 等待 WebView2 释放文件
+                    try
+                    {
+                        if (Directory.Exists(_incognitoDataFolder))
+                            Directory.Delete(_incognitoDataFolder, true);
+                    }
+                    catch { }
+                });
+            }
+
             try
             {
                 // 停止所有定时器

@@ -132,11 +132,25 @@ public static class HtmlGenerator
     /// <summary>
     /// 生成新标签页 HTML
     /// </summary>
-    public static string GenerateNewTabPage(BrowserSettings settings, List<FrequentSite>? frequentSites = null)
+    public static string GenerateNewTabPage(BrowserSettings settings, List<FrequentSite>? frequentSites = null, bool isIncognito = false)
     {
+        if (isIncognito)
+        {
+            return GenerateIncognitoPage(settings);
+        }
+
         var shortcutsHtml = GenerateShortcutsHtml(frequentSites);
         var watermarkPngBase64 = GetIconPngBase64(1024, "鲲穹_.png"); // 使用用户指定的 PNG 水印
         var logoPngBase64 = GetIconPngBase64(144, "鲲穹AI浏览器.ico"); // Logo 保持原样
+        
+        var backgroundColor = "#ffffff";
+        var textColor = "#1e293b";
+        var inputBackground = "#ffffff";
+        var inputColor = "#1e293b";
+        var inputBorder = "rgba(0, 0, 0, 0.1)";
+        var searchBtnBackground = "#2563eb";
+        var searchBtnColor = "white";
+        
         var watermarkStyle = string.IsNullOrEmpty(watermarkPngBase64) ? "" : $@"
          .watermark-container {{
              position: fixed;
@@ -169,13 +183,13 @@ public static class HtmlGenerator
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
             font-family: 'Microsoft YaHei UI', 'Segoe UI', sans-serif;
-            background: #ffffff;
+            background: {backgroundColor};
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #1e293b;
+            color: {textColor};
             position: relative;
             overflow: hidden;
         }}
@@ -191,14 +205,14 @@ public static class HtmlGenerator
         }}
         .logo {{ margin-bottom: 12px; }}
         .logo-img {{ width: 72px; height: 72px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); }}
-        h1 {{ font-size: 32px; font-weight: 600; margin-bottom: 28px; letter-spacing: 0.5px; color: #334155; }}
+        h1 {{ font-size: 32px; font-weight: 600; margin-bottom: 28px; letter-spacing: 0.5px; color: {textColor}; }}
         .search-box {{ position: relative; width: 100%; max-width: 600px; margin: 0 auto 40px; }}
         .search-input {{
             width: 100%; padding: 18px 60px 18px 24px; font-size: 16px;
-            border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 30px; outline: none;
+            border: 1px solid {inputBorder}; border-radius: 30px; outline: none;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            background: #ffffff;
-            color: #1e293b;
+            background: {inputBackground};
+            color: {inputColor};
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }}
         .search-input:focus {{
@@ -209,19 +223,19 @@ public static class HtmlGenerator
         .search-btn {{
             position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
             width: 42px; height: 42px; border: none; border-radius: 50%;
-            background: #2563eb; color: white;
+            background: {searchBtnBackground}; color: {searchBtnColor};
             cursor: pointer; transition: all 0.2s;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
             display: flex; align-items: center; justify-content: center;
         }}
-        .search-btn:hover {{ background: #1d4ed8; transform: translateY(-50%) scale(1.05); }}
+        .search-btn:hover {{ background: {searchBtnBackground}; opacity: 0.9; transform: translateY(-50%) scale(1.05); }}
         .search-btn svg {{ width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }}
         .shortcuts {{ display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }}
-        .shortcut {{ width: 88px; text-decoration: none; color: #475569; text-align: center; transition: all 0.2s; }}
+        .shortcut {{ width: 88px; text-decoration: none; color: {textColor}; text-align: center; transition: all 0.2s; }}
         .shortcut:hover {{ transform: translateY(-4px); color: #2563eb; }}
         .shortcut-icon {{
             width: 64px; height: 64px;
-            background: #ffffff;
+            background: {inputBackground};
             border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 20px;
             display: flex; align-items: center;
@@ -261,6 +275,143 @@ public static class HtmlGenerator
         </div>
     </div>
     <div class='footer'>轻量 · 快速 · 简洁</div>
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const searchEngine = '{settings.SearchEngine}';
+        searchInput.addEventListener('keydown', e => {{ if (e.key === 'Enter') doSearch(); }});
+        function doSearch() {{
+            const query = searchInput.value.trim();
+            if (!query) return;
+            if (query.includes('.') && !query.includes(' ')) {{
+                window.location.href = query.startsWith('http') ? query : 'https://' + query;
+            }} else {{
+                window.location.href = searchEngine + encodeURIComponent(query);
+            }}
+        }}
+    </script>
+</body>
+</html>";
+    }
+
+    private static string GenerateIncognitoPage(BrowserSettings settings)
+    {
+        return $@"<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>InPrivate 浏览</title>
+    <style>
+        body {{
+            background-color: #202124;
+            color: #fff;
+            font-family: 'Segoe UI', 'Microsoft YaHei UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }}
+        .container {{
+            max-width: 720px;
+            padding: 20px;
+        }}
+        .header {{
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }}
+        .icon {{
+            font-size: 48px;
+            margin-right: 20px;
+        }}
+        h1 {{
+            font-size: 24px;
+            font-weight: 400;
+            margin: 0;
+        }}
+        p {{
+            color: #bdc1c6;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }}
+        .cards {{
+            display: flex;
+            gap: 20px;
+        }}
+        .card {{
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+        }}
+        .card h3 {{
+            font-size: 16px;
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: #fff;
+        }}
+        ul {{
+            margin: 0;
+            padding-left: 20px;
+            color: #9aa0a6;
+        }}
+        li {{
+            margin-bottom: 8px;
+            font-size: 13px;
+        }}
+        .search-box {{
+            margin-top: 40px;
+            position: relative;
+        }}
+        .search-input {{
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 24px;
+            border: 1px solid #5f6368;
+            background: #303134;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }}
+        .search-input:focus {{
+            background: #202124;
+            border-color: #8ab4f8;
+        }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <div class='icon'>🕶️</div>
+            <div>
+                <h1>您已进入 InPrivate 浏览模式</h1>
+            </div>
+        </div>
+        <p>现在，您可以私密地浏览网页，其他人使用此设备时将不会看到您的活动。不过，您下载的内容和添加的书签仍会保存在此设备上。</p>
+        
+        <div class='cards'>
+            <div class='card'>
+                <h3>鲲穹AI浏览器 不会保存以下信息：</h3>
+                <ul>
+                    <li>您的浏览历史记录</li>
+                    <li>Cookie 和网站数据</li>
+                    <li>表单中输入的信息</li>
+                </ul>
+            </div>
+            <div class='card'>
+                <h3>以下主体可能仍会看到您的活动：</h3>
+                <ul>
+                    <li>您访问的网站</li>
+                    <li>您的雇主或您所在的学校</li>
+                    <li>您的互联网服务提供商</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class='search-box'>
+            <input type='text' class='search-input' id='searchInput' placeholder='搜索或输入网址' autofocus>
+        </div>
+    </div>
     <script>
         const searchInput = document.getElementById('searchInput');
         const searchEngine = '{settings.SearchEngine}';

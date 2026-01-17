@@ -53,10 +53,10 @@ public class TabButton : Panel
     private static readonly Color LightForeColor = Color.FromArgb(60, 60, 60);
 
     // 深色主题颜色（隐身模式）
-    private static readonly Color DarkActiveBg = Color.FromArgb(66, 67, 70);
-    private static readonly Color DarkInactiveBg = Color.FromArgb(53, 54, 58);
-    private static readonly Color DarkHoverBg = Color.FromArgb(70, 71, 75);
-    private static readonly Color DarkForeColor = Color.FromArgb(200, 200, 200);
+    private static readonly Color DarkActiveBg = Color.Black;
+    private static readonly Color DarkInactiveBg = Color.FromArgb(35, 35, 35);
+    private static readonly Color DarkHoverBg = Color.FromArgb(50, 50, 50);
+    private static readonly Color DarkForeColor = Color.White;
 
     private Color ActiveBg => _isDarkTheme ? DarkActiveBg : LightActiveBg;
     private Color InactiveBg => _isDarkTheme ? DarkInactiveBg : LightInactiveBg;

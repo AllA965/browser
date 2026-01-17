@@ -33,12 +33,13 @@ public static class MenuFactory
         {
             Font = new Font("Microsoft YaHei UI", 9F),
             AutoClose = false,
-            BackColor = Color.FromArgb(249, 249, 249),
+            BackColor = isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249),
+            ForeColor = isIncognito ? Color.White : Color.Black,
             ShowImageMargin = true,
             ImageScalingSize = new Size(20, 20),
             Padding = new Padding(0, 4, 0, 4)
         };
-        menu.Renderer = new ModernMenuRenderer();
+        menu.Renderer = new ModernMenuRenderer(isIncognito);
 
         // 新建标签页
         var newTab = CreateMenuItem("新建标签页(T)", "Ctrl+T", MenuIconDrawer.DrawNewTab);

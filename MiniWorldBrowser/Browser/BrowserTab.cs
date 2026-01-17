@@ -26,6 +26,7 @@ public class BrowserTab : IDisposable
     public DateTime LastActiveTime { get; set; } = DateTime.Now;
     public bool IsSuspended { get; private set; }
     public bool BlockFind { get; set; }
+    public bool IsIncognito => !string.IsNullOrEmpty(_incognitoUserDataFolder);
     
     public bool CanGoBack => _isInitialized && WebView.CoreWebView2?.CanGoBack == true;
     public bool CanGoForward => _isInitialized && WebView.CoreWebView2?.CanGoForward == true;
@@ -48,6 +49,7 @@ public class BrowserTab : IDisposable
     private readonly IHistoryService? _historyService;
     private readonly string _resourceLogPath;
     private bool _isInitialized;
+    private readonly string? _incognitoUserDataFolder;
     private string _pendingUrl = "";
     private bool _pendingShow = false;  // 标记是否需要在内容加载后显示
     private bool _hasShownOnce = false; // 标记是否已经显示过一次
@@ -66,6 +68,12 @@ public class BrowserTab : IDisposable
     /// </summary>
     private string GetUserDataFolder()
     {
+        // 如果是隐身模式，使用传入的临时目录
+        if (!string.IsNullOrEmpty(_incognitoUserDataFolder))
+        {
+            return _incognitoUserDataFolder;
+        }
+
         // 检查是否使用自定义缓存路径
         if (_settingsService?.Settings?.UseCustomCachePath == true && 
             !string.IsNullOrEmpty(_settingsService.Settings.CustomCachePath))
@@ -110,11 +118,12 @@ public class BrowserTab : IDisposable
         return null; // 使用系统安装的 WebView2
     }
     
-    public BrowserTab(Panel container, ISettingsService settingsService, IHistoryService? historyService = null)
+    public BrowserTab(Panel container, ISettingsService settingsService, IHistoryService? historyService = null, string? incognitoUserDataFolder = null)
     {
         _container = container;
         _settingsService = settingsService;
         _historyService = historyService;
+        _incognitoUserDataFolder = incognitoUserDataFolder;
 
         try
         {
@@ -282,8 +291,8 @@ public class BrowserTab : IDisposable
                 settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
                 
                 // 启用更多功能支持
-                settings.IsPasswordAutosaveEnabled = true;
-                settings.IsGeneralAutofillEnabled = true;
+                settings.IsPasswordAutosaveEnabled = !IsIncognito; // 隐身模式不自动保存密码
+                settings.IsGeneralAutofillEnabled = !IsIncognito; // 隐身模式不自动填充
                 settings.IsWebMessageEnabled = true;
                 settings.AreHostObjectsAllowed = true;
             }
@@ -1526,9 +1535,10 @@ public class BrowserTab : IDisposable
             {
                 var settings = _settingsService?.Settings ?? new Models.BrowserSettings();
                 var frequentSites = _historyService?.GetFrequentSites(6);
-                var newTabHtml = HtmlGenerator.GenerateNewTabPage(settings, frequentSites);
+                var isIncognito = !string.IsNullOrEmpty(_incognitoUserDataFolder);
+                var newTabHtml = HtmlGenerator.GenerateNewTabPage(settings, frequentSites, isIncognito);
                 Url = "about:newtab";
-                Title = "新标签页";
+                Title = isIncognito ? "InPrivate - 新标签页" : "新标签页";
                 IsSecure = true;
                 WebView.CoreWebView2.NavigateToString(newTabHtml);
                 TitleChanged?.Invoke(this);

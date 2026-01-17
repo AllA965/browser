@@ -21,6 +21,7 @@ public class BrowserTabManager
     private readonly IAdBlockService _adBlockService;
     private readonly IHistoryService? _historyService;
     private readonly IBookmarkService? _bookmarkService;
+    private readonly string? _incognitoUserDataFolder;
     private readonly PasswordService _passwordService = new();
     
     private BrowserTab? _activeTab;
@@ -72,7 +73,8 @@ public class BrowserTabManager
         ISettingsService settingsService,
         IAdBlockService adBlockService,
         IHistoryService? historyService = null,
-        IBookmarkService? bookmarkService = null)
+        IBookmarkService? bookmarkService = null,
+        string? incognitoUserDataFolder = null)
     {
         _browserContainer = browserContainer;
         _tabContainer = tabContainer;
@@ -82,6 +84,7 @@ public class BrowserTabManager
         _adBlockService = adBlockService;
         _historyService = historyService;
         _bookmarkService = bookmarkService;
+        _incognitoUserDataFolder = incognitoUserDataFolder;
 
         _tabContainer.SizeChanged += (_, __) => UpdateTabLayout();
         _newTabButton.SizeChanged += (_, __) => UpdateTabLayout();
@@ -324,7 +327,7 @@ public class BrowserTabManager
         
         try
         {
-            var tab = new BrowserTab(_browserContainer, _settingsService, _historyService);
+            var tab = new BrowserTab(_browserContainer, _settingsService, _historyService, _incognitoUserDataFolder);
             
             var tabBtn = new TabButton { TabId = tab.Id };
             tabBtn.RightClickToClose = _settingsService?.Settings?.RightClickCloseTab ?? false;
@@ -486,7 +489,7 @@ public class BrowserTabManager
         // 正常创建标签页
         try
         {
-            tab = new BrowserTab(_browserContainer, _settingsService!, _historyService);
+            tab = new BrowserTab(_browserContainer, _settingsService!, _historyService, _incognitoUserDataFolder);
             
             // 创建标签按钮
             tabBtn = new TabButton { TabId = tab.Id };

@@ -12,7 +12,8 @@ public class HistoryService : IHistoryService, IDisposable
 {
     private readonly List<HistoryItem> _items = new();
     private int _currentIndex = -1;
-    private readonly string _historyFilePath;
+    private readonly string? _historyFilePath;
+    private readonly bool _persistent;
     private readonly object _lock = new();
     private bool _isDirty = false;
     private System.Windows.Forms.Timer? _saveTimer;
@@ -23,32 +24,36 @@ public class HistoryService : IHistoryService, IDisposable
     public bool CanGoBack => _currentIndex > 0;
     public bool CanGoForward => _currentIndex < _items.Count - 1;
     
-    public HistoryService()
+    public HistoryService(bool persistent = true)
     {
-        // 历史记录文件路径
-        var appDataPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "MiniWorld");
-        
-        try
+        _persistent = persistent;
+        if (_persistent)
         {
-            if (!Directory.Exists(appDataPath))
-                Directory.CreateDirectory(appDataPath);
+            // 历史记录文件路径
+            var appDataPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "MiniWorld");
+            
+            try
+            {
+                if (!Directory.Exists(appDataPath))
+                    Directory.CreateDirectory(appDataPath);
+            }
+            catch { }
+            
+            _historyFilePath = Path.Combine(appDataPath, "history.json");
+            
+            // 加载历史记录
+            Load();
+            
+            // 使用 Windows Forms Timer（在 UI 线程执行，更安全）
+            _saveTimer = new System.Windows.Forms.Timer { Interval = 60000 }; // 每分钟保存一次
+            _saveTimer.Tick += OnSaveTimerTick;
+            _saveTimer.Start();
+            
+            // 注册应用程序退出事件
+            Application.ApplicationExit += OnApplicationExit;
         }
-        catch { }
-        
-        _historyFilePath = Path.Combine(appDataPath, "history.json");
-        
-        // 加载历史记录
-        Load();
-        
-        // 使用 Windows Forms Timer（在 UI 线程执行，更安全）
-        _saveTimer = new System.Windows.Forms.Timer { Interval = 60000 }; // 每分钟保存一次
-        _saveTimer.Tick += OnSaveTimerTick;
-        _saveTimer.Start();
-        
-        // 注册应用程序退出事件
-        Application.ApplicationExit += OnApplicationExit;
     }
     
     private void OnSaveTimerTick(object? sender, EventArgs e)
@@ -281,6 +286,9 @@ public class HistoryService : IHistoryService, IDisposable
     /// </summary>
     private void SaveInternal()
     {
+        if (!_persistent || string.IsNullOrEmpty(_historyFilePath))
+            return;
+
         try
         {
             List<HistoryItem> itemsCopy;

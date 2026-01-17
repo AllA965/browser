@@ -182,6 +182,33 @@ public partial class MainForm
                 g.Clear(Color.Transparent);
                 iconDrawer(g, new Rectangle(0, 0, 20, 20));
             }
+
+            // 如果是隐身模式，将图标颜色转换为白色
+            if (_isIncognito)
+            {
+                var newBitmap = new Bitmap(20, 20);
+                using (var g = Graphics.FromImage(newBitmap))
+                {
+                    // 将所有非透明像素转换为白色
+                    var matrix = new System.Drawing.Imaging.ColorMatrix(new[]
+                    {
+                        new float[] { 0, 0, 0, 0, 0 }, // R 乘数
+                        new float[] { 0, 0, 0, 0, 0 }, // G 乘数
+                        new float[] { 0, 0, 0, 0, 0 }, // B 乘数
+                        new float[] { 0, 0, 0, 1, 0 }, // A 乘数 (保持原样)
+                        new float[] { 1, 1, 1, 0, 1 }  // 偏移量 (R,G,B 都加 1，即变成白色)
+                    });
+                    
+                    var attributes = new System.Drawing.Imaging.ImageAttributes();
+                    attributes.SetColorMatrix(matrix);
+                    
+                    g.DrawImage(iconBitmap, new Rectangle(0, 0, 20, 20),
+                        0, 0, 20, 20, GraphicsUnit.Pixel, attributes);
+                }
+                iconBitmap.Dispose();
+                iconBitmap = newBitmap;
+            }
+
             item.Image = iconBitmap;
             item.ImageScaling = ToolStripItemImageScaling.None;
         }
@@ -204,15 +231,16 @@ public partial class MainForm
         {
             Font = new Font("Microsoft YaHei UI", 9F),
             AutoClose = false,
-            BackColor = Color.FromArgb(249, 249, 249),
+            BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249),
+            ForeColor = _isIncognito ? Color.White : Color.Black,
             ShowImageMargin = true,
             ImageScalingSize = new Size(20, 20),
-            Padding = new Padding(0, 4, 0, 4)  // 减少上下 Padding 从 8 改为 4
+            Padding = new Padding(0, 4, 0, 4)
         };
         var menu = _mainMenu;
 
         // 应用 Edge 风格渲染器
-        menu.Renderer = new ModernMenuRenderer();
+        menu.Renderer = new ModernMenuRenderer(_isIncognito);
 
         // 菜单关闭时的处理
         menu.Closed += (s, e) => 
@@ -249,7 +277,9 @@ public partial class MainForm
         // 收藏夹
         var bookmarks = CreateMenuItem("收藏夹(B)", null, MenuIconDrawer.DrawBookmark);
         bookmarks.DropDownDirection = ToolStripDropDownDirection.Left;
-        bookmarks.DropDown.Renderer = new ModernMenuRenderer();
+        bookmarks.DropDown.Renderer = new ModernMenuRenderer(_isIncognito);
+        bookmarks.DropDown.BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249);
+        bookmarks.DropDown.ForeColor = _isIncognito ? Color.White : Color.Black;
 
         // 显示收藏栏 - 切换开关，不关闭菜单
         var showBar = new ToolStripMenuItem("显示收藏栏(S)")
@@ -339,7 +369,9 @@ public partial class MainForm
         // 历史记录
         var history = CreateMenuItem("历史记录(H)", "Ctrl+H", MenuIconDrawer.DrawHistory);
         history.DropDownDirection = ToolStripDropDownDirection.Left;
-        history.DropDown.Renderer = new ModernMenuRenderer();
+        history.DropDown.Renderer = new ModernMenuRenderer(_isIncognito);
+        history.DropDown.BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249);
+        history.DropDown.ForeColor = _isIncognito ? Color.White : Color.Black;
 
         var showHistory = new ToolStripMenuItem("显示全部历史记录")
         {
@@ -414,7 +446,9 @@ public partial class MainForm
         // 更多工具
         var tools = CreateMenuItem("更多工具", null, MenuIconDrawer.DrawTools);
         tools.DropDownDirection = ToolStripDropDownDirection.Left;
-        tools.DropDown.Renderer = new ModernMenuRenderer();
+        tools.DropDown.Renderer = new ModernMenuRenderer(_isIncognito);
+        tools.DropDown.BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249);
+        tools.DropDown.ForeColor = _isIncognito ? Color.White : Color.Black;
 
         var taskManager = new ToolStripMenuItem("任务管理器(T)")
         {
@@ -425,6 +459,10 @@ public partial class MainForm
 
         var encoding = new ToolStripMenuItem("编码(E)");
         encoding.DropDownDirection = ToolStripDropDownDirection.Left;
+        encoding.DropDown.Renderer = new ModernMenuRenderer(_isIncognito);
+        encoding.DropDown.BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249);
+        encoding.DropDown.ForeColor = _isIncognito ? Color.White : Color.Black;
+        
         var encodingAuto = new ToolStripMenuItem("自动检测") { Checked = true };
         encodingAuto.Click += (s, e) => { CloseMainMenu(); SetEncoding("auto"); };
         encoding.DropDownItems.Add(encodingAuto);
@@ -495,10 +533,16 @@ public partial class MainForm
                 "鲲穹AI浏览器\n版本 1.0\n\n基于 WebView2 内核",
                 "关于", MessageBoxButtons.OK, MessageBoxIcon.Information); }));
 
+        if (_isIncognito)
+        {
+            menu.Items.Add(CreateMenuItem("关于 InPrivate 浏览", null, MenuIconDrawer.DrawIncognito,
+                () => { CloseMainMenu(); ShowIncognitoInfo(); }));
+        }
+
         menu.Items.Add(new ToolStripSeparator());
 
         // 退出
-        var exit = new ToolStripMenuItem("关闭鲲穹AI浏览器")
+        var exit = new ToolStripMenuItem(_isIncognito ? "关闭隐身窗口" : "关闭鲲穹AI浏览器")
         {
             Padding = new Padding(8, 6, 8, 6)
         };
@@ -512,6 +556,10 @@ public partial class MainForm
 
     private void AddBookmarkFolderItems(ToolStripMenuItem parent, string folderId)
     {
+        parent.DropDown.Renderer = new ModernMenuRenderer(_isIncognito);
+        parent.DropDown.BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249);
+        parent.DropDown.ForeColor = _isIncognito ? Color.White : Color.Black;
+
         var children = _bookmarkService.GetChildren(folderId);
         foreach (var child in children)
         {
@@ -562,7 +610,7 @@ public partial class MainForm
             Location = new Point(40, 9),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", 9F),
-            ForeColor = Color.FromArgb(32, 32, 32)
+            ForeColor = _isIncognito ? Color.White : Color.FromArgb(32, 32, 32)
         };
 
         var btnMinus = CreateZoomButton("—", new Point(120, 5), new Size(32, 24), () => { ZoomOut(); UpdateZoomLabel(); });
@@ -574,7 +622,7 @@ public partial class MainForm
             Location = new Point(154, 7),
             TextAlign = ContentAlignment.MiddleCenter,
             Font = new Font("Microsoft YaHei UI", 9F),
-            ForeColor = Color.FromArgb(32, 32, 32)
+            ForeColor = _isIncognito ? Color.White : Color.FromArgb(32, 32, 32)
         };
 
         var btnPlus = CreateZoomButton("+", new Point(206, 5), new Size(32, 24), () => { ZoomIn(); UpdateZoomLabel(); });
@@ -602,7 +650,7 @@ public partial class MainForm
             Font = new Font("Segoe UI", 10F),
             Cursor = Cursors.Hand,
             BackColor = Color.Transparent,
-            ForeColor = Color.FromArgb(32, 32, 32)
+            ForeColor = _isIncognito ? Color.White : Color.FromArgb(32, 32, 32)
         };
 
         btn.Paint += (s, e) =>
@@ -610,16 +658,16 @@ public partial class MainForm
             var g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             var rect = new Rectangle(0, 0, btn.Width - 1, btn.Height - 1);
-            using var pen = new Pen(Color.FromArgb(180, 180, 180));
+            using var pen = new Pen(_isIncognito ? Color.FromArgb(100, 100, 100) : Color.FromArgb(180, 180, 180));
             using var path = CreateRoundedRect(rect, 4);
             g.DrawPath(pen, path);
         };
 
-        btn.MouseEnter += (s, e) => btn.BackColor = Color.FromArgb(232, 232, 232);
+        btn.MouseEnter += (s, e) => btn.BackColor = _isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(232, 232, 232);
         btn.MouseLeave += (s, e) => btn.BackColor = Color.Transparent;
         btn.MouseDown += (s, e) => 
         {
-            btn.BackColor = Color.FromArgb(210, 210, 210);
+            btn.BackColor = _isIncognito ? Color.FromArgb(90, 90, 90) : Color.FromArgb(210, 210, 210);
             // 如果需要保持菜单打开，设置重新打开标志
             if (keepMenuOpen)
             {
@@ -631,7 +679,7 @@ public partial class MainForm
         btn.MouseUp += (s, e) =>
         {
             btn.BackColor = btn.ClientRectangle.Contains(btn.PointToClient(Cursor.Position))
-                ? Color.FromArgb(232, 232, 232) : Color.Transparent;
+                ? (_isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(232, 232, 232)) : Color.Transparent;
             // 如果不需要保持菜单打开，在MouseUp时执行操作
             if (!keepMenuOpen && btn.ClientRectangle.Contains(btn.PointToClient(Cursor.Position)))
                 onClick?.Invoke();
@@ -985,7 +1033,7 @@ public partial class MainForm
 
     private void OpenIncognitoWindow()
     {
-        var incognitoForm = new IncognitoForm(_settingsService, _bookmarkService, _loginService, _historyService);
+        var incognitoForm = new MainForm(true);
         incognitoForm.Show();
     }
 
