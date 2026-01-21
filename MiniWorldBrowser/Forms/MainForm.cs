@@ -264,7 +264,7 @@ public partial class MainForm : Form
         Size = new Size(1200, 800);
         MinimumSize = new Size(800, 600);
         StartPosition = FormStartPosition.CenterScreen;
-        BackColor = _isIncognito ? Color.FromArgb(53, 54, 58) : Color.FromArgb(240, 240, 240);
+        BackColor = _isIncognito ? Color.FromArgb(53, 54, 58) : Color.FromArgb(232, 234, 237);
         FormBorderStyle = FormBorderStyle.None;
         
         // 设置窗口图标
@@ -307,7 +307,7 @@ public partial class MainForm : Form
         {
             Dock = DockStyle.Top,
             Height = 36,
-            BackColor = _isIncognito ? Color.FromArgb(20, 20, 20) : Color.FromArgb(223, 225, 229)
+            BackColor = _isIncognito ? Color.FromArgb(20, 20, 20) : Color.FromArgb(232, 234, 237)
         };
         _tabBar.MouseDown += OnTitleBarMouseDown;
 
@@ -484,7 +484,7 @@ public partial class MainForm : Form
         {
             Dock = DockStyle.Top,
             Height = 44,
-            BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.White,
+            BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.FromArgb(232, 234, 237),
             Padding = new Padding(4, 4, 4, 4)
         };
         
@@ -531,7 +531,7 @@ public partial class MainForm : Form
         _aiBtn.Click += (s, e) => ToggleAISidePanel();
 
         // 布局
-        var toolPanel = new Panel { Dock = DockStyle.Fill, BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.White };
+        var toolPanel = new Panel { Dock = DockStyle.Fill, BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.FromArgb(232, 234, 237) };
         
         var navPanel = new FlowLayoutPanel
         {
@@ -674,7 +674,7 @@ public partial class MainForm : Form
     {
         _bookmarkBar = new BookmarkBar(_bookmarkService);
         _bookmarkBar.IsIncognito = _isIncognito;
-        _bookmarkBar.BackColor = _isIncognito ? Color.FromArgb(53, 54, 58) : Color.White;
+        _bookmarkBar.BackColor = _isIncognito ? Color.FromArgb(53, 54, 58) : Color.FromArgb(232, 234, 237);
         _bookmarkBar.ForeColor = _isIncognito ? Color.FromArgb(200, 200, 200) : Color.FromArgb(60, 60, 60);
     }    // 事件绑定移到 InitializeManagers 之后，避免空引用
     
@@ -696,7 +696,7 @@ public partial class MainForm : Form
         {
             Dock = DockStyle.Bottom,
             Height = 22,
-            BackColor = _isIncognito ? Color.FromArgb(41, 42, 45) : Color.FromArgb(240, 240, 240)
+            BackColor = _isIncognito ? Color.FromArgb(41, 42, 45) : Color.FromArgb(232, 234, 237)
         };
         
         _statusLabel = new Label
