@@ -94,14 +94,14 @@ public partial class MainForm
     
     private void ShowAddressDropdown()
     {
+        if (_addressBar == null || _addressDropdown == null || _addressDropdown.IsDisposed) return;
+
         var text = _addressBar.Text.Trim();
+        _addressDropdown.SearchEngine = _settingsService.Settings.SearchEngine;
+        _addressDropdown.Show(_addressBar, text, _urlHistory);
         
-        if (_addressBar != null)
-        {
-            _addressBar.IsDropdownOpen = true;
-            _addressDropdown.SearchEngine = _settingsService.Settings.SearchEngine;
-            _addressDropdown.Show(_addressBar, text, _urlHistory);
-        }
+        // 只有当下拉框确实有建议并显示时，才改变地址栏样式
+        _addressBar.IsDropdownOpen = _addressDropdown.Visible;
     }
     
     #endregion

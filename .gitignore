@@ -57,13 +57,31 @@ Output/
 *_ISPPBuiltins.iss
 *Setup.exe
 KunQiongBrowserSetup.exe
+鲲穹AI浏览器_安装包.exe
 *.iss.bak
 installer/
+# Ignore generated executables in the root directory (usually installers)
+/*.exe
 
 # .NET Core / .NET 5+
 project.lock.json
 project.fragment.lock.json
 artifacts/
+appsettings.Development.json
+appsettings.Local.json
+
+# Python (for Interface scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Node.js / Web (if applicable)
+node_modules/
+npm-debug.log
+yarn-error.log
 
 # StyleCop
 StyleCop.Cache

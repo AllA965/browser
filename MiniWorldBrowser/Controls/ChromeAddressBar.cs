@@ -14,11 +14,15 @@ namespace MiniWorldBrowser.Controls
         private bool _isDarkMode = false;
         
         // Chrome Colors
-        private Color _idleBackColor = Color.FromArgb(241, 243, 244); // Google Grey 100 #F1F3F4
+        private Color _idleBackColor = Color.White; // Changed to White for modern look
         private Color _activeBackColor = Color.White;
-        private Color _focusRingColor = Color.FromArgb(26, 115, 232); // Google Blue 600 #1A73E8
-        private Color _hoverBackColor = Color.FromArgb(232, 234, 237); // Google Grey 200 #E8EAED
+        private Color _focusRingColor = Color.Transparent; // 用户要求透明或灰色，这里设为透明以移除蓝色边框，或者使用淡灰色
+        private Color _borderColor = Color.FromArgb(218, 220, 224); // 新增边框颜色 Google Grey 300
+        private Color _hoverBackColor = Color.FromArgb(241, 243, 244); // Light grey for hover
         private Color _textColor = Color.FromArgb(32, 33, 36);
+        
+        // Expanded corner radius
+        private int _expandedCornerRadius = 16;
 
         public bool IsDarkMode
         {
@@ -45,9 +49,9 @@ namespace MiniWorldBrowser.Controls
             }
             else
             {
-                _idleBackColor = Color.FromArgb(241, 243, 244);
+                _idleBackColor = Color.White;
                 _activeBackColor = Color.White;
-                _hoverBackColor = Color.FromArgb(232, 234, 237);
+                _hoverBackColor = Color.FromArgb(241, 243, 244);
                 _textColor = Color.FromArgb(32, 33, 36);
             }
             _textBox.BackColor = _isFocused || _isDropdownOpen ? _activeBackColor : _idleBackColor;
@@ -132,11 +136,13 @@ namespace MiniWorldBrowser.Controls
 
         [System.ComponentModel.Browsable(true)]
         [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Visible)]
-        public override string? Text
+#pragma warning disable CS8765
+        public override string Text
         {
             get => _textBox.Text;
-            set => _textBox.Text = value ?? string.Empty;
+            set => _textBox.Text = value;
         }
+#pragma warning restore CS8765
 
         public int SelectionStart
         {
@@ -170,12 +176,31 @@ namespace MiniWorldBrowser.Controls
             e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
             var rect = new Rectangle(0, 0, this.Width - 1, this.Height - 1);
-            int radius = this.Height / 2; // Full capsule
-
-            using var path = GetAddressBarPath(rect, radius);
             
             // 1. Fill Background
             var bgColor = (_isFocused || _isDropdownOpen) ? _activeBackColor : (_isHovered ? _hoverBackColor : _idleBackColor);
+            
+            // Determine path based on state
+            using var path = new GraphicsPath();
+            
+            if (_isDropdownOpen)
+            {
+                // Expanded state: Top rounded, bottom flat
+                int d = _expandedCornerRadius * 2;
+                path.AddArc(rect.X, rect.Y, d, d, 180, 90); // Top-left
+                path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90); // Top-right
+                path.AddLine(rect.Right, rect.Bottom, rect.X, rect.Bottom); // Bottom edge
+                path.CloseFigure();
+            }
+            else
+            {
+                // Default state: Capsule
+                int d = rect.Height; // Diameter = Height
+                path.AddArc(rect.X, rect.Y, d, d, 90, 180); // Left arc
+                path.AddArc(rect.Right - d, rect.Y, d, d, 270, 180); // Right arc
+                path.CloseFigure();
+            }
+
             using (var brush = new SolidBrush(bgColor))
             {
                 e.Graphics.FillPath(brush, path);
@@ -184,59 +209,46 @@ namespace MiniWorldBrowser.Controls
             // 2. Draw Focus Ring or Border
             if (_isFocused || _isDropdownOpen)
             {
-                using var pen = new Pen(_focusRingColor, 2f);
-                // Inset slightly to keep border within bounds
-                var borderRect = rect;
-                borderRect.Inflate(-1, -1);
+                // 使用灰色边框替代原来的蓝色聚焦环
+                // 如果是 DropdownOpen 状态，使用透明色或者灰色，这里统一用灰色保持轮廓
+                using var pen = new Pen(_borderColor, 1f); 
                 
                 if (_isDropdownOpen)
                 {
-                    // 下拉框打开时，不绘制底部边框，实现一体化效果
-                    int d = (radius - 1) * 2;
+                    // Draw top and sides only
                     using var borderPath = new GraphicsPath();
-                    borderPath.AddLine(borderRect.X, borderRect.Bottom, borderRect.X, borderRect.Y + radius - 1);
-                    borderPath.AddArc(borderRect.X, borderRect.Y, d, d, 180, 90);
-                    borderPath.AddArc(borderRect.Right - d, borderRect.Y, d, d, 270, 90);
-                    borderPath.AddLine(borderRect.Right, borderRect.Y + radius - 1, borderRect.Right, borderRect.Bottom);
+                    int d = _expandedCornerRadius * 2;
+                    
+                    // Start from bottom-left
+                    borderPath.AddLine(rect.X, rect.Bottom, rect.X, rect.Y + _expandedCornerRadius);
+                    borderPath.AddArc(rect.X, rect.Y, d, d, 180, 90); // Top-left
+                    borderPath.AddArc(rect.Right - d, rect.Y, d, d, 270, 90); // Top-right
+                    borderPath.AddLine(rect.Right, rect.Y + _expandedCornerRadius, rect.Right, rect.Bottom);
+                    
                     e.Graphics.DrawPath(pen, borderPath);
-
-                    // 绘制一个非常浅的分割线（可选，Chrome 有时会有）
-                    using var separatorPen = new Pen(Color.FromArgb(241, 243, 244), 1f);
-                    e.Graphics.DrawLine(separatorPen, borderRect.X + 1, borderRect.Bottom, borderRect.Right - 1, borderRect.Bottom);
                 }
                 else
                 {
-                    using var borderPath = GetAddressBarPath(borderRect, radius - 1);
-                    e.Graphics.DrawPath(pen, borderPath);
+                    // Full border for capsule
+                    e.Graphics.DrawPath(pen, path);
+                }
+            }
+            else
+            {
+                // Idle border
+                if (!IsDarkMode)
+                {
+                    using var borderPen = new Pen(Color.FromArgb(20, 0, 0, 0), 1f);
+                    e.Graphics.DrawPath(borderPen, path);
                 }
             }
         }
 
+        // Helper not used anymore but kept if needed for reference, or can be removed.
+        // Simplified OnPaint handles logic directly.
         private GraphicsPath GetAddressBarPath(Rectangle rect, int radius)
         {
-            var path = new GraphicsPath();
-            int d = radius * 2;
-            
-            // Ensure diameter doesn't exceed dimensions
-            if (d > rect.Height) d = rect.Height;
-            if (d > rect.Width) d = rect.Width;
-
-            if (_isDropdownOpen)
-            {
-                // Dropdown open: Rounded top, square bottom
-                path.AddArc(rect.X, rect.Y, d, d, 180, 90); // Top-left
-                path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90); // Top-right
-                path.AddLine(rect.Right, rect.Bottom, rect.X, rect.Bottom); // Bottom edge (flat)
-                path.CloseFigure();
-            }
-            else
-            {
-                // Capsule shape
-                path.AddArc(rect.X, rect.Y, d, d, 90, 180); // Left arc
-                path.AddArc(rect.Right - d, rect.Y, d, d, 270, 180); // Right arc
-                path.CloseFigure();
-            }
-            return path;
+            return new GraphicsPath(); // Placeholder
         }
 
         protected override void OnResize(EventArgs e)

@@ -287,7 +287,7 @@ public class FontSettingsDialog : Form
     {
         try
         {
-            var fontName = _standardFontCombo.SelectedItem?.ToString() ?? "宋体";
+            var fontName = _standardFontCombo.SelectedItem?.ToString() ?? "Microsoft YaHei";
             var fontSize = _standardFontSizeSlider.Value;
             _standardPreview.Font = new Font(fontName, fontSize);
             _standardPreview.Text = $"{fontSize}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.";
@@ -299,7 +299,7 @@ public class FontSettingsDialog : Form
     {
         try
         {
-            var fontName = _serifFontCombo.SelectedItem?.ToString() ?? "宋体";
+            var fontName = _serifFontCombo.SelectedItem?.ToString() ?? "Times New Roman";
             _serifPreview.Font = new Font(fontName, 16);
         }
         catch { }
@@ -309,7 +309,7 @@ public class FontSettingsDialog : Form
     {
         try
         {
-            var fontName = _sansSerifFontCombo.SelectedItem?.ToString() ?? "宋体";
+            var fontName = _sansSerifFontCombo.SelectedItem?.ToString() ?? "Arial";
             _sansSerifPreview.Font = new Font(fontName, 16);
         }
         catch { }
@@ -319,7 +319,7 @@ public class FontSettingsDialog : Form
     {
         try
         {
-            var fontName = _fixedWidthFontCombo.SelectedItem?.ToString() ?? "新宋体";
+            var fontName = _fixedWidthFontCombo.SelectedItem?.ToString() ?? "Consolas";
             _fixedWidthPreview.Font = new Font(fontName, 14);
         }
         catch { }
@@ -340,11 +340,11 @@ public class FontSettingsDialog : Form
     private void OnDoneClick(object? sender, EventArgs e)
     {
         // 保存设置
-        _settingsService.Settings.StandardFont = _standardFontCombo.SelectedItem?.ToString() ?? "宋体";
+        _settingsService.Settings.StandardFont = _standardFontCombo.SelectedItem?.ToString() ?? "Microsoft YaHei";
         _settingsService.Settings.StandardFontSize = _standardFontSizeSlider.Value;
-        _settingsService.Settings.SerifFont = _serifFontCombo.SelectedItem?.ToString() ?? "宋体";
-        _settingsService.Settings.SansSerifFont = _sansSerifFontCombo.SelectedItem?.ToString() ?? "宋体";
-        _settingsService.Settings.FixedWidthFont = _fixedWidthFontCombo.SelectedItem?.ToString() ?? "新宋体";
+        _settingsService.Settings.SerifFont = _serifFontCombo.SelectedItem?.ToString() ?? "Times New Roman";
+        _settingsService.Settings.SansSerifFont = _sansSerifFontCombo.SelectedItem?.ToString() ?? "Arial";
+        _settingsService.Settings.FixedWidthFont = _fixedWidthFontCombo.SelectedItem?.ToString() ?? "Consolas";
         _settingsService.Settings.MinimumFontSize = _minFontSizeSlider.Value;
         _settingsService.Save();
         

@@ -24,6 +24,9 @@ static class Program
         
         ApplicationConfiguration.Initialize();
         
+        // 设置全局默认字体为微软雅黑，使界面更现代化，接近 Edge 风格
+        Application.SetDefaultFont(new Font("Microsoft YaHei UI", 9F));
+        
         // 使用 ApplicationContext 来管理多窗口生命周期
         var context = new MultiWindowApplicationContext();
         context.ShowMainForm();

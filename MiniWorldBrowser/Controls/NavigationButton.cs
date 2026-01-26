@@ -117,39 +117,39 @@ public class NavigationButton : Control
             LineJoin = LineJoin.Round
         };
 
-        // 绘制房子轮廓
-        // 屋顶（三角形）
-        float roofTop = centerY - size;
+        // 绘制更简洁、现代的 Edge 风格房子图标
+        // 1. 绘制屋顶（V形向上）
+        float roofTop = centerY - size * 0.9f;
         float roofLeft = centerX - size;
         float roofRight = centerX + size;
-        float roofBottom = centerY - size * 0.1f;
+        float roofBaseY = centerY - size * 0.1f;
+
+        g.DrawLine(pen, roofLeft, roofBaseY, centerX, roofTop);
+        g.DrawLine(pen, centerX, roofTop, roofRight, roofBaseY);
+
+        // 2. 绘制房子主体轮廓（不带底部的矩形，更透气）
+        float houseWidth = size * 1.5f;
+        float houseLeft = centerX - houseWidth / 2f;
+        float houseRight = centerX + houseWidth / 2f;
+        float houseBottom = centerY + size * 0.9f;
         
-        var roofPoints = new PointF[]
-        {
-            new(centerX, roofTop),           // 顶点
-            new(roofLeft, roofBottom),       // 左下
-            new(roofRight, roofBottom)       // 右下
-        };
-        g.DrawPolygon(pen, roofPoints);
+        // 侧墙
+        g.DrawLine(pen, houseLeft, roofBaseY + 1, houseLeft, houseBottom);
+        g.DrawLine(pen, houseRight, roofBaseY + 1, houseRight, houseBottom);
         
-        // 房子主体（矩形）
-        float houseLeft = centerX - size * 0.75f;
-        float houseRight = centerX + size * 0.75f;
-        float houseTop = roofBottom;
-        float houseBottom = centerY + size;
-        
-        g.DrawLine(pen, houseLeft, houseTop, houseLeft, houseBottom);
+        // 底边（带一点向内的间隙，或者直接连通）
         g.DrawLine(pen, houseLeft, houseBottom, houseRight, houseBottom);
-        g.DrawLine(pen, houseRight, houseBottom, houseRight, houseTop);
-        
-        // 门（小矩形）
-        float doorWidth = size * 0.4f;
+
+        // 3. 绘制门（仅用一根短竖线或一个小倒 U 简化，这里选择倒 U 且不闭合底部）
+        float doorWidth = size * 0.5f;
         float doorHeight = size * 0.6f;
         float doorLeft = centerX - doorWidth / 2;
         float doorRight = centerX + doorWidth / 2;
         float doorTop = houseBottom - doorHeight;
-        
-        g.DrawRectangle(pen, doorLeft, doorTop, doorWidth, doorHeight);
+
+        g.DrawLine(pen, doorLeft, houseBottom, doorLeft, doorTop);
+        g.DrawLine(pen, doorLeft, doorTop, doorRight, doorTop);
+        g.DrawLine(pen, doorRight, doorTop, doorRight, houseBottom);
     }
 
     private void DrawBackIcon(Graphics g)
@@ -218,22 +218,37 @@ public class NavigationButton : Control
         using var pen = new Pen(color, penWidth)
         {
             StartCap = LineCap.Round,
-            EndCap = LineCap.Round
+            EndCap = LineCap.Round,
+            LineJoin = LineJoin.Round
         };
 
-        // 绘制圆弧（从右上角开始，顺时针约300度）
+        // 绘制圆弧：从 0 度开始，顺时针旋转 285 度（留出一点间隙避免重叠）
         var arcRect = new RectangleF(centerX - radius, centerY - radius, radius * 2, radius * 2);
-        g.DrawArc(pen, arcRect, -60, 300);
+        g.DrawArc(pen, arcRect, 0, 285);
 
-        // 绘制箭头（在圆弧末端，指向右上）
-        float arrowAngle = -60 * (float)(Math.PI / 180); // 转换为弧度
+        // 箭头位置：圆弧末端稍后一点（300度位置）
+        float arrowAngle = 300 * (float)(Math.PI / 180);
         float arrowX = centerX + radius * (float)Math.Cos(arrowAngle);
         float arrowY = centerY + radius * (float)Math.Sin(arrowAngle);
 
-        float arrowSize = radius * 0.45f;
-        // 箭头指向右上方
-        g.DrawLine(pen, arrowX, arrowY, arrowX + arrowSize * 0.3f, arrowY - arrowSize);
-        g.DrawLine(pen, arrowX, arrowY, arrowX + arrowSize, arrowY + arrowSize * 0.2f);
+        // 箭头方向：切线方向（垂直于半径，顺时针）
+        // 半径方向是 300 度，切线方向是 300 + 90 = 390 度 (即 30 度)
+        float tangentAngle = (300 + 90) * (float)(Math.PI / 180);
+        float arrowSize = radius * 0.5f;
+
+        // 箭头翼角（相对于切线反方向偏转）
+        float wingAngle = (float)(Math.PI * 0.2); // 约 36 度
+        
+        // 计算两个翼的末端点
+        float x1 = arrowX - arrowSize * (float)Math.Cos(tangentAngle - wingAngle);
+        float y1 = arrowY - arrowSize * (float)Math.Sin(tangentAngle - wingAngle);
+        
+        float x2 = arrowX - arrowSize * (float)Math.Cos(tangentAngle + wingAngle);
+        float y2 = arrowY - arrowSize * (float)Math.Sin(tangentAngle + wingAngle);
+
+        // 绘制箭头
+        g.DrawLine(pen, arrowX, arrowY, x1, y1);
+        g.DrawLine(pen, arrowX, arrowY, x2, y2);
     }
 
     private void DrawStopIcon(Graphics g)

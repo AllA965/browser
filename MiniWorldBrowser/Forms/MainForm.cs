@@ -100,7 +100,6 @@ public partial class MainForm : Form
     private System.Windows.Forms.Timer? _linkAnimationTimer;
     private int _linkAnimOffset = 0;
     private const int MaxLinkAnimOffset = 4;
-    private bool _isAddressBarHovered = false; // 已废弃，由 ChromeAddressBar 自行处理
     
     #endregion
     
@@ -484,7 +483,7 @@ public partial class MainForm : Form
         {
             Dock = DockStyle.Top,
             Height = 44,
-            BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.FromArgb(232, 234, 237),
+            BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.White,
             Padding = new Padding(4, 4, 4, 4)
         };
         
@@ -531,7 +530,7 @@ public partial class MainForm : Form
         _aiBtn.Click += (s, e) => ToggleAISidePanel();
 
         // 布局
-        var toolPanel = new Panel { Dock = DockStyle.Fill, BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.FromArgb(232, 234, 237) };
+        var toolPanel = new Panel { Dock = DockStyle.Fill, BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.White };
         
         var navPanel = new FlowLayoutPanel
         {
@@ -674,7 +673,7 @@ public partial class MainForm : Form
     {
         _bookmarkBar = new BookmarkBar(_bookmarkService);
         _bookmarkBar.IsIncognito = _isIncognito;
-        _bookmarkBar.BackColor = _isIncognito ? Color.FromArgb(53, 54, 58) : Color.FromArgb(232, 234, 237);
+        _bookmarkBar.BackColor = _isIncognito ? Color.FromArgb(53, 54, 58) : Color.White;
         _bookmarkBar.ForeColor = _isIncognito ? Color.FromArgb(200, 200, 200) : Color.FromArgb(60, 60, 60);
     }    // 事件绑定移到 InitializeManagers 之后，避免空引用
     
@@ -696,7 +695,7 @@ public partial class MainForm : Form
         {
             Dock = DockStyle.Bottom,
             Height = 22,
-            BackColor = _isIncognito ? Color.FromArgb(41, 42, 45) : Color.FromArgb(232, 234, 237)
+            BackColor = _isIncognito ? Color.FromArgb(41, 42, 45) : Color.White
         };
         
         _statusLabel = new Label
@@ -846,7 +845,10 @@ public partial class MainForm : Form
     
     private void CreateAddressDropdown()
     {
-        _addressDropdown = new AddressBarDropdown(_historyService, _bookmarkService, _isIncognito);
+        _addressDropdown = new AddressBarDropdown(_historyService, _bookmarkService, _isIncognito)
+        {
+            Owner = this // 确保所有权，防止 Z-order 问题
+        };
         _addressDropdown.SearchEngine = _settingsService.Settings.SearchEngine;
         _addressDropdown.ItemSelected += url =>
         {

@@ -318,7 +318,7 @@ public class BrowserSettings
     /// <summary>
     /// 标准字体
     /// </summary>
-    public string StandardFont { get; set; } = "宋体";
+    public string StandardFont { get; set; } = "Microsoft YaHei";
     
     /// <summary>
     /// 标准字体大小 (9-72)
@@ -328,17 +328,17 @@ public class BrowserSettings
     /// <summary>
     /// Serif 字体
     /// </summary>
-    public string SerifFont { get; set; } = "宋体";
+    public string SerifFont { get; set; } = "Times New Roman";
     
     /// <summary>
     /// Sans-serif 字体
     /// </summary>
-    public string SansSerifFont { get; set; } = "宋体";
+    public string SansSerifFont { get; set; } = "Arial";
     
     /// <summary>
     /// 等宽字体（宽度固定的字体）
     /// </summary>
-    public string FixedWidthFont { get; set; } = "新宋体";
+    public string FixedWidthFont { get; set; } = "Consolas";
     
     /// <summary>
     /// 最小字号 (6-24)

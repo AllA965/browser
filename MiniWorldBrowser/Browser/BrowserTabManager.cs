@@ -1459,15 +1459,19 @@ public class BrowserTabManager
                 }}
                 style.textContent = `
                     html, body {{
-                        font-family: '{settings.StandardFont}', 'Segoe UI', 'Microsoft YaHei', sans-serif !important;
-                        -webkit-font-smoothing: antialiased !important;
-                        text-rendering: optimizeLegibility !important;
+                        font-family: '{settings.StandardFont}', 'Segoe UI', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+                        -webkit-font-smoothing: antialiased;
+                        text-rendering: optimizeLegibility;
+                    }}
+                    /* 仅在元素没有设置字体时应用 */
+                    :not(i):not([class*='icon']):not([class*='fa']):not([class*='glyph']) {{
+                        font-family: inherit;
                     }}
                     body {{
-                        font-size: {settings.StandardFontSize}px !important;
+                        font-size: {settings.StandardFontSize}px;
                     }}
                     code, pre, kbd, samp, tt {{
-                        font-family: '{settings.FixedWidthFont}', 'Consolas', 'Monaco', monospace !important;
+                        font-family: '{settings.FixedWidthFont}', 'Consolas', 'Monaco', 'Lucida Console', monospace;
                     }}
                 `;
             }})();";
