@@ -42,7 +42,33 @@ public static class Win32Helper
     [DllImport("user32.dll")]
     public static extern IntPtr GetParent(IntPtr hWnd);
     
+    [DllImport("dwmapi.dll")]
+    public static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+
     #endregion
+    
+    public const int DWMWA_WINDOW_CORNER_PREFERENCE = 33;
+    public enum DWM_WINDOW_CORNER_PREFERENCE
+    {
+        DWMWCP_DEFAULT = 0,
+        DWMWCP_DONOTROUND = 1,
+        DWMWCP_ROUND = 2,
+        DWMWCP_ROUNDSMALL = 3
+    }
+    
+    /// <summary>
+    /// 为窗口应用圆角（仅 Win11 及更新版本的 Win10 部分版本支持）
+    /// </summary>
+    public static void ApplyRoundedCorners(IntPtr handle)
+    {
+        try
+        {
+            var attribute = DWMWA_WINDOW_CORNER_PREFERENCE;
+            var preference = (int)DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND;
+            DwmSetWindowAttribute(handle, attribute, ref preference, sizeof(int));
+        }
+        catch { }
+    }
     
     public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
     

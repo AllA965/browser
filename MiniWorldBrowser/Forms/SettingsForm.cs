@@ -571,6 +571,14 @@ public class SettingsForm : Form
         
         _showHomeButtonCheck = new CheckBox { Text = "显示\"主页\"按钮", Location = new Point(15, 25), AutoSize = true };
         _showBookmarkBarCheck = new CheckBox { Text = "总是显示书签栏", Location = new Point(15, 50), AutoSize = true };
+        _showBookmarkBarCheck.CheckedChanged += (s, e) => 
+        {
+            if (_showBookmarkBarCheck.Focused) // 只有用户点击时才触发
+            {
+                _settingsService.Settings.AlwaysShowBookmarkBar = _showBookmarkBarCheck.Checked;
+                _settingsService.Save();
+            }
+        };
         
         // 隐藏收藏栏功能
         var hideBookmarkBarCheck = new CheckBox 

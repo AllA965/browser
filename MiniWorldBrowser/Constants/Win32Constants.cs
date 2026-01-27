@@ -8,6 +8,7 @@ public static class Win32Constants
     // 窗口消息
     public const int WM_NCLBUTTONDOWN = 0xA1;
     public const int WM_NCHITTEST = 0x84;
+    public const int WM_NCCALCSIZE = 0x0083;
     public const int WM_KEYDOWN = 0x0100;
     public const int WM_HOTKEY = 0x0312;
     

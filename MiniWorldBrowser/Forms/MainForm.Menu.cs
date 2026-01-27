@@ -285,14 +285,14 @@ public partial class MainForm
         var showBar = new ToolStripMenuItem("显示收藏栏(S)")
         {
             ShortcutKeyDisplayString = "Ctrl+Shift+B",
-            Checked = _bookmarkBar.Visible
+            Checked = _settingsService.Settings.AlwaysShowBookmarkBar
         };
         showBar.Click += (s, e) => 
         {
-            _bookmarkBar.Visible = !_bookmarkBar.Visible;
-            _settingsService.Settings.AlwaysShowBookmarkBar = _bookmarkBar.Visible;
+            _settingsService.Settings.AlwaysShowBookmarkBar = !_settingsService.Settings.AlwaysShowBookmarkBar;
             _settingsService.Save();
-            showBar.Checked = _bookmarkBar.Visible;
+            // 注意：Save() 会触发 SettingsChanged，进而触发 UpdateBookmarkBarVisibility()
+            showBar.Checked = _settingsService.Settings.AlwaysShowBookmarkBar;
         };
         bookmarks.DropDownItems.Add(showBar);
 

@@ -514,7 +514,16 @@ public static class HtmlGenerator
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{ font-family: 'Microsoft YaHei UI', 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; }}
         .container {{ display: flex; min-height: 100vh; }}
-        .sidebar {{ width: 200px; background: #fff; border-right: 1px solid #e0e0e0; padding: 20px 0; }}
+        .sidebar {{ 
+            width: 200px; 
+            background: #fff; 
+            border-right: 1px solid #e0e0e0; 
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            flex-shrink: 0;
+        }}
         .sidebar h2 {{ padding: 10px 20px; font-size: 18px; color: #333; margin-bottom: 10px; }}
         .nav-item {{ padding: 12px 20px; cursor: pointer; color: #666; transition: all 0.2s; }}
         .nav-item:hover {{ background: #f0f0f0; }}

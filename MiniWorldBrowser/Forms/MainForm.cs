@@ -278,9 +278,12 @@ public partial class MainForm : Form
         CreateAddressDropdown();
         if (!_isIncognito)
         {
-            CreateAdCarousel();
+            // CreateAdCarousel();
         }
         CreateAISidePanel();
+        
+        // 应用圆角
+        Win32Helper.ApplyRoundedCorners(this.Handle);
         
         // 注意：WinForms 中后 Add 的控件默认在最上层
         // 我们先添加基础布局控件
@@ -292,12 +295,12 @@ public partial class MainForm : Form
         Controls.Add(_toolbar);
         Controls.Add(_tabBar);
         
-        // 隐身模式不显示广告
+        /* 隐身模式不显示广告
         if (!_isIncognito)
         {
             Controls.Add(_adCarousel);
             _adCarousel.BringToFront();
-        }
+        } */
     }
     
     private void CreateTabBar()
@@ -336,7 +339,15 @@ public partial class MainForm : Form
         _titleBarIcon.MouseDown += OnTitleBarMouseDown;
         
         // 窗口控制按钮
-        var windowControlPanel = new Panel { Dock = DockStyle.Right, Width = 138, BackColor = Color.Transparent };
+        var windowControlPanel = new Panel 
+        { 
+            Dock = DockStyle.Right, 
+            Width = 138, 
+            Height = 36,
+            BackColor = Color.Transparent,
+            Margin = Padding.Empty,
+            Padding = Padding.Empty
+        };
         
         _minimizeBtn = CreateWindowControlButton("─");
         _minimizeBtn.Click += (s, e) => WindowState = FormWindowState.Minimized;
@@ -515,7 +526,7 @@ public partial class MainForm : Form
 
         _settingsBtn = CreateToolButton("☰", "菜单");
         
-        _aiBtn = CreateToolButton(string.Empty, "鲲穹 AI 助手");
+        _aiBtn = CreateToolButton(string.Empty, "智能助手");
         _aiBtn.UseGrayscale = true;
         try
         {
@@ -682,6 +693,40 @@ public partial class MainForm : Form
         _bookmarkBar.BookmarkClicked += url => _tabManager.ActiveTab?.Navigate(url);
         _bookmarkBar.BookmarkMiddleClicked += async (url, _) => await _tabManager.CreateTabAsync(url);
         _bookmarkBar.AddBookmarkRequested += AddCurrentPageToBookmarks;
+
+        // 监听书签变更
+        _bookmarkService.BookmarksChanged += () => {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(UpdateBookmarkBarVisibility));
+            }
+            else
+            {
+                UpdateBookmarkBarVisibility();
+            }
+        };
+
+        // 初始设置可见性
+        UpdateBookmarkBarVisibility();
+    }
+
+    /// <summary>
+    /// 更新收藏栏可见性：当没有收藏时自动隐藏（除非设置了总是显示）
+    /// </summary>
+    private void UpdateBookmarkBarVisibility()
+    {
+        var settings = _settingsService.Settings;
+        var hasBookmarks = _bookmarkService.GetBookmarkBarItems().Count > 0;
+        
+        // 逻辑：总是显示开启 OR 有收藏内容
+        bool shouldShow = settings.AlwaysShowBookmarkBar || hasBookmarks;
+        
+        if (_bookmarkBar.Visible != shouldShow)
+        {
+            _bookmarkBar.Visible = shouldShow;
+            // 强制重新布局以更新浏览器容器大小
+            this.PerformLayout();
+        }
     }
     
     private void CreateBrowserContainer()
@@ -708,7 +753,7 @@ public partial class MainForm : Form
             Text = _isIncognito ? "InPrivate - 您的浏览活动不会保存到此设备" : "就绪"
         };
 
-        _brandLabel = new Label
+        /* _brandLabel = new Label
         {
             Dock = DockStyle.Right,
             AutoSize = true,
@@ -716,9 +761,9 @@ public partial class MainForm : Form
             Font = new Font("Microsoft YaHei UI", 8.5F),
             ForeColor = _isIncognito ? Color.FromArgb(100, 150, 255) : Color.FromArgb(120, 120, 120),
             Text = "鲲穹AI旗下产品"
-        };
+        }; */
 
-        _customLinkLabel = new LinkLabel
+        /* _customLinkLabel = new LinkLabel
         {
             Dock = DockStyle.Right,
             AutoSize = true,
@@ -731,18 +776,18 @@ public partial class MainForm : Form
             LinkBehavior = LinkBehavior.NeverUnderline,
             TextAlign = ContentAlignment.MiddleLeft,
             Cursor = Cursors.Hand
-        };
+        }; */
 
-        _iconPictureBox = new PictureBox
+        /* _iconPictureBox = new PictureBox
         {
             Dock = DockStyle.Right,
             Size = new Size(20, 16),
             SizeMode = PictureBoxSizeMode.Zoom,
             Padding = new Padding(0, 3, 4, 0),
             Cursor = Cursors.Hand
-        };
+        }; */
 
-        // 初始化动画定时器
+        /* // 初始化动画定时器
         _linkAnimationTimer = new System.Windows.Forms.Timer { Interval = 15 };
         bool animatingIn = false;
         
@@ -796,7 +841,8 @@ public partial class MainForm : Form
                 }
             }
         }
-        catch { /* 忽略图标加载错误 */ }
+        catch { // 忽略图标加载错误 
+        }
 
         // 统一的跳转逻辑
         var openCustomUrl = new EventHandler(async (s, e) => {
@@ -828,7 +874,7 @@ public partial class MainForm : Form
         });
 
         _iconPictureBox.Click += openCustomUrl;
-        _customLinkLabel.Click += openCustomUrl; // 使用 Click 而不是 LinkClicked 以获得更统一的体验
+        _customLinkLabel.Click += openCustomUrl; // 使用 Click 而不是 LinkClicked 以获得更统一的体验 */
         
         _progressBar = new ModernProgressBar
         {
@@ -840,7 +886,8 @@ public partial class MainForm : Form
             IsMarquee = true
         };
         
-        _statusBar.Controls.AddRange(new Control[] { _statusLabel, _customLinkLabel, _iconPictureBox, _brandLabel, _progressBar });
+        // _statusBar.Controls.AddRange(new Control[] { _statusLabel, _customLinkLabel, _iconPictureBox, _brandLabel, _progressBar });
+            _statusBar.Controls.AddRange(new Control[] { _statusLabel, _progressBar });
     }
     
     private void CreateAddressDropdown()
@@ -961,12 +1008,13 @@ public partial class MainForm : Form
 
         var titleLabel = new Label
         {
-            Text = "鲲穹 AI 助手",
+            Text = "智能助手",
             Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold),
             ForeColor = Color.FromArgb(45, 55, 72),
             Dock = DockStyle.Left,
             TextAlign = ContentAlignment.MiddleLeft,
-            AutoSize = true
+            AutoSize = false,
+            Width = 150 // 给定一个足够的宽度
         };
 
         var summarizeBtn = new Button
@@ -1132,6 +1180,16 @@ public partial class MainForm : Form
                     this.Invoke(new Action(async () => {
                         await _aiWebView.CoreWebView2.ExecuteScriptAsync("if(typeof updateModelName === 'function') updateModelName();");
                     }));
+                }
+                
+                // 确保 UI 线程更新收藏栏
+                if (InvokeRequired)
+                {
+                    BeginInvoke(new Action(UpdateBookmarkBarVisibility));
+                }
+                else
+                {
+                    UpdateBookmarkBarVisibility();
                 }
             };
 
@@ -1981,6 +2039,7 @@ public partial class MainForm : Form
         var btn = new Button
         {
             Width = 46,
+            Height = 36, // 显式设置高度匹配 _tabBar
             Dock = DockStyle.Right,
             FlatStyle = FlatStyle.Flat,
             Text = text,
@@ -1988,10 +2047,13 @@ public partial class MainForm : Form
             Cursor = Cursors.Hand,
             BackColor = Color.Transparent,
             ForeColor = Color.Black,
-            TabStop = false
+            TabStop = false,
+            Margin = Padding.Empty, // 移除边距
+            Padding = Padding.Empty // 移除内边距
         };
         btn.FlatAppearance.BorderSize = 0;
         btn.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
+        btn.FlatAppearance.MouseDownBackColor = Color.FromArgb(180, 180, 180);
         btn.MouseEnter += (s, e) => btn.BackColor = Color.FromArgb(200, 200, 200);
         btn.MouseLeave += (s, e) => btn.BackColor = Color.Transparent;
         return btn;
@@ -2278,11 +2340,13 @@ public partial class MainForm : Form
         {
             case "hidebookmarkbar":
                 // 隐藏收藏栏：value 为 true 时隐藏，false 时显示
-                _bookmarkBar.Visible = !(bool)value;
+                _settingsService.Settings.AlwaysShowBookmarkBar = !(bool)value;
+                UpdateBookmarkBarVisibility();
                 break;
             case "bookmarkbar":
                 // 显示收藏栏：value 为 true 时显示，false 时隐藏
-                _bookmarkBar.Visible = (bool)value;
+                _settingsService.Settings.AlwaysShowBookmarkBar = (bool)value;
+                UpdateBookmarkBarVisibility();
                 break;
             case "adblock":
                 _adBlockService.Enabled = (bool)value;

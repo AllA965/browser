@@ -346,19 +346,24 @@ public partial class MainForm
             if (IsDisposed || !IsHandleCreated)
                 return Win32Helper.CallNextHookEx(_keyboardHookId, nCode, wParam, lParam);
             
-            // 只在窗口获得焦点时处理快捷键
+            // 杀毒软件对键盘钩子非常敏感
+            // 仅在窗口处于前台且激活时才处理钩子逻辑，减少被判定为“键盘记录器”的风险
             if (nCode >= 0 && wParam == (IntPtr)Win32Constants.WM_KEYDOWN && IsFormActive())
             {
                 int vkCode = Marshal.ReadInt32(lParam);
-                if (vkCode == (int)Keys.F11)
+                // 仅处理特定功能键，不拦截普通输入字符
+                if (vkCode == (int)Keys.F11 || vkCode == (int)Keys.Escape)
                 {
-                    BeginInvoke(() => { if (!IsDisposed) _fullscreenManager.Toggle(); });
-                    return (IntPtr)1;
-                }
-                if (vkCode == (int)Keys.Escape && _fullscreenManager.IsFullscreen)
-                {
-                    BeginInvoke(() => { if (!IsDisposed) _fullscreenManager.Toggle(); });
-                    return (IntPtr)1;
+                    if (vkCode == (int)Keys.F11)
+                    {
+                        BeginInvoke(() => { if (!IsDisposed) _fullscreenManager.Toggle(); });
+                        return (IntPtr)1;
+                    }
+                    if (vkCode == (int)Keys.Escape && _fullscreenManager.IsFullscreen)
+                    {
+                        BeginInvoke(() => { if (!IsDisposed) _fullscreenManager.Toggle(); });
+                        return (IntPtr)1;
+                    }
                 }
             }
         }
@@ -412,6 +417,23 @@ public partial class MainForm
     {
         const int WM_NCHITTEST = 0x84;
         
+        // 处理 WM_NCCALCSIZE 以移除窗口边框导致的间隙（特别是顶部）
+        if (m.Msg == Win32Constants.WM_NCCALCSIZE && m.WParam != IntPtr.Zero)
+        {
+            if (WindowState == FormWindowState.Maximized)
+            {
+                // 当窗口最大化时，必须允许系统进行默认的非客户区计算，否则会导致内容偏移或出现黑色填充区域
+                // 这是因为 Windows 在最大化时会通过非客户区计算来偏置窗口以隐藏边框
+                base.WndProc(ref m);
+                return;
+            }
+
+            // 当 WParam 为 true 时，LParam 指向 NCCALCSIZE_PARAMS 结构
+            // 直接返回 0 表示整个窗口区域都是客户区，从而移除标准边框
+            m.Result = IntPtr.Zero;
+            return;
+        }
+
         if (m.Msg == WM_NCHITTEST)
         {
             // 最大化或全屏时，禁止边框调整大小，直接返回 HTCLIENT

@@ -230,8 +230,8 @@ public class BrowserTab : IDisposable
                 // 配置环境选项，提高兼容性
                 var options = new CoreWebView2EnvironmentOptions
                 {
-                    // 允许加载不安全的内容，解决部分网站样式/图标加载问题
-                    AdditionalBrowserArguments = "--allow-running-insecure-content --disable-features=BlockInsecurePrivateNetworkRequests"
+                    AdditionalBrowserArguments = "--allow-running-insecure-content " +
+                                               "--disable-blink-features=AutomationControlled"
                 };
 
                 // 加载 AI 扩展
@@ -1949,11 +1949,40 @@ public class BrowserTab : IDisposable
             {
                 try
                 {
-                    // 只处理 POST 请求
-                    if (e.Request.Method != "POST") return;
-                    
                     var uri = new Uri(e.Request.Uri);
                     var host = uri.Host;
+
+                    // 修复 B 站等网站资源加载/日志上报 403 被拦截的问题
+                    if ((uri.Scheme == Uri.UriSchemeHttps || uri.Scheme == Uri.UriSchemeHttp) &&
+                        (host.Contains("bilibili.com") || host.Contains("hdslb.com") || host.Contains("biliapi") || host.Contains("bilivideo")))
+                    {
+                        // 仅在缺失时补充 Referer，避免覆盖站点自身设置
+                        var referer = e.Request.Headers.GetHeader("Referer");
+                        if (string.IsNullOrEmpty(referer))
+                        {
+                            e.Request.Headers.SetHeader("Referer", "https://www.bilibili.com/");
+                        }
+
+                        // 仅在必要场景补充 Origin：
+                        // 1. 日志/接口等 POST 请求
+                        // 2. B 站 CDN 静态资源（hdslb.com）的图片/媒体请求
+                        var origin = e.Request.Headers.GetHeader("Origin");
+                        if (string.IsNullOrEmpty(origin))
+                        {
+                            bool isPostRequest = string.Equals(e.Request.Method, "POST", StringComparison.OrdinalIgnoreCase);
+                            bool isHdslbCdn = host.Contains("hdslb.com");
+                            bool isMediaResource = e.ResourceContext == CoreWebView2WebResourceContext.Image ||
+                                                   e.ResourceContext == CoreWebView2WebResourceContext.Media;
+
+                            if (isPostRequest || (isHdslbCdn && isMediaResource))
+                            {
+                                e.Request.Headers.SetHeader("Origin", "https://www.bilibili.com");
+                            }
+                        }
+                    }
+
+                    // 只处理 POST 请求以捕获凭据
+                    if (e.Request.Method != "POST") return;
                     
                     // 获取请求体
                     var content = e.Request.Content;

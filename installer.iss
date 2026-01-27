@@ -19,15 +19,16 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={autopf}\{#MyAppName}
+DefaultDirName={localappdata}\{#MyAppName}
 DisableProgramGroupPage=yes
-; Uncomment the following line to run in non administrative install mode (install for current user only.)
-;PrivilegesRequired=lowest
+; 使用 lowest 权限安装，避免触发 UAC 警告和 360 对系统目录的监控
+PrivilegesRequired=lowest
 OutputDir=.
 OutputBaseFilename=KunQiongBrowserSetup
 SetupIconFile=MiniWorldBrowser\Resources\鲲穹AI浏览器.ico
-Compression=lzma
-SolidCompression=yes
+; 降低压缩强度，某些杀毒软件会扫描高压缩包内的特征码
+Compression=zip
+SolidCompression=no
 WizardStyle=modern
 
 [Languages]
