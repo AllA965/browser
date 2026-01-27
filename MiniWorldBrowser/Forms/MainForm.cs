@@ -1604,8 +1604,7 @@ public partial class MainForm : Form
         _settingsBtn.Click += (s, e) => ShowMainMenu();
         _bookmarkBtn.BookmarkClicked += (s, e) => ToggleBookmark();
         _newTabButton.Click += async (s, e) => {
-            if (_tabManager != null)
-                await _tabManager.CreateTabAsync("about:newtab");
+            await CreateNewTabWithProtection("about:newtab");
         };
         
         // 地址栏

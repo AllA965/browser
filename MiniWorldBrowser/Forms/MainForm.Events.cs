@@ -103,6 +103,26 @@ public partial class MainForm
         // 只有当下拉框确实有建议并显示时，才改变地址栏样式
         _addressBar.IsDropdownOpen = _addressDropdown.Visible;
     }
+
+    /// <summary>
+    /// 在带有保护的情况下创建新标签页，防止地址栏下拉框意外弹出
+    /// </summary>
+    private async Task CreateNewTabWithProtection(string url)
+    {
+        if (_tabManager == null) return;
+
+        _isInternalAddressUpdate = true;
+        try
+        {
+            await _tabManager.CreateTabAsync(url);
+        }
+        finally
+        {
+            // 延迟重置，确保创建过程中的所有事件（如焦点转移、URL变化）都已处理
+            await Task.Delay(250);
+            _isInternalAddressUpdate = false;
+        }
+    }
     
     #endregion
     
@@ -119,7 +139,7 @@ public partial class MainForm
             switch (e.KeyCode)
             {
                 case Keys.T:
-                    _ = _tabManager.CreateTabAsync("about:newtab");
+                    _ = CreateNewTabWithProtection("about:newtab");
                     e.Handled = true;
                     break;
                 case Keys.W:
