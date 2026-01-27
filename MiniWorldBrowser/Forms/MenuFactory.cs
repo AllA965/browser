@@ -93,7 +93,11 @@ public static class MenuFactory
             }
             else
             {
-                bmItem.Click += (s, e) => onNavigate(item.Url);
+                bmItem.Click += (s, e) => 
+                {
+                    if (Control.MouseButtons != MouseButtons.Right)
+                        onNavigate(item.Url);
+                };
             }
             bookmarks.DropDownItems.Add(bmItem);
         }
@@ -256,7 +260,11 @@ public static class MenuFactory
             }
             else
             {
-                item.Click += (s, e) => onNavigate(child.Url);
+                item.Click += (s, e) => 
+                {
+                    if (Control.MouseButtons != MouseButtons.Right)
+                        onNavigate(child.Url);
+                };
             }
             parent.DropDownItems.Add(item);
         }

@@ -345,7 +345,14 @@ public partial class MainForm
                     bmItem.Image = Helpers.FaviconHelper.GetCachedFavicon(item.Url);
                     LoadMenuItemFaviconAsync(bmItem, item.Url, item.FaviconUrl);
                     var itemUrl = item.Url;
-                    bmItem.Click += (s, e) => { CloseMainMenu(); _tabManager.ActiveTab?.Navigate(itemUrl); };
+                    bmItem.Click += (s, e) => 
+                    { 
+                        if (Control.MouseButtons != MouseButtons.Right)
+                        {
+                            CloseMainMenu(); 
+                            _tabManager.ActiveTab?.Navigate(itemUrl); 
+                        }
+                    };
                 }
                 bookmarks.DropDownItems.Add(bmItem);
             }

@@ -93,7 +93,11 @@ public class BookmarkBar : Panel
             Visible = false,
             Margin = new Padding(2, 0, 2, 0)
         };
-        _otherBookmarksBtn.Click += OnOtherBookmarksClick;
+        _otherBookmarksBtn.MouseClick += (s, e) =>
+        {
+            if (e.Button == MouseButtons.Left)
+                OnOtherBookmarksClick(s, e);
+        };
         
         _overflowBtn = new Button
         {
@@ -166,7 +170,11 @@ public class BookmarkBar : Panel
                     var item = new ToolStripMenuItem(child.Title);
                     item.Image = Helpers.FaviconHelper.GetCachedFavicon(child.Url);
                     LoadMenuItemFaviconAsync(item, child.Url);
-                    item.Click += (s, ev) => BookmarkClicked?.Invoke(child.Url);
+                    item.Click += (s, ev) => 
+                    {
+                        if (Control.MouseButtons != MouseButtons.Right)
+                            BookmarkClicked?.Invoke(child.Url);
+                    };
                     item.ToolTipText = child.Url;
                     AddBookmarkContextMenu(item, child);
                     _folderMenu.Items.Add(item);
@@ -314,7 +322,11 @@ public class BookmarkBar : Panel
         if (bookmark.IsFolder)
         {
             btn.Icon = CreateFolderIcon();
-            btn.Click += (s, e) => ShowFolderMenu(btn, bookmark);
+            btn.MouseClick += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                    ShowFolderMenu(btn, bookmark);
+            };
         }
         else
         {
@@ -322,7 +334,11 @@ public class BookmarkBar : Panel
             btn.Icon = Helpers.FaviconHelper.GetCachedFavicon(bookmark.Url);
             LoadFaviconAsync(btn, bookmark.Url);
             
-            btn.Click += (s, e) => BookmarkClicked?.Invoke(bookmark.Url);
+            btn.MouseClick += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                    BookmarkClicked?.Invoke(bookmark.Url);
+            };
             btn.MouseDown += (s, e) =>
             {
                 if (e.Button == MouseButtons.Middle)
@@ -405,7 +421,11 @@ public class BookmarkBar : Panel
                     var item = new ToolStripMenuItem(child.Title);
                     item.Image = Helpers.FaviconHelper.GetCachedFavicon(child.Url);
                     LoadMenuItemFaviconAsync(item, child.Url);
-                    item.Click += (s, e) => BookmarkClicked?.Invoke(child.Url);
+                    item.Click += (s, e) => 
+                    {
+                        if (Control.MouseButtons != MouseButtons.Right)
+                            BookmarkClicked?.Invoke(child.Url);
+                    };
                     item.ToolTipText = child.Url;
                     AddBookmarkContextMenu(item, child);
                     _folderMenu.Items.Add(item);
@@ -441,7 +461,11 @@ public class BookmarkBar : Panel
             else
             {
                 var item = new ToolStripMenuItem(child.Title);
-                item.Click += (s, e) => BookmarkClicked?.Invoke(child.Url);
+                item.Click += (s, e) => 
+                {
+                    if (Control.MouseButtons != MouseButtons.Right)
+                        BookmarkClicked?.Invoke(child.Url);
+                };
                 menu.DropDownItems.Add(item);
             }
         }
@@ -466,15 +490,19 @@ public class BookmarkBar : Panel
                 menu.DropDownItems.Add(subMenu);
             }
             else
-            {
-                var item = new ToolStripMenuItem(child.Title);
-                item.Image = Helpers.FaviconHelper.GetCachedFavicon(child.Url);
-                LoadMenuItemFaviconAsync(item, child.Url);
-                item.Click += (s, e) => BookmarkClicked?.Invoke(child.Url);
-                item.ToolTipText = child.Url;
-                AddBookmarkContextMenu(item, child);
-                menu.DropDownItems.Add(item);
-            }
+                {
+                    var item = new ToolStripMenuItem(child.Title);
+                    item.Image = Helpers.FaviconHelper.GetCachedFavicon(child.Url);
+                    LoadMenuItemFaviconAsync(item, child.Url);
+                    item.Click += (s, e) => 
+                    {
+                        if (Control.MouseButtons != MouseButtons.Right)
+                            BookmarkClicked?.Invoke(child.Url);
+                    };
+                    item.ToolTipText = child.Url;
+                    AddBookmarkContextMenu(item, child);
+                    menu.DropDownItems.Add(item);
+                }
         }
     }
     
@@ -551,7 +579,11 @@ public class BookmarkBar : Panel
                 else
                 {
                     var item = new ToolStripMenuItem(bookmark.Title);
-                    item.Click += (s, ev) => BookmarkClicked?.Invoke(bookmark.Url);
+                    item.Click += (s, ev) => 
+                    {
+                        if (Control.MouseButtons != MouseButtons.Right)
+                            BookmarkClicked?.Invoke(bookmark.Url);
+                    };
                     _overflowMenu.Items.Add(item);
                 }
             }
