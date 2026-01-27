@@ -656,6 +656,9 @@ public class BrowserTabManager
             _activeTab.Show();
             _activeTab.TabButton?.SetActive(true);
             
+            // 切换标签页时，尝试让 WebView 获得焦点，避免焦点落到地址栏导致下拉框展开
+            _activeTab.WebView?.Focus();
+            
             oldTab?.Hide();
             oldTab?.TabButton?.SetActive(false);
         }

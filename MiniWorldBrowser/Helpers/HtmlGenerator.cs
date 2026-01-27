@@ -265,7 +265,7 @@ public static class HtmlGenerator
         <h1>鲲穹AI浏览器</h1>
         <div class='search-box'>
             <input type='text' class='search-input' id='searchInput' 
-                   placeholder='搜索或输入网址' autofocus>
+                   placeholder='搜索或输入网址'>
             <button class='search-btn' onclick='doSearch()'>
                 <svg viewBox='0 0 24 24'><circle cx='11' cy='11' r='8'></circle><line x1='21' y1='21' x2='16.65' y2='16.65'></line></svg>
             </button>
@@ -409,7 +409,7 @@ public static class HtmlGenerator
         </div>
 
         <div class='search-box'>
-            <input type='text' class='search-input' id='searchInput' placeholder='搜索或输入网址' autofocus>
+            <input type='text' class='search-input' id='searchInput' placeholder='搜索或输入网址'>
         </div>
     </div>
     <script>

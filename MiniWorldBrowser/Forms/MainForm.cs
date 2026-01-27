@@ -34,6 +34,7 @@ public partial class MainForm : Form
     private readonly IAdService _adService;
     private readonly bool _isIncognito;
     private readonly string? _incognitoDataFolder;
+    private bool _isInternalAddressUpdate;
     private BrowserTabManager _tabManager = null!;
     private MouseGesture _mouseGesture = null!;
     private BossKey? _bossKey;
@@ -1609,8 +1610,17 @@ public partial class MainForm : Form
         
         // 地址栏
         _addressBar.EnterKeyPressed += (s, e) => NavigateToAddress();
-        _addressBar.TextChanged += (s, e) => { if (_addressBar.Focused) ShowAddressDropdown(); };
-        _addressBar.GotFocus += (s, e) => { _addressBar.SelectAll(); ShowAddressDropdown(); };
+        _addressBar.TextChanged += (s, e) => { 
+            if (_addressBar.Focused && !_isInternalAddressUpdate) 
+                ShowAddressDropdown(); 
+        };
+        _addressBar.GotFocus += (s, e) => { 
+            if (!_isInternalAddressUpdate)
+            {
+                _addressBar.SelectAll(); 
+                ShowAddressDropdown(); 
+            }
+        };
         _addressBar.LostFocus += (s, e) => 
         {
             // 延迟检查，给按钮点击事件足够时间处理
@@ -2157,7 +2167,16 @@ public partial class MainForm : Form
     
     private void OnActiveTabChanged(BrowserTab tab)
     {
-        _addressBar.Text = tab.Url ?? "";
+        _isInternalAddressUpdate = true;
+        try
+        {
+            _addressBar.Text = tab.Url ?? "";
+        }
+        finally
+        {
+            _isInternalAddressUpdate = false;
+        }
+        
         Text = $"{tab.Title ?? "新标签页"} - {AppConstants.AppName}";
         UpdateSecurityIcon(tab.IsSecure);
         UpdateNavigationButtons();
@@ -2181,7 +2200,17 @@ public partial class MainForm : Form
         }
 
         _translateBtn.Visible = tab.IsTranslated;
-        _addressBar.Text = tab.Url ?? "";
+        
+        _isInternalAddressUpdate = true;
+        try
+        {
+            _addressBar.Text = tab.Url ?? "";
+        }
+        finally
+        {
+            _isInternalAddressUpdate = false;
+        }
+
         if (!string.IsNullOrEmpty(tab.Url) && !_urlHistory.Contains(tab.Url))
         {
             _urlHistory.Insert(0, tab.Url);
