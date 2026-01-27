@@ -172,7 +172,7 @@ public class BrowserTabManager
         return false;
     }
 
-    private void UpdateTabLayout()
+    public void UpdateTabLayout()
     {
         if (_tabContainer.IsDisposed || _newTabButton.IsDisposed) return;
 

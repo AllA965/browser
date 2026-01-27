@@ -1660,6 +1660,12 @@ public partial class MainForm : Form
                 // 最小化时减少资源占用
                 GC.Collect(0, GCCollectionMode.Optimized);
             }
+            else if (WindowState == FormWindowState.Normal)
+            {
+                // 从其他状态恢复到 Normal 时，强制刷新布局以消除间隙
+                _tabManager?.UpdateTabLayout();
+                this.PerformLayout();
+            }
         };
     }
     
@@ -2092,6 +2098,13 @@ public partial class MainForm : Form
         {
             WindowState = FormWindowState.Normal;
             _maximizeBtn.Text = "☐";
+            
+            // 延迟刷新布局以解决取消最大化时的间隙问题
+            BeginInvoke(new Action(() => {
+                this.PerformLayout();
+                _tabManager?.UpdateTabLayout();
+                RefreshAllControls();
+            }));
         }
         else
         {

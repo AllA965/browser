@@ -432,60 +432,85 @@ public partial class MainForm
     #endregion
     
     #region 窗口消息处理
-    
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct RECT
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct NCCALCSIZE_PARAMS
+    {
+        public RECT rgrc0;
+        public RECT rgrc1;
+        public RECT rgrc2;
+        public IntPtr lppos;
+    }
+
     protected override void WndProc(ref Message m)
     {
         const int WM_NCHITTEST = 0x84;
-        
-        // 处理 WM_NCCALCSIZE 以移除窗口边框导致的间隙（特别是顶部）
+
+        // 处理 WM_NCCALCSIZE：在保留系统边框/用户区域的前提下，吃掉顶部多余的 1px 间隙
         if (m.Msg == Win32Constants.WM_NCCALCSIZE && m.WParam != IntPtr.Zero)
         {
+            // 先让系统完成默认的非客户区计算，这样可以保留正常的调整大小边框
+            base.WndProc(ref m);
+
+            // 最大化时保持系统默认行为，避免内容错位
             if (WindowState == FormWindowState.Maximized)
-            {
-                // 当窗口最大化时，必须允许系统进行默认的非客户区计算，否则会导致内容偏移或出现黑色填充区域
-                // 这是因为 Windows 在最大化时会通过非客户区计算来偏置窗口以隐藏边框
-                base.WndProc(ref m);
                 return;
+
+            try
+            {
+                var ncc = Marshal.PtrToStructure<NCCALCSIZE_PARAMS>(m.LParam);
+                // 向上扩展客户端区域 1 像素，用来盖住 Win11 标题栏用户区域留下的细小缝隙
+                ncc.rgrc0.Top -= 1;
+                Marshal.StructureToPtr(ncc, m.LParam, false);
+            }
+            catch
+            {
+                // 忽略结构体转换过程中的异常，保持系统默认行为
             }
 
-            // 当 WParam 为 true 时，LParam 指向 NCCALCSIZE_PARAMS 结构
-            // 直接返回 0 表示整个窗口区域都是客户区，从而移除标准边框
-            m.Result = IntPtr.Zero;
             return;
         }
 
         if (m.Msg == WM_NCHITTEST)
         {
-            // 最大化或全屏时，禁止边框调整大小，直接返回 HTCLIENT
+            // 全屏或者最大化时不允许通过边框调整大小，直接交给系统处理
             if (WindowState == FormWindowState.Maximized || _fullscreenManager.IsFullscreen)
             {
-                m.Result = (IntPtr)Win32Constants.HTCLIENT;
+                base.WndProc(ref m);
                 return;
             }
-            
-            // 处理窗口边框命中测试，让 Windows 自动处理调整大小
+
             if (WindowState == FormWindowState.Normal)
             {
-                // 先调用基类处理
+                // 先让系统做一次命中测试（保留 Edge 类似的用户区域行为）
                 base.WndProc(ref m);
-                
-                // 获取鼠标位置（从消息参数中提取）
-                int x = (short)(m.LParam.ToInt32() & 0xFFFF);
-                int y = (short)((m.LParam.ToInt32() >> 16) & 0xFFFF);
-                var screenPoint = new Point(x, y);
-                var clientPoint = PointToClient(screenPoint);
-                
-                // 计算命中测试结果
-                var hitResult = GetResizeHitTest(clientPoint);
-                if (hitResult != 0)
+
+                // 只有在系统认为当前是客户端区域时，才做自定义边框命中测试，
+                // 这样可以在不破坏系统默认逻辑的情况下扩展可拖拽区域
+                if ((int)m.Result == Win32Constants.HTCLIENT)
                 {
-                    m.Result = (IntPtr)hitResult;
+                    var clientPoint = PointToClient(Cursor.Position);
+                    var hitResult = GetResizeHitTest(clientPoint);
+                    if (hitResult != 0)
+                    {
+                        m.Result = (IntPtr)hitResult;
+                        return;
+                    }
                 }
-                
+
                 return;
             }
         }
-        
+
         base.WndProc(ref m);
     }
     
