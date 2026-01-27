@@ -6,7 +6,7 @@
 #define MyAppPublisher "鲲穹AI"
 #define MyAppURL "https://github.com/yourusername/kunqiong-browser"
 #define MyAppExeName "鲲穹AI浏览器.exe"
-#define MySourcePath "MiniWorldBrowser\bin\Release\net8.0-windows\win-x64\publish"
+#define MySourcePath "publish"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.

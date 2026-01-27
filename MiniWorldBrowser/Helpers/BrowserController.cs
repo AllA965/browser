@@ -11,12 +11,14 @@ namespace MiniWorldBrowser.Helpers
         private readonly BrowserTabManager _tabManager;
         private readonly Control _syncContext;
         private readonly ISettingsService _settingsService;
+        private readonly Func<string, bool, Task> _createTabAction;
 
-        public BrowserController(BrowserTabManager tabManager, Control syncContext, ISettingsService settingsService)
+        public BrowserController(BrowserTabManager tabManager, Control syncContext, ISettingsService settingsService, Func<string, bool, Task> createTabAction = null)
         {
             _tabManager = tabManager;
             _syncContext = syncContext;
             _settingsService = settingsService;
+            _createTabAction = createTabAction ?? ((url, bg) => _tabManager.CreateTabAsync(url, bg));
         }
 
         public void Navigate(string url)
@@ -41,7 +43,7 @@ namespace MiniWorldBrowser.Helpers
                     var searchEngine = _settingsService?.Settings?.SearchEngine 
                         ?? MiniWorldBrowser.Constants.AppConstants.DefaultSearchEngine;
                     string url = searchEngine + Uri.EscapeDataString(query);
-                    await _tabManager.CreateTabAsync(url);
+                    await _createTabAction(url, false);
                 }
             }));
         }
@@ -55,7 +57,7 @@ namespace MiniWorldBrowser.Helpers
                     if (!string.IsNullOrEmpty(urlTemplate))
                     {
                         string url = string.Format(urlTemplate, Uri.EscapeDataString(query));
-                        await _tabManager.CreateTabAsync(url);
+                        await _createTabAction(url, false);
                     }
                     else
                     {
@@ -111,7 +113,7 @@ namespace MiniWorldBrowser.Helpers
         {
             _syncContext.Invoke(new Action(async () => {
                 string targetUrl = string.IsNullOrEmpty(url) ? (_settingsService?.Settings?.HomePage ?? "about:newtab") : url;
-                await _tabManager.CreateTabAsync(targetUrl);
+                await _createTabAction(targetUrl, false);
             }));
         }
 

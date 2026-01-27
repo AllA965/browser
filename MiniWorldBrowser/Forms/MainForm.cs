@@ -188,7 +188,7 @@ public partial class MainForm : Form
                 {
                     // 隐身模式直接打开主页
                     var homePage = _settingsService?.Settings?.HomePage ?? "about:newtab";
-                    await _tabManager.CreateTabAsync(homePage);
+                    await CreateNewTabWithProtection(homePage);
                 }
                 else
                 {
@@ -199,7 +199,7 @@ public partial class MainForm : Form
                     switch (startupBehavior)
                     {
                         case 0: // 打开新标签页
-                            await _tabManager.CreateTabAsync("about:newtab");
+                            await CreateNewTabWithProtection("about:newtab");
                             break;
                             
                         case 1: // 继续上次浏览
@@ -208,12 +208,12 @@ public partial class MainForm : Form
                             {
                                 foreach (var url in lastUrls)
                                 {
-                                    await _tabManager.CreateTabAsync(url);
+                                    await CreateNewTabWithProtection(url);
                                 }
                             }
                             else
                             {
-                                await _tabManager.CreateTabAsync("about:newtab");
+                                await CreateNewTabWithProtection("about:newtab");
                             }
                             break;
                             
@@ -223,7 +223,7 @@ public partial class MainForm : Form
                             {
                                 foreach (var url in startupPages)
                                 {
-                                    await _tabManager.CreateTabAsync(url);
+                                    await CreateNewTabWithProtection(url);
                                 }
                             }
                             else
@@ -234,12 +234,12 @@ public partial class MainForm : Form
                                 {
                                     startupUrl = "about:newtab";
                                 }
-                                await _tabManager.CreateTabAsync(startupUrl);
+                                await CreateNewTabWithProtection(startupUrl);
                             }
                             break;
                             
                         default:
-                            await _tabManager.CreateTabAsync("about:newtab");
+                            await CreateNewTabWithProtection("about:newtab");
                             break;
                     }
                 }
@@ -692,7 +692,7 @@ public partial class MainForm : Form
     private void SetupBookmarkBarEvents()
     {
         _bookmarkBar.BookmarkClicked += url => _tabManager.ActiveTab?.Navigate(url);
-        _bookmarkBar.BookmarkMiddleClicked += async (url, _) => await _tabManager.CreateTabAsync(url);
+        _bookmarkBar.BookmarkMiddleClicked += async (url, _) => await CreateNewTabWithProtection(url);
         _bookmarkBar.AddBookmarkRequested += AddCurrentPageToBookmarks;
 
         // 监听书签变更
@@ -717,10 +717,10 @@ public partial class MainForm : Form
     private void UpdateBookmarkBarVisibility()
     {
         var settings = _settingsService.Settings;
-        var hasBookmarks = _bookmarkService.GetBookmarkBarItems().Count > 0;
         
-        // 逻辑：总是显示开启 OR 有收藏内容
-        bool shouldShow = settings.AlwaysShowBookmarkBar || hasBookmarks;
+        // 逻辑：严格遵循“总是显示收藏栏”设置
+        // 修正：之前逻辑是 (settings.AlwaysShowBookmarkBar || hasBookmarks)，导致只要有书签就强制显示
+        bool shouldShow = settings.AlwaysShowBookmarkBar;
         
         if (_bookmarkBar.Visible != shouldShow)
         {
@@ -856,7 +856,7 @@ public partial class MainForm : Form
                 // 在当前浏览器中打开，而不是调用外部系统浏览器
                 if (_tabManager != null)
                 {
-                    await _tabManager.CreateTabAsync(url);
+                    await CreateNewTabWithProtection(url);
                 }
                 else
                 {
@@ -865,7 +865,7 @@ public partial class MainForm : Form
             } catch {
                 if (_tabManager != null)
                 {
-                    await _tabManager.CreateTabAsync("https://www.kunqiong.com");
+                    await CreateNewTabWithProtection("https://www.kunqiong.com");
                 }
                 else
                 {
@@ -1159,7 +1159,7 @@ public partial class MainForm : Form
             await _aiWebView.EnsureCoreWebView2Async();
             
             // 注册桥接对象
-            _aiApiBridge = new AiApiBridge(_settingsService, new MiniWorldBrowser.Helpers.BrowserController(_tabManager, this, _settingsService));
+            _aiApiBridge = new AiApiBridge(_settingsService, new MiniWorldBrowser.Helpers.BrowserController(_tabManager, this, _settingsService, CreateNewTabWithProtection));
             
             // 订阅流式输出事件
             _aiApiBridge.OnStreamChunk += (content, type) => {
@@ -1200,7 +1200,7 @@ public partial class MainForm : Form
                 e.Handled = true;
                 if (!string.IsNullOrEmpty(e.Uri))
                 {
-                    await _tabManager.CreateTabAsync(e.Uri);
+                    await CreateNewTabWithProtection(e.Uri);
                 }
             };
             
@@ -1216,7 +1216,7 @@ public partial class MainForm : Form
 
                 // 阻止其他所有导航，并在主浏览器标签中打开
                 e.Cancel = true;
-                await _tabManager.CreateTabAsync(e.Uri);
+                await CreateNewTabWithProtection(e.Uri);
             };
 
             var settings = _settingsService.Settings;
@@ -1411,7 +1411,7 @@ public partial class MainForm : Form
         };
         _tabManager.TabZoomChanged += OnTabZoomChanged;
         _tabManager.TabTranslationRequested += t => { if (t == _tabManager.ActiveTab) TranslateCurrentPageWithAI(); };
-        _tabManager.NewWindowRequested += url => _ = _tabManager.CreateTabAsync(url, _settingsService.Settings.OpenLinksInBackground);
+        _tabManager.NewWindowRequested += url => _ = CreateNewTabWithProtection(url, _settingsService.Settings.OpenLinksInBackground);
         _tabManager.SettingChanged += OnSettingChanged;
         _tabManager.WebViewClicked += ClosePopups;
         _tabManager.PasswordKeyButtonRequested += OnPasswordKeyButtonRequested;
@@ -1617,7 +1617,13 @@ public partial class MainForm : Form
             if (!_isInternalAddressUpdate)
             {
                 _addressBar.SelectAll(); 
-                ShowAddressDropdown(); 
+                
+                // 只有当用户通过鼠标或快捷键主动进入地址栏时才显示下拉框
+                // 避免切换标签页或新建标签页时自动弹出
+                if (Control.MouseButtons != MouseButtons.None || ModifierKeys != Keys.None)
+                {
+                    ShowAddressDropdown(); 
+                }
             }
         };
         _addressBar.LostFocus += (s, e) => 
@@ -1739,7 +1745,7 @@ public partial class MainForm : Form
             var (loginUrl, encodedNonce) = await _loginService.PrepareLoginAsync();
 
             // 2. 在应用内浏览器标签页打开
-            await _tabManager.CreateTabAsync(loginUrl);
+            await CreateNewTabWithProtection(loginUrl);
 
             // 3. 开始轮询（在后台静默进行，不再显示进度弹窗）
             var token = await _loginService.PollTokenAsync(encodedNonce, _loginCts.Token);

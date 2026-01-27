@@ -19,4 +19,3 @@ if %ERRORLEVEL% equ 0 (
     echo [失败] 打包过程中出现错误。
 )
 
-pause

@@ -42,8 +42,7 @@ echo   构建完成！
 echo ========================================
 echo.
 echo 输出目录: publish\
-echo 可执行文件: publish\MiniWorld.exe
+echo 可执行文件: publish\鲲穹AI浏览器.exe
 echo.
 echo 已包含 WebView2 Runtime，用户可直接运行！
 echo.
-pause

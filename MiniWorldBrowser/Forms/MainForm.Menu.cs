@@ -256,7 +256,7 @@ public partial class MainForm
 
         // 新建标签页
         menu.Items.Add(CreateMenuItem("新建标签页(T)", "Ctrl+T", MenuIconDrawer.DrawNewTab,
-            async () => { CloseMainMenu(); await _tabManager.CreateTabAsync("about:newtab"); }));
+            async () => { CloseMainMenu(); await CreateNewTabWithProtection("about:newtab"); }));
 
         // 新建窗口
         menu.Items.Add(CreateMenuItem("新建窗口(N)", "Ctrl+N", MenuIconDrawer.DrawNewWindow,
@@ -384,7 +384,7 @@ public partial class MainForm
         {
             ShortcutKeyDisplayString = "Ctrl+H"
         };
-        showHistory.Click += (s, e) => { CloseMainMenu(); _ = _tabManager.CreateTabAsync("about:settings"); };
+        showHistory.Click += (s, e) => { CloseMainMenu(); _ = CreateNewTabWithProtection("about:settings"); };
         history.DropDownItems.Add(showHistory);
 
         history.DropDownItems.Add(new ToolStripSeparator());
@@ -1027,7 +1027,7 @@ public partial class MainForm
 
     private void ShowSettings()
     {
-        _ = _tabManager.CreateTabAsync("about:settings");
+        _ = CreateNewTabWithProtection("about:settings");
     }
 
     private void ShowSettingsDialog()

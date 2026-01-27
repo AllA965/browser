@@ -107,14 +107,14 @@ public partial class MainForm
     /// <summary>
     /// 在带有保护的情况下创建新标签页，防止地址栏下拉框意外弹出
     /// </summary>
-    private async Task CreateNewTabWithProtection(string url)
+    private async Task CreateNewTabWithProtection(string url, bool openInBackground = false)
     {
         if (_tabManager == null) return;
 
         _isInternalAddressUpdate = true;
         try
         {
-            await _tabManager.CreateTabAsync(url);
+            await _tabManager.CreateTabAsync(url, openInBackground);
         }
         finally
         {
@@ -195,7 +195,7 @@ public partial class MainForm
                     break;
                 case Keys.H:
                     // Ctrl+H: 历史记录
-                    _ = _tabManager.CreateTabAsync("about:settings");
+                    _ = CreateNewTabWithProtection("about:settings");
                     e.Handled = true;
                     break;
                 case Keys.J:
