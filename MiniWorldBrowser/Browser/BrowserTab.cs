@@ -122,7 +122,14 @@ public class BrowserTab : IDisposable
             var options = new CoreWebView2EnvironmentOptions
             {
                 AdditionalBrowserArguments = "--allow-running-insecure-content " +
-                                           "--disable-blink-features=AutomationControlled"
+                                           "--disable-blink-features=AutomationControlled " +
+                                           "--ignore-gpu-blocklist " +
+                                           "--enable-gpu-rasterization " +
+                                           "--enable-zero-copy " +
+                                           "--enable-features=SharedArrayBuffer,Canvas2dLayers " +
+                                           "--use-angle=d3d11 " +
+                                           "--enable-accelerated-2d-canvas " +
+                                           "--enable-accelerated-video-decode"
             };
 
             // 加载 AI 扩展

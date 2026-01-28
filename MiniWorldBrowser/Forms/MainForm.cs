@@ -255,6 +255,12 @@ public partial class MainForm : Form
     
     private void InitializeUI()
     {
+        // 开启窗体级的双缓冲和硬件加速优化
+        this.SetStyle(ControlStyles.OptimizedDoubleBuffer | 
+                      ControlStyles.AllPaintingInWmPaint | 
+                      ControlStyles.UserPaint, true);
+        this.UpdateStyles();
+
         Text = _isIncognito ? "InPrivate - " + AppConstants.AppName : AppConstants.AppName;
         Size = DpiHelper.Scale(new Size(1200, 800));
         MinimumSize = DpiHelper.Scale(new Size(800, 600));
@@ -290,13 +296,24 @@ public partial class MainForm : Form
         Controls.Add(_bookmarkBar);
         Controls.Add(_toolbar);
         Controls.Add(_tabBar);
-        
-        /* 隐身模式不显示广告
-        if (!_isIncognito)
+
+        // 递归开启所有容器的硬件加速和双缓冲
+        EnableDoubleBuffering(this);
+    }
+
+    private void EnableDoubleBuffering(Control control)
+    {
+        if (control is Panel || control is FlowLayoutPanel || control is TableLayoutPanel || control is PictureBox)
         {
-            Controls.Add(_adCarousel);
-            _adCarousel.BringToFront();
-        } */
+            var prop = typeof(Control).GetProperty("DoubleBuffered", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            prop?.SetValue(control, true, null);
+        }
+
+        foreach (Control child in control.Controls)
+        {
+            EnableDoubleBuffering(child);
+        }
     }
     
     private void CreateTabBar()
@@ -737,7 +754,6 @@ public partial class MainForm : Form
             _bookmarkBarTimer.Tick += (s, e) =>
             {
                 int currentHeight = _bookmarkBar.Height;
-                // 每次改变 15% 的差距，至少改变 1 像素，实现平滑效果
                 int diff = _bookmarkBarTargetHeight - currentHeight;
                 if (Math.Abs(diff) <= 1)
                 {
@@ -747,15 +763,13 @@ public partial class MainForm : Form
                     {
                         _bookmarkBar.Visible = false;
                     }
-                    this.PerformLayout();
                     return;
                 }
 
-                int step = (int)(diff * 0.2);
+                int step = (int)(diff * 0.25); // 稍微加快一点速度
                 if (step == 0) step = diff > 0 ? 1 : -1;
                 
                 _bookmarkBar.Height = currentHeight + step;
-                this.PerformLayout();
             };
         }
 
@@ -1129,12 +1143,34 @@ public partial class MainForm : Form
     {
         try
         {
+            // 1. 检查 WebView2Runtime
+            string? runtimePath = MiniWorldBrowser.Browser.BrowserTab.FindWebView2Runtime();
+            if (runtimePath == null)
+            {
+                // 如果没有找到打包的运行时，尝试检查系统是否安装了 WebView2
+                try
+                {
+                    string version = Microsoft.Web.WebView2.Core.CoreWebView2Environment.GetAvailableBrowserVersionString();
+                    if (string.IsNullOrEmpty(version)) throw new Exception();
+                }
+                catch
+                {
+                    MessageBox.Show("未检测到 WebView2 运行时。AI 聊天功能需要 Microsoft Edge WebView2 才能运行。\n\n请安装 WebView2 运行时后重试。", "组件缺失", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
             // 使用共享环境初始化，防止与标签页初始化冲突 (0x8007139F)
             string userDataFolder = MiniWorldBrowser.Browser.BrowserTab.GetUserDataFolder(_incognitoDataFolder, _settingsService);
             var env = await MiniWorldBrowser.Browser.BrowserTab.GetSharedEnvironmentAsync(userDataFolder, _settingsService);
             
             await _aiWebView.EnsureCoreWebView2Async(env);
             
+            if (_aiWebView.CoreWebView2 == null)
+            {
+                throw new Exception("CoreWebView2 对象为 null");
+            }
+
             // 注册桥接对象
             _aiApiBridge = new AiApiBridge(_settingsService, new MiniWorldBrowser.Helpers.BrowserController(_tabManager, this, _settingsService, CreateNewTabWithProtection));
             
@@ -1156,7 +1192,9 @@ public partial class MainForm : Form
                 if (_aiWebView != null && _aiWebView.CoreWebView2 != null)
                 {
                     this.Invoke(new Action(async () => {
-                        await _aiWebView.CoreWebView2.ExecuteScriptAsync("if(typeof updateModelName === 'function') updateModelName();");
+                        try {
+                            await _aiWebView.CoreWebView2.ExecuteScriptAsync("if(typeof updateModelName === 'function') updateModelName();");
+                        } catch { }
                     }));
                 }
                 
@@ -1206,18 +1244,43 @@ public partial class MainForm : Form
                 string htmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "ai_chat.html");
                 if (File.Exists(htmlPath))
                 {
+                    // 使用绝对路径 URI
                     _aiWebView.Source = new Uri(htmlPath);
                 }
                 else
                 {
-                    // 如果文件不存在，直接加载 HTML 字符串或显示错误
-                    _aiWebView.NavigateToString("<html><body><h3>未找到 AI 聊天界面文件</h3><p>路径: " + htmlPath + "</p></body></html>");
+                    // 尝试从 exe 所在目录查找
+                    string altPath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName) ?? "", "Resources", "ai_chat.html");
+                    if (File.Exists(altPath))
+                    {
+                        _aiWebView.Source = new Uri(altPath);
+                    }
+                    else
+                    {
+                        // 如果文件不存在，直接加载 HTML 字符串或显示错误
+                        _aiWebView.NavigateToString("<html><body style='font-family: sans-serif; padding: 20px;'><h3>未找到 AI 聊天界面文件</h3><p>请检查以下路径是否存在:</p><ul><li>" + htmlPath + "</li><li>" + altPath + "</li></ul></body></html>");
+                    }
                 }
             }
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"AI WebView 初始化失败: {ex.Message}");
+            string errorMsg = $"AI WebView 初始化失败: {ex.Message}";
+            Debug.WriteLine(errorMsg);
+            
+            // 如果是常见的 HRESULT 错误，提供更详细的建议
+            if (ex.Message.Contains("0x8007139F"))
+            {
+                errorMsg += "\n\n提示: 浏览器环境初始化冲突，请尝试重启浏览器。";
+            }
+            else if (ex.Message.Contains("WebView2Loader.dll"))
+            {
+                errorMsg += "\n\n提示: 找不到 WebView2Loader.dll，请确保该文件存在于程序目录下。";
+            }
+
+            // 只在 AI 面板显示时提示用户，或者记录到状态栏
+            _statusLabel.Text = "AI 助手初始化失败";
+            _statusLabel.ForeColor = Color.Red;
         }
     }
 
@@ -1254,15 +1317,13 @@ public partial class MainForm : Form
                         _aiSidePanel.Visible = false;
                         _aiSplitter.Visible = false;
                     }
-                    this.PerformLayout();
                     return;
                 }
 
-                int step = (int)(diff * 0.2);
+                int step = (int)(diff * 0.25);
                 if (step == 0) step = diff > 0 ? 1 : -1;
                 
                 _aiSidePanel.Width = currentWidth + step;
-                this.PerformLayout();
             };
         }
 
