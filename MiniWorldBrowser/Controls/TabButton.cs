@@ -64,6 +64,18 @@ public class TabButton : Panel
     private Color HoverBg => _isDarkTheme ? DarkHoverBg : LightHoverBg;
     private Color TextColor => _isDarkTheme ? DarkForeColor : LightForeColor;
 
+    private SolidBrush? _activeBrush;
+    private SolidBrush? _inactiveBrush;
+    private SolidBrush? _hoverBrush;
+
+    private SolidBrush GetBrush(Color color)
+    {
+        if (color == ActiveBg) return _activeBrush ??= new SolidBrush(ActiveBg);
+        if (color == InactiveBg) return _inactiveBrush ??= new SolidBrush(InactiveBg);
+        if (color == HoverBg) return _hoverBrush ??= new SolidBrush(HoverBg);
+        return new SolidBrush(color);
+    }
+
     public TabButton(bool darkTheme = false)
     {
         _isDarkTheme = darkTheme;
@@ -108,13 +120,12 @@ public class TabButton : Panel
             TextAlign = ContentAlignment.MiddleLeft,
             ForeColor = TextColor,
             BackColor = Color.Transparent,
+            AutoEllipsis = true,
             Cursor = Cursors.Hand
         };
 
         _closeButton = new TabCloseButton(_isDarkTheme)
         {
-            Size = DpiHelper.Scale(new Size(24, 24)),
-            Location = new Point(Width - DpiHelper.Scale(28), DpiHelper.Scale(4)),
             Visible = false
         };
         _closeButton.Click += (s, e) => CloseClicked?.Invoke(this);
@@ -173,15 +184,13 @@ public class TabButton : Panel
         // 绘制圆角矩形背景（只有顶部圆角）
         var rect = new Rectangle(0, 0, Width - 1, Height);
         using var path = CreateTopRoundedRect(rect, DpiHelper.Scale(8));
-        using var brush = new SolidBrush(bgColor);
-        g.FillPath(brush, path);
+        g.FillPath(GetBrush(bgColor), path);
 
         // 激活状态下绘制底部连接线（与内容区域连接）
         if (IsActive)
         {
-            using var lineBrush = new SolidBrush(ActiveBg);
             int lineHeight = DpiHelper.Scale(2);
-            g.FillRectangle(lineBrush, 0, Height - lineHeight, Width, lineHeight);
+            g.FillRectangle(GetBrush(ActiveBg), 0, Height - lineHeight, Width, lineHeight);
         }
     }
 
@@ -258,13 +267,17 @@ public class TabButton : Panel
 
     public void SetTitle(string title)
     {
-        _titleLabel.Text = title.Truncate(20);
+        _titleLabel.Text = title;
     }
 
     public void SetActive(bool active)
     {
         IsActive = active;
-        _closeButton.Visible = !IsCompact && (active || _isHovering);
+        if (!IsCompact && (active || _isHovering))
+            _closeButton.ShowButton();
+        else
+            _closeButton.HideButton();
+            
         _titleLabel.Visible = !IsCompact;
         _titleLabel.ForeColor = TextColor;
         Invalidate();
@@ -286,6 +299,80 @@ public class TabButton : Panel
     }
 
     /// <summary>
+    /// 动画过渡到指定宽度
+    /// </summary>
+    public void AnimateToWidth(int targetWidth, int? startWidth = null)
+    {
+        if (Width == targetWidth && !startWidth.HasValue && (_animationTimer == null || !_animationTimer.Enabled)) return;
+        
+        // 如果是关闭动画正在进行中，不要被其他宽度动画打断，但允许继续执行关闭动画
+        if (_isClosing && targetWidth != 0) return;
+
+        _targetWidth = targetWidth;
+        _startWidth = startWidth ?? Width;
+        
+        if (startWidth.HasValue)
+        {
+            Width = startWidth.Value;
+        }
+
+        _animationProgress = 0f;
+
+        if (_animationTimer == null)
+        {
+            _animationTimer = new System.Windows.Forms.Timer { Interval = 16 };
+            _animationTimer.Tick += OnAnimationTick;
+        }
+        
+        if (!_animationTimer.Enabled)
+        {
+            _animationTimer.Start();
+        }
+    }
+
+    private int _targetWidth;
+    private int _startWidth;
+    private bool _isClosing;
+
+    private void OnAnimationTick(object? sender, EventArgs e)
+    {
+        _animationProgress += 0.15f; // 稍微加快步进，原来是 0.1f
+        if (_animationProgress >= 1f)
+        {
+            _animationProgress = 1f;
+            Width = _targetWidth;
+            _animationTimer?.Stop();
+            
+            if (_isClosing)
+            {
+                _isClosing = false;
+                _onCloseComplete?.Invoke();
+            }
+            return;
+        }
+
+        // 优化缓动函数：使用更轻快的 Quad Out
+        float eased = 1f - (1f - _animationProgress) * (1f - _animationProgress);
+        Width = (int)(_startWidth + (_targetWidth - _startWidth) * eased);
+        
+        // 确保布局更新 - 只有在没有父容器自动布局时才需要，或者手动触发一次以确保平滑
+        // 对于 FlowLayoutPanel，改变 Width 会自动触发布局，但显式调用可能更平滑
+        // if (Parent != null) Parent.PerformLayout();
+    }
+
+    private Action? _onCloseComplete;
+
+    /// <summary>
+    /// 播放关闭动画
+    /// </summary>
+    public void PlayCloseAnimation(Action onComplete)
+    {
+        _isClosing = true;
+        _onCloseComplete = onComplete;
+        AnimateToWidth(0);
+    }
+
+    /// <summary>
     /// 播放出现动画
     /// </summary>
     public void PlayShowAnimation()
@@ -293,34 +380,24 @@ public class TabButton : Panel
         _animationProgress = 0f;
         int minWidth = DpiHelper.Scale(40);
         Width = minWidth; // 从小宽度开始
+        _startWidth = minWidth;
 
-        var targetWidth = _isPinned ? minWidth : PreferredWidth;
+        _targetWidth = _isPinned ? minWidth : PreferredWidth;
+        _isClosing = false;
 
-        _animationTimer?.Stop();
-        _animationTimer = new System.Windows.Forms.Timer { Interval = 16 };
-        _animationTimer.Tick += (s, e) =>
+        if (_animationTimer == null)
         {
-            _animationProgress += 0.15f;
-            if (_animationProgress >= 1f)
-            {
-                _animationProgress = 1f;
-                _animationTimer?.Stop();
-                _animationTimer?.Dispose();
-                _animationTimer = null;
-            }
-
-            // 缓动函数
-            float eased = 1f - (float)Math.Pow(1 - _animationProgress, 3);
-            Width = (int)(minWidth + (targetWidth - minWidth) * eased);
-            Invalidate();
-        };
+            _animationTimer = new System.Windows.Forms.Timer { Interval = 16 };
+            _animationTimer.Tick += OnAnimationTick;
+        }
         _animationTimer.Start();
     }
 
     private void OnMouseEnterTab(object? sender, EventArgs e)
     {
         _isHovering = true;
-        _closeButton.Visible = !IsCompact;
+        if (!IsCompact)
+            _closeButton.ShowButton();
         Invalidate();
     }
 
@@ -330,7 +407,10 @@ public class TabButton : Panel
         if (!ClientRectangle.Contains(pos))
         {
             _isHovering = false;
-            _closeButton.Visible = !IsCompact && IsActive;
+            if (!IsCompact && IsActive)
+                _closeButton.ShowButton();
+            else
+                _closeButton.HideButton();
             Invalidate();
         }
     }
@@ -445,7 +525,7 @@ public class TabButton : Panel
             _favicon.Location = new Point(x, DpiHelper.Scale(8));
             _loadingIndicator.Location = new Point(x, DpiHelper.Scale(8));
             _titleLabel.Visible = false;
-            _closeButton.Visible = false;
+            _closeButton.HideButton();
         }
         else
         {
@@ -453,9 +533,21 @@ public class TabButton : Panel
             _loadingIndicator.Location = DpiHelper.Scale(new Point(10, 8));
             _titleLabel.Visible = true;
             _titleLabel.Location = DpiHelper.Scale(new Point(30, 8));
-            _titleLabel.Width = Math.Max(0, Width - DpiHelper.Scale(30 + 28));
+            
+            // 优化：使用 PreferredWidth 而不是当前 Width，防止动画过程中文字逐个出现的卡顿感
+            // 让 Panel 的剪裁机制处理视觉上的缩减，而不是让 Label 频繁重新布局文字
+            int targetLabelWidth = Math.Max(0, PreferredWidth - DpiHelper.Scale(30 + 28));
+            if (_titleLabel.Width != targetLabelWidth)
+            {
+                _titleLabel.Width = targetLabelWidth;
+            }
+
             _closeButton.Location = new Point(Width - DpiHelper.Scale(28), DpiHelper.Scale(4));
-            _closeButton.Visible = IsActive || _isHovering;
+            
+            if (IsActive || _isHovering)
+                _closeButton.ShowButton();
+            else
+                _closeButton.HideButton();
         }
     }
 
@@ -467,6 +559,9 @@ public class TabButton : Panel
             _animationTimer?.Dispose();
             _favicon.Image?.Dispose();
             _loadingIndicator.Image?.Dispose();
+            _activeBrush?.Dispose();
+            _inactiveBrush?.Dispose();
+            _hoverBrush?.Dispose();
         }
         base.Dispose(disposing);
     }
@@ -480,6 +575,9 @@ public class TabCloseButton : Control
     private bool _isHovered;
     private bool _isPressed;
     private readonly bool _isDarkTheme;
+    private float _opacity = 1f;
+    private System.Windows.Forms.Timer _fadeTimer;
+    private bool _fadingIn;
 
     public TabCloseButton(bool darkTheme = false)
     {
@@ -494,10 +592,64 @@ public class TabCloseButton : Control
         BackColor = Color.Transparent;
         Size = DpiHelper.Scale(new Size(24, 24));
         Cursor = Cursors.Hand;
+        
+        _fadeTimer = new System.Windows.Forms.Timer { Interval = 16 };
+        _fadeTimer.Tick += (s, e) =>
+        {
+            float step = 0.15f;
+            if (_fadingIn)
+            {
+                if (_opacity < 1f)
+                {
+                    _opacity += step;
+                    if (_opacity > 1f) _opacity = 1f;
+                    Invalidate();
+                }
+                else
+                {
+                    _fadeTimer.Stop();
+                }
+            }
+            else
+            {
+                if (_opacity > 0f)
+                {
+                    _opacity -= step;
+                    if (_opacity < 0f) _opacity = 0f;
+                    Invalidate();
+                }
+                else
+                {
+                    _fadeTimer.Stop();
+                    Visible = false;
+                }
+            }
+        };
+    }
+
+    public void ShowButton()
+    {
+        if (_opacity >= 1f && Visible) return;
+        _fadingIn = true;
+        if (!Visible)
+        {
+            _opacity = 0f;
+            Visible = true;
+        }
+        _fadeTimer.Start();
+    }
+
+    public void HideButton()
+    {
+        if (_opacity <= 0f && !Visible) return;
+        _fadingIn = false;
+        _fadeTimer.Start();
     }
 
     protected override void OnPaint(PaintEventArgs e)
     {
+        if (_opacity <= 0) return;
+
         var g = e.Graphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
@@ -506,13 +658,13 @@ public class TabCloseButton : Control
         // 绘制背景
         if (_isPressed)
         {
-            using var brush = new SolidBrush(Color.FromArgb(196, 43, 28));
+            using var brush = new SolidBrush(Color.FromArgb((int)(255 * _opacity), 196, 43, 28));
             using var path = CreateRoundedRect(rect, DpiHelper.Scale(4));
             g.FillPath(brush, path);
         }
         else if (_isHovered)
         {
-            using var brush = new SolidBrush(Color.FromArgb(232, 17, 35));
+            using var brush = new SolidBrush(Color.FromArgb((int)(255 * _opacity), 232, 17, 35));
             using var path = CreateRoundedRect(rect, DpiHelper.Scale(4));
             g.FillPath(brush, path);
         }
@@ -522,8 +674,9 @@ public class TabCloseButton : Control
         float centerY = Height / 2f;
         float size = DpiHelper.Scale(4f);
 
-        var iconColor = (_isHovered || _isPressed) ? Color.White :
+        var baseIconColor = (_isHovered || _isPressed) ? Color.White :
                         (_isDarkTheme ? Color.FromArgb(180, 180, 180) : Color.FromArgb(100, 100, 100));
+        var iconColor = Color.FromArgb((int)(255 * _opacity), baseIconColor);
 
         using var pen = new Pen(iconColor, DpiHelper.Scale(1.5f))
         {

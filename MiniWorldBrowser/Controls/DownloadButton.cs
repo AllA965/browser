@@ -22,6 +22,40 @@ public class DownloadButton : Control
     public Color PressedBackColor { get; set; } = Color.FromArgb(200, 200, 200);
     public Color IconColor { get; set; } = Color.FromArgb(80, 80, 80);
     
+    private float _offsetY = 0f;
+    private System.Windows.Forms.Timer? _bounceTimer;
+    private float _bouncePhase = 0f;
+
+    public void StartBounceAnimation()
+    {
+        if (_bounceTimer == null)
+        {
+            _bounceTimer = new System.Windows.Forms.Timer { Interval = 16 };
+            _bounceTimer.Tick += (s, e) => {
+                _bouncePhase += 0.2f;
+                // 正弦波弹跳：amplitude * abs(sin(phase))
+                // 让它跳几下然后停止
+                if (_bouncePhase > Math.PI * 3) // 跳 1.5 次
+                {
+                    _offsetY = 0;
+                    _bouncePhase = 0;
+                    _bounceTimer.Stop();
+                }
+                else
+                {
+                    _offsetY = -(float)Math.Abs(Math.Sin(_bouncePhase)) * DpiHelper.Scale(6);
+                }
+                Invalidate();
+            };
+        }
+        
+        if (!_bounceTimer.Enabled)
+        {
+            _bouncePhase = 0;
+            _bounceTimer.Start();
+        }
+    }
+
     public DownloadButton()
     {
         SetStyle(ControlStyles.SupportsTransparentBackColor |
@@ -65,6 +99,9 @@ public class DownloadButton : Control
     
     private void DrawDownloadIcon(Graphics g)
     {
+        // 应用弹跳偏移
+        g.TranslateTransform(0, _offsetY);
+
         var color = Enabled ? IconColor : Color.Gray;
         float penWidth = DpiHelper.Scale(2f);
         
@@ -99,6 +136,9 @@ public class DownloadButton : Control
         
         // 绘制底部横线
         g.DrawLine(pen, centerX - lineHalfWidth, lineY, centerX + lineHalfWidth, lineY);
+
+        // 重置变换
+        g.ResetTransform();
     }
     
     private static GraphicsPath CreateRoundedRect(Rectangle rect, int radius)

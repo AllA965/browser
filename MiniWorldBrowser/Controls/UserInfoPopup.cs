@@ -63,6 +63,22 @@ public class UserInfoPopup : Form
         ShowInTaskbar = false;
         Padding = new Padding(1); // 为边框预留
         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+        
+        Opacity = 0;
+        var animTimer = new System.Windows.Forms.Timer { Interval = 10 };
+        animTimer.Tick += (s, e) => {
+            if (Opacity < 1)
+            {
+                Opacity += 0.1;
+            }
+            else
+            {
+                Opacity = 1;
+                animTimer.Stop();
+                animTimer.Dispose();
+            }
+        };
+        Load += (s, e) => animTimer.Start();
     }
 
     private async void LoadAvatarAsync(string url)

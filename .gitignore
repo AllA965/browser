@@ -23,7 +23,6 @@ TestResults/
 # Visual Studio / IDEs
 .vs/
 .vscode/
-.idea/
 *.rsuser
 *.suo
 *.user
@@ -46,6 +45,13 @@ TestResults/
 *.idb
 *.ncb
 *.sdf
+
+# JetBrains (Rider, etc.)
+.idea/
+*.idea/
+*.DotSettings.user
+_ReSharper*/
+*.[Rr]e[Ss]harper
 
 # Trae
 .trae/
@@ -74,6 +80,7 @@ project.fragment.lock.json
 artifacts/
 appsettings.Development.json
 appsettings.Local.json
+secrets.json
 
 # Python (for Interface scripts)
 __pycache__/
@@ -82,14 +89,14 @@ __pycache__/
 .venv/
 venv/
 ENV/
+env/
 
 # Node.js / Web (if applicable)
 node_modules/
 npm-debug.log
 yarn-error.log
-
-# StyleCop
-StyleCop.Cache
+dist/
+build/
 
 # OS files
 Thumbs.db
@@ -99,16 +106,13 @@ Desktop.ini
 
 # Others & Backups
 *.tmp
+*.temp
 *.log
-nul
 *.bak
 *.orig
-*~
-LiveRecorder/
+*.old
 *.crash
 *.stackdump
-
-# Resharper / JetBrains
-_ReSharper*/
-*.[Rr]e[Ss]harper
-*.DotSettings.user
+nul
+*~
+LiveRecorder/

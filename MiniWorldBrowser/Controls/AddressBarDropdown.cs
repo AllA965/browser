@@ -98,6 +98,8 @@ public class AddressBarDropdown : Form
     
     public bool IsInteracting => _isInteracting;
     
+    private System.Windows.Forms.Timer? _fadeTimer;
+
     public void Show(Control anchor, string text, List<string> urlHistory)
     {
         // 如果窗体已被释放，不执行任何操作
@@ -155,7 +157,25 @@ public class AddressBarDropdown : Form
         // 显示下拉框
         if (!Visible)
         {
+            Opacity = 0;
             base.Show();
+            
+            if (_fadeTimer == null)
+            {
+                _fadeTimer = new System.Windows.Forms.Timer { Interval = 10 };
+                _fadeTimer.Tick += (s, e) => {
+                    if (Opacity < 1)
+                    {
+                        Opacity += 0.2;
+                    }
+                    else
+                    {
+                        Opacity = 1;
+                        _fadeTimer.Stop();
+                    }
+                };
+            }
+            _fadeTimer.Start();
         }
         _suggestionPanel.Invalidate();
     }

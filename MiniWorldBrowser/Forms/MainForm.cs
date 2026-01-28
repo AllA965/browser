@@ -708,6 +708,66 @@ public partial class MainForm : Form
     }
 
     private bool _isUpdatingBookmarkBar = false;
+    private System.Windows.Forms.Timer? _bookmarkBarTimer;
+    private int _bookmarkBarTargetHeight;
+    private const int BookmarkBarDefaultHeight = 40;
+
+    /// <summary>
+    /// 以动画方式显示/隐藏收藏栏
+    /// </summary>
+    private void AnimateBookmarkBar(bool show)
+    {
+        if (InvokeRequired)
+        {
+            BeginInvoke(new Action(() => AnimateBookmarkBar(show)));
+            return;
+        }
+
+        int targetHeight = show ? DpiHelper.Scale(BookmarkBarDefaultHeight) : 0;
+        
+        // 如果已经在目标状态且没有在动画中，直接返回
+        if (_bookmarkBar.Height == targetHeight && _bookmarkBar.Visible == show && (_bookmarkBarTimer == null || !_bookmarkBarTimer.Enabled)) 
+            return;
+
+        _bookmarkBarTargetHeight = targetHeight;
+        
+        if (_bookmarkBarTimer == null)
+        {
+            _bookmarkBarTimer = new System.Windows.Forms.Timer { Interval = 10 };
+            _bookmarkBarTimer.Tick += (s, e) =>
+            {
+                int currentHeight = _bookmarkBar.Height;
+                // 每次改变 15% 的差距，至少改变 1 像素，实现平滑效果
+                int diff = _bookmarkBarTargetHeight - currentHeight;
+                if (Math.Abs(diff) <= 1)
+                {
+                    _bookmarkBar.Height = _bookmarkBarTargetHeight;
+                    _bookmarkBarTimer.Stop();
+                    if (_bookmarkBarTargetHeight == 0)
+                    {
+                        _bookmarkBar.Visible = false;
+                    }
+                    this.PerformLayout();
+                    return;
+                }
+
+                int step = (int)(diff * 0.2);
+                if (step == 0) step = diff > 0 ? 1 : -1;
+                
+                _bookmarkBar.Height = currentHeight + step;
+                this.PerformLayout();
+            };
+        }
+
+        if (show && !_bookmarkBar.Visible)
+        {
+            _bookmarkBar.Height = 0;
+            _bookmarkBar.Visible = true;
+        }
+        
+        _bookmarkBarTimer.Start();
+    }
+
     /// <summary>
     /// 更新收藏栏可见性：当没有收藏内容时强制隐藏以优化空间
     /// </summary>
@@ -756,11 +816,9 @@ public partial class MainForm : Form
                 _settingsService.Save();
             }
             
-            if (_bookmarkBar.Visible != shouldShow)
+            if (_bookmarkBar.Visible != shouldShow || (shouldShow && _bookmarkBar.Height < DpiHelper.Scale(BookmarkBarDefaultHeight)))
             {
-                _bookmarkBar.Visible = shouldShow;
-                // 强制重新布局以更新浏览器容器大小
-                this.PerformLayout();
+                AnimateBookmarkBar(shouldShow);
             }
         }
         finally
@@ -1163,36 +1221,59 @@ public partial class MainForm : Form
         }
     }
 
+    private System.Windows.Forms.Timer? _aiSidePanelTimer;
+    private int _aiSidePanelTargetWidth;
+    private const int AISidePanelDefaultWidth = 380;
+
     private void ToggleAISidePanel()
     {
-        if (_aiSidePanel.Visible)
+        if (InvokeRequired)
         {
-            _aiSidePanel.Visible = false;
-            _aiSplitter.Visible = false;
+            BeginInvoke(new Action(ToggleAISidePanel));
+            return;
         }
-        else
-        {
-            // 设置初始状态用于动画
-            int targetWidth = DpiHelper.Scale(380);
-            _aiSidePanel.Width = 0;
-            _aiSidePanel.Visible = true;
-            _aiSplitter.Visible = true;
 
-            var animTimer = new System.Windows.Forms.Timer { Interval = 10 };
-            animTimer.Tick += (s, e) => {
-                if (_aiSidePanel.Width < targetWidth)
+        bool show = !_aiSidePanel.Visible || _aiSidePanel.Width == 0;
+        int targetWidth = show ? DpiHelper.Scale(AISidePanelDefaultWidth) : 0;
+        _aiSidePanelTargetWidth = targetWidth;
+
+        if (_aiSidePanelTimer == null)
+        {
+            _aiSidePanelTimer = new System.Windows.Forms.Timer { Interval = 10 };
+            _aiSidePanelTimer.Tick += (s, e) =>
+            {
+                int currentWidth = _aiSidePanel.Width;
+                int diff = _aiSidePanelTargetWidth - currentWidth;
+                
+                if (Math.Abs(diff) <= 1)
                 {
-                    _aiSidePanel.Width += DpiHelper.Scale(38);
-                    if (_aiSidePanel.Width > targetWidth) _aiSidePanel.Width = targetWidth;
+                    _aiSidePanel.Width = _aiSidePanelTargetWidth;
+                    _aiSidePanelTimer.Stop();
+                    if (_aiSidePanelTargetWidth == 0)
+                    {
+                        _aiSidePanel.Visible = false;
+                        _aiSplitter.Visible = false;
+                    }
+                    this.PerformLayout();
+                    return;
                 }
-                else
-                {
-                    _aiSidePanel.Width = targetWidth;
-                    animTimer.Stop();
-                    animTimer.Dispose();
-                }
+
+                int step = (int)(diff * 0.2);
+                if (step == 0) step = diff > 0 ? 1 : -1;
+                
+                _aiSidePanel.Width = currentWidth + step;
+                this.PerformLayout();
             };
-            animTimer.Start();
+        }
+
+        if (show)
+        {
+            if (!_aiSidePanel.Visible)
+            {
+                _aiSidePanel.Width = 0;
+                _aiSidePanel.Visible = true;
+                _aiSplitter.Visible = true;
+            }
 
             if (_aiWebView.CoreWebView2 == null)
             {
@@ -1200,7 +1281,6 @@ public partial class MainForm : Form
             }
             else
             {
-                // 检查模式是否改变，如果改变了则重新加载
                 var settings = _settingsService.Settings;
                 bool isApiMode = settings.AiServiceMode == 1;
                 bool currentlyApiPage = _aiWebView.Source.ToString().Contains("ai_chat.html");
@@ -1211,6 +1291,8 @@ public partial class MainForm : Form
                 }
             }
         }
+        
+        _aiSidePanelTimer.Start();
     }
 
     private async void SummarizeCurrentPage()
@@ -1334,6 +1416,7 @@ public partial class MainForm : Form
         _tabManager.SettingChanged += OnSettingChanged;
         _tabManager.WebViewClicked += ClosePopups;
         _tabManager.PasswordKeyButtonRequested += OnPasswordKeyButtonRequested;
+        _tabManager.DownloadStarted += OnDownloadStarted;
         
         _mouseGesture = new MouseGesture(this);
         _mouseGesture.Enabled = _settingsService.Settings.EnableMouseGesture;
@@ -1352,6 +1435,20 @@ public partial class MainForm : Form
         };
     }
     
+    private void OnDownloadStarted(MiniWorldBrowser.Models.DownloadItem item)
+    {
+        if (InvokeRequired)
+        {
+            BeginInvoke(new Action(() => OnDownloadStarted(item)));
+            return;
+        }
+        
+        _downloadBtn.StartBounceAnimation();
+        
+        // 显示下载提示
+        ShowModernMessage("下载开始", $"正在下载: {item.FileName}", ModernDialogIcon.Info);
+    }
+
     private void InitializeEvents()
     {
         Load += (s, e) =>

@@ -23,6 +23,22 @@ public class SecurityInfoPopup : Form
         _host = GetHost(url ?? "");
         
         InitializeUI();
+
+        Opacity = 0;
+        var animTimer = new System.Windows.Forms.Timer { Interval = 10 };
+        animTimer.Tick += (s, e) => {
+            if (Opacity < 1)
+            {
+                Opacity += 0.1;
+            }
+            else
+            {
+                Opacity = 1;
+                animTimer.Stop();
+                animTimer.Dispose();
+            }
+        };
+        Load += (s, e) => animTimer.Start();
     }
     
     private static string GetHost(string url)

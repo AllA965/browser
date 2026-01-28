@@ -78,6 +78,7 @@ public class BrowserTabManager
     {
         _browserContainer = browserContainer;
         _tabContainer = tabContainer;
+        _tabContainer.SetDoubleBuffered(true); // 开启双缓冲，减少多标签时的闪烁
         _newTabButton = newTabButton;
         _tabOverflowButton = tabOverflowButton;
         _settingsService = settingsService;
@@ -172,7 +173,7 @@ public class BrowserTabManager
         return false;
     }
 
-    public void UpdateTabLayout()
+    public void UpdateTabLayout(TabButton? newTab = null)
     {
         if (_tabContainer.IsDisposed || _newTabButton.IsDisposed) return;
 
@@ -217,24 +218,61 @@ public class BrowserTabManager
             }
         }
 
-        foreach (var btn in tabButtons)
-        {
-            btn.Visible = false;
-        }
+        _tabContainer.SuspendLayout(); // 开始批量布局
+
+        // 优化：不再盲目隐藏所有标签页，而是记录哪些应该显示
+        var tabsToHide = tabButtons.ToList();
 
         foreach (var b in pinned)
         {
-            b.Visible = true;
+            if (!b.Visible) b.Visible = true;
+            tabsToHide.Remove(b);
             b.PreferredWidth = PinnedTabWidth;
-            if (!b.IsDisposed && b.Width != PinnedTabWidth) b.Width = PinnedTabWidth;
+            if (!b.IsDisposed)
+            {
+                if (b == newTab)
+                {
+                    b.AnimateToWidth(PinnedTabWidth, DpiHelper.Scale(20));
+                }
+                else if (b.Width != PinnedTabWidth)
+                {
+                    b.AnimateToWidth(PinnedTabWidth);
+                }
+                else
+                {
+                    b.Width = PinnedTabWidth;
+                }
+            }
         }
 
         var visibleNormalTabs = normal.Take(tabsToShow).ToList();
         foreach (var b in visibleNormalTabs)
         {
-            b.Visible = true;
+            if (!b.Visible) b.Visible = true;
+            tabsToHide.Remove(b);
             b.PreferredWidth = normalTargetWidth;
-            if (!b.IsDisposed && b.Width != normalTargetWidth) b.Width = normalTargetWidth;
+            if (!b.IsDisposed)
+            {
+                if (b == newTab)
+                {
+                    // 新标签从较小宽度展开
+                    b.AnimateToWidth(normalTargetWidth, DpiHelper.Scale(40));
+                }
+                else if (b.Width != normalTargetWidth)
+                {
+                    b.AnimateToWidth(normalTargetWidth);
+                }
+                else
+                {
+                    b.Width = normalTargetWidth;
+                }
+            }
+        }
+
+        // 隐藏不需要显示的标签页
+        foreach (var b in tabsToHide)
+        {
+            if (b.Visible) b.Visible = false;
         }
 
         var hasOverflow = normal.Count > tabsToShow;
@@ -254,7 +292,7 @@ public class BrowserTabManager
             _newTabButton.SendToBack();
         }
 
-        try { _tabContainer.PerformLayout(); } catch { }
+        _tabContainer.ResumeLayout(true); // 结束批量布局
     }
 
     private List<BrowserTab> GetOverflowTabs()
@@ -462,8 +500,7 @@ public class BrowserTabManager
                 
                 _tabContainer.Controls.Add(tabBtn);
 
-                UpdateTabLayout();
-                tabBtn.PlayShowAnimation();
+                UpdateTabLayout(tabBtn);
                 
                 if (!openInBackground)
                 {
@@ -524,9 +561,7 @@ public class BrowserTabManager
             
             _tabContainer.Controls.Add(tabBtn);
             
-            UpdateTabLayout();
-            // 播放出现动画
-            tabBtn.PlayShowAnimation();
+            UpdateTabLayout(tabBtn);
             
             // 先初始化 WebView2
             await tab.InitializeAsync();
@@ -619,7 +654,22 @@ public class BrowserTabManager
         int index = _tabs.IndexOf(tab);
         _tabs.Remove(tab);
         
-        try { _tabContainer.Controls.Remove(tab.TabButton); } catch { }
+        // 播放关闭动画后再移除控件
+        var tabBtn = tab.TabButton;
+        if (tabBtn != null && !tabBtn.IsDisposed)
+        {
+            _tabContainer.SuspendLayout(); // 暂停布局
+            tabBtn.PlayCloseAnimation(() =>
+            {
+                try { _tabContainer.Controls.Remove(tabBtn); } catch { }
+                try { tabBtn.Dispose(); } catch { }
+                _tabContainer.ResumeLayout(true); // 恢复布局
+            });
+        }
+        else
+        {
+            try { _tabContainer.Controls.Remove(tabBtn); } catch { }
+        }
 
         UpdateTabLayout();
         

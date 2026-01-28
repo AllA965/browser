@@ -181,7 +181,7 @@ public partial class MainForm
                 case Keys.B:
                     if (e.Shift)
                     {
-                        _bookmarkBar.Visible = !_bookmarkBar.Visible;
+                        AnimateBookmarkBar(!_bookmarkBar.Visible || _bookmarkBar.Height == 0);
                         e.Handled = true;
                     }
                     break;

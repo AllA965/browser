@@ -37,6 +37,22 @@ public class SavePasswordPopup : Form
         _mode = mode;
         InitializeUI();
         StartAutoCloseTimer();
+
+        Opacity = 0;
+        var animTimer = new System.Windows.Forms.Timer { Interval = 10 };
+        animTimer.Tick += (s, e) => {
+            if (Opacity < 1)
+            {
+                Opacity += 0.1;
+            }
+            else
+            {
+                Opacity = 1;
+                animTimer.Stop();
+                animTimer.Dispose();
+            }
+        };
+        Load += (s, e) => animTimer.Start();
     }
 
     private void InitializeUI()

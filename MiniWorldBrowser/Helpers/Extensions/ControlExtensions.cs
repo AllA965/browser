@@ -46,6 +46,15 @@ public static class ControlExtensions
     }
     
     /// <summary>
+    /// 开启双缓冲
+    /// </summary>
+    public static void SetDoubleBuffered(this Control control, bool enabled = true)
+    {
+        var prop = typeof(Control).GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+        prop?.SetValue(control, enabled);
+    }
+
+    /// <summary>
     /// 创建圆角矩形路径
     /// </summary>
     public static System.Drawing.Drawing2D.GraphicsPath CreateRoundedRectangle(Rectangle rect, int radius)
