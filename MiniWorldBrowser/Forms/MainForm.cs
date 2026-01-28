@@ -20,7 +20,7 @@ public partial class MainForm : Form
 {
     #region 常量
     
-    private static readonly Color IncognitoAccent = Color.FromArgb(138, 180, 248);
+    private static readonly Color IncognitoAccent = MiniWorldBrowser.Constants.UIConstants.IncognitoAccentColor;
     
     #endregion
     
@@ -179,65 +179,12 @@ public partial class MainForm : Form
                     throw new Exception("TabManager 未初始化");
                 }
 
-                if (_isIncognito)
-                {
-                    // 隐身模式直接打开主页
-                    var homePage = _settingsService?.Settings?.HomePage ?? "about:newtab";
-                    await CreateNewTabWithProtection(homePage);
-                }
-                else
-                {
-                    // 根据 StartupBehavior 决定启动时打开什么页面
-                    // 0 = 打开新标签页, 1 = 继续上次浏览, 2 = 打开特定网页
-                    var startupBehavior = _settingsService?.Settings?.StartupBehavior ?? 0;
-                    
-                    switch (startupBehavior)
-                    {
-                        case 0: // 打开新标签页
-                            await CreateNewTabWithProtection("about:newtab");
-                            break;
-                            
-                        case 1: // 继续上次浏览
-                            var lastUrls = _settingsService?.Settings?.LastSessionUrls;
-                            if (lastUrls != null && lastUrls.Count > 0)
-                            {
-                                foreach (var url in lastUrls)
-                                {
-                                    await CreateNewTabWithProtection(url);
-                                }
-                            }
-                            else
-                            {
-                                await CreateNewTabWithProtection("about:newtab");
-                            }
-                            break;
-                            
-                        case 2: // 打开特定网页
-                            var startupPages = _settingsService?.Settings?.StartupPages;
-                            if (startupPages != null && startupPages.Count > 0)
-                            {
-                                foreach (var url in startupPages)
-                                {
-                                    await CreateNewTabWithProtection(url);
-                                }
-                            }
-                            else
-                            {
-                                // 如果没有设置特定网页，则打开主页
-                                var startupUrl = _settingsService?.Settings?.HomePage ?? "about:newtab";
-                                if (string.IsNullOrEmpty(startupUrl) || startupUrl == "about:newtab")
-                                {
-                                    startupUrl = "about:newtab";
-                                }
-                                await CreateNewTabWithProtection(startupUrl);
-                            }
-                            break;
-                            
-                        default:
-                            await CreateNewTabWithProtection("about:newtab");
-                            break;
-                    }
-                }
+                await StartupHelper.HandleStartupAsync(
+                    _settingsService,
+                    _tabManager,
+                    _isIncognito,
+                    async (url) => await CreateNewTabWithProtection(url)
+                );
                 
                 // 强制刷新标签容器
                 _tabContainer?.Invalidate();
@@ -262,10 +209,10 @@ public partial class MainForm : Form
         this.UpdateStyles();
 
         Text = _isIncognito ? "InPrivate - " + AppConstants.AppName : AppConstants.AppName;
-        Size = DpiHelper.Scale(new Size(1200, 800));
-        MinimumSize = DpiHelper.Scale(new Size(800, 600));
+        Size = DpiHelper.Scale(UIConstants.DefaultWindowSize);
+        MinimumSize = DpiHelper.Scale(UIConstants.MinWindowSize);
         StartPosition = FormStartPosition.CenterScreen;
-        BackColor = _isIncognito ? Color.FromArgb(53, 54, 58) : Color.FromArgb(232, 234, 237);
+        BackColor = _isIncognito ? UIConstants.IncognitoBackColor : UIConstants.DefaultBackColor;
         FormBorderStyle = FormBorderStyle.None;
         
         // 设置窗口图标

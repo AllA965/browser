@@ -9,7 +9,7 @@ namespace MiniWorldBrowser.Browser;
 /// <summary>
 /// 浏览器标签页管理器
 /// </summary>
-public class BrowserTabManager
+public partial class BrowserTabManager
 {
     private readonly List<BrowserTab> _tabs = new();
     private readonly Panel _browserContainer;
@@ -58,12 +58,13 @@ public class BrowserTabManager
     private bool _isPreloadingTab = false;
     private readonly object _cacheLock = new();
 
-    private static readonly int NormalTabMaxWidth = DpiHelper.Scale(200);
-    private static readonly int NormalTabMinWidth = DpiHelper.Scale(100);
-    private static readonly int PinnedTabWidth = DpiHelper.Scale(40);
-    private static readonly int OverflowButtonWidth = DpiHelper.Scale(32);
-    private static readonly int NewTabButtonWidth = DpiHelper.Scale(32);
-    private static readonly int TabBarPadding = DpiHelper.Scale(4);
+    // 使用 UIConstants 中的常量
+    private static int NormalTabMaxWidth => MiniWorldBrowser.Constants.UIConstants.NormalTabMaxWidth;
+    private static int NormalTabMinWidth => MiniWorldBrowser.Constants.UIConstants.NormalTabMinWidth;
+    private static int PinnedTabWidth => MiniWorldBrowser.Constants.UIConstants.PinnedTabWidth;
+    private static int OverflowButtonWidth => MiniWorldBrowser.Constants.UIConstants.OverflowButtonWidth;
+    private static int NewTabButtonWidth => MiniWorldBrowser.Constants.UIConstants.NewTabButtonWidth;
+    private static int TabBarPadding => MiniWorldBrowser.Constants.UIConstants.TabBarPadding;
     
     public BrowserTabManager(
         Panel browserContainer,
@@ -232,7 +233,7 @@ public class BrowserTabManager
             {
                 if (b == newTab)
                 {
-                    b.AnimateToWidth(PinnedTabWidth, DpiHelper.Scale(20));
+                    b.AnimateToWidth(PinnedTabWidth, MiniWorldBrowser.Constants.UIConstants.PinnedTabStartWidth);
                 }
                 else if (b.Width != PinnedTabWidth)
                 {
@@ -256,7 +257,7 @@ public class BrowserTabManager
                 if (b == newTab)
                 {
                     // 新标签从较小宽度展开
-                    b.AnimateToWidth(normalTargetWidth, DpiHelper.Scale(40));
+                    b.AnimateToWidth(normalTargetWidth, MiniWorldBrowser.Constants.UIConstants.NewTabStartWidth);
                 }
                 else if (b.Width != normalTargetWidth)
                 {
@@ -954,314 +955,95 @@ public class BrowserTabManager
         catch { }
     }
     
-    private void SetupWebMessageHandler(BrowserTab tab)
-    {
-        try
-        {
-            if (tab.WebView?.CoreWebView2 == null) return;
-            
-            tab.WebView.CoreWebView2.WebMessageReceived += (s, e) =>
-            {
-                try
-                {
-                    var rawMsg = e.WebMessageAsJson;
-                    var msg = System.Text.Json.JsonDocument.Parse(rawMsg);
-                    var action = msg.RootElement.GetProperty("action").GetString();
-                    
-                    if (action == "search")
-                    {
-                        var text = msg.RootElement.GetProperty("text").GetString();
-                        if (!string.IsNullOrEmpty(text))
-                        {
-                            var searchEngine = _settingsService?.Settings?.SearchEngine 
-                                ?? MiniWorldBrowser.Constants.AppConstants.DefaultSearchEngine;
-                            NewWindowRequested?.Invoke(searchEngine + Uri.EscapeDataString(text));
-                        }
-                    }
-                    else if (action == "openLink")
-                    {
-                        var linkUrl = msg.RootElement.GetProperty("url").GetString();
-                        if (!string.IsNullOrEmpty(linkUrl))
-                            NewWindowRequested?.Invoke(linkUrl);
-                    }
-                    else if (action == "updateSetting")
-                    {
-                        var key = msg.RootElement.GetProperty("key").GetString();
-                        var value = msg.RootElement.GetProperty("value");
-                        HandleSettingUpdate(key, value);
-                    }
-                    else if (action == "getHistory")
-                    {
-                        SendHistoryData(tab);
-                    }
-                    else if (action == "searchHistory")
-                    {
-                        var keyword = msg.RootElement.GetProperty("keyword").GetString() ?? "";
-                        SendHistoryData(tab, keyword);
-                    }
-                    else if (action == "clearHistory")
-                    {
-                        _historyService?.Clear();
-                        SendHistoryData(tab);
-                    }
-                    else if (action == "navigate")
-                    {
-                        var url = msg.RootElement.GetProperty("url").GetString();
-                        if (!string.IsNullOrEmpty(url))
-                            tab.Navigate(url);
-                    }
-                    else if (action == "gesture")
-                    {
-                        var gesture = msg.RootElement.GetProperty("gesture").GetString();
-                        HandleGesture(tab, gesture);
-                    }
-                    else if (action == "click")
-                    {
-                        // 点击网页内容时触发事件，用于关闭弹出窗口
-                        WebViewClicked?.Invoke();
-                    }
-                    else if (action == "resetSettings")
-                    {
-                        // 恢复默认设置
-                        _settingsService?.Reset();
-                        // 重新导航到设置页面以刷新显示
-                        tab.Navigate("about:settings");
-                    }
-                    else if (action == "browseDownloadPath")
-                    {
-                        // 打开文件夹选择对话框
-                        BrowseDownloadPath(tab);
-                    }
-                    else if (action == "openSearchEngineManager")
-                    {
-                        // 打开搜索引擎管理对话框
-                        OpenSearchEngineManager(tab);
-                    }
-                    else if (action == "getBookmarks")
-                    {
-                        var folderId = msg.RootElement.TryGetProperty("folderId", out var folderIdProp) 
-                            ? folderIdProp.GetString() : null;
-                        SendBookmarksData(tab, folderId);
-                    }
-                    else if (action == "searchBookmarks")
-                    {
-                        var keyword = msg.RootElement.GetProperty("keyword").GetString() ?? "";
-                        SendBookmarksSearchData(tab, keyword);
-                    }
-                    else if (action == "updateBookmark")
-                    {
-                        var id = msg.RootElement.GetProperty("id").GetString();
-                        var title = msg.RootElement.GetProperty("title").GetString();
-                        if (!string.IsNullOrEmpty(id))
-                        {
-                            _bookmarkService?.UpdateBookmark(id, title);
-                            SendBookmarksData(tab, null);
-                        }
-                    }
-                    else if (action == "deleteBookmark")
-                    {
-                        var id = msg.RootElement.GetProperty("id").GetString();
-                        if (!string.IsNullOrEmpty(id))
-                        {
-                            _bookmarkService?.Delete(id);
-                            SendBookmarksData(tab, null);
-                        }
-                    }
-                    else if (action == "addFolder")
-                    {
-                        var title = msg.RootElement.GetProperty("title").GetString();
-                        var parentId = msg.RootElement.TryGetProperty("parentId", out var parentProp) 
-                            ? parentProp.GetString() : null;
-                        if (!string.IsNullOrEmpty(title))
-                        {
-                            _bookmarkService?.AddFolder(title, parentId);
-                            SendBookmarksData(tab, parentId);
-                        }
-                    }
-                    else if (action == "exportBookmarks")
-                    {
-                        ExportBookmarks(tab);
-                    }
-                    else if (action == "openAdBlockExceptions")
-                    {
-                        OpenAdBlockExceptions(tab);
-                    }
-                    else if (action == "openAdBlockRulesFolder")
-                    {
-                        OpenAdBlockRulesFolder();
-                    }
-                    else if (action == "openContentSettings")
-                    {
-                        OpenContentSettings(tab);
-                    }
-                    else if (action == "openClearBrowsingData")
-                    {
-                        OpenClearBrowsingData(tab);
-                    }
-                    else if (action == "openImportData")
-                    {
-                        OpenImportData(tab);
-                    }
-                    else if (action == "openHomePageDialog")
-                    {
-                        OpenHomePageDialog(tab);
-                    }
-                    else if (action == "changeCachePath")
-                    {
-                        ChangeCachePath(tab);
-                    }
-                    else if (action == "openCacheDir")
-                    {
-                        OpenCacheDir();
-                    }
-                    else if (action == "resetCachePath")
-                    {
-                        ResetCachePath(tab);
-                    }
-                    else if (action == "openAutofillSettings")
-                    {
-                        OpenAutofillSettings(tab);
-                    }
-                    else if (action == "openPasswordManager")
-                    {
-                        OpenPasswordManager(tab);
-                    }
-                    else if (action == "setAsDefaultBrowser")
-                    {
-                        SetAsDefaultBrowser(tab);
-                    }
-                    else if (action == "checkDefaultBrowser")
-                    {
-                        CheckDefaultBrowser(tab);
-                    }
-                    else if (action == "openFontSettings")
-                    {
-                        OpenFontSettings(tab);
-                    }
-                    else if (action == "openProxySettings")
-                    {
-                        OpenProxySettings();
-                    }
-                    else if (action == "openCertificateManager")
-                    {
-                        OpenCertificateManager();
-                    }
-                    else if (action == "passwordDetected")
-                    {
-                        var host = msg.RootElement.GetProperty("host").GetString() ?? "";
-                        var username = msg.RootElement.GetProperty("username").GetString() ?? "";
-                        var password = msg.RootElement.GetProperty("password").GetString() ?? "";
-                        ShowSavePasswordPrompt(tab, host, username, password);
-                    }
-                    else if (action == "requestSavedPasswords")
-                    {
-                        var host = msg.RootElement.GetProperty("host").GetString() ?? "";
-                        SendSavedPasswords(tab, host);
-                    }
-                }
-                catch { }
-            };
-        }
-        catch { }
-    }
+
     
     private void OpenImportData(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => OpenImportData(tab));
-                return;
+                if (_bookmarkService == null) return;
+                using var dialog = new Forms.ImportDataDialog(_bookmarkService);
+                dialog.ShowDialog();
             }
-            
-            if (_bookmarkService == null) return;
-            
-            using var dialog = new Forms.ImportDataDialog(_bookmarkService);
-            dialog.ShowDialog();
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void OpenHomePageDialog(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => OpenHomePageDialog(tab));
-                return;
+                if (_settingsService == null) return;
+                
+                // 传入当前页面URL，用于"使用当前网页"功能
+                var currentUrl = _activeTab?.Url;
+                using var dialog = new Forms.HomePageDialog(_settingsService, currentUrl);
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    // 刷新设置页面以显示更新后的主页设置
+                    tab.Navigate("about:settings");
+                }
             }
-            
-            if (_settingsService == null) return;
-            
-            // 传入当前页面URL，用于"使用当前网页"功能
-            var currentUrl = _activeTab?.Url;
-            using var dialog = new Forms.HomePageDialog(_settingsService, currentUrl);
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                // 刷新设置页面以显示更新后的主页设置
-                tab.Navigate("about:settings");
-            }
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void ChangeCachePath(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => ChangeCachePath(tab));
-                return;
-            }
-            
-            if (_settingsService == null) return;
-            
-            using var dialog = new FolderBrowserDialog
-            {
-                Description = "选择缓存目录位置",
-                UseDescriptionForTitle = true,
-                ShowNewFolderButton = true
-            };
-            
-            var currentPath = _settingsService.Settings.UseCustomCachePath && !string.IsNullOrEmpty(_settingsService.Settings.CustomCachePath)
-                ? _settingsService.Settings.CustomCachePath
-                : MiniWorldBrowser.Constants.AppConstants.DefaultCacheFolder;
-            
-            if (Directory.Exists(currentPath))
-            {
-                dialog.InitialDirectory = currentPath;
-            }
-            
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                var result = MessageBox.Show(
-                    "更改缓存目录将清空现有缓存，需要重启浏览器后生效。\n\n确定要更改吗？",
-                    "更改缓存目录",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
+                if (_settingsService == null) return;
                 
-                if (result == DialogResult.Yes)
+                using var dialog = new FolderBrowserDialog
                 {
-                    _settingsService.Settings.CustomCachePath = dialog.SelectedPath;
-                    _settingsService.Settings.UseCustomCachePath = true;
-                    _settingsService.Save();
+                    Description = "选择缓存目录位置",
+                    UseDescriptionForTitle = true,
+                    ShowNewFolderButton = true
+                };
+                
+                var currentPath = _settingsService.Settings.UseCustomCachePath && !string.IsNullOrEmpty(_settingsService.Settings.CustomCachePath)
+                    ? _settingsService.Settings.CustomCachePath
+                    : MiniWorldBrowser.Constants.AppConstants.DefaultCacheFolder;
+                
+                if (Directory.Exists(currentPath))
+                {
+                    dialog.InitialDirectory = currentPath;
+                }
+                
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    var result = MessageBox.Show(
+                        "更改缓存目录将清空现有缓存，需要重启浏览器后生效。\n\n确定要更改吗？",
+                        "更改缓存目录",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
                     
-                    // 更新页面显示
-                    var json = System.Text.Json.JsonSerializer.Serialize(new
+                    if (result == DialogResult.Yes)
                     {
-                        action = "cachePathChanged",
-                        path = dialog.SelectedPath
-                    });
-                    tab.WebView?.CoreWebView2?.PostWebMessageAsJson(json);
-                    
-                    MessageBox.Show("缓存目录已更改，请重启浏览器使设置生效。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        _settingsService.Settings.CustomCachePath = dialog.SelectedPath;
+                        _settingsService.Settings.UseCustomCachePath = true;
+                        _settingsService.Save();
+                        
+                        // 更新页面显示
+                        var json = System.Text.Json.JsonSerializer.Serialize(new
+                        {
+                            action = "cachePathChanged",
+                            path = dialog.SelectedPath
+                        });
+                        tab.WebView?.CoreWebView2?.PostWebMessageAsJson(json);
+                        
+                        MessageBox.Show("缓存目录已更改，请重启浏览器使设置生效。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
             }
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void OpenCacheDir()
@@ -1286,85 +1068,73 @@ public class BrowserTabManager
     
     private void ResetCachePath(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => ResetCachePath(tab));
-                return;
+                if (_settingsService == null) return;
+                
+                _settingsService.Settings.CustomCachePath = "";
+                _settingsService.Settings.UseCustomCachePath = false;
+                _settingsService.Save();
+                
+                // 更新页面显示
+                var json = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    action = "cachePathChanged",
+                    path = MiniWorldBrowser.Constants.AppConstants.DefaultCacheFolder
+                });
+                tab.WebView?.CoreWebView2?.PostWebMessageAsJson(json);
+                
+                MessageBox.Show("缓存目录已设回默认，请重启浏览器使设置生效。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            
-            if (_settingsService == null) return;
-            
-            _settingsService.Settings.CustomCachePath = "";
-            _settingsService.Settings.UseCustomCachePath = false;
-            _settingsService.Save();
-            
-            // 更新页面显示
-            var json = System.Text.Json.JsonSerializer.Serialize(new
-            {
-                action = "cachePathChanged",
-                path = MiniWorldBrowser.Constants.AppConstants.DefaultCacheFolder
-            });
-            tab.WebView?.CoreWebView2?.PostWebMessageAsJson(json);
-            
-            MessageBox.Show("缓存目录已设回默认，请重启浏览器使设置生效。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void OpenAutofillSettings(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => OpenAutofillSettings(tab));
-                return;
+                using var dialog = new Forms.AutofillSettingsDialog();
+                dialog.ShowDialog();
             }
-            
-            using var dialog = new Forms.AutofillSettingsDialog();
-            dialog.ShowDialog();
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void OpenPasswordManager(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => OpenPasswordManager(tab));
-                return;
+                using var dialog = new Forms.PasswordManagerDialog(_passwordService);
+                dialog.ShowDialog();
             }
-            
-            using var dialog = new Forms.PasswordManagerDialog(_passwordService);
-            dialog.ShowDialog();
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void OpenFontSettings(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => OpenFontSettings(tab));
-                return;
+                if (_settingsService == null) return;
+                
+                using var dialog = new Forms.FontSettingsDialog(_settingsService);
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    // 应用字体设置到所有标签页
+                    ApplyFontSettingsToAllTabs();
+                }
             }
-            
-            if (_settingsService == null) return;
-            
-            using var dialog = new Forms.FontSettingsDialog(_settingsService);
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                // 应用字体设置到所有标签页
-                ApplyFontSettingsToAllTabs();
-            }
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void OpenProxySettings()
@@ -1581,71 +1351,39 @@ public class BrowserTabManager
     
     private void SetAsDefaultBrowser(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
-            {
-                tab.WebView.Invoke(() => SetAsDefaultBrowser(tab));
-                return;
-            }
-            
-            // 打开Windows默认应用设置
             try
             {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = "ms-settings:defaultapps",
-                    UseShellExecute = true
-                });
-            }
-            catch
-            {
-                // 如果无法打开设置，尝试打开控制面板
+                // 打开Windows默认应用设置
                 try
                 {
                     System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                     {
-                        FileName = "control.exe",
-                        Arguments = "/name Microsoft.DefaultPrograms",
+                        FileName = "ms-settings:defaultapps",
                         UseShellExecute = true
                     });
                 }
-                catch { }
-            }
-        }
-        catch { }
-    }
-    
-    private void CheckDefaultBrowser(BrowserTab tab)
-    {
-        try
-        {
-            if (tab.WebView?.CoreWebView2 == null) return;
-            
-            bool isDefault = false;
-            try
-            {
-                // 检查HTTP协议的默认处理程序
-                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
-                    @"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice");
-                if (key != null)
+                catch
                 {
-                    var progId = key.GetValue("ProgId")?.ToString() ?? "";
-                    // 检查是否是我们的浏览器（通过ProgId判断）
-                    isDefault = progId.Contains("MiniWorld", StringComparison.OrdinalIgnoreCase);
+                    // 如果无法打开设置，尝试打开控制面板
+                    try
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                        {
+                            FileName = "control.exe",
+                            Arguments = "/name Microsoft.DefaultPrograms",
+                            UseShellExecute = true
+                        });
+                    }
+                    catch { }
                 }
             }
             catch { }
-            
-            var json = System.Text.Json.JsonSerializer.Serialize(new
-            {
-                action = "defaultBrowserStatus",
-                isDefault = isDefault
-            });
-            tab.WebView.CoreWebView2.PostWebMessageAsJson(json);
-        }
-        catch { }
+        });
     }
+    
+
     
     private void ShowSavePasswordPrompt(BrowserTab tab, string host, string username, string password)
     {
@@ -1781,106 +1519,85 @@ public class BrowserTabManager
         catch { }
     }
     
-    private static string GetFaviconUrl(string url)
-    {
-        try
-        {
-            var uri = new Uri(url);
-            return $"https://www.google.com/s2/favicons?domain={uri.Host}&sz=16";
-        }
-        catch
-        {
-            return "";
-        }
-    }
+
     
     private void BrowseDownloadPath(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            // 在 UI 线程上执行文件夹选择对话框
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => BrowseDownloadPath(tab));
-                return;
-            }
-            
-            using var dialog = new FolderBrowserDialog
-            {
-                Description = "选择下载文件夹",
-                UseDescriptionForTitle = true,
-                ShowNewFolderButton = true
-            };
-            
-            // 设置初始路径
-            if (_settingsService?.Settings?.DownloadPath is string currentPath && Directory.Exists(currentPath))
-            {
-                dialog.InitialDirectory = currentPath;
-            }
-            
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                var selectedPath = dialog.SelectedPath;
-                
-                // 更新设置
-                if (_settingsService?.Settings != null)
+                using var dialog = new FolderBrowserDialog
                 {
-                    _settingsService.Settings.DownloadPath = selectedPath;
-                    _settingsService.Save();
+                    Description = "选择下载文件夹",
+                    UseDescriptionForTitle = true,
+                    ShowNewFolderButton = true
+                };
+                
+                // 设置初始路径
+                if (_settingsService?.Settings?.DownloadPath is string currentPath && Directory.Exists(currentPath))
+                {
+                    dialog.InitialDirectory = currentPath;
                 }
                 
-                // 发送消息给页面更新显示
-                var json = System.Text.Json.JsonSerializer.Serialize(new
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    action = "downloadPathSelected",
-                    path = selectedPath
-                });
-                tab.WebView?.CoreWebView2?.PostWebMessageAsJson(json);
+                    var selectedPath = dialog.SelectedPath;
+                    
+                    // 更新设置
+                    if (_settingsService?.Settings != null)
+                    {
+                        _settingsService.Settings.DownloadPath = selectedPath;
+                        _settingsService.Save();
+                    }
+                    
+                    // 发送消息给页面更新显示
+                    var json = System.Text.Json.JsonSerializer.Serialize(new
+                    {
+                        action = "downloadPathSelected",
+                        path = selectedPath
+                    });
+                    tab.WebView?.CoreWebView2?.PostWebMessageAsJson(json);
+                }
             }
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void OpenSearchEngineManager(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => OpenSearchEngineManager(tab));
-                return;
+                if (_settingsService == null) return;
+                
+                using var dialog = new Forms.SearchEngineManagerDialog(_settingsService);
+                dialog.ShowDialog();
+                
+                // 刷新设置页面
+                tab.Navigate("about:settings");
             }
-            
-            if (_settingsService == null) return;
-            
-            using var dialog = new Forms.SearchEngineManagerDialog(_settingsService);
-            dialog.ShowDialog();
-            
-            // 刷新设置页面
-            tab.Navigate("about:settings");
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void OpenAdBlockExceptions(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => OpenAdBlockExceptions(tab));
-                return;
+                if (_settingsService == null) return;
+                
+                using var dialog = new Forms.AdBlockExceptionDialog(_settingsService);
+                dialog.ShowDialog();
+                
+                // 更新 AdBlockService 的例外列表
+                _adBlockService?.SetExceptions(_settingsService.Settings.AdBlockExceptions);
             }
-            
-            if (_settingsService == null) return;
-            
-            using var dialog = new Forms.AdBlockExceptionDialog(_settingsService);
-            dialog.ShowDialog();
-            
-            // 更新 AdBlockService 的例外列表
-            _adBlockService?.SetExceptions(_settingsService.Settings.AdBlockExceptions);
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void OpenAdBlockRulesFolder()
@@ -1906,36 +1623,30 @@ public class BrowserTabManager
     
     private void OpenContentSettings(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => OpenContentSettings(tab));
-                return;
+                if (_settingsService == null) return;
+                
+                using var dialog = new Forms.ContentSettingsDialog(_settingsService);
+                dialog.ShowDialog();
             }
-            
-            if (_settingsService == null) return;
-            
-            using var dialog = new Forms.ContentSettingsDialog(_settingsService);
-            dialog.ShowDialog();
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void OpenClearBrowsingData(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => OpenClearBrowsingData(tab));
-                return;
+                using var dialog = new Forms.ClearBrowsingDataDialog();
+                dialog.ShowDialog();
             }
-            
-            using var dialog = new Forms.ClearBrowsingDataDialog();
-            dialog.ShowDialog();
-        }
-        catch { }
+            catch { }
+        });
     }
     
     private void SendBookmarksData(BrowserTab tab, string? folderId)
@@ -1994,35 +1705,32 @@ public class BrowserTabManager
     
     private void ExportBookmarks(BrowserTab tab)
     {
-        try
+        tab.WebView?.SafeInvoke(() =>
         {
-            if (tab.WebView?.InvokeRequired == true)
+            try
             {
-                tab.WebView.Invoke(() => ExportBookmarks(tab));
-                return;
+                using var dialog = new SaveFileDialog
+                {
+                    Title = "导出收藏",
+                    Filter = "HTML 文件 (*.html)|*.html",
+                    FileName = $"bookmarks_{DateTime.Now:yyyyMMdd}.html",
+                    DefaultExt = "html"
+                };
+                
+                if (dialog.ShowDialog() != DialogResult.OK) return;
+                
+                var html = GenerateBookmarksExportHtml();
+                File.WriteAllText(dialog.FileName, html, System.Text.Encoding.UTF8);
+                
+                MessageBox.Show($"收藏已导出到:\n{dialog.FileName}", "导出成功", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            
-            using var dialog = new SaveFileDialog
+            catch (Exception ex)
             {
-                Title = "导出收藏",
-                Filter = "HTML 文件 (*.html)|*.html",
-                FileName = $"bookmarks_{DateTime.Now:yyyyMMdd}.html",
-                DefaultExt = "html"
-            };
-            
-            if (dialog.ShowDialog() != DialogResult.OK) return;
-            
-            var html = GenerateBookmarksExportHtml();
-            File.WriteAllText(dialog.FileName, html, System.Text.Encoding.UTF8);
-            
-            MessageBox.Show($"收藏已导出到:\n{dialog.FileName}", "导出成功", 
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"导出失败：{ex.Message}", "错误", 
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
+                MessageBox.Show($"导出失败：{ex.Message}", "错误", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        });
     }
     
     private string GenerateBookmarksExportHtml()
@@ -2129,202 +1837,7 @@ public class BrowserTabManager
     
     public List<MiniWorldBrowser.Models.DownloadItem> GetDownloads() => _downloads.ToList();
     
-    private void HandleGesture(BrowserTab tab, string? gesture)
-    {
-        if (string.IsNullOrEmpty(gesture) || tab != _activeTab) return;
-        
-        switch (gesture)
-        {
-            case "L": // 左滑 - 后退
-            case "UL": // 上左 - 后退
-                tab.GoBack();
-                break;
-            case "R": // 右滑 - 前进
-            case "UR": // 上右 - 前进
-                tab.GoForward();
-                break;
-            case "U": // 上滑 - 滚动到顶部
-                _ = tab.WebView?.CoreWebView2?.ExecuteScriptAsync("window.scrollTo(0, 0);");
-                break;
-            case "D": // 下滑 - 滚动到底部
-                _ = tab.WebView?.CoreWebView2?.ExecuteScriptAsync("window.scrollTo(0, document.body.scrollHeight);");
-                break;
-            case "UD": // 上下 - 刷新
-                tab.Refresh();
-                break;
-            case "DR": // 下右 - 关闭标签页
-            case "RD": // 右下 - 关闭标签页
-                CloseTab(tab);
-                break;
-            case "DU": // 下上 - 新建标签页
-                _ = CreateTabAsync(_settingsService?.Settings?.HomePage ?? "about:newtab");
-                break;
-        }
-    }
-    
-    private void HandleSettingUpdate(string? key, System.Text.Json.JsonElement value)
-    {
-        if (string.IsNullOrEmpty(key) || _settingsService?.Settings == null) return;
-        
-        try
-        {
-            switch (key)
-            {
-                case "hidebookmarkbar":
-                    var hideBookmarkBar = value.GetBoolean();
-                    _settingsService.Settings.AlwaysShowBookmarkBar = !hideBookmarkBar;
-                    _settingsService.Save();
-                    SettingChanged?.Invoke("hidebookmarkbar", hideBookmarkBar);
-                    break;
-                case "bookmarkbar":
-                    var showBookmarkBar = value.GetBoolean();
-                    _settingsService.Settings.AlwaysShowBookmarkBar = showBookmarkBar;
-                    _settingsService.Save();
-                    SettingChanged?.Invoke("bookmarkbar", showBookmarkBar);
-                    break;
-                case "homebutton":
-                    _settingsService.Settings.ShowHomeButton = value.GetBoolean();
-                    _settingsService.Save();
-                    SettingChanged?.Invoke("homebutton", value.GetBoolean());
-                    break;
-                case "homepage":
-                    _settingsService.Settings.HomePage = value.GetString() ?? "";
-                    _settingsService.Save();
-                    break;
-                case "adblock":
-                    _settingsService.Settings.EnableAdBlock = value.GetBoolean();
-                    _settingsService.Save();
-                    SettingChanged?.Invoke("adblock", value.GetBoolean());
-                    break;
-                case "adblockmode":
-                    var adBlockMode = int.Parse(value.GetString() ?? "2");
-                    _settingsService.Settings.AdBlockMode = adBlockMode;
-                    _settingsService.Settings.EnableAdBlock = adBlockMode > 0;
-                    _settingsService.Save();
-                    // 更新 AdBlockService
-                    if (_adBlockService != null)
-                    {
-                        _adBlockService.Mode = adBlockMode;
-                        _adBlockService.Enabled = adBlockMode > 0;
-                    }
-                    SettingChanged?.Invoke("adblockmode", adBlockMode);
-                    break;
-                case "gesture":
-                    _settingsService.Settings.EnableMouseGesture = value.GetBoolean();
-                    _settingsService.Save();
-                    SettingChanged?.Invoke("gesture", value.GetBoolean());
-                    break;
-                case "superdrag":
-                    _settingsService.Settings.EnableSuperDrag = value.GetBoolean();
-                    _settingsService.Save();
-                    SettingChanged?.Invoke("superdrag", value.GetBoolean());
-                    break;
-                case "search":
-                    var searchIndex = int.Parse(value.GetString() ?? "1");
-                    _settingsService.Settings.AddressBarSearchEngine = searchIndex;
-                    _settingsService.Settings.SearchEngine = searchIndex switch
-                    {
-                        0 => "https://www.so.com/s?q=",
-                        1 => "https://www.baidu.com/s?wd=",
-                        2 => "https://www.bing.com/search?q=",
-                        3 => "https://www.google.com/search?q=",
-                        _ => "https://www.baidu.com/s?wd="
-                    };
-                    _settingsService.Save();
-                    SettingChanged?.Invoke("search", searchIndex);
-                    break;
-                case "startup":
-                    var startupIndex = int.Parse(value.GetString() ?? "0");
-                    _settingsService.Settings.StartupBehavior = startupIndex;
-                    _settingsService.Save();
-                    break;
-                case "downloadpath":
-                    _settingsService.Settings.DownloadPath = value.GetString() ?? "";
-                    _settingsService.Save();
-                    break;
-                case "askdownload":
-                    _settingsService.Settings.AskDownloadLocation = value.GetBoolean();
-                    _settingsService.Save();
-                    break;
-                case "crashupload":
-                    _settingsService.Settings.EnableCrashUpload = value.GetBoolean();
-                    _settingsService.Save();
-                    break;
-                case "rightclickclosetab":
-                    var rightClickClose = value.GetBoolean();
-                    _settingsService.Settings.RightClickCloseTab = rightClickClose;
-                    _settingsService.Save();
-                    // 更新所有标签的右击关闭设置
-                    foreach (var t in _tabs)
-                    {
-                        if (t.TabButton != null)
-                            t.TabButton.RightClickToClose = rightClickClose;
-                    }
-                    SettingChanged?.Invoke("rightclickclosetab", rightClickClose);
-                    break;
-                case "openlinksbackground":
-                    _settingsService.Settings.OpenLinksInBackground = value.GetBoolean();
-                    _settingsService.Save();
-                    break;
-                case "addressbarinput":
-                    _settingsService.Settings.AddressBarInputMode = int.Parse(value.GetString() ?? "0");
-                    _settingsService.Save();
-                    break;
-                case "newtabposition":
-                    _settingsService.Settings.NewTabPosition = int.Parse(value.GetString() ?? "0");
-                    _settingsService.Save();
-                    break;
-                case "smoothscrolling":
-                    _settingsService.Settings.EnableSmoothScrolling = value.GetBoolean();
-                    _settingsService.Save();
-                    break;
-                case "enableautofill":
-                    _settingsService.Settings.EnableAutofill = value.GetBoolean();
-                    _settingsService.Save();
-                    break;
-                case "savepasswords":
-                    _settingsService.Settings.SavePasswords = value.GetBoolean();
-                    _settingsService.Save();
-                    break;
-                case "fontsize":
-                    var fontSize = int.Parse(value.GetString() ?? "2");
-                    _settingsService.Settings.FontSize = fontSize;
-                    _settingsService.Save();
-                    // 应用字体大小到所有标签页
-                    ApplyFontSizeToAllTabs(fontSize);
-                    break;
-                case "pagezoom":
-                    var pageZoom = int.Parse(value.GetString() ?? "100");
-                    _settingsService.Settings.PageZoom = pageZoom;
-                    _settingsService.Save();
-                    // 应用缩放到所有标签页
-                    ApplyZoomToAllTabs(pageZoom);
-                    break;
-                case "aimode":
-                    _settingsService.Settings.AiServiceMode = int.Parse(value.GetString() ?? "0");
-                    _settingsService.Save();
-                    SettingChanged?.Invoke("aimode", _settingsService.Settings.AiServiceMode);
-                    break;
-                case "aiapikey":
-                    _settingsService.Settings.AiApiKey = value.GetString() ?? "";
-                    _settingsService.Save();
-                    break;
-                case "aiapibaseurl":
-                    _settingsService.Settings.AiApiBaseUrl = value.GetString() ?? "";
-                    _settingsService.Save();
-                    break;
-                case "aimodelname":
-                    _settingsService.Settings.AiModelName = value.GetString() ?? "";
-                    _settingsService.Save();
-                    break;
-                case "aicustomweburl":
-                    _settingsService.Settings.AiCustomWebUrl = value.GetString() ?? "";
-                    _settingsService.Save();
-                    break;
-            }
-        }
-        catch { }
-    }
+
     
     #endregion
 }
