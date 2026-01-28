@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using MiniWorldBrowser.Controls;
 
 namespace MiniWorldBrowser.Features;
 
@@ -157,10 +158,21 @@ public class FullscreenManager
             _form.WindowState = _previousWindowState;
         }
         
-        // 显示控件
+        // 恢复控件
         foreach (var control in _controlsToHide)
         {
-            control.Visible = true;
+            if (control is BookmarkBar)
+            {
+                // 书签栏需要特殊逻辑：根据是否有内容决定是否恢复显示
+                // 这里我们通过反射或回调来通知 MainForm 更新可见性
+                // 简单起见，如果 MainForm 暴露了 UpdateBookmarkBarVisibility，我们可以直接调用
+                // 但为了解耦，我们这里触发一个事件，让 MainForm 自己决定
+                FullscreenChanged?.Invoke(false);
+            }
+            else
+            {
+                control.Visible = true;
+            }
         }
     }
     

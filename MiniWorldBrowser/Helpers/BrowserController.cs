@@ -13,7 +13,7 @@ namespace MiniWorldBrowser.Helpers
         private readonly ISettingsService _settingsService;
         private readonly Func<string, bool, Task> _createTabAction;
 
-        public BrowserController(BrowserTabManager tabManager, Control syncContext, ISettingsService settingsService, Func<string, bool, Task> createTabAction = null)
+        public BrowserController(BrowserTabManager tabManager, Control syncContext, ISettingsService settingsService, Func<string, bool, Task>? createTabAction = null)
         {
             _tabManager = tabManager;
             _syncContext = syncContext;

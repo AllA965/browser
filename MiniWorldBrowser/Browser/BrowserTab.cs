@@ -54,6 +54,10 @@ public class BrowserTab : IDisposable
     private bool _pendingShow = false;  // 标记是否需要在内容加载后显示
     private bool _hasShownOnce = false; // 标记是否已经显示过一次
     
+    // 静态环境缓存，防止并发初始化冲突 (0x8007139F)
+    private static readonly Dictionary<string, CoreWebView2Environment> _environments = new();
+    private static readonly SemaphoreSlim _envSemaphore = new(1, 1);
+    
     // 待处理的密码凭据（用于在页面导航后显示保存弹窗）
     private (string host, string username, string password, DateTime timestamp)? _pendingCredentials;
     
@@ -66,19 +70,27 @@ public class BrowserTab : IDisposable
     /// <summary>
     /// 获取用户数据目录（支持自定义缓存路径）
     /// </summary>
-    private string GetUserDataFolder()
+    public string GetUserDataFolder()
+    {
+        return GetUserDataFolder(_incognitoUserDataFolder, _settingsService);
+    }
+
+    /// <summary>
+    /// 静态获取用户数据目录方法
+    /// </summary>
+    public static string GetUserDataFolder(string? incognitoFolder, ISettingsService? settingsService)
     {
         // 如果是隐身模式，使用传入的临时目录
-        if (!string.IsNullOrEmpty(_incognitoUserDataFolder))
+        if (!string.IsNullOrEmpty(incognitoFolder))
         {
-            return _incognitoUserDataFolder;
+            return incognitoFolder;
         }
 
         // 检查是否使用自定义缓存路径
-        if (_settingsService?.Settings?.UseCustomCachePath == true && 
-            !string.IsNullOrEmpty(_settingsService.Settings.CustomCachePath))
+        if (settingsService?.Settings?.UseCustomCachePath == true && 
+            !string.IsNullOrEmpty(settingsService.Settings.CustomCachePath))
         {
-            return _settingsService.Settings.CustomCachePath;
+            return settingsService.Settings.CustomCachePath;
         }
         
         // 使用默认路径
@@ -91,6 +103,56 @@ public class BrowserTab : IDisposable
         }
         
         return userDataFolder;
+    }
+
+    /// <summary>
+    /// 获取或创建共享的 WebView2 环境
+    /// </summary>
+    public static async Task<CoreWebView2Environment> GetSharedEnvironmentAsync(string userDataFolder, ISettingsService? settingsService)
+    {
+        await _envSemaphore.WaitAsync();
+        try
+        {
+            if (_environments.TryGetValue(userDataFolder, out var existingEnv))
+            {
+                return existingEnv;
+            }
+
+            string? browserExecutableFolder = FindWebView2Runtime();
+            var options = new CoreWebView2EnvironmentOptions
+            {
+                AdditionalBrowserArguments = "--allow-running-insecure-content " +
+                                           "--disable-blink-features=AutomationControlled"
+            };
+
+            // 加载 AI 扩展
+            var extensionPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "AiExtension");
+            if (Directory.Exists(extensionPath))
+            {
+                options.AdditionalBrowserArguments += $" --load-extension=\"{extensionPath}\"";
+            }
+            else
+            {
+                // 开发环境下尝试查找源码目录
+                var sourceExtensionPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Resources", "AiExtension");
+                if (Directory.Exists(sourceExtensionPath))
+                {
+                    options.AdditionalBrowserArguments += $" --load-extension=\"{Path.GetFullPath(sourceExtensionPath)}\"";
+                }
+            }
+
+            var env = await CoreWebView2Environment.CreateAsync(
+                browserExecutableFolder: browserExecutableFolder,
+                userDataFolder: userDataFolder,
+                options: options);
+
+            _environments[userDataFolder] = env;
+            return env;
+        }
+        finally
+        {
+            _envSemaphore.Release();
+        }
     }
     
     /// <summary>
@@ -220,53 +282,9 @@ public class BrowserTab : IDisposable
             if (!Directory.Exists(userDataFolder))
                 Directory.CreateDirectory(userDataFolder);
             
-            // 查找打包的 WebView2 Runtime
-            string? browserExecutableFolder = FindWebView2Runtime();
-            
-            // 创建 WebView2 环境
-            CoreWebView2Environment? env = null;
-            try
-            {
-                // 配置环境选项，提高兼容性
-                var options = new CoreWebView2EnvironmentOptions
-                {
-                    AdditionalBrowserArguments = "--allow-running-insecure-content " +
-                                               "--disable-blink-features=AutomationControlled"
-                };
+            // 使用共享环境初始化，防止并发冲突
+            CoreWebView2Environment env = await GetSharedEnvironmentAsync(userDataFolder, _settingsService);
 
-                // 加载 AI 扩展
-                var extensionPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "AiExtension");
-                if (Directory.Exists(extensionPath))
-                {
-                    options.AdditionalBrowserArguments += $" --load-extension=\"{extensionPath}\"";
-                }
-                else
-                {
-                    // 开发环境下尝试查找源码目录
-                    var sourceExtensionPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Resources", "AiExtension");
-                    if (Directory.Exists(sourceExtensionPath))
-                    {
-                        options.AdditionalBrowserArguments += $" --load-extension=\"{Path.GetFullPath(sourceExtensionPath)}\"";
-                    }
-                }
-
-                env = await CoreWebView2Environment.CreateAsync(
-                    browserExecutableFolder: browserExecutableFolder,
-                    userDataFolder: userDataFolder,
-                    options: options);
-
-                AppendResourceLog($"WebView2 Environment Created. BrowserVersion: {env.BrowserVersionString}");
-                AppendResourceLog($"UserDataFolder: {userDataFolder}");
-                AppendResourceLog($"AdditionalArgs: {options.AdditionalBrowserArguments}");
-            }
-            catch (Exception envEx)
-            {
-                throw new Exception($"无法创建 WebView2 环境: {envEx.Message}", envEx);
-            }
-            
-            if (env == null)
-                throw new Exception("无法创建 WebView2 环境");
-            
             // 初始化 WebView2
             await WebView.EnsureCoreWebView2Async(env);
             

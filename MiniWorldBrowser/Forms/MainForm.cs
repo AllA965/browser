@@ -35,6 +35,7 @@ public partial class MainForm : Form
     private readonly bool _isIncognito;
     private readonly string? _incognitoDataFolder;
     private bool _isInternalAddressUpdate;
+    private bool _hadBookmarks; // 记录上次检查时是否有收藏内容
     private BrowserTabManager _tabManager = null!;
     private MouseGesture _mouseGesture = null!;
     private BossKey? _bossKey;
@@ -75,10 +76,7 @@ public partial class MainForm : Form
     private Panel _browserContainer = null!;
     private Panel _statusBar = null!;
     private Label _statusLabel = null!;
-    private LinkLabel _customLinkLabel = null!;
-    private Label _brandLabel = null!;
     private PictureBox _titleBarIcon = null!;
-    private PictureBox _iconPictureBox = null!;
     private ModernProgressBar _progressBar = null!;
     private AddressBarDropdown _addressDropdown = null!;
     private AdCarouselControl _adCarousel = null!;
@@ -98,9 +96,6 @@ public partial class MainForm : Form
     private System.Windows.Forms.Timer? _cursorTimer;
     private System.Windows.Forms.Timer? _memoryTimer;
     private System.Windows.Forms.Timer? _adPopupTimer;
-    private System.Windows.Forms.Timer? _linkAnimationTimer;
-    private int _linkAnimOffset = 0;
-    private const int MaxLinkAnimOffset = 4;
     
     #endregion
     
@@ -686,7 +681,8 @@ public partial class MainForm : Form
         _bookmarkBar = new BookmarkBar(_bookmarkService);
         _bookmarkBar.IsIncognito = _isIncognito;
         _bookmarkBar.BackColor = _isIncognito ? Color.FromArgb(53, 54, 58) : Color.White;
-        _bookmarkBar.ForeColor = _isIncognito ? Color.FromArgb(200, 200, 200) : Color.FromArgb(60, 60, 60);
+        // 初始可见性设为 false，由 UpdateBookmarkBarVisibility 根据内容决定
+        _bookmarkBar.Visible = false;
     }    // 事件绑定移到 InitializeManagers 之后，避免空引用
     
     private void SetupBookmarkBarEvents()
@@ -697,36 +693,77 @@ public partial class MainForm : Form
 
         // 监听书签变更
         _bookmarkService.BookmarksChanged += () => {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new Action(UpdateBookmarkBarVisibility));
-            }
-            else
-            {
-                UpdateBookmarkBarVisibility();
-            }
+            UpdateBookmarkBarVisibility();
+            UpdateCurrentTabBookmarkState();
         };
+
+        // 初始记录书签状态，避免启动时触发“从无到有”的自动勾选逻辑
+        _hadBookmarks = (_bookmarkService.GetBookmarkBarItems().Count > 0) || 
+                          (_bookmarkService.GetOtherBookmarks().Count > 0);
 
         // 初始设置可见性
         UpdateBookmarkBarVisibility();
     }
 
+    private bool _isUpdatingBookmarkBar = false;
     /// <summary>
-    /// 更新收藏栏可见性：当没有收藏时自动隐藏（除非设置了总是显示）
+    /// 更新收藏栏可见性：当没有收藏内容时强制隐藏以优化空间
     /// </summary>
     private void UpdateBookmarkBarVisibility()
     {
-        var settings = _settingsService.Settings;
+        if (_isUpdatingBookmarkBar) return;
         
-        // 逻辑：严格遵循“总是显示收藏栏”设置
-        // 修正：之前逻辑是 (settings.AlwaysShowBookmarkBar || hasBookmarks)，导致只要有书签就强制显示
-        bool shouldShow = settings.AlwaysShowBookmarkBar;
-        
-        if (_bookmarkBar.Visible != shouldShow)
+        if (InvokeRequired)
         {
-            _bookmarkBar.Visible = shouldShow;
-            // 强制重新布局以更新浏览器容器大小
-            this.PerformLayout();
+            BeginInvoke(new Action(UpdateBookmarkBarVisibility));
+            return;
+        }
+
+        _isUpdatingBookmarkBar = true;
+        try
+        {
+            var settings = _settingsService.Settings;
+            
+            // 只有当书签栏根目录或“其他收藏”中有内容时，才认为“有内容”
+            var hasBookmarks = (_bookmarkService.GetBookmarkBarItems().Count > 0) || 
+                              (_bookmarkService.GetOtherBookmarks().Count > 0);
+            
+            // 记录旧状态
+            bool wasHadBookmarks = _hadBookmarks;
+            // 立即更新记录状态，防止 Save() 触发的事件递归进入时逻辑错误
+            _hadBookmarks = hasBookmarks;
+            
+            // 智能逻辑：如果从“无内容”变为“有内容”，自动开启“总是显示收藏栏”
+            if (!wasHadBookmarks && hasBookmarks)
+            {
+                if (!settings.AlwaysShowBookmarkBar)
+                {
+                    settings.AlwaysShowBookmarkBar = true;
+                    _settingsService.Save();
+                }
+            }
+            
+            // 逻辑：如果设置了总是显示，且确实有内容，则显示；
+            // 如果没有内容，则强制收起并同步更新设置，保持状态一致
+            bool shouldShow = settings.AlwaysShowBookmarkBar && hasBookmarks;
+            
+            // 如果设置是“总是显示”但实际没内容导致收起了，则同步取消设置中的勾选
+            if (settings.AlwaysShowBookmarkBar && !hasBookmarks)
+            {
+                settings.AlwaysShowBookmarkBar = false;
+                _settingsService.Save();
+            }
+            
+            if (_bookmarkBar.Visible != shouldShow)
+            {
+                _bookmarkBar.Visible = shouldShow;
+                // 强制重新布局以更新浏览器容器大小
+                this.PerformLayout();
+            }
+        }
+        finally
+        {
+            _isUpdatingBookmarkBar = false;
         }
     }
     
@@ -754,129 +791,6 @@ public partial class MainForm : Form
             Text = _isIncognito ? "InPrivate - 您的浏览活动不会保存到此设备" : "就绪"
         };
 
-        /* _brandLabel = new Label
-        {
-            Dock = DockStyle.Right,
-            AutoSize = true,
-            Padding = new Padding(0, 3, 10, 0),
-            Font = new Font("Microsoft YaHei UI", 8.5F),
-            ForeColor = _isIncognito ? Color.FromArgb(100, 150, 255) : Color.FromArgb(120, 120, 120),
-            Text = "鲲穹AI旗下产品"
-        }; */
-
-        /* _customLinkLabel = new LinkLabel
-        {
-            Dock = DockStyle.Right,
-            AutoSize = true,
-            Padding = new Padding(0, 3, 15, 0),
-            Font = new Font("Microsoft YaHei UI", 8.5F),
-            Text = "我要软件定制",
-            LinkColor = _isIncognito ? Color.FromArgb(200, 200, 200) : Color.Black,
-            ActiveLinkColor = _isIncognito ? Color.White : Color.FromArgb(64, 64, 64),
-            VisitedLinkColor = _isIncognito ? Color.FromArgb(200, 200, 200) : Color.Black,
-            LinkBehavior = LinkBehavior.NeverUnderline,
-            TextAlign = ContentAlignment.MiddleLeft,
-            Cursor = Cursors.Hand
-        }; */
-
-        /* _iconPictureBox = new PictureBox
-        {
-            Dock = DockStyle.Right,
-            Size = new Size(20, 16),
-            SizeMode = PictureBoxSizeMode.Zoom,
-            Padding = new Padding(0, 3, 4, 0),
-            Cursor = Cursors.Hand
-        }; */
-
-        /* // 初始化动画定时器
-        _linkAnimationTimer = new System.Windows.Forms.Timer { Interval = 15 };
-        bool animatingIn = false;
-        
-        _linkAnimationTimer.Tick += (s, e) => {
-            if (animatingIn) {
-                if (_linkAnimOffset < MaxLinkAnimOffset) {
-                    _linkAnimOffset++;
-                    _customLinkLabel.Padding = new Padding(0, 3, 15 + _linkAnimOffset, 0);
-                    _iconPictureBox.Padding = new Padding(0, 3, 4 + _linkAnimOffset, 0);
-                } else {
-                    _linkAnimationTimer.Stop();
-                }
-            } else {
-                if (_linkAnimOffset > 0) {
-                    _linkAnimOffset--;
-                    _customLinkLabel.Padding = new Padding(0, 3, 15 + _linkAnimOffset, 0);
-                    _iconPictureBox.Padding = new Padding(0, 3, 4 + _linkAnimOffset, 0);
-                } else {
-                    _linkAnimationTimer.Stop();
-                }
-            }
-        };
-
-        var startAnim = new EventHandler((s, e) => {
-            animatingIn = true;
-            _customLinkLabel.LinkColor = Color.FromArgb(80, 80, 80);
-            _linkAnimationTimer.Start();
-        });
-
-        var stopAnim = new EventHandler((s, e) => {
-            animatingIn = false;
-            _customLinkLabel.LinkColor = Color.Black;
-            _linkAnimationTimer.Start();
-        });
-
-        _customLinkLabel.MouseEnter += startAnim;
-        _customLinkLabel.MouseLeave += stopAnim;
-        _iconPictureBox.MouseEnter += startAnim;
-        _iconPictureBox.MouseLeave += stopAnim;
-
-        try
-        {
-            // 使用用户指定的图标路径
-            string iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "鲲穹01.ico");
-
-            if (File.Exists(iconPath))
-            {
-                using (Icon icon = new Icon(iconPath))
-                {
-                    _iconPictureBox.Image = icon.ToBitmap();
-                }
-            }
-        }
-        catch { // 忽略图标加载错误 
-        }
-
-        // 统一的跳转逻辑
-        var openCustomUrl = new EventHandler(async (s, e) => {
-            try {
-                var url = await _adService.GetCustomUrlAsync();
-                if (string.IsNullOrEmpty(url)) {
-                    url = "https://www.kunqiong.com"; // 降级方案
-                }
-                
-                // 在当前浏览器中打开，而不是调用外部系统浏览器
-                if (_tabManager != null)
-                {
-                    await CreateNewTabWithProtection(url);
-                }
-                else
-                {
-                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-                }
-            } catch {
-                if (_tabManager != null)
-                {
-                    await CreateNewTabWithProtection("https://www.kunqiong.com");
-                }
-                else
-                {
-                    Process.Start(new ProcessStartInfo("https://www.kunqiong.com") { UseShellExecute = true });
-                }
-            }
-        });
-
-        _iconPictureBox.Click += openCustomUrl;
-        _customLinkLabel.Click += openCustomUrl; // 使用 Click 而不是 LinkClicked 以获得更统一的体验 */
-        
         _progressBar = new ModernProgressBar
         {
             Dock = DockStyle.Right,
@@ -887,8 +801,7 @@ public partial class MainForm : Form
             IsMarquee = true
         };
         
-        // _statusBar.Controls.AddRange(new Control[] { _statusLabel, _customLinkLabel, _iconPictureBox, _brandLabel, _progressBar });
-            _statusBar.Controls.AddRange(new Control[] { _statusLabel, _progressBar });
+        _statusBar.Controls.AddRange(new Control[] { _statusLabel, _progressBar });
     }
     
     private void CreateAddressDropdown()
@@ -1156,7 +1069,11 @@ public partial class MainForm : Form
     {
         try
         {
-            await _aiWebView.EnsureCoreWebView2Async();
+            // 使用共享环境初始化，防止与标签页初始化冲突 (0x8007139F)
+            string userDataFolder = MiniWorldBrowser.Browser.BrowserTab.GetUserDataFolder(_incognitoDataFolder, _settingsService);
+            var env = await MiniWorldBrowser.Browser.BrowserTab.GetSharedEnvironmentAsync(userDataFolder, _settingsService);
+            
+            await _aiWebView.EnsureCoreWebView2Async(env);
             
             // 注册桥接对象
             _aiApiBridge = new AiApiBridge(_settingsService, new MiniWorldBrowser.Helpers.BrowserController(_tabManager, this, _settingsService, CreateNewTabWithProtection));
@@ -1424,12 +1341,24 @@ public partial class MainForm : Form
         _mouseGesture.GestureClose += () => { if (_tabManager.ActiveTab != null) _tabManager.CloseTab(_tabManager.ActiveTab); };
         
         _fullscreenManager = new FullscreenManager(this, _tabBar, _toolbar, _bookmarkBar, _statusBar);
+        _fullscreenManager.FullscreenChanged += isFullscreen => {
+            if (!isFullscreen)
+            {
+                // 退出全屏时，重新检查收藏栏可见性
+                UpdateBookmarkBarVisibility();
+            }
+        };
     }
     
     private void InitializeEvents()
     {
         Load += (s, e) =>
         {
+            // 设置任务栏分组 ID (AppUserModelID)
+            // 隐身模式和普通模式使用不同的 ID，防止在任务栏合并
+            string appId = _isIncognito ? "MiniWorldBrowser.Incognito" : "MiniWorldBrowser.Normal";
+            Win32Helper.SetWindowAppUserModelId(this.Handle, appId);
+
             // 启动时默认最大化并露出任务栏
             var workArea = Screen.FromHandle(Handle).WorkingArea;
             int borderX = SystemInformation.FrameBorderSize.Width + SystemInformation.Border3DSize.Width;
@@ -1448,6 +1377,9 @@ public partial class MainForm : Form
             {
                 _bossKey = new BossKey(this);
                 SetupKeyboardHook();
+                
+                // 确保启动时收藏栏状态正确
+                UpdateBookmarkBarVisibility();
                 
                 // 启动光标更新定时器
                 _cursorTimer = new System.Windows.Forms.Timer { Interval = 50 };
@@ -2156,7 +2088,27 @@ public partial class MainForm : Form
     
     private void UpdateBookmarkButton(bool isBookmarked)
     {
+        if (InvokeRequired)
+        {
+            BeginInvoke(new Action(() => UpdateBookmarkButton(isBookmarked)));
+            return;
+        }
         _bookmarkBtn.IsBookmarked = isBookmarked;
+    }
+
+    /// <summary>
+    /// 更新当前标签页的收藏状态按钮
+    /// </summary>
+    private void UpdateCurrentTabBookmarkState()
+    {
+        var url = _tabManager.ActiveTab?.Url;
+        if (string.IsNullOrEmpty(url))
+        {
+            UpdateBookmarkButton(false);
+            return;
+        }
+        var isBookmarked = _bookmarkService.FindByUrl(url) != null;
+        UpdateBookmarkButton(isBookmarked);
     }
     
     private void OpenDownloadDialog()
@@ -2202,6 +2154,7 @@ public partial class MainForm : Form
         _stopBtn.Visible = tab.IsLoading;
         _progressBar.Visible = tab.IsLoading;
         _translateBtn.Visible = tab.IsTranslated;
+        UpdateCurrentTabBookmarkState();
     }
     
     private void OnTabUrlChanged(BrowserTab tab)

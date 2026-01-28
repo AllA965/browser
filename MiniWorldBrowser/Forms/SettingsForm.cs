@@ -11,6 +11,7 @@ public class SettingsForm : Form
 {
     private const int CornerRadius = 10;
     private readonly ISettingsService _settingsService;
+    private readonly IBookmarkService? _bookmarkService;
     
     // 左侧导航
     private Panel _navPanel = null!;
@@ -88,9 +89,10 @@ public class SettingsForm : Form
     private NumericUpDown _memoryReleaseNum = null!;
     private Button _resetSettingsBtn = null!;
     
-    public SettingsForm(ISettingsService settingsService)
+    public SettingsForm(ISettingsService settingsService, IBookmarkService? bookmarkService = null)
     {
         _settingsService = settingsService;
+        _bookmarkService = bookmarkService;
         InitializeUI();
         LoadSettings();
     }
@@ -99,11 +101,7 @@ public class SettingsForm : Form
     {
         get
         {
-            const int WS_EX_TOOLWINDOW = 0x00000080;
-            const int CS_DROPSHADOW = 0x00020000;
             var cp = base.CreateParams;
-            cp.ExStyle |= WS_EX_TOOLWINDOW;
-            cp.ClassStyle |= CS_DROPSHADOW;
             return cp;
         }
     }
@@ -111,19 +109,11 @@ public class SettingsForm : Form
     protected override void OnSizeChanged(EventArgs e)
     {
         base.OnSizeChanged(e);
-        if (Width <= 0 || Height <= 0) return;
-        using var path = CreateRoundedRectPath(new Rectangle(0, 0, Width, Height), CornerRadius);
-        Region = new Region(path);
-        Invalidate();
     }
     
     protected override void OnPaint(PaintEventArgs e)
     {
         base.OnPaint(e);
-        e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-        using var path = CreateRoundedRectPath(new Rectangle(0, 0, Width - 1, Height - 1), CornerRadius);
-        using var pen = new Pen(Color.FromArgb(220, 220, 220), 1);
-        e.Graphics.DrawPath(pen, path);
     }
 
     private static System.Drawing.Drawing2D.GraphicsPath CreateRoundedRectPath(Rectangle rect, int radius)
@@ -144,12 +134,15 @@ public class SettingsForm : Form
     private void InitializeUI()
     {
         Text = "设置";
-        Size = new Size(800, 600);
-        MinimumSize = new Size(700, 500);
+        Size = new Size(1000, 700);
+        MinimumSize = new Size(800, 600);
         StartPosition = FormStartPosition.CenterParent;
         BackColor = Color.White;
         Font = new Font("Microsoft YaHei UI", 9F);
-        FormBorderStyle = FormBorderStyle.None;
+        FormBorderStyle = FormBorderStyle.Sizable;
+        MaximizeBox = true;
+        MinimizeBox = true;
+        ShowInTaskbar = true;
         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
         
         // 设置窗口图标
@@ -200,7 +193,7 @@ public class SettingsForm : Form
             DrawMode = DrawMode.OwnerDrawFixed
         };
         
-        _navList.Items.AddRange(new object[] { "历史记录", "设置", "AI 设置" });
+        _navList.Items.AddRange(new object[] { "历史记录", "设置", "隐私", "高级", "AI 设置" });
         _navList.DrawItem += OnNavListDrawItem;
         _navList.SelectedIndexChanged += OnNavListSelectedIndexChanged;
         
@@ -244,7 +237,15 @@ public class SettingsForm : Form
             case 1: // 设置
                 ShowPanel(_basicPanel);
                 break;
-            case 2: // AI 设置
+            case 2: // 隐私
+                if (_privacyPanel == null) CreatePrivacyPanel();
+                ShowPanel(_privacyPanel!);
+                break;
+            case 3: // 高级
+                if (_advancedPanel == null) CreateAdvancedPanel();
+                ShowPanel(_advancedPanel!);
+                break;
+            case 4: // AI 设置
                 if (_aiPanel == null) CreateAiPanel();
                 ShowPanel(_aiPanel!);
                 break;
@@ -474,8 +475,7 @@ public class SettingsForm : Form
         var advancedLink = CreateLinkLabel("显示高级设置...", new Point(0, y));
         advancedLink.Click += (s, e) => 
         {
-            if (_advancedPanel == null) CreateAdvancedPanel();
-            ShowPanel(_advancedPanel!);
+            _navList.SelectedIndex = 3; // 切换到高级设置
         };
         _basicPanel.Controls.Add(advancedLink);
     }
@@ -577,6 +577,30 @@ public class SettingsForm : Form
             {
                 _settingsService.Settings.AlwaysShowBookmarkBar = _showBookmarkBarCheck.Checked;
                 _settingsService.Save();
+                
+                // 实时更新显示文字，并根据内容决定是否强制隐藏
+                bool hasBookmarks = _bookmarkService != null && 
+                                  (_bookmarkService.GetBookmarkBarItems().Count > 0 || _bookmarkService.GetOtherBookmarks().Count > 0);
+                
+                if (!hasBookmarks && _showBookmarkBarCheck.Checked)
+                {
+                    // 如果用户强行勾选但没内容，给出提示并自动取消勾选
+                    MessageBox.Show("收藏栏目前没有任何内容（包括“其他收藏”），已自动隐藏。请先添加收藏。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    _showBookmarkBarCheck.Checked = false;
+                    _settingsService.Settings.AlwaysShowBookmarkBar = false;
+                    _settingsService.Save();
+                }
+                
+                if (!hasBookmarks)
+                {
+                    _showBookmarkBarCheck.Text = "总是显示书签栏 (当前无书签已收起)";
+                    _showBookmarkBarCheck.ForeColor = Color.Gray;
+                }
+                else
+                {
+                    _showBookmarkBarCheck.Text = "总是显示书签栏";
+                    _showBookmarkBarCheck.ForeColor = Color.Black;
+                }
             }
         };
         
@@ -914,6 +938,8 @@ public class SettingsForm : Form
         
         privacyGroup.Controls.Add(_sendDoNotTrackCheck);
         _privacyPanel.Controls.Add(privacyGroup);
+        
+        LoadSettings();
     }
     
     #endregion
@@ -971,8 +997,10 @@ public class SettingsForm : Form
         
         // 返回基本设置
         var backLink = CreateLinkLabel("← 返回基本设置", new Point(0, y));
-        backLink.Click += (s, e) => ShowPanel(_basicPanel);
+        backLink.Click += (s, e) => _navList.SelectedIndex = 1; // 切换回基本设置
         _advancedPanel.Controls.Add(backLink);
+        
+        LoadSettings();
     }
     
     #endregion
@@ -981,13 +1009,13 @@ public class SettingsForm : Form
     
     private Panel CreateHeaderPanel(string title, string searchPlaceholder, Panel? targetPanel = null)
     {
-        var panel = new Panel { Size = new Size(600, 50) };
+        var panel = new Panel { Dock = DockStyle.Top, Height = 60 };
         
         var titleLabel = new Label
         {
             Text = title,
             Font = new Font("Microsoft YaHei UI", 16F),
-            Location = new Point(0, 10),
+            Location = new Point(0, 15),
             AutoSize = true
         };
         
@@ -995,10 +1023,16 @@ public class SettingsForm : Form
         {
             var searchBox = new TextBox
             {
-                Location = new Point(400, 12),
+                Anchor = AnchorStyles.Top | AnchorStyles.Right,
+                Location = new Point(panel.Width - 170, 18),
                 Width = 150,
                 Text = searchPlaceholder,
                 ForeColor = Color.Gray
+            };
+            
+            // 确保面板调整大小时搜索框位置正确
+            panel.SizeChanged += (s, e) => {
+                searchBox.Left = panel.Width - searchBox.Width - 20;
             };
             
             // 焦点处理
@@ -1128,10 +1162,6 @@ public class SettingsForm : Form
     
     private void OnTitleBarMouseDown(object? sender, MouseEventArgs e)
     {
-        if (e.Button == MouseButtons.Left)
-        {
-            Win32Helper.EnableWindowDrag(Handle);
-        }
     }
     
     #endregion
@@ -1174,7 +1204,20 @@ public class SettingsForm : Form
         
         // 外观
         _showHomeButtonCheck.Checked = settings.ShowHomeButton;
+        
+        bool hasBookmarks = _bookmarkService != null && 
+                          (_bookmarkService.GetBookmarkBarItems().Count > 0 || _bookmarkService.GetOtherBookmarks().Count > 0);
         _showBookmarkBarCheck.Checked = settings.AlwaysShowBookmarkBar;
+        if (!hasBookmarks && settings.AlwaysShowBookmarkBar)
+        {
+            _showBookmarkBarCheck.Text = "总是显示书签栏 (当前无书签已收起)";
+            _showBookmarkBarCheck.ForeColor = Color.Gray;
+        }
+        else
+        {
+            _showBookmarkBarCheck.Text = "总是显示书签栏";
+            _showBookmarkBarCheck.ForeColor = Color.Black;
+        }
         
         // 下载
         _downloadModeCombo.SelectedIndex = settings.UseBuiltInDownloader ? 0 : 1;
@@ -1182,16 +1225,22 @@ public class SettingsForm : Form
         _askDownloadLocationCheck.Checked = settings.AskDownloadLocation;
         
         // 隐私
-        _clearHistoryOnExitCheck.Checked = settings.ClearHistoryOnExit;
-        _clearDownloadsOnExitCheck.Checked = settings.ClearDownloadsOnExit;
-        _clearCacheOnExitCheck.Checked = settings.ClearCacheOnExit;
-        _clearCookiesOnExitCheck.Checked = settings.ClearCookiesOnExit;
-        _sendDoNotTrackCheck.Checked = settings.SendDoNotTrack;
+        if (_clearHistoryOnExitCheck != null)
+        {
+            _clearHistoryOnExitCheck.Checked = settings.ClearHistoryOnExit;
+            _clearDownloadsOnExitCheck.Checked = settings.ClearDownloadsOnExit;
+            _clearCacheOnExitCheck.Checked = settings.ClearCacheOnExit;
+            _clearCookiesOnExitCheck.Checked = settings.ClearCookiesOnExit;
+            _sendDoNotTrackCheck.Checked = settings.SendDoNotTrack;
+        }
         
         // 高级
-        _mouseGestureCheck.Checked = settings.EnableMouseGesture;
-        _superDragCheck.Checked = settings.EnableSuperDrag;
-        _memoryReleaseNum.Value = settings.MemoryReleaseMinutes;
+        if (_mouseGestureCheck != null)
+        {
+            _mouseGestureCheck.Checked = settings.EnableMouseGesture;
+            _superDragCheck.Checked = settings.EnableSuperDrag;
+            _memoryReleaseNum.Value = settings.MemoryReleaseMinutes;
+        }
     }
     
     public void SaveSettings()
@@ -1239,16 +1288,22 @@ public class SettingsForm : Form
         settings.AskDownloadLocation = _askDownloadLocationCheck.Checked;
         
         // 隐私
-        settings.ClearHistoryOnExit = _clearHistoryOnExitCheck.Checked;
-        settings.ClearDownloadsOnExit = _clearDownloadsOnExitCheck.Checked;
-        settings.ClearCacheOnExit = _clearCacheOnExitCheck.Checked;
-        settings.ClearCookiesOnExit = _clearCookiesOnExitCheck.Checked;
-        settings.SendDoNotTrack = _sendDoNotTrackCheck.Checked;
+        if (_clearHistoryOnExitCheck != null)
+        {
+            settings.ClearHistoryOnExit = _clearHistoryOnExitCheck.Checked;
+            settings.ClearDownloadsOnExit = _clearDownloadsOnExitCheck.Checked;
+            settings.ClearCacheOnExit = _clearCacheOnExitCheck.Checked;
+            settings.ClearCookiesOnExit = _clearCookiesOnExitCheck.Checked;
+            settings.SendDoNotTrack = _sendDoNotTrackCheck.Checked;
+        }
         
         // 高级
-        settings.EnableMouseGesture = _mouseGestureCheck.Checked;
-        settings.EnableSuperDrag = _superDragCheck.Checked;
-        settings.MemoryReleaseMinutes = (int)_memoryReleaseNum.Value;
+        if (_mouseGestureCheck != null)
+        {
+            settings.EnableMouseGesture = _mouseGestureCheck.Checked;
+            settings.EnableSuperDrag = _superDragCheck.Checked;
+            settings.MemoryReleaseMinutes = (int)_memoryReleaseNum.Value;
+        }
         
         // AI 设置
         if (_aiPanel != null)

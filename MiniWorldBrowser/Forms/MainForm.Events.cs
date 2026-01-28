@@ -482,10 +482,17 @@ public partial class MainForm
 
         if (m.Msg == WM_NCHITTEST)
         {
-            // 全屏或者最大化时不允许通过边框调整大小，直接交给系统处理
+            // 全屏或者最大化时不允许通过边框调整大小
             if (WindowState == FormWindowState.Maximized || _fullscreenManager.IsFullscreen)
             {
                 base.WndProc(ref m);
+                
+                // 最大化时强制将边框命中测试结果改为客户端区域，防止鼠标悬停显示缩放光标或进行缩放
+                int hitTest = (int)m.Result;
+                if (hitTest >= Win32Constants.HTLEFT && hitTest <= Win32Constants.HTBOTTOMRIGHT)
+                {
+                    m.Result = (IntPtr)Win32Constants.HTCLIENT;
+                }
                 return;
             }
 

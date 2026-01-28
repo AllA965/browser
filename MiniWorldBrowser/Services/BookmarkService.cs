@@ -55,6 +55,7 @@ public class BookmarkService : IBookmarkService
     
     public Bookmark AddBookmark(string title, string url, string? parentId = null, string? faviconUrl = null)
     {
+        Bookmark bookmark;
         lock (_lock)
         {
             var maxOrder = _bookmarks
@@ -63,7 +64,7 @@ public class BookmarkService : IBookmarkService
                 .DefaultIfEmpty(-1)
                 .Max();
             
-            var bookmark = new Bookmark
+            bookmark = new Bookmark
             {
                 Title = title,
                 Url = url,
@@ -75,13 +76,14 @@ public class BookmarkService : IBookmarkService
             
             _bookmarks.Add(bookmark);
             Save();
-            BookmarksChanged?.Invoke();
-            return bookmark;
         }
+        BookmarksChanged?.Invoke();
+        return bookmark;
     }
     
     public Bookmark AddFolder(string title, string? parentId = null)
     {
+        Bookmark folder;
         lock (_lock)
         {
             var maxOrder = _bookmarks
@@ -90,7 +92,7 @@ public class BookmarkService : IBookmarkService
                 .DefaultIfEmpty(-1)
                 .Max();
             
-            var folder = new Bookmark
+            folder = new Bookmark
             {
                 Title = title,
                 IsFolder = true,
@@ -100,13 +102,14 @@ public class BookmarkService : IBookmarkService
             
             _bookmarks.Add(folder);
             Save();
-            BookmarksChanged?.Invoke();
-            return folder;
         }
+        BookmarksChanged?.Invoke();
+        return folder;
     }
     
     public void UpdateBookmark(string id, string? title = null, string? url = null, string? parentId = null)
     {
+        bool changed = false;
         lock (_lock)
         {
             var bookmark = _bookmarks.FirstOrDefault(b => b.Id == id);
@@ -117,32 +120,39 @@ public class BookmarkService : IBookmarkService
                 if (parentId != null) bookmark.ParentId = parentId == "" ? null : parentId;
                 bookmark.ModifiedAt = DateTime.Now;
                 Save();
-                BookmarksChanged?.Invoke();
+                changed = true;
             }
         }
+        if (changed) BookmarksChanged?.Invoke();
     }
     
     public void Delete(string id)
     {
+        bool changed = false;
         lock (_lock)
         {
-            var item = _bookmarks.FirstOrDefault(b => b.Id == id);
-            if (item == null) return;
-            
-            if (item.IsFolder)
-            {
-                // 递归删除子项
-                var children = _bookmarks.Where(b => b.ParentId == id).ToList();
-                foreach (var child in children)
-                {
-                    Delete(child.Id);
-                }
-            }
-            
-            _bookmarks.Remove(item);
-            Save();
-            BookmarksChanged?.Invoke();
+            changed = DeleteInternal(id);
+            if (changed) Save();
         }
+        if (changed) BookmarksChanged?.Invoke();
+    }
+
+    private bool DeleteInternal(string id)
+    {
+        var item = _bookmarks.FirstOrDefault(b => b.Id == id);
+        if (item == null) return false;
+        
+        if (item.IsFolder)
+        {
+            var children = _bookmarks.Where(b => b.ParentId == id).ToList();
+            foreach (var child in children)
+            {
+                DeleteInternal(child.Id);
+            }
+        }
+        
+        _bookmarks.Remove(item);
+        return true;
     }
     
     public void Move(string id, string? newParentId, int newOrder)
@@ -167,8 +177,8 @@ public class BookmarkService : IBookmarkService
             item.Order = newOrder;
             item.ModifiedAt = DateTime.Now;
             Save();
-            BookmarksChanged?.Invoke();
         }
+        BookmarksChanged?.Invoke();
     }
     
     public Bookmark? FindByUrl(string url)

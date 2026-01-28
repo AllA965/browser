@@ -1,6 +1,7 @@
 using MiniWorldBrowser.Browser;
 using MiniWorldBrowser.Controls;
 using MiniWorldBrowser.Services;
+using System.Diagnostics;
 
 namespace MiniWorldBrowser.Forms;
 
@@ -877,8 +878,10 @@ public partial class MainForm
     /// </summary>
     private void ShowAddBookmarkDialog()
     {
-        var url = _tabManager.ActiveTab?.Url;
-        var title = _tabManager.ActiveTab?.Title ?? "新书签";
+        if (_tabManager.ActiveTab == null) return;
+        
+        var url = _tabManager.ActiveTab.Url;
+        var title = _tabManager.ActiveTab.Title ?? "新书签";
 
         if (string.IsNullOrEmpty(url) || url.StartsWith("about:")) 
         {
@@ -886,26 +889,37 @@ public partial class MainForm
             return;
         }
 
-        var existing = _bookmarkService.FindByUrl(url);
-        
-        using var dialog = new AddBookmarkDialog(
-            _bookmarkService, 
-            title, 
-            url, 
-            _tabManager.ActiveTab?.FaviconUrl,
-            existing);
-        
-        var btnLocation = _bookmarkBtn.PointToScreen(new Point(_bookmarkBtn.Width, _bookmarkBtn.Height));
-        dialog.SetAnchorPoint(btnLocation);
-        
-        var result = dialog.ShowDialog(this);
-        
-        UpdateBookmarkButton(result != DialogResult.Abort);
-        
-        if (result == DialogResult.Abort)
-            _statusLabel.Text = "已取消收藏";
-        else if (result == DialogResult.Retry)
-            ShowBookmarkManager();
+        try 
+        {
+            var existing = _bookmarkService.FindByUrl(url);
+            
+            using var dialog = new AddBookmarkDialog(
+                _bookmarkService, 
+                title, 
+                url, 
+                _tabManager.ActiveTab?.FaviconUrl,
+                existing);
+            
+            if (_bookmarkBtn != null && _bookmarkBtn.IsHandleCreated)
+            {
+                var btnLocation = _bookmarkBtn.PointToScreen(new Point(_bookmarkBtn.Width, _bookmarkBtn.Height));
+                dialog.SetAnchorPoint(btnLocation);
+            }
+            
+            var result = dialog.ShowDialog(this);
+            
+            UpdateBookmarkButton(result != DialogResult.Abort);
+            
+            if (result == DialogResult.Abort)
+                _statusLabel.Text = "已取消收藏";
+            else if (result == DialogResult.Retry)
+                ShowBookmarkManager();
+        }
+        catch (Exception ex)
+         {
+             Debug.WriteLine($"显示添加书签对话框失败: {ex.Message}");
+             MessageBox.Show("操作失败，请重试", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+         }
     }
 
     /// <summary>
@@ -1032,15 +1046,17 @@ public partial class MainForm
 
     private void ShowSettingsDialog()
     {
-        using var dlg = new SettingsForm(_settingsService);
+        using var dlg = new SettingsForm(_settingsService, _bookmarkService);
         dlg.ShowDialog();
         _adBlockService.Enabled = _settingsService.Settings.EnableAdBlock;
-        _bookmarkBar.Visible = _settingsService.Settings.AlwaysShowBookmarkBar;
+        UpdateBookmarkBarVisibility();
     }
 
     private void OpenIncognitoWindow()
     {
         var incognitoForm = new MainForm(true);
+        // 注册到多窗口上下文，确保生命周期正确管理
+        MultiWindowApplicationContext.Current?.RegisterForm(incognitoForm);
         incognitoForm.Show();
     }
 

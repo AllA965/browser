@@ -45,7 +45,66 @@ public static class Win32Helper
     [DllImport("dwmapi.dll")]
     public static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
 
+    [DllImport("shell32.dll", SetLastError = true)]
+    public static extern int SHGetPropertyStoreForWindow(IntPtr hwnd, ref Guid iid, [Out, MarshalAs(UnmanagedType.Interface)] out IPropertyStore propertyStore);
+
     #endregion
+    
+    [ComImport]
+    [Guid("886D8EEB-8CF2-4446-8D02-CDBA1DBDCF99")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IPropertyStore
+    {
+        int GetCount([Out] out uint propertyCount);
+        int GetAt([In] uint propertyIndex, [Out, MarshalAs(UnmanagedType.Struct)] out PropertyKey key);
+        int GetValue([In, MarshalAs(UnmanagedType.Struct)] ref PropertyKey key, [Out, MarshalAs(UnmanagedType.Struct)] out PropVariant value);
+        int SetValue([In, MarshalAs(UnmanagedType.Struct)] ref PropertyKey key, [In, MarshalAs(UnmanagedType.Struct)] ref PropVariant value);
+        int Commit();
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct PropertyKey
+    {
+        public Guid fmtid;
+        public uint pid;
+    }
+
+    [StructLayout(LayoutKind.Explicit)]
+    public struct PropVariant
+    {
+        [FieldOffset(0)] public ushort vt;
+        [FieldOffset(8)] public IntPtr ptr;
+
+        public void SetString(string value)
+        {
+            vt = 31; // VT_LPWSTR
+            ptr = Marshal.StringToCoTaskMemUni(value);
+        }
+    }
+
+    private static readonly Guid IID_IPropertyStore = new Guid("886D8EEB-8CF2-4446-8D02-CDBA1DBDCF99");
+    private static readonly PropertyKey AppUserModel_ID = new PropertyKey { fmtid = new Guid("9F4C0559-8192-4919-9E7E-6D201F546743"), pid = 5 };
+
+    /// <summary>
+    /// 设置窗口的 AppUserModelID，用于任务栏分组
+    /// </summary>
+    public static void SetWindowAppUserModelId(IntPtr hwnd, string appId)
+    {
+        try
+        {
+            var iid = IID_IPropertyStore;
+            if (SHGetPropertyStoreForWindow(hwnd, ref iid, out var propertyStore) == 0)
+            {
+                var pv = new PropVariant();
+                pv.SetString(appId);
+                var key = AppUserModel_ID;
+                propertyStore.SetValue(ref key, ref pv);
+                propertyStore.Commit();
+                Marshal.ReleaseComObject(propertyStore);
+            }
+        }
+        catch { }
+    }
     
     public const int DWMWA_WINDOW_CORNER_PREFERENCE = 33;
     public enum DWM_WINDOW_CORNER_PREFERENCE
