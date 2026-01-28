@@ -58,12 +58,12 @@ public class BrowserTabManager
     private bool _isPreloadingTab = false;
     private readonly object _cacheLock = new();
 
-    private const int NormalTabMaxWidth = 200;
-    private const int NormalTabMinWidth = 100;
-    private const int PinnedTabWidth = 40;
-    private const int OverflowButtonWidth = 32;
-    private const int NewTabButtonWidth = 32;
-    private const int TabBarPadding = 4;
+    private static readonly int NormalTabMaxWidth = DpiHelper.Scale(200);
+    private static readonly int NormalTabMinWidth = DpiHelper.Scale(100);
+    private static readonly int PinnedTabWidth = DpiHelper.Scale(40);
+    private static readonly int OverflowButtonWidth = DpiHelper.Scale(32);
+    private static readonly int NewTabButtonWidth = DpiHelper.Scale(32);
+    private static readonly int TabBarPadding = DpiHelper.Scale(4);
     
     public BrowserTabManager(
         Panel browserContainer,

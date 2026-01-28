@@ -28,8 +28,8 @@ public class AdCarouselControl : UserControl
     private const int StatusBarHeight = 35; // 对齐状态栏上方
     private const int CornerRadius = 10; // 缩小圆角
 
-    private static readonly Size ExpandedSize = new(146, 220); // 原 220, 330 的 2/3
-    private static readonly Color OverlayColor = Color.FromArgb(30, 0, 0, 0);
+    private static readonly Size ExpandedSize = new(147, 220); // 原 220, 330 的 2/3
+    private static readonly Color OverlayColor = Color.FromArgb(80, 0, 0, 0);
 
     #endregion
 
@@ -114,9 +114,9 @@ public class AdCarouselControl : UserControl
         // 初始状态：处于折叠/隐藏态，不显示任何唤出箭头
         this.Visible = false;
         this._isCollapsed = true;
-        this.Size = new Size(CollapsedSize, CollapsedSize);
-        this._targetWidth = CollapsedSize;
-        this._targetHeight = CollapsedSize;
+        this.Size = DpiHelper.Scale(new Size(CollapsedSize, CollapsedSize));
+        this._targetWidth = Width;
+        this._targetHeight = Height;
         
         this.BackColor = Color.Transparent;
         this.DoubleBuffered = true;
@@ -145,12 +145,12 @@ public class AdCarouselControl : UserControl
         _toggleButton = new RoundedButton
         {
             Text = string.Empty,
-            Size = new Size(CollapsedSize, CollapsedSize),
+            Size = DpiHelper.Scale(new Size(CollapsedSize, CollapsedSize)),
             BackColor = Color.Transparent,
             ForeColor = Color.FromArgb(64, 64, 64),
             HoverBackColor = Color.Transparent,
             CornerRadius = CollapsedSize / 2,
-            Font = new Font("Segoe UI", 16F, FontStyle.Bold),
+            Font = new Font("Segoe UI", DpiHelper.Scale(16F), FontStyle.Bold),
             Cursor = Cursors.Default,
             Visible = false
         };
@@ -440,7 +440,7 @@ public class AdCarouselControl : UserControl
             // 折叠/隐藏状态：不再显示任何唤出箭头
             _pictureBox.Visible = false;
             _toggleButton.Visible = false;
-            this.Size = new Size(CollapsedSize, CollapsedSize);
+            this.Size = DpiHelper.Scale(new Size(CollapsedSize, CollapsedSize));
         }
         else
         {
@@ -452,9 +452,9 @@ public class AdCarouselControl : UserControl
             _toggleButton.Visible = false;
 
             // 计算交互区域
-            int btnSize = 32;
-            int padding = 8;
-            _closeRect = new Rectangle(this.Width - 28, 4, 24, 24);
+            int btnSize = DpiHelper.Scale(32);
+            int padding = DpiHelper.Scale(8);
+            _closeRect = new Rectangle(this.Width - DpiHelper.Scale(28), DpiHelper.Scale(4), DpiHelper.Scale(24), DpiHelper.Scale(24));
             _prevRect = new Rectangle(padding, (this.Height - btnSize) / 2, btnSize, btnSize);
             _nextRect = new Rectangle(this.Width - btnSize - padding, (this.Height - btnSize) / 2, btnSize, btnSize);
 
@@ -490,8 +490,8 @@ public class AdCarouselControl : UserControl
     {
         if (this.Parent == null) return;
 
-        var x = this.Parent.ClientSize.Width - this.Width - PaddingSize;
-        var y = this.Parent.ClientSize.Height - this.Height - StatusBarHeight;
+        var x = this.Parent.ClientSize.Width - this.Width - DpiHelper.Scale(PaddingSize);
+        var y = this.Parent.ClientSize.Height - this.Height - DpiHelper.Scale(StatusBarHeight);
         
         this.Location = new Point(x, y);
         this.BringToFront(); // 确保始终在最前端
@@ -632,11 +632,11 @@ public class AdCarouselControl : UserControl
     private void DrawDots(Graphics g)
     {
         int dotCount = _ads.Count;
-        int dotSize = 6;
-        int dotSpacing = 8;
+        int dotSize = DpiHelper.Scale(6);
+        int dotSpacing = DpiHelper.Scale(8);
         int totalWidth = (dotCount * dotSize) + ((dotCount - 1) * dotSpacing);
         int startX = (_pictureBox.Width - totalWidth) / 2;
-        int y = _pictureBox.Height - 15;
+        int y = _pictureBox.Height - DpiHelper.Scale(15);
 
         for (int i = 0; i < dotCount; i++)
         {
@@ -651,7 +651,7 @@ public class AdCarouselControl : UserControl
             // 如果是当前点，加一个微弱的描边
             if (isCurrent)
             {
-                using var dotPen = new Pen(Color.FromArgb(50, 0, 0, 0), 1);
+                using var dotPen = new Pen(Color.FromArgb(50, 0, 0, 0), DpiHelper.Scale(1));
                 g.DrawEllipse(dotPen, dotRect);
             }
         }
@@ -663,15 +663,15 @@ public class AdCarouselControl : UserControl
 
         // 检查是否点击了指示点
         int dotCount = _ads.Count;
-        int dotSize = 12; // 增加点击判定区域
-        int dotSpacing = 8;
-        int totalWidth = (dotCount * 6) + ((dotCount - 1) * dotSpacing);
+        int dotSize = DpiHelper.Scale(12); // 增加点击判定区域
+        int dotSpacing = DpiHelper.Scale(8);
+        int totalWidth = (dotCount * DpiHelper.Scale(6)) + ((dotCount - 1) * dotSpacing);
         int startX = (_pictureBox.Width - totalWidth) / 2;
-        int y = _pictureBox.Height - 15 - 3; // 向上偏移一点以覆盖 6x6 的点
+        int y = _pictureBox.Height - DpiHelper.Scale(15) - DpiHelper.Scale(3); // 向上偏移一点以覆盖 6x6 的点
 
         for (int i = 0; i < dotCount; i++)
         {
-            var hitRect = new Rectangle(startX + (i * (6 + dotSpacing)) - 3, y, dotSize, dotSize);
+            var hitRect = new Rectangle(startX + (i * (DpiHelper.Scale(6) + dotSpacing)) - DpiHelper.Scale(3), y, dotSize, dotSize);
             if (hitRect.Contains(e.Location))
             {
                 if (_currentAdIndex != i)
@@ -702,8 +702,8 @@ public class AdCarouselControl : UserControl
     {
         // 关闭后彻底隐藏并停止所有与广告相关的活动
         _isCollapsed = true;
-        _targetWidth = CollapsedSize;
-        _targetHeight = CollapsedSize;
+        _targetWidth = DpiHelper.Scale(CollapsedSize);
+        _targetHeight = DpiHelper.Scale(CollapsedSize);
 
         _pictureBox.Visible = false;
         _toggleButton.Visible = false;
@@ -722,8 +722,8 @@ public class AdCarouselControl : UserControl
     {
         if (!_isCollapsed) return;
         _isCollapsed = false;
-        _targetWidth = ExpandedSize.Width;
-        _targetHeight = ExpandedSize.Height;
+        _targetWidth = DpiHelper.Scale(ExpandedSize.Width);
+        _targetHeight = DpiHelper.Scale(ExpandedSize.Height);
         
         // 确保在动画开始前控件是可见的
         this.Visible = true;
@@ -771,16 +771,19 @@ public class AdCarouselControl : UserControl
         }
     }
 
-    private static bool AnimateValue(int current, int target, Action<int> setter)
+    private static bool AnimateValue(int current, int target, Action<int> updateAction)
     {
-        if (Math.Abs(current - target) <= AnimationSpeed)
+        if (Math.Abs(current - target) <= DpiHelper.Scale(AnimationSpeed))
         {
-            setter(target);
+            updateAction(target);
             return true;
         }
 
-        int step = (current < target) ? AnimationSpeed : -AnimationSpeed;
-        setter(current + step);
+        int diff = target - current;
+        int step = Math.Max(DpiHelper.Scale(2), Math.Abs(diff) / 4);
+        if (step > DpiHelper.Scale(AnimationSpeed)) step = DpiHelper.Scale(AnimationSpeed);
+
+        updateAction(current + (diff > 0 ? step : -step));
         return false;
     }
 
@@ -873,35 +876,16 @@ public class AdCarouselControl : UserControl
 
     private void DrawLoadingOverlay(Graphics g)
     {
-        using var overlayBrush = new SolidBrush(Color.FromArgb(80, 0, 0, 0));
-        g.FillRectangle(overlayBrush, new Rectangle(0, 0, _pictureBox.Width, _pictureBox.Height));
+        using var brush = new SolidBrush(OverlayColor);
+        g.FillRectangle(brush, _pictureBox.ClientRectangle);
 
-        var size = Math.Min(_pictureBox.Width, _pictureBox.Height);
-        var ringSize = Math.Max(24, size / 6);
-        var thickness = Math.Max(3, ringSize / 8);
-        var cx = _pictureBox.Width / 2;
-        var cy = _pictureBox.Height / 2;
-        var rect = new Rectangle(cx - ringSize / 2, cy - ringSize / 2, ringSize, ringSize);
+        float centerX = _pictureBox.Width / 2f;
+        float centerY = _pictureBox.Height / 2f;
+        float radius = DpiHelper.Scale(15f);
 
-        using var bgPen = new Pen(Color.FromArgb(60, 255, 255, 255), thickness)
-        {
-            StartCap = LineCap.Round,
-            EndCap = LineCap.Round
-        };
-        g.DrawArc(bgPen, rect, 0, 360);
-
-        using var fgPen = new Pen(Color.FromArgb(220, 255, 255, 255), thickness)
-        {
-            StartCap = LineCap.Round,
-            EndCap = LineCap.Round
-        };
-        g.DrawArc(fgPen, rect, _loadingAngle, 120);
-
-        using var font = new Font("Segoe UI", 9F, FontStyle.Regular);
-        var text = _isAdImageLoadFailed ? "加载失败，点击重试" : "加载中";
-        var textSize = g.MeasureString(text, font);
-        using var textBrush = new SolidBrush(Color.FromArgb(230, 255, 255, 255));
-        g.DrawString(text, font, textBrush, cx - textSize.Width / 2, cy + ringSize / 2 + 10);
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using var pen = new Pen(Color.White, DpiHelper.Scale(3f));
+        g.DrawArc(pen, centerX - radius, centerY - radius, radius * 2, radius * 2, _loadingAngle, 270);
     }
 
     private Task InvokeAsync(Action action)

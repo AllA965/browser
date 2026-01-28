@@ -1,6 +1,7 @@
 using MiniWorldBrowser.Helpers.Extensions;
 using MiniWorldBrowser.Models;
 using MiniWorldBrowser.Services.Interfaces;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls;
 
@@ -69,10 +70,10 @@ public class BookmarkBar : Panel
         _bookmarkService = bookmarkService;
         _bookmarkService.BookmarksChanged += RefreshBookmarks;
         
-        Height = 40;
+        Height = DpiHelper.Scale(40);
         Dock = DockStyle.Top;
         BackColor = Color.FromArgb(245, 245, 245);
-        Padding = new Padding(4, 6, 4, 6);
+        Padding = DpiHelper.Scale(new Padding(4, 6, 4, 6));
         
         _container = new FlowLayoutPanel
         {
@@ -91,7 +92,7 @@ public class BookmarkBar : Panel
             Icon = CreateFolderIcon(),
             Dock = DockStyle.Right,
             Visible = false,
-            Margin = new Padding(2, 0, 2, 0)
+            Margin = DpiHelper.Scale(new Padding(2, 0, 2, 0))
         };
         _otherBookmarksBtn.MouseClick += (s, e) =>
         {
@@ -102,9 +103,9 @@ public class BookmarkBar : Panel
         _overflowBtn = new Button
         {
             Text = "»",
-            Size = new Size(20, 20),
+            Size = DpiHelper.Scale(new Size(20, 20)),
             FlatStyle = FlatStyle.Flat,
-            Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+            Font = new Font("Segoe UI", DpiHelper.Scale(9F), FontStyle.Bold),
             Cursor = Cursors.Hand,
             Visible = false,
             Dock = DockStyle.Right
@@ -315,7 +316,7 @@ public class BookmarkBar : Panel
             Tag = bookmark,
             IsFolder = bookmark.IsFolder,
             IsIncognito = _isIncognito, // 应用隐身模式
-            Margin = new Padding(2, 0, 2, 0)
+            Margin = DpiHelper.Scale(new Padding(2, 0, 2, 0))
         };
         
         // 设置图标
@@ -385,12 +386,16 @@ public class BookmarkBar : Panel
     
     private static Image CreateFolderIcon()
     {
-        var bmp = new Bitmap(16, 16);
+        int size = DpiHelper.Scale(16);
+        var bmp = new Bitmap(size, size);
         using var g = Graphics.FromImage(bmp);
         g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         using var brush = new SolidBrush(Color.FromArgb(255, 193, 7));
-        g.FillRectangle(brush, 1, 4, 14, 10);
-        g.FillRectangle(brush, 1, 2, 6, 3);
+        
+        // 比例缩放绘制
+        float ratio = size / 16f;
+        g.FillRectangle(brush, 1 * ratio, 4 * ratio, 14 * ratio, 10 * ratio);
+        g.FillRectangle(brush, 1 * ratio, 2 * ratio, 6 * ratio, 3 * ratio);
         return bmp;
     }
     
@@ -565,7 +570,7 @@ public class BookmarkBar : Panel
         
         foreach (Control ctrl in _container.Controls)
         {
-            if (ctrl.Right > _container.Width - 25)
+            if (ctrl.Right > _container.Width - DpiHelper.Scale(25))
             {
                 var bookmark = ctrl.Tag as Bookmark;
                 if (bookmark == null) continue;
@@ -596,9 +601,10 @@ public class BookmarkBar : Panel
     private void UpdateOverflow()
     {
         bool hasOverflow = false;
+        int overflowThreshold = DpiHelper.Scale(25);
         foreach (Control ctrl in _container.Controls)
         {
-            bool visible = ctrl.Right <= _container.Width - 25;
+            bool visible = ctrl.Right <= _container.Width - overflowThreshold;
             ctrl.Visible = visible;
             if (!visible) hasOverflow = true;
         }
@@ -657,8 +663,8 @@ public class BookmarkButton : Control
                  ControlStyles.UserPaint, true);
         BackColor = Color.Transparent;
         Cursor = Cursors.Hand;
-        Font = new Font("Segoe UI", 9F);
-        Height = 28;
+        Font = new Font("Segoe UI", DpiHelper.Scale(9F));
+        Height = DpiHelper.Scale(28);
     }
 
     protected override void OnTextChanged(EventArgs e)
@@ -669,9 +675,9 @@ public class BookmarkButton : Control
 
     private void UpdateWidth()
     {
-        const int iconSize = 16;
-        const int padding = 8;
-        const int iconTextGap = 4;
+        int iconSize = DpiHelper.Scale(16);
+        int padding = DpiHelper.Scale(8);
+        int iconTextGap = DpiHelper.Scale(4);
 
         int width = padding;
         if (_icon != null)
@@ -707,14 +713,14 @@ public class BookmarkButton : Control
             }
 
             using var hoverBrush = new SolidBrush(hoverColor);
-            var rect = new Rectangle(0, 2, Width, Height - 4);
-            using var path = CreateRoundedRectangle(rect, 4);
+            var rect = new Rectangle(0, DpiHelper.Scale(2), Width, Height - DpiHelper.Scale(4));
+            using var path = CreateRoundedRectangle(rect, DpiHelper.Scale(4));
             g.FillPath(hoverBrush, path);
         }
 
-        const int iconSize = 16;
-        const int padding = 8;
-        const int iconTextGap = 4;
+        int iconSize = DpiHelper.Scale(16);
+        int padding = DpiHelper.Scale(8);
+        int iconTextGap = DpiHelper.Scale(4);
 
         int x = padding;
         int centerY = (Height - iconSize) / 2;
@@ -785,7 +791,7 @@ public class BookmarkEditDialog : Form
     public BookmarkEditDialog(Bookmark? bookmark, bool isFolder = false)
     {
         Text = bookmark == null ? (isFolder ? "添加文件夹" : "添加书签") : "编辑";
-        Size = new Size(400, isFolder ? 120 : 160);
+        Size = DpiHelper.Scale(new Size(400, isFolder ? 120 : 160));
         FormBorderStyle = FormBorderStyle.FixedDialog;
         StartPosition = FormStartPosition.CenterParent;
         MaximizeBox = false;
@@ -794,11 +800,11 @@ public class BookmarkEditDialog : Form
         var panel = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
-            Padding = new Padding(10),
+            Padding = DpiHelper.Scale(new Padding(10)),
             RowCount = isFolder ? 2 : 3,
             ColumnCount = 2
         };
-        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60));
+        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, DpiHelper.Scale(60)));
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         
         panel.Controls.Add(new Label { Text = "名称:", TextAlign = ContentAlignment.MiddleLeft }, 0, 0);

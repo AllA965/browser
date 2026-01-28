@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls;
 
@@ -50,7 +51,7 @@ public class NavigationButton : Control
                  ControlStyles.ResizeRedraw, true);
 
         BackColor = Color.Transparent;
-        Size = new Size(32, 32);
+        Size = DpiHelper.Scale(new Size(32, 32));
         Cursor = Cursors.Hand;
         TabStop = false;
     }
@@ -75,7 +76,7 @@ public class NavigationButton : Control
 
         if (bgColor != Color.Transparent && bgColor.A > 0)
         {
-            using var path = CreateRoundedRect(rect, _cornerRadius);
+            using var path = CreateRoundedRect(rect, DpiHelper.Scale(_cornerRadius));
             using var brush = new SolidBrush(bgColor);
             g.FillPath(brush, path);
         }
@@ -104,7 +105,7 @@ public class NavigationButton : Control
     private void DrawHomeIcon(Graphics g)
     {
         var color = Enabled ? IconColor : DisabledIconColor;
-        float penWidth = 1.8f;
+        float penWidth = DpiHelper.Scale(1.8f);
 
         float centerX = Width / 2f;
         float centerY = Height / 2f;
@@ -155,7 +156,7 @@ public class NavigationButton : Control
     private void DrawBackIcon(Graphics g)
     {
         var color = Enabled ? IconColor : DisabledIconColor;
-        float penWidth = 2f;
+        float penWidth = DpiHelper.Scale(2f);
 
         float centerX = Width / 2f;
         float centerY = Height / 2f;
@@ -182,7 +183,7 @@ public class NavigationButton : Control
     private void DrawForwardIcon(Graphics g)
     {
         var color = Enabled ? IconColor : DisabledIconColor;
-        float penWidth = 2f;
+        float penWidth = DpiHelper.Scale(2f);
 
         float centerX = Width / 2f;
         float centerY = Height / 2f;
@@ -209,7 +210,7 @@ public class NavigationButton : Control
     private void DrawRefreshIcon(Graphics g)
     {
         var color = Enabled ? IconColor : DisabledIconColor;
-        float penWidth = 2f;
+        float penWidth = DpiHelper.Scale(2f);
 
         float centerX = Width / 2f;
         float centerY = Height / 2f;
@@ -254,7 +255,7 @@ public class NavigationButton : Control
     private void DrawStopIcon(Graphics g)
     {
         var color = Enabled ? IconColor : DisabledIconColor;
-        float penWidth = 2f;
+        float penWidth = DpiHelper.Scale(2f);
 
         float centerX = Width / 2f;
         float centerY = Height / 2f;

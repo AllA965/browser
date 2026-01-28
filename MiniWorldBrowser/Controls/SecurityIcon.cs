@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls;
 
@@ -34,7 +35,7 @@ public class SecurityIcon : Control
                  ControlStyles.UserPaint |
                  ControlStyles.ResizeRedraw, true);
         
-        Size = new Size(22, 22);
+        Size = DpiHelper.Scale(new Size(22, 22));
         Cursor = Cursors.Hand;
         BackColor = Color.Transparent;
         
@@ -59,7 +60,7 @@ public class SecurityIcon : Control
         if (_isHovered)
         {
             using var hoverBrush = new SolidBrush(Color.FromArgb(30, 0, 0, 0));
-            g.FillEllipse(hoverBrush, 1, 1, Width - 2, Height - 2);
+            g.FillEllipse(hoverBrush, DpiHelper.Scale(1), DpiHelper.Scale(1), Width - DpiHelper.Scale(2), Height - DpiHelper.Scale(2));
         }
         
         if (_isSecure)
@@ -77,14 +78,14 @@ public class SecurityIcon : Control
         int cy = Height / 2;
         
         // 锁的尺寸
-        int lockWidth = 10;
-        int lockHeight = 8;
-        int shackleWidth = 6;
-        int shackleHeight = 5;
+        int lockWidth = DpiHelper.Scale(10);
+        int lockHeight = DpiHelper.Scale(8);
+        int shackleWidth = DpiHelper.Scale(6);
+        int shackleHeight = DpiHelper.Scale(5);
         
         // 锁体位置
         int bodyX = cx - lockWidth / 2;
-        int bodyY = cy - 1;
+        int bodyY = cy - DpiHelper.Scale(1);
         
         // 绿色渐变
         var greenDark = Color.FromArgb(34, 139, 34);   // 深绿
@@ -92,13 +93,13 @@ public class SecurityIcon : Control
         var greenMid = Color.FromArgb(60, 179, 60);    // 中绿
         
         // 绘制锁扣（U形部分）
-        using (var shacklePen = new Pen(greenDark, 2.0f))
+        using (var shacklePen = new Pen(greenDark, DpiHelper.Scale(1.5f)))
         {
             shacklePen.StartCap = LineCap.Round;
             shacklePen.EndCap = LineCap.Round;
             
             int shackleX = cx - shackleWidth / 2;
-            int shackleY = bodyY - shackleHeight + 1;
+            int shackleY = bodyY - shackleHeight + DpiHelper.Scale(1);
             
             // 绘制U形锁扣
             using var path = new GraphicsPath();
@@ -106,27 +107,27 @@ public class SecurityIcon : Control
             g.DrawPath(shacklePen, path);
             
             // 绘制两侧竖线
-            g.DrawLine(shacklePen, shackleX, shackleY + shackleHeight, shackleX, bodyY + 1);
-            g.DrawLine(shacklePen, shackleX + shackleWidth, shackleY + shackleHeight, shackleX + shackleWidth, bodyY + 1);
+            g.DrawLine(shacklePen, shackleX, shackleY + shackleHeight, shackleX, bodyY + DpiHelper.Scale(1));
+            g.DrawLine(shacklePen, shackleX + shackleWidth, shackleY + shackleHeight, shackleX + shackleWidth, bodyY + DpiHelper.Scale(1));
         }
         
         // 绘制锁体（带渐变的圆角矩形）
         var bodyRect = new Rectangle(bodyX, bodyY, lockWidth, lockHeight);
         using (var bodyBrush = new LinearGradientBrush(bodyRect, greenLight, greenDark, LinearGradientMode.Vertical))
         {
-            using var bodyPath = CreateRoundedRect(bodyRect, 2);
+            using var bodyPath = CreateRoundedRect(bodyRect, DpiHelper.Scale(2));
             g.FillPath(bodyBrush, bodyPath);
         }
         
         // 绘制锁体边框
-        using (var borderPen = new Pen(greenDark, 0.5f))
+        using (var borderPen = new Pen(greenDark, DpiHelper.Scale(0.5f)))
         {
-            using var bodyPath = CreateRoundedRect(bodyRect, 2);
+            using var bodyPath = CreateRoundedRect(bodyRect, DpiHelper.Scale(2));
             g.DrawPath(borderPen, bodyPath);
         }
         
         // 绘制锁孔（白色小圆点）
-        int holeSize = 3;
+        int holeSize = DpiHelper.Scale(3);
         int holeX = cx - holeSize / 2;
         int holeY = bodyY + lockHeight / 2 - holeSize / 2;
         using (var holeBrush = new SolidBrush(Color.White))
@@ -143,25 +144,25 @@ public class SecurityIcon : Control
         int cx = Width / 2;
         int cy = Height / 2;
         
-        int lockWidth = 10;
-        int lockHeight = 8;
-        int shackleWidth = 6;
-        int shackleHeight = 5;
+        int lockWidth = DpiHelper.Scale(10);
+        int lockHeight = DpiHelper.Scale(8);
+        int shackleWidth = DpiHelper.Scale(6);
+        int shackleHeight = DpiHelper.Scale(5);
         
         int bodyX = cx - lockWidth / 2;
-        int bodyY = cy - 1;
+        int bodyY = cy - DpiHelper.Scale(1);
         
         var grayDark = Color.FromArgb(120, 120, 120);
         var grayLight = Color.FromArgb(180, 180, 180);
         
         // 绘制开着的锁扣（倾斜的U形）
-        using (var shacklePen = new Pen(grayDark, 2.0f))
+        using (var shacklePen = new Pen(grayDark, DpiHelper.Scale(2.0f)))
         {
             shacklePen.StartCap = LineCap.Round;
             shacklePen.EndCap = LineCap.Round;
             
-            int shackleX = cx - shackleWidth / 2 - 1;
-            int shackleY = bodyY - shackleHeight - 2;
+            int shackleX = cx - shackleWidth / 2 - DpiHelper.Scale(1);
+            int shackleY = bodyY - shackleHeight - DpiHelper.Scale(2);
             
             // 开锁状态 - 锁扣向上打开
             using var path = new GraphicsPath();
@@ -169,25 +170,25 @@ public class SecurityIcon : Control
             g.DrawPath(shacklePen, path);
             
             // 只绘制右侧竖线（左侧打开）
-            g.DrawLine(shacklePen, shackleX + shackleWidth, shackleY + shackleHeight, shackleX + shackleWidth, bodyY + 1);
+            g.DrawLine(shacklePen, shackleX + shackleWidth, shackleY + shackleHeight, shackleX + shackleWidth, bodyY + DpiHelper.Scale(1));
         }
         
         // 绘制锁体
         var bodyRect = new Rectangle(bodyX, bodyY, lockWidth, lockHeight);
         using (var bodyBrush = new LinearGradientBrush(bodyRect, grayLight, grayDark, LinearGradientMode.Vertical))
         {
-            using var bodyPath = CreateRoundedRect(bodyRect, 2);
+            using var bodyPath = CreateRoundedRect(bodyRect, DpiHelper.Scale(2));
             g.FillPath(bodyBrush, bodyPath);
         }
         
-        using (var borderPen = new Pen(grayDark, 0.5f))
+        using (var borderPen = new Pen(grayDark, DpiHelper.Scale(0.5f)))
         {
-            using var bodyPath = CreateRoundedRect(bodyRect, 2);
+            using var bodyPath = CreateRoundedRect(bodyRect, DpiHelper.Scale(2));
             g.DrawPath(borderPen, bodyPath);
         }
         
         // 锁孔
-        int holeSize = 3;
+        int holeSize = DpiHelper.Scale(3);
         int holeX = cx - holeSize / 2;
         int holeY = bodyY + lockHeight / 2 - holeSize / 2;
         using (var holeBrush = new SolidBrush(Color.White))

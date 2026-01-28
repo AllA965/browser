@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls
 {
@@ -22,7 +23,7 @@ namespace MiniWorldBrowser.Controls
         private Color _textColor = Color.FromArgb(32, 33, 36);
         
         // Expanded corner radius
-        private int _expandedCornerRadius = 16;
+        private int _expandedCornerRadius = DpiHelper.Scale(16);
 
         public bool IsDarkMode
         {
@@ -77,15 +78,15 @@ namespace MiniWorldBrowser.Controls
         public ChromeAddressBar()
         {
             this.DoubleBuffered = true;
-            this.Padding = new Padding(16, 0, 12, 0); // Left padding for icon space, right for buttons
-            this.Size = new Size(500, 34);
+            this.Padding = DpiHelper.Scale(new Padding(16, 0, 12, 0)); // Left padding for icon space, right for buttons
+            this.Size = DpiHelper.Scale(new Size(500, 34));
             this.BackColor = Color.Transparent;
 
             _textBox = new TextBox
             {
                 BorderStyle = BorderStyle.None,
                 BackColor = _idleBackColor,
-                Font = new Font("Segoe UI", 10.5f),
+                Font = new Font("Segoe UI", DpiHelper.Scale(10.5f)),
                 ForeColor = _textColor,
                 Dock = DockStyle.Fill,
                 Margin = Padding.Empty
@@ -123,7 +124,7 @@ namespace MiniWorldBrowser.Controls
             { 
                 Dock = DockStyle.Fill, 
                 BackColor = Color.Transparent,
-                Padding = new Padding(0, 8, 0, 0) // Push text down
+                Padding = DpiHelper.Scale(new Padding(0, 8, 0, 0)) // Push text down
             };
             textContainer.Controls.Add(_textBox);
 
@@ -211,7 +212,7 @@ namespace MiniWorldBrowser.Controls
             {
                 // 使用灰色边框替代原来的蓝色聚焦环
                 // 如果是 DropdownOpen 状态，使用透明色或者灰色，这里统一用灰色保持轮廓
-                using var pen = new Pen(_borderColor, 1f); 
+                using var pen = new Pen(_borderColor, DpiHelper.Scale(1f)); 
                 
                 if (_isDropdownOpen)
                 {
@@ -238,7 +239,7 @@ namespace MiniWorldBrowser.Controls
                 // Idle border
                 if (!IsDarkMode)
                 {
-                    using var borderPen = new Pen(Color.FromArgb(20, 0, 0, 0), 1f);
+                    using var borderPen = new Pen(Color.FromArgb(20, 0, 0, 0), DpiHelper.Scale(1f));
                     e.Graphics.DrawPath(borderPen, path);
                 }
             }

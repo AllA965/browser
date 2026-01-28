@@ -1,6 +1,7 @@
 using System.Drawing.Drawing2D;
 using MiniWorldBrowser.Models;
 using MiniWorldBrowser.Services.Interfaces;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls;
 
@@ -58,14 +59,14 @@ public class AddressBarDropdown : Form
         DoubleBuffered = true;
         
         // 设置 Padding 以留出边框空间 (左、右、下各 2px，上为 0 以实现无缝连接)
-        this.Padding = new Padding(2, 0, 2, 2);
+        this.Padding = DpiHelper.Scale(new Padding(2, 0, 2, 2));
         
         // 建议列表面板
         _suggestionPanel = new Panel
         {
             Dock = DockStyle.Fill,
             BackColor = _backgroundColor, // 内部面板使用白色背景
-            Padding = new Padding(0, 4, 0, 4)
+            Padding = DpiHelper.Scale(new Padding(0, 4, 0, 4))
         };
         _suggestionPanel.Paint += OnSuggestionPanelPaint;
         _suggestionPanel.MouseMove += OnSuggestionPanelMouseMove;
@@ -76,9 +77,9 @@ public class AddressBarDropdown : Form
         _actionPanel = new FlowLayoutPanel
         {
             Dock = DockStyle.Bottom,
-            Height = 36,
+            Height = DpiHelper.Scale(36),
             BackColor = isDarkMode ? Color.FromArgb(40, 41, 45) : Color.FromArgb(248, 249, 250),
-            Padding = new Padding(8, 4, 8, 4),
+            Padding = DpiHelper.Scale(new Padding(8, 4, 8, 4)),
             FlowDirection = FlowDirection.LeftToRight,
             WrapContents = false
         };
@@ -142,8 +143,9 @@ public class AddressBarDropdown : Form
         Location = new Point(x, y);
         Width = targetWidth;
         
-        int suggestionHeight = Math.Min(_suggestions.Count * 40, 480); // 增加最大高度限制
-        Height = suggestionHeight + _actionPanel.Height + 8;
+        int itemHeight = DpiHelper.Scale(40);
+        int suggestionHeight = Math.Min(_suggestions.Count * itemHeight, DpiHelper.Scale(480)); // 增加最大高度限制
+        Height = suggestionHeight + _actionPanel.Height + DpiHelper.Scale(8);
         
         _selectedIndex = -1;
         
@@ -163,7 +165,7 @@ public class AddressBarDropdown : Form
         if (Width > 0 && Height > 0)
         {
             // 使用 Region 裁剪窗体形状，避免 TransparencyKey 导致的粉色杂边
-            int cornerRadius = 16;
+            int cornerRadius = DpiHelper.Scale(16);
             int d = cornerRadius * 2;
             
             using var path = new GraphicsPath();
@@ -195,9 +197,9 @@ public class AddressBarDropdown : Form
         e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
         // Same radius as ChromeAddressBar
-        int cornerRadius = 16; 
+        int cornerRadius = DpiHelper.Scale(16); 
         int d = cornerRadius * 2;
-        float borderWidth = 1f; // Thinner border matches Region better
+        float borderWidth = DpiHelper.Scale(1f); // Thinner border matches Region better
         
         // Region 裁剪是基于像素边界的，绘制时尽量贴合 Region
         // Region Path 使用的是 0 到 Width/Height
@@ -209,7 +211,7 @@ public class AddressBarDropdown : Form
         using var path = new GraphicsPath();
         path.AddLine(0, 0, Width, 0);
         path.AddLine(Width, 0, Width, Height - cornerRadius);
-        path.AddArc(Width - d - 1, Height - d - 1, d, d, 0, 90); // 微调 -1 以适应 Pen 宽度
+        path.AddArc(Width - d - DpiHelper.Scale(1), Height - d - DpiHelper.Scale(1), d, d, 0, 90); // 微调 -1 以适应 Pen 宽度
         path.AddLine(Width - cornerRadius, Height, cornerRadius, Height); // Bottom is at Height? Region uses Height. Draw uses Height-1?
         // Let's align Draw with Region. Region is 0..Width, 0..Height.
         // Fill should cover everything visible.
@@ -227,16 +229,16 @@ public class AddressBarDropdown : Form
         using var borderPath = new GraphicsPath();
         
         // 1. 右侧线 (从上到下)
-        borderPath.AddLine(Width - 1, 0, Width - 1, Height - cornerRadius);
+        borderPath.AddLine(Width - DpiHelper.Scale(1), 0, Width - DpiHelper.Scale(1), Height - cornerRadius);
         
         // 2. 右下圆角
-        borderPath.AddArc(Width - d - 1, Height - d - 1, d, d, 0, 90);
+        borderPath.AddArc(Width - d - DpiHelper.Scale(1), Height - d - DpiHelper.Scale(1), d, d, 0, 90);
         
         // 3. 底部线
-        borderPath.AddLine(Width - cornerRadius, Height - 1, cornerRadius, Height - 1);
+        borderPath.AddLine(Width - cornerRadius, Height - DpiHelper.Scale(1), cornerRadius, Height - DpiHelper.Scale(1));
         
         // 4. 左下圆角
-        borderPath.AddArc(0, Height - d - 1, d, d, 90, 90);
+        borderPath.AddArc(0, Height - d - DpiHelper.Scale(1), d, d, 90, 90);
         
         // 5. 左侧线 (从下到上)
         borderPath.AddLine(0, Height - cornerRadius, 0, 0);
@@ -430,9 +432,9 @@ public class AddressBarDropdown : Form
         {
             Text = "筛选搜索:",
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 8.5F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(8.5F)),
             ForeColor = _secondaryTextColor,
-            Padding = new Padding(0, 6, 8, 0)
+            Padding = DpiHelper.Scale(new Padding(0, 6, 8, 0))
         };
         
         _historyBtn = CreateFilterButton("历史记录", "🕐", FilterMode.History);
@@ -511,8 +513,8 @@ public class AddressBarDropdown : Form
         }
         
         // 重新计算高度
-        int suggestionHeight = Math.Min(_suggestions.Count * 40, 320);
-        Height = suggestionHeight + _actionPanel.Height + 8;
+        int suggestionHeight = Math.Min(_suggestions.Count * DpiHelper.Scale(40), DpiHelper.Scale(320));
+        Height = suggestionHeight + _actionPanel.Height + DpiHelper.Scale(8);
         
         _selectedIndex = -1;
         _suggestionPanel.Invalidate();
@@ -544,13 +546,13 @@ public class AddressBarDropdown : Form
             Text = $"{icon} {text}",
             FlatStyle = FlatStyle.Flat,
             AutoSize = true,
-            Height = 28,
-            Padding = new Padding(8, 0, 8, 0),
-            Font = new Font("Microsoft YaHei UI", 8.5F),
+            Height = DpiHelper.Scale(28),
+            Padding = DpiHelper.Scale(new Padding(8, 0, 8, 0)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(8.5F)),
             ForeColor = _secondaryTextColor,
             BackColor = Color.Transparent,
             Cursor = Cursors.Hand,
-            Margin = new Padding(0, 0, 8, 0),
+            Margin = DpiHelper.Scale(new Padding(0, 0, 8, 0)),
             TabStop = false
         };
         btn.FlatAppearance.BorderSize = 1;
@@ -600,42 +602,46 @@ public class AddressBarDropdown : Form
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
         e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
         
-        int y = 8; // Top padding inside the panel
-        int itemHeight = 36; // Chrome standard height for suggestion items
+        int y = DpiHelper.Scale(8); // Top padding inside the panel
+        int itemHeight = DpiHelper.Scale(36); // Chrome standard height for suggestion items
+        int iconSize = DpiHelper.Scale(20);
+        int sidePadding = DpiHelper.Scale(10);
+        int iconLeftMargin = DpiHelper.Scale(14);
+        int textLeftMargin = DpiHelper.Scale(12);
         
         for (int i = 0; i < _suggestions.Count; i++)
         {
             var item = _suggestions[i];
             // Chrome style: rounded rectangle selection, with side padding
-            var itemRect = new Rectangle(10, y, _suggestionPanel.Width - 20, itemHeight);
+            var itemRect = new Rectangle(sidePadding, y, _suggestionPanel.Width - sidePadding * 2, itemHeight);
             
             // 背景
             if (i == _selectedIndex)
             {
                 using var brush = new SolidBrush(_selectedColor);
-                using var path = CreateRoundedRect(itemRect, 18); // 18px radius for full rounding effect
+                using var path = CreateRoundedRect(itemRect, DpiHelper.Scale(18)); // 18px radius for full rounding effect
                 e.Graphics.FillPath(brush, path);
             }
             
             // 图标
-            var iconRect = new Rectangle(itemRect.X + 14, itemRect.Y + (itemHeight - 20) / 2, 20, 20);
+            var iconRect = new Rectangle(itemRect.X + iconLeftMargin, itemRect.Y + (itemHeight - iconSize) / 2, iconSize, iconSize);
             using (var iconBrush = new SolidBrush(_iconColor))
             {
                 // Use Segoe UI Emoji or Symbol for better icon rendering
-                var iconFont = new Font("Segoe UI Emoji", 11F);
+                using var iconFont = new Font("Segoe UI Emoji", DpiHelper.Scale(11F));
                 // Center icon
-                var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+                using var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
                 e.Graphics.DrawString(item.Icon, iconFont, iconBrush, iconRect, format);
             }
             
             // 文本
-            var textRect = new Rectangle(iconRect.Right + 12, itemRect.Y, itemRect.Width - 80, itemHeight);
+            var textRect = new Rectangle(iconRect.Right + textLeftMargin, itemRect.Y, itemRect.Width - DpiHelper.Scale(80), itemHeight);
             var displayText = item.DisplayText ?? item.Text;
             
             using (var textBrush = new SolidBrush(_textColor))
             {
-                var textFont = new Font("Segoe UI", 10F); // Chrome font
-                var format = new StringFormat
+                using var textFont = new Font("Segoe UI", DpiHelper.Scale(10F)); // Chrome font
+                using var format = new StringFormat
                 {
                     LineAlignment = StringAlignment.Center,
                     Trimming = StringTrimming.EllipsisPath,
@@ -647,11 +653,12 @@ public class AddressBarDropdown : Form
             // 删除按钮（仅历史记录显示）
             if (item.Type == SuggestionType.History && i == _selectedIndex)
             {
-                var deleteRect = new Rectangle(itemRect.Right - 32, itemRect.Y + (itemHeight - 20) / 2, 20, 20);
+                int deleteSize = DpiHelper.Scale(20);
+                var deleteRect = new Rectangle(itemRect.Right - DpiHelper.Scale(32), itemRect.Y + (itemHeight - deleteSize) / 2, deleteSize, deleteSize);
                 // Draw 'X'
                 using var deleteBrush = new SolidBrush(_secondaryTextColor);
-                using var deleteFont = new Font("Segoe UI", 9F);
-                 var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+                using var deleteFont = new Font("Segoe UI", DpiHelper.Scale(9F));
+                using var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
                 e.Graphics.DrawString("✕", deleteFont, deleteBrush, deleteRect, format);
             }
             
@@ -661,7 +668,9 @@ public class AddressBarDropdown : Form
     
     private void OnSuggestionPanelMouseMove(object? sender, MouseEventArgs e)
     {
-        int index = (e.Y - 4) / 40;
+        int yOffset = DpiHelper.Scale(8);
+        int itemHeight = DpiHelper.Scale(36);
+        int index = (e.Y - yOffset) / itemHeight;
         if (index >= 0 && index < _suggestions.Count && index != _selectedIndex)
         {
             _selectedIndex = index;
@@ -676,8 +685,12 @@ public class AddressBarDropdown : Form
             var item = _suggestions[_selectedIndex];
             
             // 检查是否点击了删除按钮
-            var itemRect = new Rectangle(4, 4 + _selectedIndex * 40, _suggestionPanel.Width - 8, 40);
-            var deleteRect = new Rectangle(itemRect.Right - 32, itemRect.Y + 10, 20, 20);
+            int yOffset = DpiHelper.Scale(8);
+            int itemHeight = DpiHelper.Scale(36);
+            int sidePadding = DpiHelper.Scale(10);
+            var itemRect = new Rectangle(sidePadding, yOffset + _selectedIndex * itemHeight, _suggestionPanel.Width - sidePadding * 2, itemHeight);
+            int deleteSize = DpiHelper.Scale(20);
+            var deleteRect = new Rectangle(itemRect.Right - DpiHelper.Scale(32), itemRect.Y + (itemHeight - deleteSize) / 2, deleteSize, deleteSize);
             
             if (item.Type == SuggestionType.History && deleteRect.Contains(e.Location))
             {

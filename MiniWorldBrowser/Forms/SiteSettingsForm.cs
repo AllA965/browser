@@ -37,23 +37,23 @@ public class SiteSettingsForm : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "内容设置";
-        Size = new Size(450, 650);
-        MinimumSize = new Size(400, 500);
+        Size = DpiHelper.Scale(new Size(450, 650));
+        MinimumSize = DpiHelper.Scale(new Size(400, 500));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", 9F);
+        Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
         
         // 关闭按钮
         var closeBtn = new Button
         {
             Text = "×",
-            Size = new Size(30, 30),
-            Location = new Point(Width - 45, 5),
+            Size = DpiHelper.Scale(new Size(30, 30)),
+            Location = new Point(Width - DpiHelper.Scale(45), DpiHelper.Scale(5)),
             FlatStyle = FlatStyle.Flat,
-            Font = new Font("Segoe UI", 12F),
+            Font = new Font("Segoe UI", DpiHelper.Scale(12F)),
             ForeColor = Color.Gray,
             Cursor = Cursors.Hand
         };
@@ -63,8 +63,8 @@ public class SiteSettingsForm : Form
         // 滚动面板
         _contentPanel = new Panel
         {
-            Location = new Point(10, 10),
-            Size = new Size(Width - 40, Height - 80),
+            Location = DpiHelper.Scale(new Point(10, 10)),
+            Size = new Size(Width - DpiHelper.Scale(40), Height - DpiHelper.Scale(80)),
             AutoScroll = true,
             BackColor = Color.White
         };
@@ -75,15 +75,15 @@ public class SiteSettingsForm : Form
         var bottomPanel = new Panel
         {
             Dock = DockStyle.Bottom,
-            Height = 50,
+            Height = DpiHelper.Scale(50),
             BackColor = Color.FromArgb(245, 245, 245)
         };
         
         var okBtn = new Button
         {
             Text = "确定",
-            Size = new Size(80, 30),
-            Location = new Point(Width - 200, 10),
+            Size = DpiHelper.Scale(new Size(80, 30)),
+            Location = new Point(Width - DpiHelper.Scale(200), DpiHelper.Scale(10)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.FromArgb(0, 120, 212),
             ForeColor = Color.White,
@@ -95,8 +95,8 @@ public class SiteSettingsForm : Form
         var cancelBtn = new Button
         {
             Text = "取消",
-            Size = new Size(80, 30),
-            Location = new Point(Width - 105, 10),
+            Size = DpiHelper.Scale(new Size(80, 30)),
+            Location = new Point(Width - DpiHelper.Scale(105), DpiHelper.Scale(10)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.White,
             ForeColor = Color.Black,
@@ -261,13 +261,13 @@ public class SiteSettingsForm : Form
         var titleLabel = new Label
         {
             Text = title,
-            Location = new Point(5, y + 10),
+            Location = new Point(DpiHelper.Scale(5), y + DpiHelper.Scale(10)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
             ForeColor = Color.Black
         };
         _contentPanel.Controls.Add(titleLabel);
-        y += 35;
+        y += DpiHelper.Scale(35);
         
         // 选项
         var currentValue = _permissions.GetValueOrDefault(key, 0);
@@ -276,9 +276,9 @@ public class SiteSettingsForm : Form
             var radio = new RadioButton
             {
                 Text = text,
-                Location = new Point(15, y),
+                Location = new Point(DpiHelper.Scale(15), y),
                 AutoSize = true,
-                Font = new Font("Microsoft YaHei UI", 9F),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
                 Checked = currentValue == value,
                 Tag = (key, value)
             };
@@ -288,39 +288,39 @@ public class SiteSettingsForm : Form
                     _permissions[k] = v;
             };
             _contentPanel.Controls.Add(radio);
-            y += 24;
+            y += DpiHelper.Scale(24);
         }
         
         // 按钮
         if (buttons != null)
         {
-            y += 5;
+            y += DpiHelper.Scale(5);
             foreach (var (text, action) in buttons)
             {
                 var btn = new LinkLabel
                 {
                     Text = text,
-                    Location = new Point(15, y),
+                    Location = new Point(DpiHelper.Scale(15), y),
                     AutoSize = true,
-                    Font = new Font("Microsoft YaHei UI", 9F),
+                    Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
                     LinkColor = Color.FromArgb(0, 102, 204)
                 };
                 btn.Click += (s, e) => action();
                 _contentPanel.Controls.Add(btn);
-                y += 22;
+                y += DpiHelper.Scale(22);
             }
         }
         
         // 分隔线
-        y += 10;
+        y += DpiHelper.Scale(10);
         var separator = new Panel
         {
-            Location = new Point(5, y),
-            Size = new Size(_contentPanel.Width - 30, 1),
+            Location = new Point(DpiHelper.Scale(5), y),
+            Size = new Size(_contentPanel.Width - DpiHelper.Scale(30), 1), // 1px height usually fine, but can scale
             BackColor = Color.FromArgb(230, 230, 230)
         };
         _contentPanel.Controls.Add(separator);
-        y += 15;
+        y += DpiHelper.Scale(15);
         
         return y;
     }
@@ -376,48 +376,48 @@ public class ExceptionsDialog : Form
     private void InitializeUI()
     {
         Text = $"{_category} 例外情况";
-        Size = new Size(500, 400);
+        Size = DpiHelper.Scale(new Size(500, 400));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", 9F);
+        Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
         
         // 说明标签
         var descLabel = new Label
         {
             Text = $"您可以为特定网站设置 {_category} 权限。",
-            Location = new Point(15, 15),
+            Location = DpiHelper.Scale(new Point(15, 15)),
             AutoSize = true
         };
         
         // 添加区域
         var addPanel = new Panel
         {
-            Location = new Point(15, 45),
-            Size = new Size(Width - 45, 30),
+            Location = DpiHelper.Scale(new Point(15, 45)),
+            Size = new Size(Width - DpiHelper.Scale(45), DpiHelper.Scale(30)),
             BackColor = Color.White
         };
         
         var patternLabel = new Label
         {
             Text = "主机名模式:",
-            Location = new Point(0, 5),
+            Location = new Point(0, DpiHelper.Scale(5)),
             AutoSize = true
         };
         
         var patternBox = new TextBox
         {
-            Location = new Point(80, 2),
-            Size = new Size(200, 24),
+            Location = new Point(DpiHelper.Scale(80), DpiHelper.Scale(2)),
+            Size = DpiHelper.Scale(new Size(200, 24)),
             BorderStyle = BorderStyle.FixedSingle
         };
         
         var behaviorCombo = new ComboBox
         {
-            Location = new Point(290, 2),
-            Size = new Size(80, 24),
+            Location = new Point(DpiHelper.Scale(290), DpiHelper.Scale(2)),
+            Size = DpiHelper.Scale(new Size(80, 24)),
             DropDownStyle = ComboBoxStyle.DropDownList
         };
         behaviorCombo.Items.AddRange(new[] { "允许", "阻止", "询问" });
@@ -426,8 +426,8 @@ public class ExceptionsDialog : Form
         var addBtn = new Button
         {
             Text = "添加",
-            Location = new Point(380, 1),
-            Size = new Size(60, 26),
+            Location = new Point(DpiHelper.Scale(380), DpiHelper.Scale(1)),
+            Size = DpiHelper.Scale(new Size(60, 26)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.FromArgb(0, 120, 212),
             ForeColor = Color.White
@@ -447,21 +447,21 @@ public class ExceptionsDialog : Form
         // 列表视图
         _listView = new ListView
         {
-            Location = new Point(15, 85),
-            Size = new Size(Width - 45, Height - 180),
+            Location = DpiHelper.Scale(new Point(15, 85)),
+            Size = new Size(Width - DpiHelper.Scale(45), Height - DpiHelper.Scale(180)),
             View = View.Details,
             FullRowSelect = true,
             GridLines = true
         };
-        _listView.Columns.Add("主机名模式", 280);
-        _listView.Columns.Add("行为", 150);
+        _listView.Columns.Add("主机名模式", DpiHelper.Scale(280));
+        _listView.Columns.Add("行为", DpiHelper.Scale(150));
         
         // 删除按钮
         var removeBtn = new Button
         {
             Text = "删除",
-            Location = new Point(15, Height - 85),
-            Size = new Size(80, 28),
+            Location = new Point(DpiHelper.Scale(15), Height - DpiHelper.Scale(85)),
+            Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.Flat
         };
         removeBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
@@ -474,8 +474,8 @@ public class ExceptionsDialog : Form
         var removeAllBtn = new Button
         {
             Text = "全部删除",
-            Location = new Point(105, Height - 85),
-            Size = new Size(80, 28),
+            Location = new Point(DpiHelper.Scale(105), Height - DpiHelper.Scale(85)),
+            Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.Flat
         };
         removeAllBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
@@ -485,8 +485,8 @@ public class ExceptionsDialog : Form
         var doneBtn = new Button
         {
             Text = "完成",
-            Location = new Point(Width - 100, Height - 85),
-            Size = new Size(70, 28),
+            Location = new Point(Width - DpiHelper.Scale(100), Height - DpiHelper.Scale(85)),
+            Size = DpiHelper.Scale(new Size(70, 28)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.FromArgb(0, 120, 212),
             ForeColor = Color.White,

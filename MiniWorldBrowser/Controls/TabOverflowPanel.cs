@@ -19,9 +19,9 @@ public class TabOverflowPanel : Control
     private readonly Label _headerLabel;
     private bool _isDarkTheme;
     private const int MaxVisibleItems = 15;
-    private const int ItemHeight = 36;
-    private const int PanelWidth = 320;
-    private const int PanelMaxHeight = 500;
+    private static readonly int ItemHeight = DpiHelper.Scale(36);
+    private static readonly int PanelWidth = DpiHelper.Scale(320);
+    private static readonly int PanelMaxHeight = DpiHelper.Scale(500);
 
     public event Action<object>? TabClicked;
     public event Action<object>? CloseClicked;
@@ -48,10 +48,10 @@ public class TabOverflowPanel : Control
         {
             Text = "打开的标签页",
             Dock = DockStyle.Top,
-            Height = 32,
-            Font = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold),
+            Height = DpiHelper.Scale(32),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F), FontStyle.Bold),
             ForeColor = _isDarkTheme ? Color.FromArgb(200, 200, 200) : Color.FromArgb(100, 100, 100),
-            Padding = new Padding(12, 8, 0, 0),
+            Padding = DpiHelper.Scale(new Padding(12, 8, 0, 0)),
             BackColor = _isDarkTheme ? Color.FromArgb(53, 54, 58) : Color.FromArgb(245, 245, 245)
         };
         
@@ -148,7 +148,7 @@ public class TabOverflowPanel : Control
         
         using var path = new System.Drawing.Drawing2D.GraphicsPath();
         var rect = new Rectangle(0, 0, Width - 1, Height - 1);
-        int radius = 8;
+        int radius = DpiHelper.Scale(8);
         
         path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
         path.AddArc(rect.X + rect.Width - radius, rect.Y, radius, radius, 270, 90);
@@ -159,7 +159,7 @@ public class TabOverflowPanel : Control
         using var backBrush = new SolidBrush(_isDarkTheme ? Color.FromArgb(43, 44, 48) : Color.White);
         g.FillPath(backBrush, path);
         
-        using var pen = new Pen(_isDarkTheme ? Color.FromArgb(80, 80, 80) : Color.FromArgb(220, 220, 220), 1);
+        using var pen = new Pen(_isDarkTheme ? Color.FromArgb(80, 80, 80) : Color.FromArgb(220, 220, 220), DpiHelper.Scale(1));
         g.DrawPath(pen, path);
     }
 
@@ -207,7 +207,7 @@ internal class TabOverflowItem : Control
         _isDarkTheme = darkTheme;
         TabButton = tabButton;
         
-        Height = 36;
+        Height = DpiHelper.Scale(36);
         Cursor = Cursors.Hand;
         
         SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
@@ -216,35 +216,35 @@ internal class TabOverflowItem : Control
         _activeIndicator = new Panel
         {
             Dock = DockStyle.Left,
-            Width = 3,
+            Width = DpiHelper.Scale(3),
             BackColor = _isDarkTheme ? Color.FromArgb(0, 120, 215) : Color.FromArgb(0, 120, 215),
             Visible = false
         };
         
         _favicon = new PictureBox
         {
-            Location = new Point(8, 8),
-            Size = new Size(20, 20),
+            Location = DpiHelper.Scale(new Point(8, 8)),
+            Size = DpiHelper.Scale(new Size(20, 20)),
             SizeMode = PictureBoxSizeMode.StretchImage
         };
         
         _titleLabel = new Label
         {
-            Location = new Point(36, 8),
+            Location = DpiHelper.Scale(new Point(36, 8)),
             AutoSize = false,
-            Size = new Size(200, 20),
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Size = DpiHelper.Scale(new Size(200, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
             ForeColor = _isDarkTheme ? Color.FromArgb(220, 220, 220) : Color.FromArgb(60, 60, 60)
         };
         
         _closeButton = new Button
         {
-            Location = new Point(280, 6),
-            Size = new Size(24, 24),
+            Location = new Point(Width - DpiHelper.Scale(32), DpiHelper.Scale(6)),
+            Size = DpiHelper.Scale(new Size(24, 24)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.Transparent,
             Text = "×",
-            Font = new Font("Microsoft YaHei UI", 10F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F)),
             ForeColor = _isDarkTheme ? Color.FromArgb(180, 180, 180) : Color.FromArgb(140, 140, 140),
             Cursor = Cursors.Hand
         };

@@ -58,9 +58,9 @@ public class BookmarkManagerForm : Form
     private void InitializeComponent()
     {
         Text = "收藏管理器";
-        Size = new Size(900, 550);
+        Size = DpiHelper.Scale(new Size(900, 550));
         StartPosition = FormStartPosition.CenterParent;
-        MinimumSize = new Size(700, 400);
+        MinimumSize = DpiHelper.Scale(new Size(700, 400));
         BackColor = Color.White;
         
         // 设置窗口图标
@@ -72,19 +72,19 @@ public class BookmarkManagerForm : Form
         var lblName = new Label
         {
             Text = "名字:",
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(15, 18),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Location = DpiHelper.Scale(new Point(15, 18)),
             AutoSize = true
         };
         
         _txtName = new TextBox
         {
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(55, 15),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Location = DpiHelper.Scale(new Point(55, 15)),
             Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _txtName.Width = ClientSize.Width - 70;
+        _txtName.Width = ClientSize.Width - DpiHelper.Scale(70);
         _txtName.Leave += TxtName_Leave;
         _txtName.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) { SaveNameChange(); e.Handled = true; } };
         
@@ -92,38 +92,38 @@ public class BookmarkManagerForm : Form
         var lblUrl = new Label
         {
             Text = "网址:",
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(15, 48),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Location = DpiHelper.Scale(new Point(15, 48)),
             AutoSize = true
         };
         
         _txtUrl = new TextBox
         {
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(55, 45),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Location = DpiHelper.Scale(new Point(55, 45)),
             Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _txtUrl.Width = ClientSize.Width - 70;
+        _txtUrl.Width = ClientSize.Width - DpiHelper.Scale(70);
         _txtUrl.Leave += TxtUrl_Leave;
         _txtUrl.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) { SaveUrlChange(); e.Handled = true; } };
         
         // 分割容器 - 调整比例约 1:2
         _splitContainer = new SplitContainer
         {
-            Location = new Point(15, 80),
+            Location = DpiHelper.Scale(new Point(15, 80)),
             Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
             BorderStyle = BorderStyle.FixedSingle,
-            SplitterWidth = 4
+            SplitterWidth = DpiHelper.Scale(4)
         };
-        _splitContainer.Size = new Size(ClientSize.Width - 30, ClientSize.Height - 135);
+        _splitContainer.Size = new Size(ClientSize.Width - DpiHelper.Scale(30), ClientSize.Height - DpiHelper.Scale(135));
         _splitContainer.SplitterDistance = (int)(_splitContainer.Width * 0.28); // 左侧约28%
         
         // 左侧文件夹树
         _treeView = new TreeView
         {
             Dock = DockStyle.Fill,
-            Font = new Font("Microsoft YaHei UI", 9),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
             BorderStyle = BorderStyle.None,
             ShowLines = true,
             ShowPlusMinus = true,
@@ -138,15 +138,15 @@ public class BookmarkManagerForm : Form
         _listView = new ListView
         {
             Dock = DockStyle.Fill,
-            Font = new Font("Microsoft YaHei UI", 9),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
             BorderStyle = BorderStyle.None,
             View = View.Details,
             FullRowSelect = true,
             GridLines = false,
             SmallImageList = _listImageList
         };
-        _listView.Columns.Add("名称", 300);
-        _listView.Columns.Add("网址", 350);
+        _listView.Columns.Add("名称", DpiHelper.Scale(300));
+        _listView.Columns.Add("网址", DpiHelper.Scale(350));
         _listView.SelectedIndexChanged += ListView_SelectedIndexChanged;
         _listView.DoubleClick += ListView_DoubleClick;
         _listView.KeyDown += ListView_KeyDown;
@@ -165,9 +165,9 @@ public class BookmarkManagerForm : Form
         var btnNewFolder = new Button
         {
             Text = "新建文件夹",
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(15, ClientSize.Height - 45),
-            Size = new Size(100, 30),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Location = new Point(DpiHelper.Scale(15), ClientSize.Height - DpiHelper.Scale(45)),
+            Size = DpiHelper.Scale(new Size(100, 30)),
             Anchor = AnchorStyles.Bottom | AnchorStyles.Left,
             FlatStyle = FlatStyle.System
         };
@@ -176,9 +176,9 @@ public class BookmarkManagerForm : Form
         var btnExport = new Button
         {
             Text = "导出收藏到HTML文件",
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(125, ClientSize.Height - 45),
-            Size = new Size(140, 30),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Location = new Point(DpiHelper.Scale(125), ClientSize.Height - DpiHelper.Scale(45)),
+            Size = DpiHelper.Scale(new Size(140, 30)),
             Anchor = AnchorStyles.Bottom | AnchorStyles.Left,
             FlatStyle = FlatStyle.System
         };
@@ -187,9 +187,9 @@ public class BookmarkManagerForm : Form
         var btnClose = new Button
         {
             Text = "关闭",
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(ClientSize.Width - 90, ClientSize.Height - 45),
-            Size = new Size(75, 30),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Location = new Point(ClientSize.Width - DpiHelper.Scale(90), ClientSize.Height - DpiHelper.Scale(45)),
+            Size = DpiHelper.Scale(new Size(75, 30)),
             Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
             FlatStyle = FlatStyle.System,
             DialogResult = DialogResult.Cancel

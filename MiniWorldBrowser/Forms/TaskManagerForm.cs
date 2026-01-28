@@ -20,11 +20,11 @@ public class TaskManagerForm : Form
         AppIconHelper.SetIcon(this);
         
         Text = "任务管理器 - 鲲穹AI浏览器";
-        Size = new Size(600, 400);
-        MinimumSize = new Size(500, 300);
+        Size = DpiHelper.Scale(new Size(600, 400));
+        MinimumSize = DpiHelper.Scale(new Size(500, 300));
         StartPosition = FormStartPosition.CenterParent;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", 9F);
+        Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
         
         // 创建 ListView
         _listView = new ListView
@@ -36,24 +36,24 @@ public class TaskManagerForm : Form
             BorderStyle = BorderStyle.None
         };
         
-        _listView.Columns.Add("任务", 250);
-        _listView.Columns.Add("内存", 80, HorizontalAlignment.Right);
-        _listView.Columns.Add("CPU", 60, HorizontalAlignment.Right);
-        _listView.Columns.Add("网络", 60, HorizontalAlignment.Right);
-        _listView.Columns.Add("进程 ID", 80, HorizontalAlignment.Right);
+        _listView.Columns.Add("任务", DpiHelper.Scale(250));
+        _listView.Columns.Add("内存", DpiHelper.Scale(80), HorizontalAlignment.Right);
+        _listView.Columns.Add("CPU", DpiHelper.Scale(60), HorizontalAlignment.Right);
+        _listView.Columns.Add("网络", DpiHelper.Scale(60), HorizontalAlignment.Right);
+        _listView.Columns.Add("进程 ID", DpiHelper.Scale(80), HorizontalAlignment.Right);
         
         // 底部面板
         var bottomPanel = new Panel
         {
             Dock = DockStyle.Bottom,
-            Height = 50,
-            Padding = new Padding(10)
+            Height = DpiHelper.Scale(50),
+            Padding = DpiHelper.Scale(new Padding(10))
         };
         
         _endProcessBtn = new Button
         {
             Text = "结束进程",
-            Size = new Size(90, 30),
+            Size = DpiHelper.Scale(new Size(90, 30)),
             Dock = DockStyle.Right,
             FlatStyle = FlatStyle.Flat,
             Enabled = false

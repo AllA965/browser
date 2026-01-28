@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls;
 
@@ -51,7 +52,7 @@ public class ModernMenuRenderer : ToolStripProfessionalRenderer
         // 绘制圆角背景
         var rect = new Rectangle(0, 0, e.ToolStrip.Width, e.ToolStrip.Height);
         using var brush = new SolidBrush(_backgroundColor);
-        using var path = CreateRoundedRect(rect, 4);
+        using var path = CreateRoundedRect(rect, DpiHelper.Scale(4));
         g.FillPath(brush, path);
     }
 
@@ -61,16 +62,16 @@ public class ModernMenuRenderer : ToolStripProfessionalRenderer
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
         var rect = new Rectangle(0, 0, e.ToolStrip.Width - 1, e.ToolStrip.Height - 1);
-        using var pen = new Pen(_borderColor);
-        using var path = CreateRoundedRect(rect, 4);
+        using var pen = new Pen(_borderColor, DpiHelper.Scale(1f));
+        using var path = CreateRoundedRect(rect, DpiHelper.Scale(4));
         g.DrawPath(pen, path);
 
         // 绘制阴影效果（隐身模式下阴影更深或不绘制）
         if (!_isDarkMode)
         {
-            using var shadowPen = new Pen(Color.FromArgb(20, 0, 0, 0));
-            g.DrawLine(shadowPen, 4, e.ToolStrip.Height, e.ToolStrip.Width - 1, e.ToolStrip.Height);
-            g.DrawLine(shadowPen, e.ToolStrip.Width, 4, e.ToolStrip.Width, e.ToolStrip.Height - 1);
+            using var shadowPen = new Pen(Color.FromArgb(20, 0, 0, 0), DpiHelper.Scale(1f));
+            g.DrawLine(shadowPen, DpiHelper.Scale(4), e.ToolStrip.Height, e.ToolStrip.Width - 1, e.ToolStrip.Height);
+            g.DrawLine(shadowPen, e.ToolStrip.Width, DpiHelper.Scale(4), e.ToolStrip.Width, e.ToolStrip.Height - 1);
         }
     }
 
@@ -81,12 +82,12 @@ public class ModernMenuRenderer : ToolStripProfessionalRenderer
         var g = e.Graphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
-        var rect = new Rectangle(4, 1, e.Item.Width - 8, e.Item.Height - 2);
+        var rect = new Rectangle(DpiHelper.Scale(4), DpiHelper.Scale(1), e.Item.Width - DpiHelper.Scale(8), e.Item.Height - DpiHelper.Scale(2));
 
         if (e.Item.Selected && e.Item.Enabled)
         {
             using var brush = new SolidBrush(_hoverColor);
-            using var path = CreateRoundedRect(rect, 4);
+            using var path = CreateRoundedRect(rect, DpiHelper.Scale(4));
             g.FillPath(brush, path);
         }
     }
@@ -104,7 +105,7 @@ public class ModernMenuRenderer : ToolStripProfessionalRenderer
             e.TextColor = _normalTextColor;
 
         var textRect = e.TextRectangle;
-        textRect.X = 44;
+        textRect.X = DpiHelper.Scale(44);
         e.TextRectangle = textRect;
 
         base.OnRenderItemText(e);
@@ -121,15 +122,15 @@ public class ModernMenuRenderer : ToolStripProfessionalRenderer
         var centerY = e.ArrowRectangle.Y + e.ArrowRectangle.Height / 2;
         var centerX = e.ArrowRectangle.X + e.ArrowRectangle.Width / 2;
 
-        using var pen = new Pen(arrowColor, 1.5f)
+        using var pen = new Pen(arrowColor, DpiHelper.Scale(1.5f))
         {
             StartCap = LineCap.Round,
             EndCap = LineCap.Round,
             LineJoin = LineJoin.Round
         };
 
-        g.DrawLine(pen, centerX - 2, centerY - 4, centerX + 2, centerY);
-        g.DrawLine(pen, centerX + 2, centerY, centerX - 2, centerY + 4);
+        g.DrawLine(pen, centerX - DpiHelper.Scale(2), centerY - DpiHelper.Scale(4), centerX + DpiHelper.Scale(2), centerY);
+        g.DrawLine(pen, centerX + DpiHelper.Scale(2), centerY, centerX - DpiHelper.Scale(2), centerY + DpiHelper.Scale(4));
     }
 
     protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
@@ -139,26 +140,26 @@ public class ModernMenuRenderer : ToolStripProfessionalRenderer
         var g = e.Graphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
-        var centerX = 22;
+        var centerX = DpiHelper.Scale(22);
         var centerY = e.Item.Height / 2;
 
-        using var pen = new Pen(_checkColor, 2f)
+        using var pen = new Pen(_checkColor, DpiHelper.Scale(2f))
         {
             StartCap = LineCap.Round,
             EndCap = LineCap.Round,
             LineJoin = LineJoin.Round
         };
 
-        g.DrawLine(pen, centerX - 5, centerY, centerX - 2, centerY + 3);
-        g.DrawLine(pen, centerX - 2, centerY + 3, centerX + 4, centerY - 3);
+        g.DrawLine(pen, centerX - DpiHelper.Scale(5), centerY, centerX - DpiHelper.Scale(2), centerY + DpiHelper.Scale(3));
+        g.DrawLine(pen, centerX - DpiHelper.Scale(2), centerY + DpiHelper.Scale(3), centerX + DpiHelper.Scale(4), centerY - DpiHelper.Scale(3));
     }
 
     protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
     {
         var g = e.Graphics;
         var y = e.Item.Height / 2;
-        using var pen = new Pen(_separatorColor);
-        g.DrawLine(pen, 12, y, e.Item.Width - 12, y);
+        using var pen = new Pen(_separatorColor, DpiHelper.Scale(1f));
+        g.DrawLine(pen, DpiHelper.Scale(12), y, e.Item.Width - DpiHelper.Scale(12), y);
     }
 
     protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
@@ -217,65 +218,65 @@ public static class MenuIconDrawer
     public static void DrawNewTab(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 绘制标签页轮廓
-        g.DrawRectangle(pen, cx - 6, cy - 4, 12, 8);
-        g.DrawLine(pen, cx - 6, cy - 1, cx + 6, cy - 1);
+        g.DrawRectangle(pen, cx - DpiHelper.Scale(6), cy - DpiHelper.Scale(4), DpiHelper.Scale(12), DpiHelper.Scale(8));
+        g.DrawLine(pen, cx - DpiHelper.Scale(6), cy - DpiHelper.Scale(1), cx + DpiHelper.Scale(6), cy - DpiHelper.Scale(1));
     }
 
     public static void DrawNewWindow(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 绘制窗口轮廓
-        g.DrawRectangle(pen, cx - 6, cy - 5, 12, 10);
-        g.DrawLine(pen, cx - 6, cy - 2, cx + 6, cy - 2);
+        g.DrawRectangle(pen, cx - DpiHelper.Scale(6), cy - DpiHelper.Scale(5), DpiHelper.Scale(12), DpiHelper.Scale(10));
+        g.DrawLine(pen, cx - DpiHelper.Scale(6), cy - DpiHelper.Scale(2), cx + DpiHelper.Scale(6), cy - DpiHelper.Scale(2));
     }
 
     public static void DrawIncognito(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 绘制眼镜形状
-        g.DrawEllipse(pen, cx - 7, cy - 3, 6, 6);
-        g.DrawEllipse(pen, cx + 1, cy - 3, 6, 6);
-        g.DrawLine(pen, cx - 1, cy, cx + 1, cy);
+        g.DrawEllipse(pen, cx - DpiHelper.Scale(7), cy - DpiHelper.Scale(3), DpiHelper.Scale(6), DpiHelper.Scale(6));
+        g.DrawEllipse(pen, cx + DpiHelper.Scale(1), cy - DpiHelper.Scale(3), DpiHelper.Scale(6), DpiHelper.Scale(6));
+        g.DrawLine(pen, cx - DpiHelper.Scale(1), cy, cx + DpiHelper.Scale(1), cy);
         // 帽子
-        g.DrawArc(pen, cx - 8, cy - 8, 16, 10, 180, 180);
+        g.DrawArc(pen, cx - DpiHelper.Scale(8), cy - DpiHelper.Scale(8), DpiHelper.Scale(16), DpiHelper.Scale(10), 180, 180);
     }
 
     public static void DrawZoom(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 放大镜
-        g.DrawEllipse(pen, cx - 5, cy - 5, 8, 8);
-        g.DrawLine(pen, cx + 2, cy + 2, cx + 6, cy + 6);
+        g.DrawEllipse(pen, cx - DpiHelper.Scale(5), cy - DpiHelper.Scale(5), DpiHelper.Scale(8), DpiHelper.Scale(8));
+        g.DrawLine(pen, cx + DpiHelper.Scale(2), cy + DpiHelper.Scale(2), cx + DpiHelper.Scale(6), cy + DpiHelper.Scale(6));
         // + 号
-        g.DrawLine(pen, cx - 3, cy - 1, cx + 1, cy - 1);
-        g.DrawLine(pen, cx - 1, cy - 3, cx - 1, cy + 1);
+        g.DrawLine(pen, cx - DpiHelper.Scale(3), cy - DpiHelper.Scale(1), cx + DpiHelper.Scale(1), cy - DpiHelper.Scale(1));
+        g.DrawLine(pen, cx - DpiHelper.Scale(1), cy - DpiHelper.Scale(3), cx - DpiHelper.Scale(1), cy + DpiHelper.Scale(1));
     }
 
     public static void DrawBookmark(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
@@ -285,7 +286,7 @@ public static class MenuIconDrawer
         for (int i = 0; i < 5; i++)
         {
             double angle = -Math.PI / 2 + i * 2 * Math.PI / 5;
-            points[i] = new PointF(cx + 6 * (float)Math.Cos(angle), cy + 6 * (float)Math.Sin(angle));
+            points[i] = new PointF(cx + DpiHelper.Scale(6) * (float)Math.Cos(angle), cy + DpiHelper.Scale(6) * (float)Math.Sin(angle));
         }
         // 连接星形的点
         g.DrawLine(pen, points[0], points[2]);
@@ -298,104 +299,104 @@ public static class MenuIconDrawer
     public static void DrawHistory(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 时钟
-        g.DrawEllipse(pen, cx - 6, cy - 6, 12, 12);
-        g.DrawLine(pen, cx, cy - 4, cx, cy);
-        g.DrawLine(pen, cx, cy, cx + 3, cy + 2);
+        g.DrawEllipse(pen, cx - DpiHelper.Scale(6), cy - DpiHelper.Scale(6), DpiHelper.Scale(12), DpiHelper.Scale(12));
+        g.DrawLine(pen, cx, cy - DpiHelper.Scale(4), cx, cy);
+        g.DrawLine(pen, cx, cy, cx + DpiHelper.Scale(3), cy + DpiHelper.Scale(2));
     }
 
     public static void DrawDownload(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 向下箭头
-        g.DrawLine(pen, cx, cy - 5, cx, cy + 2);
-        g.DrawLine(pen, cx - 4, cy - 2, cx, cy + 2);
-        g.DrawLine(pen, cx + 4, cy - 2, cx, cy + 2);
+        g.DrawLine(pen, cx, cy - DpiHelper.Scale(5), cx, cy + DpiHelper.Scale(2));
+        g.DrawLine(pen, cx - DpiHelper.Scale(4), cy - DpiHelper.Scale(2), cx, cy + DpiHelper.Scale(2));
+        g.DrawLine(pen, cx + DpiHelper.Scale(4), cy - DpiHelper.Scale(2), cx, cy + DpiHelper.Scale(2));
         // 底部横线
-        g.DrawLine(pen, cx - 6, cy + 5, cx + 6, cy + 5);
+        g.DrawLine(pen, cx - DpiHelper.Scale(6), cy + DpiHelper.Scale(5), cx + DpiHelper.Scale(6), cy + DpiHelper.Scale(5));
     }
 
     public static void DrawSave(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 软盘图标
-        g.DrawRectangle(pen, cx - 6, cy - 6, 12, 12);
-        g.DrawRectangle(pen, cx - 3, cy - 6, 6, 4);
-        g.DrawRectangle(pen, cx - 4, cy + 1, 8, 5);
+        g.DrawRectangle(pen, cx - DpiHelper.Scale(6), cy - DpiHelper.Scale(6), DpiHelper.Scale(12), DpiHelper.Scale(12));
+        g.DrawRectangle(pen, cx - DpiHelper.Scale(3), cy - DpiHelper.Scale(6), DpiHelper.Scale(6), DpiHelper.Scale(4));
+        g.DrawRectangle(pen, cx - DpiHelper.Scale(4), cy + DpiHelper.Scale(1), DpiHelper.Scale(8), DpiHelper.Scale(5));
     }
 
     public static void DrawFind(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 放大镜
-        g.DrawEllipse(pen, cx - 5, cy - 5, 8, 8);
-        g.DrawLine(pen, cx + 2, cy + 2, cx + 6, cy + 6);
+        g.DrawEllipse(pen, cx - DpiHelper.Scale(5), cy - DpiHelper.Scale(5), DpiHelper.Scale(8), DpiHelper.Scale(8));
+        g.DrawLine(pen, cx + DpiHelper.Scale(2), cy + DpiHelper.Scale(2), cx + DpiHelper.Scale(6), cy + DpiHelper.Scale(6));
     }
 
     public static void DrawPrint(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 打印机
-        g.DrawRectangle(pen, cx - 6, cy - 2, 12, 6);
-        g.DrawRectangle(pen, cx - 4, cy - 6, 8, 4);
-        g.DrawRectangle(pen, cx - 4, cy + 2, 8, 4);
+        g.DrawRectangle(pen, cx - DpiHelper.Scale(6), cy - DpiHelper.Scale(2), DpiHelper.Scale(12), DpiHelper.Scale(6));
+        g.DrawRectangle(pen, cx - DpiHelper.Scale(4), cy - DpiHelper.Scale(6), DpiHelper.Scale(8), DpiHelper.Scale(4));
+        g.DrawRectangle(pen, cx - DpiHelper.Scale(4), cy + DpiHelper.Scale(2), DpiHelper.Scale(8), DpiHelper.Scale(4));
     }
 
     public static void DrawTools(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 扳手
-        g.DrawLine(pen, cx - 5, cy + 5, cx + 2, cy - 2);
-        g.DrawEllipse(pen, cx, cy - 6, 6, 6);
+        g.DrawLine(pen, cx - DpiHelper.Scale(5), cy + DpiHelper.Scale(5), cx + DpiHelper.Scale(2), cy - DpiHelper.Scale(2));
+        g.DrawEllipse(pen, cx, cy - DpiHelper.Scale(6), DpiHelper.Scale(6), DpiHelper.Scale(6));
     }
 
     public static void DrawSettings(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 齿轮
-        g.DrawEllipse(pen, cx - 3, cy - 3, 6, 6);
+        g.DrawEllipse(pen, cx - DpiHelper.Scale(3), cy - DpiHelper.Scale(3), DpiHelper.Scale(6), DpiHelper.Scale(6));
         for (int i = 0; i < 8; i++)
         {
             double angle = i * Math.PI / 4;
-            float x1 = cx + 4 * (float)Math.Cos(angle);
-            float y1 = cy + 4 * (float)Math.Sin(angle);
-            float x2 = cx + 6 * (float)Math.Cos(angle);
-            float y2 = cy + 6 * (float)Math.Sin(angle);
+            float x1 = cx + DpiHelper.Scale(4) * (float)Math.Cos(angle);
+            float y1 = cy + DpiHelper.Scale(4) * (float)Math.Sin(angle);
+            float x2 = cx + DpiHelper.Scale(6) * (float)Math.Cos(angle);
+            float y2 = cy + DpiHelper.Scale(6) * (float)Math.Sin(angle);
             g.DrawLine(pen, x1, y1, x2, y2);
         }
     }
@@ -403,23 +404,23 @@ public static class MenuIconDrawer
     public static void DrawAbout(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 问号圆圈
-        g.DrawEllipse(pen, cx - 6, cy - 6, 12, 12);
+        g.DrawEllipse(pen, cx - DpiHelper.Scale(6), cy - DpiHelper.Scale(6), DpiHelper.Scale(12), DpiHelper.Scale(12));
         // 问号
-        g.DrawArc(pen, cx - 3, cy - 4, 6, 5, 180, 180);
-        g.DrawLine(pen, cx, cy + 1, cx, cy + 2);
-        g.FillEllipse(new SolidBrush(IconColor), cx - 1, cy + 3, 2, 2);
+        g.DrawArc(pen, cx - DpiHelper.Scale(3), cy - DpiHelper.Scale(4), DpiHelper.Scale(6), DpiHelper.Scale(5), 180, 180);
+        g.DrawLine(pen, cx, cy + DpiHelper.Scale(1), cx, cy + DpiHelper.Scale(2));
+        g.FillEllipse(new SolidBrush(IconColor), cx - DpiHelper.Scale(1), cy + DpiHelper.Scale(3), DpiHelper.Scale(2), DpiHelper.Scale(2));
     }
 
     public static void DrawAdBlock(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
@@ -427,12 +428,12 @@ public static class MenuIconDrawer
         // 盾牌
         var points = new PointF[]
         {
-            new PointF(cx, cy - 6),
-            new PointF(cx + 6, cy - 3),
-            new PointF(cx + 6, cy + 2),
-            new PointF(cx, cy + 6),
-            new PointF(cx - 6, cy + 2),
-            new PointF(cx - 6, cy - 3)
+            new PointF(cx, cy - DpiHelper.Scale(6)),
+            new PointF(cx + DpiHelper.Scale(6), cy - DpiHelper.Scale(3)),
+            new PointF(cx + DpiHelper.Scale(6), cy + DpiHelper.Scale(2)),
+            new PointF(cx, cy + DpiHelper.Scale(6)),
+            new PointF(cx - DpiHelper.Scale(6), cy + DpiHelper.Scale(2)),
+            new PointF(cx - DpiHelper.Scale(6), cy - DpiHelper.Scale(3))
         };
         g.DrawPolygon(pen, points);
     }
@@ -441,7 +442,7 @@ public static class MenuIconDrawer
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
         var enabledColor = Color.FromArgb(0, 120, 212); // 蓝色表示启用
-        using var pen = new Pen(enabledColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(enabledColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
         using var brush = new SolidBrush(Color.FromArgb(40, 0, 120, 212)); // 半透明填充
 
         var cx = rect.X + rect.Width / 2;
@@ -450,37 +451,37 @@ public static class MenuIconDrawer
         // 盾牌
         var points = new PointF[]
         {
-            new PointF(cx, cy - 6),
-            new PointF(cx + 6, cy - 3),
-            new PointF(cx + 6, cy + 2),
-            new PointF(cx, cy + 6),
-            new PointF(cx - 6, cy + 2),
-            new PointF(cx - 6, cy - 3)
+            new PointF(cx, cy - DpiHelper.Scale(6)),
+            new PointF(cx + DpiHelper.Scale(6), cy - DpiHelper.Scale(3)),
+            new PointF(cx + DpiHelper.Scale(6), cy + DpiHelper.Scale(2)),
+            new PointF(cx, cy + DpiHelper.Scale(6)),
+            new PointF(cx - DpiHelper.Scale(6), cy + DpiHelper.Scale(2)),
+            new PointF(cx - DpiHelper.Scale(6), cy - DpiHelper.Scale(3))
         };
         g.FillPolygon(brush, points);
         g.DrawPolygon(pen, points);
 
         // 勾选标记
-        using var checkPen = new Pen(enabledColor, 2f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
-        g.DrawLine(checkPen, cx - 3, cy, cx - 1, cy + 2);
-        g.DrawLine(checkPen, cx - 1, cy + 2, cx + 3, cy - 2);
+        using var checkPen = new Pen(enabledColor, DpiHelper.Scale(2f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        g.DrawLine(checkPen, cx - DpiHelper.Scale(3), cy, cx - DpiHelper.Scale(1), cy + DpiHelper.Scale(2));
+        g.DrawLine(checkPen, cx - DpiHelper.Scale(1), cy + DpiHelper.Scale(2), cx + DpiHelper.Scale(3), cy - DpiHelper.Scale(2));
     }
 
     public static void DrawClear(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        using var pen = new Pen(IconColor, 1.5f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
 
         var cx = rect.X + rect.Width / 2;
         var cy = rect.Y + rect.Height / 2;
 
         // 垃圾桶
-        g.DrawLine(pen, cx - 5, cy - 4, cx + 5, cy - 4);
-        g.DrawLine(pen, cx - 4, cy - 4, cx - 4, cy + 5);
-        g.DrawLine(pen, cx + 4, cy - 4, cx + 4, cy + 5);
-        g.DrawLine(pen, cx - 4, cy + 5, cx + 4, cy + 5);
-        g.DrawLine(pen, cx - 2, cy - 6, cx + 2, cy - 6);
-        g.DrawLine(pen, cx - 2, cy - 6, cx - 2, cy - 4);
-        g.DrawLine(pen, cx + 2, cy - 6, cx + 2, cy - 4);
+        g.DrawLine(pen, cx - DpiHelper.Scale(5), cy - DpiHelper.Scale(4), cx + DpiHelper.Scale(5), cy - DpiHelper.Scale(4));
+        g.DrawLine(pen, cx - DpiHelper.Scale(4), cy - DpiHelper.Scale(4), cx - DpiHelper.Scale(4), cy + DpiHelper.Scale(5));
+        g.DrawLine(pen, cx + DpiHelper.Scale(4), cy - DpiHelper.Scale(4), cx + DpiHelper.Scale(4), cy + DpiHelper.Scale(5));
+        g.DrawLine(pen, cx - DpiHelper.Scale(4), cy + DpiHelper.Scale(5), cx + DpiHelper.Scale(4), cy + DpiHelper.Scale(5));
+        g.DrawLine(pen, cx - DpiHelper.Scale(2), cy - DpiHelper.Scale(6), cx + DpiHelper.Scale(2), cy - DpiHelper.Scale(6));
+        g.DrawLine(pen, cx - DpiHelper.Scale(2), cy - DpiHelper.Scale(6), cx - DpiHelper.Scale(2), cy - DpiHelper.Scale(4));
+        g.DrawLine(pen, cx + DpiHelper.Scale(2), cy - DpiHelper.Scale(6), cx + DpiHelper.Scale(2), cy - DpiHelper.Scale(4));
     }
 }

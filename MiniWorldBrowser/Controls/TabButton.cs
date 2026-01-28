@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using MiniWorldBrowser.Helpers;
 using MiniWorldBrowser.Helpers.Extensions;
 
 namespace MiniWorldBrowser.Controls;
@@ -12,9 +13,9 @@ public class TabButton : Panel
     public bool IsActive { get; private set; }
     public bool IsPinned => _isPinned;
 
-    public int PreferredWidth { get; set; } = 200;
+    public int PreferredWidth { get; set; } = DpiHelper.Scale(200);
 
-    private const int CompactThresholdWidth = 70;
+    private static readonly int CompactThresholdWidth = DpiHelper.Scale(70);
 
     private bool IsCompact => _isPinned || Width <= CompactThresholdWidth;
     
@@ -67,9 +68,9 @@ public class TabButton : Panel
     {
         _isDarkTheme = darkTheme;
 
-        Height = 32;
+        Height = DpiHelper.Scale(32);
         Width = PreferredWidth;
-        Margin = new Padding(1, 0, 0, 0);
+        Margin = new Padding(DpiHelper.Scale(1), 0, 0, 0);
         Cursor = Cursors.Hand;
         BackColor = Color.Transparent;
         BorderStyle = BorderStyle.None;
@@ -83,16 +84,16 @@ public class TabButton : Panel
 
         _favicon = new PictureBox
         {
-            Size = new Size(16, 16),
-            Location = new Point(10, 8),
+            Size = DpiHelper.Scale(new Size(16, 16)),
+            Location = DpiHelper.Scale(new Point(10, 8)),
             SizeMode = PictureBoxSizeMode.Zoom,
             BackColor = Color.Transparent
         };
 
         _loadingIndicator = new PictureBox
         {
-            Size = new Size(16, 16),
-            Location = new Point(10, 8),
+            Size = DpiHelper.Scale(new Size(16, 16)),
+            Location = DpiHelper.Scale(new Point(10, 8)),
             BackColor = Color.Transparent,
             Visible = false
         };
@@ -100,9 +101,9 @@ public class TabButton : Panel
         _titleLabel = new Label
         {
             AutoSize = false,
-            Location = new Point(30, 8),
-            Size = new Size(120, 16),
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = DpiHelper.Scale(new Point(30, 8)),
+            Size = DpiHelper.Scale(new Size(120, 16)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
             Text = "新标签页",
             TextAlign = ContentAlignment.MiddleLeft,
             ForeColor = TextColor,
@@ -112,8 +113,8 @@ public class TabButton : Panel
 
         _closeButton = new TabCloseButton(_isDarkTheme)
         {
-            Size = new Size(24, 24),
-            Location = new Point(Width - 28, 4),
+            Size = DpiHelper.Scale(new Size(24, 24)),
+            Location = new Point(Width - DpiHelper.Scale(28), DpiHelper.Scale(4)),
             Visible = false
         };
         _closeButton.Click += (s, e) => CloseClicked?.Invoke(this);
@@ -171,7 +172,7 @@ public class TabButton : Panel
 
         // 绘制圆角矩形背景（只有顶部圆角）
         var rect = new Rectangle(0, 0, Width - 1, Height);
-        using var path = CreateTopRoundedRect(rect, 8);
+        using var path = CreateTopRoundedRect(rect, DpiHelper.Scale(8));
         using var brush = new SolidBrush(bgColor);
         g.FillPath(brush, path);
 
@@ -179,7 +180,8 @@ public class TabButton : Panel
         if (IsActive)
         {
             using var lineBrush = new SolidBrush(ActiveBg);
-            g.FillRectangle(lineBrush, 0, Height - 2, Width, 2);
+            int lineHeight = DpiHelper.Scale(2);
+            g.FillRectangle(lineBrush, 0, Height - lineHeight, Width, lineHeight);
         }
     }
 
@@ -273,7 +275,7 @@ public class TabButton : Panel
         _isPinned = pinned;
         if (pinned)
         {
-            Width = 40;
+            Width = DpiHelper.Scale(40);
         }
         else
         {
@@ -289,9 +291,10 @@ public class TabButton : Panel
     public void PlayShowAnimation()
     {
         _animationProgress = 0f;
-        Width = 40; // 从小宽度开始
+        int minWidth = DpiHelper.Scale(40);
+        Width = minWidth; // 从小宽度开始
 
-        var targetWidth = _isPinned ? 40 : PreferredWidth;
+        var targetWidth = _isPinned ? minWidth : PreferredWidth;
 
         _animationTimer?.Stop();
         _animationTimer = new System.Windows.Forms.Timer { Interval = 16 };
@@ -308,7 +311,7 @@ public class TabButton : Panel
 
             // 缓动函数
             float eased = 1f - (float)Math.Pow(1 - _animationProgress, 3);
-            Width = (int)(40 + (targetWidth - 40) * eased);
+            Width = (int)(minWidth + (targetWidth - minWidth) * eased);
             Invalidate();
         };
         _animationTimer.Start();
@@ -438,20 +441,20 @@ public class TabButton : Panel
 
         if (IsCompact)
         {
-            var x = Math.Max(0, (Width - 16) / 2);
-            _favicon.Location = new Point(x, 8);
-            _loadingIndicator.Location = new Point(x, 8);
+            var x = Math.Max(0, (Width - DpiHelper.Scale(16)) / 2);
+            _favicon.Location = new Point(x, DpiHelper.Scale(8));
+            _loadingIndicator.Location = new Point(x, DpiHelper.Scale(8));
             _titleLabel.Visible = false;
             _closeButton.Visible = false;
         }
         else
         {
-            _favicon.Location = new Point(10, 8);
-            _loadingIndicator.Location = new Point(10, 8);
+            _favicon.Location = DpiHelper.Scale(new Point(10, 8));
+            _loadingIndicator.Location = DpiHelper.Scale(new Point(10, 8));
             _titleLabel.Visible = true;
-            _titleLabel.Location = new Point(30, 8);
-            _titleLabel.Width = Math.Max(0, Width - 30 - 28);
-            _closeButton.Location = new Point(Width - 28, 4);
+            _titleLabel.Location = DpiHelper.Scale(new Point(30, 8));
+            _titleLabel.Width = Math.Max(0, Width - DpiHelper.Scale(30 + 28));
+            _closeButton.Location = new Point(Width - DpiHelper.Scale(28), DpiHelper.Scale(4));
             _closeButton.Visible = IsActive || _isHovering;
         }
     }
@@ -489,7 +492,7 @@ public class TabCloseButton : Control
                  ControlStyles.ResizeRedraw, true);
 
         BackColor = Color.Transparent;
-        Size = new Size(24, 24);
+        Size = DpiHelper.Scale(new Size(24, 24));
         Cursor = Cursors.Hand;
     }
 
@@ -504,25 +507,25 @@ public class TabCloseButton : Control
         if (_isPressed)
         {
             using var brush = new SolidBrush(Color.FromArgb(196, 43, 28));
-            using var path = CreateRoundedRect(rect, 4);
+            using var path = CreateRoundedRect(rect, DpiHelper.Scale(4));
             g.FillPath(brush, path);
         }
         else if (_isHovered)
         {
             using var brush = new SolidBrush(Color.FromArgb(232, 17, 35));
-            using var path = CreateRoundedRect(rect, 4);
+            using var path = CreateRoundedRect(rect, DpiHelper.Scale(4));
             g.FillPath(brush, path);
         }
 
         // 绘制 X 图标
         float centerX = Width / 2f;
         float centerY = Height / 2f;
-        float size = 4f;
+        float size = DpiHelper.Scale(4f);
 
         var iconColor = (_isHovered || _isPressed) ? Color.White :
                         (_isDarkTheme ? Color.FromArgb(180, 180, 180) : Color.FromArgb(100, 100, 100));
 
-        using var pen = new Pen(iconColor, 1.5f)
+        using var pen = new Pen(iconColor, DpiHelper.Scale(1.5f))
         {
             StartCap = LineCap.Round,
             EndCap = LineCap.Round

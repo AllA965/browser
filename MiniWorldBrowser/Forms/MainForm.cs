@@ -256,8 +256,8 @@ public partial class MainForm : Form
     private void InitializeUI()
     {
         Text = _isIncognito ? "InPrivate - " + AppConstants.AppName : AppConstants.AppName;
-        Size = new Size(1200, 800);
-        MinimumSize = new Size(800, 600);
+        Size = DpiHelper.Scale(new Size(1200, 800));
+        MinimumSize = DpiHelper.Scale(new Size(800, 600));
         StartPosition = FormStartPosition.CenterScreen;
         BackColor = _isIncognito ? Color.FromArgb(53, 54, 58) : Color.FromArgb(232, 234, 237);
         FormBorderStyle = FormBorderStyle.None;
@@ -304,7 +304,7 @@ public partial class MainForm : Form
         _tabBar = new Panel
         {
             Dock = DockStyle.Top,
-            Height = 36,
+            Height = DpiHelper.Scale(36),
             BackColor = _isIncognito ? Color.FromArgb(20, 20, 20) : Color.FromArgb(232, 234, 237)
         };
         _tabBar.MouseDown += OnTitleBarMouseDown;
@@ -313,7 +313,7 @@ public partial class MainForm : Form
         _titleBarIcon = new PictureBox
         {
             Dock = DockStyle.Left,
-            Width = 8, // 保留极小间距或设为0
+            Width = DpiHelper.Scale(8), // 保留极小间距或设为0
             BackColor = Color.Transparent,
             Visible = false
         };
@@ -323,7 +323,7 @@ public partial class MainForm : Form
             if (AppIconHelper.AppIcon != null)
             {
                 // 居中绘制图标，直接使用 DrawIcon 以保留完美透明度
-                int iconSize = 18; 
+                int iconSize = DpiHelper.Scale(18); 
                 int x = (_titleBarIcon.Width - iconSize) / 2;
                 int y = (_titleBarIcon.Height - iconSize) / 2;
                 
@@ -338,12 +338,14 @@ public partial class MainForm : Form
         var windowControlPanel = new Panel 
         { 
             Dock = DockStyle.Right, 
-            Width = 138, 
-            Height = 36,
+            Width = DpiHelper.Scale(138), 
+            Height = DpiHelper.Scale(36),
             BackColor = Color.Transparent,
             Margin = Padding.Empty,
             Padding = Padding.Empty
         };
+
+        // ... (CreateWindowControlButton uses hardcoded sizes too, but I'll check it later)
         
         _minimizeBtn = CreateWindowControlButton("─");
         _minimizeBtn.Click += (s, e) => WindowState = FormWindowState.Minimized;
@@ -369,8 +371,8 @@ public partial class MainForm : Form
         // 新标签按钮
         _newTabButton = new NewTabButton(_isIncognito)
         {
-            Size = new Size(28, 28),
-            Margin = new Padding(0, 4, 0, 0) // 调整边距使其对齐
+            Size = DpiHelper.Scale(new Size(28, 28)),
+            Margin = DpiHelper.Scale(new Padding(0, 4, 0, 0)) // 调整边距使其对齐
         };
         new ToolTip().SetToolTip(_newTabButton, "新建标签页 (Ctrl+T)");
 
@@ -381,7 +383,7 @@ public partial class MainForm : Form
             FlowDirection = FlowDirection.LeftToRight,
             WrapContents = false,
             AutoScroll = false,
-            Padding = new Padding(4, 4, 0, 0)
+            Padding = DpiHelper.Scale(new Padding(4, 4, 0, 0))
         };
         _tabContainer.MouseDown += OnTitleBarMouseDown;
         
@@ -392,15 +394,15 @@ public partial class MainForm : Form
         _tabOverflowBtn = new Button
         {
             Dock = DockStyle.Right,
-            Width = 32,
+            Width = DpiHelper.Scale(32),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.Transparent,
             Text = "﹀", // 或者使用 unicode 字符
-            Font = new Font("Segoe UI Symbol", 9F),
+            Font = new Font("Segoe UI Symbol", DpiHelper.Scale(9F)),
             ForeColor = _isIncognito ? Color.White : Color.Black,
             Cursor = Cursors.Hand,
             Visible = false, // 默认隐藏
-            Margin = new Padding(0)
+            Margin = Padding.Empty
         };
         _tabOverflowBtn.FlatAppearance.BorderSize = 0;
         _tabOverflowBtn.FlatAppearance.MouseOverBackColor = _isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(220, 220, 220);
@@ -429,7 +431,7 @@ public partial class MainForm : Form
         var panel = new Panel
         {
             Dock = DockStyle.Right,
-            Width = 90,
+            Width = DpiHelper.Scale(90),
             BackColor = Color.Transparent,
             Cursor = Cursors.Hand
         };
@@ -439,7 +441,7 @@ public partial class MainForm : Form
             Text = "🕵️ InPrivate",
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleCenter,
-            Font = new Font("Segoe UI", 9F),
+            Font = new Font("Segoe UI", DpiHelper.Scale(9F)),
             ForeColor = IncognitoAccent,
             BackColor = Color.Transparent,
             Cursor = Cursors.Hand
@@ -489,9 +491,9 @@ public partial class MainForm : Form
         _toolbar = new Panel
         {
             Dock = DockStyle.Top,
-            Height = 44,
+            Height = DpiHelper.Scale(44),
             BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.White,
-            Padding = new Padding(4, 4, 4, 4)
+            Padding = DpiHelper.Scale(new Padding(4, 4, 4, 4))
         };
         
         _backBtn = CreateNavigationButton(NavigationButtonType.Back, "后退 (Alt+Left)");
@@ -504,13 +506,13 @@ public partial class MainForm : Form
         
         _downloadBtn = new DownloadButton
         {
-            Size = new Size(32, 32),
-            Margin = new Padding(2),
+            Size = DpiHelper.Scale(new Size(32, 32)),
+            Margin = DpiHelper.Scale(new Padding(2)),
             IconColor = _isIncognito ? Color.FromArgb(200, 200, 200) : Color.FromArgb(80, 80, 80)
         };
         new ToolTip().SetToolTip(_downloadBtn, "下载 (Ctrl+J)");
 
-        _userBtn = new UserButton { Margin = new Padding(2), Visible = !_isIncognito };
+        _userBtn = new UserButton { Margin = DpiHelper.Scale(new Padding(2)), Visible = !_isIncognito };
         if (!_isIncognito)
         {
             new ToolTip().SetToolTip(_userBtn, "用户/登录");
@@ -545,10 +547,10 @@ public partial class MainForm : Form
             FlowDirection = FlowDirection.LeftToRight,
             WrapContents = false,
             AutoSize = true,
-            Padding = new Padding(4, 4, 0, 4)
+            Padding = DpiHelper.Scale(new Padding(4, 4, 0, 4))
         };
         
-        var refreshStopPanel = new Panel { Size = new Size(32, 32) };
+        var refreshStopPanel = new Panel { Size = DpiHelper.Scale(new Size(32, 32)) };
         _refreshBtn.Dock = DockStyle.Fill;
         _stopBtn.Dock = DockStyle.Fill;
         refreshStopPanel.Controls.Add(_stopBtn);
@@ -562,7 +564,7 @@ public partial class MainForm : Form
             FlowDirection = FlowDirection.LeftToRight,
             WrapContents = false,
             AutoSize = true,
-            Padding = new Padding(0, 4, 4, 4)
+            Padding = DpiHelper.Scale(new Padding(0, 4, 4, 4))
         };
         // 注意：这里不再重复添加 _passwordKeyBtn 和 _zoomBtn 到 menuPanel，因为它们被移动到了地址栏内部
         menuPanel.Controls.Add(_aiBtn); // AI 助手按钮
@@ -579,20 +581,20 @@ public partial class MainForm : Form
         };
 
         // Inner controls inside the address bar (Icons)
-        _securityIcon = new SecurityIcon { Size = new Size(28, 20), BackColor = Color.Transparent, Padding = new Padding(4,0,0,0), Cursor = Cursors.Hand };
+        _securityIcon = new SecurityIcon { Size = DpiHelper.Scale(new Size(28, 20)), BackColor = Color.Transparent, Padding = DpiHelper.Scale(new Padding(4,0,0,0)), Cursor = Cursors.Hand };
         _securityIcon.SecurityInfoRequested += OnSecurityInfoRequested;
         UpdateSecurityIcon(false);
 
         _translateBtn = new Button
         {
-            Size = new Size(32, 28),
+            Size = DpiHelper.Scale(new Size(32, 28)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.Transparent,
             Text = "🌐",
-            Font = new Font("Segoe UI Emoji", 12F),
+            Font = new Font("Segoe UI Emoji", DpiHelper.Scale(12F)),
             Cursor = Cursors.Hand,
             Visible = false,
-            Margin = new Padding(2, 0, 2, 0),
+            Margin = DpiHelper.Scale(new Padding(2, 0, 2, 0)),
             ForeColor = _isIncognito ? Color.White : Color.Black
         };
         _translateBtn.FlatAppearance.BorderSize = 0;
@@ -600,18 +602,18 @@ public partial class MainForm : Form
         _translateBtn.Click += OnTranslateButtonClick;
         new ToolTip().SetToolTip(_translateBtn, "翻译此页面");
         
-        _bookmarkBtn = new AnimatedBookmarkButton { Size = new Size(28, 24), BackColor = Color.Transparent, Margin = new Padding(2,0,2,0) };
+        _bookmarkBtn = new AnimatedBookmarkButton { Size = DpiHelper.Scale(new Size(28, 24)), BackColor = Color.Transparent, Margin = DpiHelper.Scale(new Padding(2,0,2,0)) };
         
         _zoomBtn = new Button
         {
-            Size = new Size(32, 28),
+            Size = DpiHelper.Scale(new Size(32, 28)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.Transparent,
             Text = "🔍",
-            Font = new Font("Segoe UI Emoji", 10F),
+            Font = new Font("Segoe UI Emoji", DpiHelper.Scale(10F)),
             Cursor = Cursors.Hand,
             Visible = false,
-            Margin = new Padding(2, 0, 2, 0),
+            Margin = DpiHelper.Scale(new Padding(2, 0, 2, 0)),
             ForeColor = _isIncognito ? Color.White : Color.Black
         };
         _zoomBtn.FlatAppearance.BorderSize = 0;
@@ -621,14 +623,14 @@ public partial class MainForm : Form
 
         _passwordKeyBtn = new Button
         {
-            Size = new Size(32, 28),
+            Size = DpiHelper.Scale(new Size(32, 28)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.Transparent,
             Text = "🔑",
-            Font = new Font("Segoe UI Emoji", 10F),
+            Font = new Font("Segoe UI Emoji", DpiHelper.Scale(10F)),
             Cursor = Cursors.Hand,
             Visible = false,
-            Margin = new Padding(2, 0, 2, 0),
+            Margin = DpiHelper.Scale(new Padding(2, 0, 2, 0)),
             ForeColor = _isIncognito ? Color.White : Color.Black
         };
         _passwordKeyBtn.FlatAppearance.BorderSize = 0;
@@ -644,7 +646,7 @@ public partial class MainForm : Form
             FlowDirection = FlowDirection.LeftToRight,
             WrapContents = false,
             BackColor = Color.Transparent,
-            Padding = new Padding(0, 4, 0, 0) // Center vertically
+            Padding = DpiHelper.Scale(new Padding(0, 4, 0, 0)) // Center vertically
         };
         rightIconPanel.Controls.Add(_passwordKeyBtn);
         rightIconPanel.Controls.Add(_zoomBtn);
@@ -777,7 +779,7 @@ public partial class MainForm : Form
         _statusBar = new Panel
         {
             Dock = DockStyle.Bottom,
-            Height = 22,
+            Height = DpiHelper.Scale(22),
             BackColor = _isIncognito ? Color.FromArgb(41, 42, 45) : Color.White
         };
         
@@ -785,8 +787,8 @@ public partial class MainForm : Form
         {
             Dock = DockStyle.Left,
             AutoSize = true,
-            Padding = new Padding(4, 3, 0, 0),
-            Font = new Font("Microsoft YaHei UI", 8F),
+            Padding = DpiHelper.Scale(new Padding(4, 3, 0, 0)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(8F)),
             ForeColor = _isIncognito ? Color.FromArgb(150, 150, 150) : Color.Black,
             Text = _isIncognito ? "InPrivate - 您的浏览活动不会保存到此设备" : "就绪"
         };
@@ -794,9 +796,9 @@ public partial class MainForm : Form
         _progressBar = new ModernProgressBar
         {
             Dock = DockStyle.Right,
-            Width = 110,
-            Height = 22,
-            Padding = new Padding(10, 0, 10, 0),
+            Width = DpiHelper.Scale(110),
+            Height = DpiHelper.Scale(22),
+            Padding = DpiHelper.Scale(new Padding(10, 0, 10, 0)),
             Visible = false,
             IsMarquee = true
         };
@@ -884,7 +886,7 @@ public partial class MainForm : Form
         _aiSidePanel = new Panel
         {
             Dock = DockStyle.Right,
-            Width = 380,
+            Width = DpiHelper.Scale(380),
             BackColor = Color.FromArgb(250, 250, 250),
             Visible = false,
             BorderStyle = BorderStyle.None
@@ -893,7 +895,7 @@ public partial class MainForm : Form
         _aiSplitter = new Splitter
         {
             Dock = DockStyle.Right,
-            Width = 3,
+            Width = DpiHelper.Scale(3),
             BackColor = Color.FromArgb(220, 220, 220),
             Visible = false
         };
@@ -907,14 +909,14 @@ public partial class MainForm : Form
         var topPanel = new Panel
         {
             Dock = DockStyle.Top,
-            Height = 45,
+            Height = DpiHelper.Scale(45),
             BackColor = Color.FromArgb(250, 251, 252),
-            Padding = new Padding(12, 0, 8, 0)
+            Padding = DpiHelper.Scale(new Padding(12, 0, 8, 0))
         };
 
         // 添加底部边框线
         topPanel.Paint += (s, e) => {
-            using (var pen = new Pen(Color.FromArgb(230, 233, 237), 1))
+            using (var pen = new Pen(Color.FromArgb(230, 233, 237), DpiHelper.Scale(1)))
             {
                 e.Graphics.DrawLine(pen, 0, topPanel.Height - 1, topPanel.Width, topPanel.Height - 1);
             }
@@ -923,23 +925,23 @@ public partial class MainForm : Form
         var titleLabel = new Label
         {
             Text = "智能助手",
-            Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
             ForeColor = Color.FromArgb(45, 55, 72),
             Dock = DockStyle.Left,
             TextAlign = ContentAlignment.MiddleLeft,
             AutoSize = false,
-            Width = 150 // 给定一个足够的宽度
+            Width = DpiHelper.Scale(150) // 给定一个足够的宽度
         };
 
         var summarizeBtn = new Button
         {
             Text = "📝 总结此页",
-            Font = new Font("Microsoft YaHei UI", 9F),
-            Size = new Size(90, 32),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Size = DpiHelper.Scale(new Size(90, 32)),
             FlatStyle = FlatStyle.Flat,
             Dock = DockStyle.Right,
             Cursor = Cursors.Hand,
-            Margin = new Padding(0, 6, 4, 6),
+            Margin = DpiHelper.Scale(new Padding(0, 6, 4, 6)),
             BackColor = Color.Transparent,
             ForeColor = Color.FromArgb(74, 85, 104)
         };
@@ -953,11 +955,11 @@ public partial class MainForm : Form
         var closeBtn = new Button
         {
             Text = "", // 不直接使用文本，改用 Paint 绘制
-            Size = new Size(32, 32),
+            Size = DpiHelper.Scale(new Size(32, 32)),
             FlatStyle = FlatStyle.Flat,
             Dock = DockStyle.Right,
             Cursor = Cursors.Hand,
-            Margin = new Padding(4, 6, 4, 6),
+            Margin = DpiHelper.Scale(new Padding(4, 6, 4, 6)),
             BackColor = Color.Transparent
         };
         closeBtn.FlatAppearance.BorderSize = 0;
@@ -975,7 +977,7 @@ public partial class MainForm : Form
             e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
             
             // 确保绘制的是正圆：取宽高的最小值作为直径
-            int size = Math.Min(closeBtn.Width, closeBtn.Height) - 12;
+            int size = Math.Min(closeBtn.Width, closeBtn.Height) - DpiHelper.Scale(12);
             int x = (closeBtn.Width - size) / 2;
             int y = (closeBtn.Height - size) / 2;
             Rectangle circleRect = new Rectangle(x, y, size, size);
@@ -999,11 +1001,11 @@ public partial class MainForm : Form
             e.Graphics.ScaleTransform(scale, scale);
             
             Color iconColor = backgroundAlpha > 150 ? Color.White : Color.FromArgb(100, 116, 139); // Slate 500
-            using (var pen = new Pen(iconColor, 2f))
+            using (var pen = new Pen(iconColor, DpiHelper.Scale(2f)))
             {
                 pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
                 pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
-                float iconSize = 4.5f;
+                float iconSize = DpiHelper.Scale(4.5f);
                 e.Graphics.DrawLine(pen, -iconSize, -iconSize, iconSize, iconSize);
                 e.Graphics.DrawLine(pen, iconSize, -iconSize, -iconSize, iconSize);
             }
@@ -1171,7 +1173,7 @@ public partial class MainForm : Form
         else
         {
             // 设置初始状态用于动画
-            int targetWidth = 380;
+            int targetWidth = DpiHelper.Scale(380);
             _aiSidePanel.Width = 0;
             _aiSidePanel.Visible = true;
             _aiSplitter.Visible = true;
@@ -1180,7 +1182,7 @@ public partial class MainForm : Form
             animTimer.Tick += (s, e) => {
                 if (_aiSidePanel.Width < targetWidth)
                 {
-                    _aiSidePanel.Width += 38;
+                    _aiSidePanel.Width += DpiHelper.Scale(38);
                     if (_aiSidePanel.Width > targetWidth) _aiSidePanel.Width = targetWidth;
                 }
                 else
@@ -1657,7 +1659,7 @@ public partial class MainForm : Form
         
         // 计算弹出位置（在按钮下方对齐）
         var screenPos = _userBtn.PointToScreen(new Point(0, _userBtn.Height));
-        _userInfoPopup.Location = new Point(screenPos.X - (_userInfoPopup.Width - _userBtn.Width) / 2, screenPos.Y + 5);
+        _userInfoPopup.Location = new Point(screenPos.X - (_userInfoPopup.Width - _userBtn.Width) / 2, screenPos.Y + DpiHelper.Scale(5));
         
         _userInfoPopup.FormClosed += (s, ev) => _userInfoPopup = null;
         _userInfoPopup.Show(this);
@@ -1770,25 +1772,25 @@ public partial class MainForm : Form
             StartPosition = FormStartPosition.CenterParent;
             ShowInTaskbar = false;
             BackColor = Color.White;
-            Font = new Font("Microsoft YaHei UI", 9F);
-            ClientSize = new Size(360, cancelText == null ? 170 : 180);
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
+            ClientSize = DpiHelper.Scale(new Size(360, cancelText == null ? 170 : 180));
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
 
             var titleLabel = new Label
             {
                 Text = title,
-                Location = new Point(20, 18),
+                Location = DpiHelper.Scale(new Point(20, 18)),
                 AutoSize = true,
-                Font = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(11F), FontStyle.Bold),
                 ForeColor = Color.FromArgb(40, 40, 40)
             };
 
             var closeLabel = new Label
             {
                 Text = "×",
-                Location = new Point(ClientSize.Width - 36, 12),
-                Size = new Size(24, 24),
-                Font = new Font("Microsoft YaHei UI", 12F),
+                Location = new Point(ClientSize.Width - DpiHelper.Scale(36), DpiHelper.Scale(12)),
+                Size = DpiHelper.Scale(new Size(24, 24)),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(12F)),
                 ForeColor = Color.FromArgb(140, 140, 140),
                 Cursor = Cursors.Hand,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -1802,46 +1804,57 @@ public partial class MainForm : Form
                 Close();
             };
 
+            int iconSize = DpiHelper.Scale(40);
             var iconBox = new Panel
             {
-                Location = new Point(20, 56),
-                Size = new Size(40, 40),
+                Location = DpiHelper.Scale(new Point(20, 56)),
+                Size = new Size(iconSize, iconSize),
                 BackColor = Color.Transparent
             };
             iconBox.Paint += (s, e) =>
             {
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                
                 using var brush = new SolidBrush(GetIconBackColor(icon));
-                e.Graphics.FillEllipse(brush, 0, 0, 40, 40);
+                e.Graphics.FillEllipse(brush, 0, 0, iconSize, iconSize);
 
                 using var textBrush = new SolidBrush(Color.White);
-                using var iconFont = new Font("Segoe UI Symbol", 16F, FontStyle.Bold);
+                using var iconFont = new Font("Segoe UI Symbol", DpiHelper.Scale(16F), FontStyle.Bold);
                 var ch = GetIconChar(icon);
-                var sz = e.Graphics.MeasureString(ch, iconFont);
-                e.Graphics.DrawString(ch, iconFont, textBrush, (40 - sz.Width) / 2, (40 - sz.Height) / 2 + 1);
+                
+                // 使用 StringFormat 确保图标在圆形背景中精确居中
+                using var sf = new StringFormat
+                {
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Center
+                };
+                e.Graphics.DrawString(ch, iconFont, textBrush, new RectangleF(0, 0, iconSize, iconSize), sf);
             };
 
             var messageLabel = new Label
             {
                 Text = message,
-                Location = new Point(72, 56),
-                Size = new Size(ClientSize.Width - 92, 64),
-                Font = new Font("Microsoft YaHei UI", 9.5F),
+                Location = DpiHelper.Scale(new Point(72, 56)),
+                Size = new Size(ClientSize.Width - DpiHelper.Scale(92), DpiHelper.Scale(64)),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9.5F)),
                 ForeColor = Color.FromArgb(70, 70, 70)
             };
 
             var okBtn = new Button
             {
                 Text = okText,
-                Size = new Size(cancelText == null ? 120 : 110, 34),
-                Location = cancelText == null ? new Point(ClientSize.Width - 140, ClientSize.Height - 54) : new Point(ClientSize.Width - 240, ClientSize.Height - 54),
+                Size = DpiHelper.Scale(new Size(cancelText == null ? 120 : 110, 34)),
+                Location = cancelText == null ? 
+                    new Point(ClientSize.Width - DpiHelper.Scale(140), ClientSize.Height - DpiHelper.Scale(54)) : 
+                    new Point(ClientSize.Width - DpiHelper.Scale(240), ClientSize.Height - DpiHelper.Scale(54)),
                 FlatStyle = FlatStyle.Flat,
                 BackColor = Color.FromArgb(0, 120, 215),
                 ForeColor = Color.White,
                 Cursor = Cursors.Hand
             };
             okBtn.FlatAppearance.BorderSize = 0;
-            okBtn.Font = new Font("Microsoft YaHei UI", 9F, FontStyle.Bold);
+            okBtn.Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F), FontStyle.Bold);
             okBtn.MouseEnter += (s, e) => okBtn.BackColor = Color.FromArgb(0, 100, 180);
             okBtn.MouseLeave += (s, e) => okBtn.BackColor = Color.FromArgb(0, 120, 215);
             okBtn.MouseDown += (s, e) => okBtn.BackColor = Color.FromArgb(0, 80, 150);
@@ -1851,7 +1864,7 @@ public partial class MainForm : Form
                 DialogResult = DialogResult.OK;
                 Close();
             };
-            ApplyRoundedRegion(okBtn, 10);
+            ApplyRoundedRegion(okBtn, DpiHelper.Scale(10));
 
             Controls.Add(titleLabel);
             Controls.Add(closeLabel);
@@ -1864,8 +1877,8 @@ public partial class MainForm : Form
                 var cancelBtn = new Button
                 {
                     Text = cancelText,
-                    Size = new Size(110, 34),
-                    Location = new Point(ClientSize.Width - 120, ClientSize.Height - 54),
+                    Size = DpiHelper.Scale(new Size(110, 34)),
+                    Location = new Point(ClientSize.Width - DpiHelper.Scale(120), ClientSize.Height - DpiHelper.Scale(54)),
                     FlatStyle = FlatStyle.Flat,
                     BackColor = Color.FromArgb(248, 249, 250),
                     ForeColor = Color.FromArgb(60, 60, 60),
@@ -1880,7 +1893,7 @@ public partial class MainForm : Form
                     DialogResult = DialogResult.Cancel;
                     Close();
                 };
-                ApplyRoundedRegion(cancelBtn, 10);
+                ApplyRoundedRegion(cancelBtn, DpiHelper.Scale(10));
                 Controls.Add(cancelBtn);
                 CancelButton = cancelBtn;
             }
@@ -1965,10 +1978,10 @@ public partial class MainForm : Form
     {
         var btn = new RoundedButton
         {
-            Size = new Size(32, 32),
+            Size = DpiHelper.Scale(new Size(32, 32)),
             Text = text,
-            Font = new Font("Segoe UI", 11F),
-            Margin = new Padding(2)
+            Font = new Font("Segoe UI", DpiHelper.Scale(11F)),
+            Margin = DpiHelper.Scale(new Padding(2))
         };
         new ToolTip().SetToolTip(btn, tooltip);
         return btn;
@@ -1978,9 +1991,9 @@ public partial class MainForm : Form
     {
         var btn = new NavigationButton
         {
-            Size = new Size(32, 32),
+            Size = DpiHelper.Scale(new Size(32, 32)),
             ButtonType = type,
-            Margin = new Padding(2),
+            Margin = DpiHelper.Scale(new Padding(2)),
             IconColor = Color.FromArgb(80, 80, 80)
         };
         new ToolTip().SetToolTip(btn, tooltip);
@@ -1991,12 +2004,12 @@ public partial class MainForm : Form
     {
         var btn = new Button
         {
-            Width = 46,
-            Height = 36, // 显式设置高度匹配 _tabBar
+            Width = DpiHelper.Scale(46),
+            Height = DpiHelper.Scale(36), // 显式设置高度匹配 _tabBar
             Dock = DockStyle.Right,
             FlatStyle = FlatStyle.Flat,
             Text = text,
-            Font = new Font("Segoe UI", 10F),
+            Font = new Font("Segoe UI", DpiHelper.Scale(10F)),
             Cursor = Cursors.Hand,
             BackColor = Color.Transparent,
             ForeColor = Color.Black,

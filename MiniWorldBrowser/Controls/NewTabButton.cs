@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls;
 
@@ -26,7 +27,7 @@ public class NewTabButton : Control
                  ControlStyles.ResizeRedraw, true);
 
         BackColor = Color.Transparent;
-        Size = new Size(28, 28);
+        Size = DpiHelper.Scale(new Size(28, 28));
         Cursor = Cursors.Hand;
 
         // 根据主题设置颜色
@@ -49,7 +50,8 @@ public class NewTabButton : Control
         var g = e.Graphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
 
-        var rect = new Rectangle(2, 2, Width - 5, Height - 5);
+        int padding = DpiHelper.Scale(2);
+        var rect = new Rectangle(padding, padding, Width - DpiHelper.Scale(5), Height - DpiHelper.Scale(5));
 
         // 绘制背景
         Color bgColor;
@@ -62,7 +64,7 @@ public class NewTabButton : Control
 
         if (bgColor != Color.Transparent)
         {
-            using var path = CreateRoundedRect(rect, 6);
+            using var path = CreateRoundedRect(rect, DpiHelper.Scale(6));
             using var brush = new SolidBrush(bgColor);
             g.FillPath(brush, path);
         }
@@ -75,8 +77,8 @@ public class NewTabButton : Control
     {
         float centerX = Width / 2f;
         float centerY = Height / 2f;
-        float size = 5f;
-        float penWidth = 1.8f;
+        float size = DpiHelper.Scale(5f);
+        float penWidth = DpiHelper.Scale(1.8f);
 
         using var pen = new Pen(IconColor, penWidth)
         {

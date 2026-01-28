@@ -1,6 +1,7 @@
 using MiniWorldBrowser.Browser;
 using MiniWorldBrowser.Controls;
 using MiniWorldBrowser.Services;
+using MiniWorldBrowser.Helpers;
 using System.Diagnostics;
 
 namespace MiniWorldBrowser.Forms;
@@ -171,23 +172,24 @@ public partial class MainForm
         var item = new ToolStripMenuItem(text)
         {
             ShortcutKeyDisplayString = shortcut,
-            Padding = new Padding(8, 6, 8, 6)
+            Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
         };
 
         if (iconDrawer != null)
         {
             // 创建图标图像
-            var iconBitmap = new Bitmap(20, 20);
+            int iconSize = DpiHelper.Scale(20);
+            var iconBitmap = new Bitmap(iconSize, iconSize);
             using (var g = Graphics.FromImage(iconBitmap))
             {
                 g.Clear(Color.Transparent);
-                iconDrawer(g, new Rectangle(0, 0, 20, 20));
+                iconDrawer(g, new Rectangle(0, 0, iconSize, iconSize));
             }
 
             // 如果是隐身模式，将图标颜色转换为白色
             if (_isIncognito)
             {
-                var newBitmap = new Bitmap(20, 20);
+                var newBitmap = new Bitmap(iconSize, iconSize);
                 using (var g = Graphics.FromImage(newBitmap))
                 {
                     // 将所有非透明像素转换为白色
@@ -203,8 +205,8 @@ public partial class MainForm
                     var attributes = new System.Drawing.Imaging.ImageAttributes();
                     attributes.SetColorMatrix(matrix);
                     
-                    g.DrawImage(iconBitmap, new Rectangle(0, 0, 20, 20),
-                        0, 0, 20, 20, GraphicsUnit.Pixel, attributes);
+                    g.DrawImage(iconBitmap, new Rectangle(0, 0, iconSize, iconSize),
+                        0, 0, iconSize, iconSize, GraphicsUnit.Pixel, attributes);
                 }
                 iconBitmap.Dispose();
                 iconBitmap = newBitmap;
@@ -230,13 +232,13 @@ public partial class MainForm
         
         _mainMenu = new ContextMenuStrip
         {
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
             AutoClose = false,
             BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249),
             ForeColor = _isIncognito ? Color.White : Color.Black,
             ShowImageMargin = true,
-            ImageScalingSize = new Size(20, 20),
-            Padding = new Padding(0, 4, 0, 4)
+            ImageScalingSize = DpiHelper.Scale(new Size(20, 20)),
+            Padding = DpiHelper.Scale(new Padding(0, 4, 0, 4))
         };
         var menu = _mainMenu;
 
@@ -516,14 +518,15 @@ public partial class MainForm
             _settingsService.Save();
             adBlock.Checked = _adBlockService.Enabled;
             // 更新图标
-            var iconBitmap = new Bitmap(20, 20);
+            int iconSize = DpiHelper.Scale(20);
+            var iconBitmap = new Bitmap(iconSize, iconSize);
             using (var g = Graphics.FromImage(iconBitmap))
             {
                 g.Clear(Color.Transparent);
                 if (_adBlockService.Enabled)
-                    MenuIconDrawer.DrawAdBlockEnabled(g, new Rectangle(0, 0, 20, 20));
+                    MenuIconDrawer.DrawAdBlockEnabled(g, new Rectangle(0, 0, iconSize, iconSize));
                 else
-                    MenuIconDrawer.DrawAdBlock(g, new Rectangle(0, 0, 20, 20));
+                    MenuIconDrawer.DrawAdBlock(g, new Rectangle(0, 0, iconSize, iconSize));
             }
             adBlock.Image = iconBitmap;
         };
@@ -552,7 +555,7 @@ public partial class MainForm
         // 退出
         var exit = new ToolStripMenuItem(_isIncognito ? "关闭隐身窗口" : "关闭鲲穹AI浏览器")
         {
-            Padding = new Padding(8, 6, 8, 6)
+            Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
         };
         exit.Click += (s, e) => { CloseMainMenu(); Close(); };
         menu.Items.Add(exit);
@@ -592,7 +595,7 @@ public partial class MainForm
         var host = new ToolStripControlHost(CreateZoomPanel())
         {
             AutoSize = false,
-            Size = new Size(280, 36)
+            Size = DpiHelper.Scale(new Size(280, 36))
         };
         return host;
     }
@@ -601,47 +604,48 @@ public partial class MainForm
     
     private Panel CreateZoomPanel()
     {
-        _zoomPanel = new Panel { Size = new Size(280, 34), BackColor = Color.Transparent };
+        _zoomPanel = new Panel { Size = DpiHelper.Scale(new Size(280, 34)), BackColor = Color.Transparent };
 
         // 缩放图标
+        int iconSize = DpiHelper.Scale(20);
         var iconPanel = new Panel
         {
-            Size = new Size(20, 20),
-            Location = new Point(12, 7),
+            Size = new Size(iconSize, iconSize),
+            Location = DpiHelper.Scale(new Point(12, 7)),
             BackColor = Color.Transparent
         };
-        iconPanel.Paint += (s, e) => MenuIconDrawer.DrawZoom(e.Graphics, new Rectangle(0, 0, 20, 20));
+        iconPanel.Paint += (s, e) => MenuIconDrawer.DrawZoom(e.Graphics, new Rectangle(0, 0, iconSize, iconSize));
 
         var lblZoom = new Label
         {
             Text = "缩放",
-            Location = new Point(40, 9),
+            Location = DpiHelper.Scale(new Point(40, 9)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
             ForeColor = _isIncognito ? Color.White : Color.FromArgb(32, 32, 32)
         };
 
-        var btnMinus = CreateZoomButton("—", new Point(120, 5), new Size(32, 24), () => { ZoomOut(); UpdateZoomLabel(); });
+        var btnMinus = CreateZoomButton("—", DpiHelper.Scale(new Point(120, 5)), DpiHelper.Scale(new Size(32, 24)), () => { ZoomOut(); UpdateZoomLabel(); });
 
         _zoomLevelLabel = new Label
         {
             Text = $"{(int)(_zoomLevel * 100)}%",
-            Size = new Size(50, 24),
-            Location = new Point(154, 7),
+            Size = DpiHelper.Scale(new Size(50, 24)),
+            Location = DpiHelper.Scale(new Point(154, 7)),
             TextAlign = ContentAlignment.MiddleCenter,
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
             ForeColor = _isIncognito ? Color.White : Color.FromArgb(32, 32, 32)
         };
 
-        var btnPlus = CreateZoomButton("+", new Point(206, 5), new Size(32, 24), () => { ZoomIn(); UpdateZoomLabel(); });
+        var btnPlus = CreateZoomButton("+", DpiHelper.Scale(new Point(206, 5)), DpiHelper.Scale(new Size(32, 24)), () => { ZoomIn(); UpdateZoomLabel(); });
 
-        var btnFullscreen = CreateZoomButton("⛶", new Point(244, 5), new Size(28, 24), () =>
+        var btnFullscreen = CreateZoomButton("⛶", DpiHelper.Scale(new Point(244, 5)), DpiHelper.Scale(new Size(28, 24)), () =>
         {
             _reopenMenuAfterZoom = false;  // 确保不会重新打开菜单
             CloseMainMenu();
             _fullscreenManager.Toggle();
         }, keepMenuOpen: false);
-        btnFullscreen.Font = new Font("Segoe UI Symbol", 11F);
+        btnFullscreen.Font = new Font("Segoe UI Symbol", DpiHelper.Scale(11F));
 
         _zoomPanel.Controls.AddRange(new Control[] { iconPanel, lblZoom, btnMinus, _zoomLevelLabel, btnPlus, btnFullscreen });
         return _zoomPanel;
@@ -655,7 +659,7 @@ public partial class MainForm
             Size = size,
             Location = location,
             TextAlign = ContentAlignment.MiddleCenter,
-            Font = new Font("Segoe UI", 10F),
+            Font = new Font("Segoe UI", DpiHelper.Scale(10F)),
             Cursor = Cursors.Hand,
             BackColor = Color.Transparent,
             ForeColor = _isIncognito ? Color.White : Color.FromArgb(32, 32, 32)
@@ -667,7 +671,7 @@ public partial class MainForm
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             var rect = new Rectangle(0, 0, btn.Width - 1, btn.Height - 1);
             using var pen = new Pen(_isIncognito ? Color.FromArgb(100, 100, 100) : Color.FromArgb(180, 180, 180));
-            using var path = CreateRoundedRect(rect, 4);
+            using var path = CreateRoundedRect(rect, DpiHelper.Scale(4));
             g.DrawPath(pen, path);
         };
 
@@ -761,7 +765,7 @@ public partial class MainForm
         {
             _zoomPopup = new Panel
             {
-                Size = new Size(160, 70),
+                Size = DpiHelper.Scale(new Size(160, 70)),
                 BackColor = Color.White,
                 BorderStyle = BorderStyle.FixedSingle
             };
@@ -769,9 +773,9 @@ public partial class MainForm
             _zoomPopupLabel = new Label
             {
                 Text = $"缩放：{(int)(_zoomLevel * 100)}%",
-                Font = new Font("Microsoft YaHei UI", 10F),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F)),
                 ForeColor = Color.Black,
-                Location = new Point(10, 10),
+                Location = DpiHelper.Scale(new Point(10, 10)),
                 AutoSize = true
             };
             _zoomPopup.Controls.Add(_zoomPopupLabel);
@@ -779,9 +783,9 @@ public partial class MainForm
             var resetBtn = new Button
             {
                 Text = "重置为默认设置",
-                Font = new Font("Microsoft YaHei UI", 9F),
-                Location = new Point(10, 35),
-                Size = new Size(140, 28),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+                Location = DpiHelper.Scale(new Point(10, 35)),
+                Size = DpiHelper.Scale(new Size(140, 28)),
                 FlatStyle = FlatStyle.Flat,
                 Cursor = Cursors.Hand
             };
@@ -802,7 +806,7 @@ public partial class MainForm
         var btnScreenPos = anchorBtn.PointToScreen(Point.Empty);
         var formPos = PointToClient(btnScreenPos);
         var x = formPos.X + anchorBtn.Width - _zoomPopup.Width;
-        var y = formPos.Y + anchorBtn.Height + 2;
+        var y = formPos.Y + anchorBtn.Height + DpiHelper.Scale(2);
         _zoomPopup.Location = new Point(x, y);
         _zoomPopup.Visible = true;
         

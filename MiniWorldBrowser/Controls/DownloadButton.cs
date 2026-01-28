@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls;
 
@@ -9,7 +10,7 @@ public class DownloadButton : Control
 {
     private bool _isHovered;
     private bool _isPressed;
-    private int _cornerRadius = 6;
+    private int _cornerRadius = DpiHelper.Scale(6);
     
     public int CornerRadius
     {
@@ -30,7 +31,7 @@ public class DownloadButton : Control
                  ControlStyles.ResizeRedraw, true);
         
         BackColor = Color.Transparent;
-        Size = new Size(32, 32);
+        Size = DpiHelper.Scale(new Size(32, 32));
         Cursor = Cursors.Hand;
         TabStop = false;
     }
@@ -65,7 +66,7 @@ public class DownloadButton : Control
     private void DrawDownloadIcon(Graphics g)
     {
         var color = Enabled ? IconColor : Color.Gray;
-        float penWidth = 2f;
+        float penWidth = DpiHelper.Scale(2f);
         
         // 计算图标区域（居中）
         float iconSize = Math.Min(Width, Height) * 0.5f;

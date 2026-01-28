@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls;
 
@@ -51,7 +52,7 @@ public class AnimatedBookmarkButton : Control
                  ControlStyles.UserPaint |
                  ControlStyles.ResizeRedraw, true);
         
-        Size = new Size(32, 32);
+        Size = DpiHelper.Scale(new Size(32, 32));
         BackColor = Color.Transparent;
         Cursor = Cursors.Hand;
         TabStop = false;
@@ -103,12 +104,13 @@ public class AnimatedBookmarkButton : Control
         if (_isHovered)
         {
             using var brush = new SolidBrush(HoverBgColor);
-            g.FillEllipse(brush, 2, 2, Width - 4, Height - 4);
+            int offset = DpiHelper.Scale(2);
+            g.FillEllipse(brush, offset, offset, Width - offset * 2, Height - offset * 2);
         }
         
         // 计算星星大小和位置
         float scale = _isAnimating ? _scaleProgress : 1f;
-        float starSize = 14 * scale;
+        float starSize = DpiHelper.Scale(14) * scale;
         float centerX = Width / 2f;
         float centerY = Height / 2f;
         
@@ -121,7 +123,7 @@ public class AnimatedBookmarkButton : Control
             float fillProgress = _isAnimating ? _animationProgress : 1f;
             
             // 先绘制轮廓
-            using (var outlinePen = new Pen(StarFilledColor, 1.5f))
+            using (var outlinePen = new Pen(StarFilledColor, DpiHelper.Scale(1.5f)))
             {
                 g.DrawPath(outlinePen, starPath);
             }
@@ -144,7 +146,7 @@ public class AnimatedBookmarkButton : Control
         else
         {
             // 未收藏 - 只绘制轮廓
-            using var pen = new Pen(StarOutlineColor, 1.5f);
+            using var pen = new Pen(StarOutlineColor, DpiHelper.Scale(1.5f));
             g.DrawPath(pen, starPath);
         }
         

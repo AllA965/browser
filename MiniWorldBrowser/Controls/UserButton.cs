@@ -50,8 +50,8 @@ public class UserButton : RoundedButton
 
     public UserButton()
     {
-        Size = new Size(32, 32);
-        CornerRadius = 16; // 圆形
+        Size = DpiHelper.Scale(new Size(32, 32));
+        CornerRadius = DpiHelper.Scale(16); // 圆形
     }
 
     protected override void OnPaint(PaintEventArgs e)
@@ -65,7 +65,7 @@ public class UserButton : RoundedButton
         // 1. 绘制背景（悬停效果）
         // 如果已登录，我们通常画蓝色圆圈；如果未登录，Hover时画淡灰色背景
         // 将 Y 从 4 改为 2，向上移动以对齐其他图标
-        var rect = new Rectangle(4, 2, Width - 9, Height - 9);
+        var rect = new Rectangle(DpiHelper.Scale(4), DpiHelper.Scale(2), Width - DpiHelper.Scale(9), Height - DpiHelper.Scale(9));
 
         if (_userInfo != null && !string.IsNullOrEmpty(_userInfo.Nickname))
         {
@@ -85,11 +85,11 @@ public class UserButton : RoundedButton
                 g.FillEllipse(brush, rect);
 
                 var initial = _userInfo.Nickname[0].ToString().ToUpper();
-                using var font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold);
+                using var font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold);
                 var size = g.MeasureString(initial, font);
                 g.DrawString(initial, font, Brushes.White, 
                     rect.X + (rect.Width - size.Width) / 2, 
-                    rect.Y + (rect.Height - size.Height) / 2 + 1);
+                    rect.Y + (rect.Height - size.Height) / 2 + DpiHelper.Scale(1));
             }
         }
         else
@@ -105,11 +105,14 @@ public class UserButton : RoundedButton
             using var silhouetteBrush = new SolidBrush(isHovered ? Color.FromArgb(100, 100, 100) : Color.FromArgb(160, 160, 160));
             
             // 头部（稍小且居中）
-            var headRect = new Rectangle(rect.X + rect.Width / 2 - 5, rect.Y + 6, 10, 10);
+            var headSize = DpiHelper.Scale(10);
+            var headRect = new Rectangle(rect.X + (rect.Width - headSize) / 2, rect.Y + DpiHelper.Scale(6), headSize, headSize);
             g.FillEllipse(silhouetteBrush, headRect);
             
             // 身体（圆弧底部，与头部留有间隙显示“脖子”）
-            var bodyRect = new Rectangle(rect.X + rect.Width / 2 - 9, rect.Y + 18, 18, 10);
+            var bodyWidth = DpiHelper.Scale(18);
+            var bodyHeight = DpiHelper.Scale(10);
+            var bodyRect = new Rectangle(rect.X + (rect.Width - bodyWidth) / 2, rect.Y + DpiHelper.Scale(18), bodyWidth, bodyHeight);
             g.FillPie(silhouetteBrush, bodyRect, 180, 180);
         }
     }

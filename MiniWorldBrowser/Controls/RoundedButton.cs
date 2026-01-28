@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls;
 
@@ -9,7 +10,7 @@ public class RoundedButton : Control
 {
     private bool _isHovered;
     private bool _isPressed;
-    private int _cornerRadius = 6;
+    private int _cornerRadius = DpiHelper.Scale(6);
     private Image? _iconImage;
     private bool _useGrayscale = false;
 
@@ -44,8 +45,8 @@ public class RoundedButton : Control
         
         BackColor = Color.Transparent;
         ForeColor = Color.FromArgb(80, 80, 80);
-        Font = new Font("Segoe UI Symbol", 11F);
-        Size = new Size(32, 32);
+        Font = new Font("Segoe UI Symbol", DpiHelper.Scale(11F));
+        Size = DpiHelper.Scale(new Size(32, 32));
         Cursor = Cursors.Hand;
         TabStop = true;
     }
@@ -68,14 +69,14 @@ public class RoundedButton : Control
         
         if (bgColor != Color.Transparent && bgColor.A > 0)
         {
-            using var path = CreateRoundedRect(rect, _cornerRadius);
+            using var path = CreateRoundedRect(rect, DpiHelper.Scale(_cornerRadius));
             using var brush = new SolidBrush(bgColor);
             g.FillPath(brush, path);
         }
         
         if (_iconImage != null)
         {
-            int targetSize = Math.Min(Height, Width) - 10;
+            int targetSize = Math.Min(Height, Width) - DpiHelper.Scale(10);
             if (targetSize <= 0) targetSize = Math.Min(Height, Width);
             int x = (Width - targetSize) / 2;
             int y = (Height - targetSize) / 2;

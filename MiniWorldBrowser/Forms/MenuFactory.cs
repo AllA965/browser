@@ -1,6 +1,7 @@
 using MiniWorldBrowser.Controls;
 using MiniWorldBrowser.Services;
 using MiniWorldBrowser.Services.Interfaces;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Forms;
 
@@ -31,13 +32,13 @@ public static class MenuFactory
     {
         var menu = new ContextMenuStrip
         {
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
             AutoClose = false,
             BackColor = isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249),
             ForeColor = isIncognito ? Color.White : Color.Black,
             ShowImageMargin = true,
-            ImageScalingSize = new Size(20, 20),
-            Padding = new Padding(0, 4, 0, 4)
+            ImageScalingSize = DpiHelper.Scale(new Size(20, 20)),
+            Padding = DpiHelper.Scale(new Padding(0, 4, 0, 4))
         };
         menu.Renderer = new ModernMenuRenderer(isIncognito);
 
