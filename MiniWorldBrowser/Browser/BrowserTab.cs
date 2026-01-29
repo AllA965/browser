@@ -36,6 +36,7 @@ public class BrowserTab : IDisposable
     public event Action<BrowserTab>? UrlChanged;
     public event Action<BrowserTab>? LoadingStateChanged;
     public event Action<BrowserTab, string>? NewWindowRequested;
+    public event Action<BrowserTab, CoreWebView2NewWindowRequestedEventArgs>? NewWindowRequestedWithArgs;
     public event Action<BrowserTab>? FaviconChanged;
     public event Action<BrowserTab>? SecurityStateChanged;
     public event Action<BrowserTab, string>? StatusTextChanged;
@@ -300,6 +301,9 @@ public class BrowserTab : IDisposable
             
             _isInitialized = true;
             
+            // 设置默认缩放倍数为 1.0，确保与系统 DPI 协调一致，防止默认字体过大
+            WebView.ZoomFactor = 1.0;
+            
             // 注册右键菜单事件
             WebView.CoreWebView2.ContextMenuRequested += OnContextMenuRequested;
             
@@ -311,9 +315,9 @@ public class BrowserTab : IDisposable
                 settings.AreDefaultContextMenusEnabled = true;
                 settings.AreDevToolsEnabled = true;
                 
-                // 设置标准 User-Agent，避免部分网站因识别为 WebView 而减少样式支持
-                // 使用 Chrome 130 的标准 UA
-                settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
+                // 设置标准 User-Agent，增加 Edg/ 标识以获取更佳的网站兼容性（如 Canva）
+                // 使用 Chrome 130 + Edge 130 的标准 UA
+                settings.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0";
                 
                 // 启用更多功能支持
                 settings.IsPasswordAutosaveEnabled = !IsIncognito; // 隐身模式不自动保存密码
@@ -870,6 +874,14 @@ public class BrowserTab : IDisposable
     {
         try
         {
+            // 优先触发带有完整参数的事件，允许外部处理弹窗逻辑
+            if (NewWindowRequestedWithArgs != null)
+            {
+                NewWindowRequestedWithArgs.Invoke(this, e);
+                // 如果外部已经处理了（例如通过 e.NewWindow 赋值并设置 e.Handled = true），则不再触发普通事件
+                if (e.Handled) return;
+            }
+
             e.Handled = true;
             NewWindowRequested?.Invoke(this, e.Uri);
         }

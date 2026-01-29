@@ -1,3 +1,4 @@
+using Microsoft.Web.WebView2.Core;
 using MiniWorldBrowser.Controls;
 using MiniWorldBrowser.Helpers;
 using MiniWorldBrowser.Helpers.Extensions;
@@ -42,6 +43,7 @@ public partial class BrowserTabManager
     public event Action<BrowserTab, double>? TabZoomChanged;
     public event Action<BrowserTab>? TabTranslationRequested;
     public event Action<string>? NewWindowRequested;
+    public event Action<BrowserTab, CoreWebView2NewWindowRequestedEventArgs>? NewWindowRequestedWithArgs;
     public event Action<string, object>? SettingChanged;
     public event Action<MiniWorldBrowser.Models.DownloadItem>? DownloadStarted;
     public event Action? WebViewClicked;
@@ -550,6 +552,7 @@ public partial class BrowserTabManager
             tab.UrlChanged += t => OnTabUrlChanged(t);
             tab.LoadingStateChanged += t => OnTabLoadingStateChanged(t);
             tab.NewWindowRequested += (t, newUrl) => NewWindowRequested?.Invoke(newUrl);
+            tab.NewWindowRequestedWithArgs += (t, args) => NewWindowRequestedWithArgs?.Invoke(t, args);
             tab.FaviconChanged += t => t.TabButton?.SetFavicon(t.FaviconUrl);
             tab.SecurityStateChanged += t => OnTabSecurityStateChanged(t);
             tab.StatusTextChanged += (t, text) => OnTabStatusTextChanged(t, text);
@@ -1203,22 +1206,15 @@ public partial class BrowserTabManager
             4 => 130,  // 极大
             _ => 100
         };
-        
-        // 使用更强的 CSS 样式来缩放字体
-        var script = $@"
-            (function() {{
-                var style = document.getElementById('miniworld-fontsize');
-                if (!style) {{
-                    style = document.createElement('style');
-                    style.id = 'miniworld-fontsize';
-                    document.head.appendChild(style);
-                }}
-                style.textContent = `
-                    html {{ font-size: {fontSizePercent}% !important; }}
-                    body {{ font-size: {fontSizePercent}% !important; }}
-                `;
+
+        var script = fontSizePercent == 100 ?
+            @"(function() { var s = document.getElementById('miniworld-fontsize'); if (s) s.remove(); })();" :
+            $@"(function() {{ 
+                var s = document.getElementById('miniworld-fontsize'); 
+                if (!s) {{ s = document.createElement('style'); s.id = 'miniworld-fontsize'; document.head.appendChild(s); }}
+                s.textContent = 'html {{ font-size: {fontSizePercent}% !important; }}';
             }})();";
-        
+
         foreach (var tab in _tabs)
         {
             try
@@ -1271,6 +1267,16 @@ public partial class BrowserTabManager
     
     private static string GenerateFontSettingsScript(Models.BrowserSettings settings)
     {
+        // 如果是 16px (Chromium 默认)，则不注入额外的样式，避免干扰网页自身的响应式设计
+        if (settings.StandardFontSize == 16 && settings.StandardFont == "Microsoft YaHei")
+        {
+            return @"
+                (function() {
+                    var style = document.getElementById('miniworld-font-settings');
+                    if (style) style.remove();
+                })();";
+        }
+
         // 强制使用 Chrome 风格字体栈作为后备
         return $@"
             (function() {{
@@ -1290,9 +1296,6 @@ public partial class BrowserTabManager
                     :not(i):not([class*='icon']):not([class*='fa']):not([class*='glyph']) {{
                         font-family: inherit;
                     }}
-                    body {{
-                        font-size: {settings.StandardFontSize}px;
-                    }}
                     code, pre, kbd, samp, tt {{
                         font-family: '{settings.FixedWidthFont}', 'Consolas', 'Monaco', 'Lucida Console', monospace;
                     }}
@@ -1311,9 +1314,11 @@ public partial class BrowserTabManager
         {
             if (tab.WebView?.CoreWebView2 != null)
             {
-                // 应用字号设置（使用 CSS）
-                var fontSizeLevel = _settingsService.Settings.FontSize;
-                var fontSizePercent = fontSizeLevel switch
+                var settings = _settingsService.Settings;
+
+                // 1. 使用优化的 CSS 注入来调整字号
+                // 仅作用于 html 根元素，这样网页内部的 em/rem 依然能正常工作
+                var fontSizePercent = settings.FontSize switch
                 {
                     0 => 75,   // 极小
                     1 => 87,   // 小
@@ -1323,25 +1328,35 @@ public partial class BrowserTabManager
                     _ => 100
                 };
                 
-                var fontSizeScript = $@"
-                    (function() {{
-                        var style = document.getElementById('miniworld-fontsize');
-                        if (!style) {{
-                            style = document.createElement('style');
-                            style.id = 'miniworld-fontsize';
-                            document.head.appendChild(style);
-                        }}
-                        style.textContent = `
-                            html {{ font-size: {fontSizePercent}% !important; }}
-                            body {{ font-size: {fontSizePercent}% !important; }}
-                        `;
-                    }})();";
-                _ = tab.WebView.CoreWebView2.ExecuteScriptAsync(fontSizeScript);
+                if (fontSizePercent != 100)
+                {
+                    var fontSizeScript = $@"
+                        (function() {{
+                            var style = document.getElementById('miniworld-fontsize');
+                            if (!style) {{
+                                style = document.createElement('style');
+                                style.id = 'miniworld-fontsize';
+                                document.head.appendChild(style);
+                            }}
+                            // 仅设置 html 字体大小，且不使用 !important 除非是极小/极大模式需要强制覆盖
+                            style.textContent = 'html {{ font-size: {fontSizePercent}% !important; }}';
+                        }})();";
+                    _ = tab.WebView.CoreWebView2.ExecuteScriptAsync(fontSizeScript);
+                }
+                else
+                {
+                    // 如果是中号字，彻底移除注入，还网页原生控制权
+                    _ = tab.WebView.CoreWebView2.ExecuteScriptAsync(@"
+                        (function() {
+                            var style = document.getElementById('miniworld-fontsize');
+                            if (style) style.remove();
+                        })();");
+                }
                 
-                // 对非 about: 页面应用自定义字体设置
+                // 2. 对非 about: 页面应用自定义字体设置
                 if (!tab.Url.StartsWith("about:"))
                 {
-                    var script = GenerateFontSettingsScript(_settingsService.Settings);
+                    var script = GenerateFontSettingsScript(settings);
                     _ = tab.WebView.CoreWebView2.ExecuteScriptAsync(script);
                 }
             }

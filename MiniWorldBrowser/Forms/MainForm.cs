@@ -1,3 +1,4 @@
+using Microsoft.Web.WebView2.Core;
 using MiniWorldBrowser.Browser;
 using MiniWorldBrowser.Constants;
 using MiniWorldBrowser.Controls;
@@ -1159,10 +1160,28 @@ public partial class MainForm : Form
             // 拦截 AI 面板内的导航
             _aiWebView.CoreWebView2.NewWindowRequested += async (s, e) =>
             {
-                e.Handled = true;
-                if (!string.IsNullOrEmpty(e.Uri))
+                // 检查是否应该是弹窗
+                bool isPopup = e.WindowFeatures.HasPosition || e.WindowFeatures.HasSize || !e.IsUserInitiated;
+                if (e.Uri.Contains("weixin.qq.com") || e.Uri.Contains("graph.qq.com") || e.Uri.Contains("passport.baidu.com"))
                 {
-                    await CreateNewTabWithProtection(e.Uri);
+                    isPopup = true;
+                }
+
+                if (isPopup)
+                {
+                    e.Handled = true;
+                    var env = _aiWebView.CoreWebView2.Environment;
+                    var popup = new PopupWindow(env, e);
+                    popup.Owner = this;
+                    popup.Show();
+                }
+                else
+                {
+                    e.Handled = true;
+                    if (!string.IsNullOrEmpty(e.Uri))
+                    {
+                        await CreateNewTabWithProtection(e.Uri);
+                    }
                 }
             };
             
@@ -1421,6 +1440,7 @@ public partial class MainForm : Form
         _tabManager.TabZoomChanged += OnTabZoomChanged;
         _tabManager.TabTranslationRequested += t => { if (t == _tabManager.ActiveTab) TranslateCurrentPageWithAI(); };
         _tabManager.NewWindowRequested += url => _ = CreateNewTabWithProtection(url, _settingsService.Settings.OpenLinksInBackground);
+        _tabManager.NewWindowRequestedWithArgs += OnNewWindowRequestedWithArgs;
         _tabManager.SettingChanged += OnSettingChanged;
         _tabManager.WebViewClicked += ClosePopups;
         _tabManager.PasswordKeyButtonRequested += OnPasswordKeyButtonRequested;
@@ -2273,6 +2293,12 @@ public partial class MainForm : Form
         _progressBar.Visible = tab.IsLoading;
         _translateBtn.Visible = tab.IsTranslated;
         UpdateCurrentTabBookmarkState();
+
+        // 切换标签时确保缩放倍数正确，防止因 DPI 感知导致的不同标签页缩放不一致
+        if (tab.WebView?.CoreWebView2 != null)
+        {
+            tab.WebView.ZoomFactor = _zoomLevel;
+        }
     }
     
     private void OnTabUrlChanged(BrowserTab tab)

@@ -22,6 +22,7 @@ static class Program
                 "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
         };
         
+        Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
         ApplicationConfiguration.Initialize();
         
         // 设置全局默认字体为微软雅黑，使界面更现代化，接近 Edge 风格

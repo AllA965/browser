@@ -1,3 +1,4 @@
+using Microsoft.Web.WebView2.Core;
 using MiniWorldBrowser.Constants;
 using MiniWorldBrowser.Helpers;
 using MiniWorldBrowser.Services;
@@ -102,6 +103,48 @@ public partial class MainForm
         
         // 只有当下拉框确实有建议并显示时，才改变地址栏样式
         _addressBar.IsDropdownOpen = _addressDropdown.Visible;
+    }
+
+    /// <summary>
+    /// 处理 WebView2 的新窗口请求（包括弹窗和新标签页）
+    /// </summary>
+    private void OnNewWindowRequestedWithArgs(MiniWorldBrowser.Browser.BrowserTab tab, Microsoft.Web.WebView2.Core.CoreWebView2NewWindowRequestedEventArgs e)
+    {
+        // 判定是否需要作为弹窗打开
+        // 1. 有明确的窗口特征（位置、大小）
+        // 2. 脚本自动弹出（非用户主动触发）
+        // 3. 常见的登录、授权地址
+        bool isPopup = e.WindowFeatures.HasPosition || e.WindowFeatures.HasSize || !e.IsUserInitiated;
+        
+        string uri = e.Uri.ToLower();
+        string[] loginKeywords = { 
+            "login", "auth", "oauth", "signin", "signup", "wechat", "weixin", 
+            "qq.com", "baidu.com", "weibo.com", "github.com", "google.com", 
+            "microsoft.com", "passport", "cas", "authorize", "callback", "canva.cn/login"
+        };
+
+        if (loginKeywords.Any(k => uri.Contains(k)))
+        {
+            isPopup = true;
+        }
+
+        if (isPopup)
+        {
+            // 获取当前标签页的 WebView2 环境
+            var env = tab.WebView.CoreWebView2.Environment;
+            
+            // 创建弹出窗口
+            var popup = new PopupWindow(env, e);
+            popup.Owner = this;
+            popup.Show();
+            
+            e.Handled = true;
+        }
+        else
+        {
+            // 普通链接，让 MainForm 的 NewWindowRequested 事件处理（打开新标签页）
+            e.Handled = false;
+        }
     }
 
     /// <summary>
