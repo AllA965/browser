@@ -18,18 +18,9 @@ public enum NavigationButtonType
 /// <summary>
 /// 导航按钮控件 - 自定义绘制 Edge 风格图标
 /// </summary>
-public class NavigationButton : Control
+public class NavigationButton : BaseToolButton
 {
-    private bool _isHovered;
-    private bool _isPressed;
-    private int _cornerRadius = 6;
     private NavigationButtonType _buttonType = NavigationButtonType.Back;
-
-    public int CornerRadius
-    {
-        get => _cornerRadius;
-        set { _cornerRadius = value; Invalidate(); }
-    }
 
     public NavigationButtonType ButtonType
     {
@@ -37,50 +28,16 @@ public class NavigationButton : Control
         set { _buttonType = value; Invalidate(); }
     }
 
-    public Color HoverBackColor { get; set; } = Color.FromArgb(220, 220, 220);
-    public Color PressedBackColor { get; set; } = Color.FromArgb(200, 200, 200);
     public Color IconColor { get; set; } = Color.FromArgb(80, 80, 80);
     public Color DisabledIconColor { get; set; } = Color.FromArgb(180, 180, 180);
 
     public NavigationButton()
     {
-        SetStyle(ControlStyles.SupportsTransparentBackColor |
-                 ControlStyles.OptimizedDoubleBuffer |
-                 ControlStyles.AllPaintingInWmPaint |
-                 ControlStyles.UserPaint |
-                 ControlStyles.ResizeRedraw, true);
-
-        BackColor = Color.Transparent;
-        Size = DpiHelper.Scale(new Size(32, 32));
-        Cursor = Cursors.Hand;
         TabStop = false;
     }
 
-    protected override void OnPaint(PaintEventArgs e)
+    protected override void DrawContent(Graphics g)
     {
-        var g = e.Graphics;
-        g.SmoothingMode = SmoothingMode.AntiAlias;
-
-        var rect = new Rectangle(0, 0, Width - 1, Height - 1);
-
-        // 绘制背景
-        Color bgColor;
-        if (!Enabled)
-            bgColor = Color.Transparent;
-        else if (_isPressed)
-            bgColor = PressedBackColor;
-        else if (_isHovered)
-            bgColor = HoverBackColor;
-        else
-            bgColor = BackColor;
-
-        if (bgColor != Color.Transparent && bgColor.A > 0)
-        {
-            using var path = CreateRoundedRect(rect, DpiHelper.Scale(_cornerRadius));
-            using var brush = new SolidBrush(bgColor);
-            g.FillPath(brush, path);
-        }
-
         // 绘制图标
         switch (_buttonType)
         {
@@ -270,54 +227,6 @@ public class NavigationButton : Control
         // 绘制X形
         g.DrawLine(pen, centerX - size, centerY - size, centerX + size, centerY + size);
         g.DrawLine(pen, centerX + size, centerY - size, centerX - size, centerY + size);
-    }
-
-    private static GraphicsPath CreateRoundedRect(Rectangle rect, int radius)
-    {
-        var path = new GraphicsPath();
-        int d = radius * 2;
-
-        if (d > rect.Width) d = rect.Width;
-        if (d > rect.Height) d = rect.Height;
-
-        path.AddArc(rect.X, rect.Y, d, d, 180, 90);
-        path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
-        path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
-        path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
-        path.CloseFigure();
-        return path;
-    }
-
-    protected override void OnMouseEnter(EventArgs e)
-    {
-        base.OnMouseEnter(e);
-        _isHovered = true;
-        Invalidate();
-    }
-
-    protected override void OnMouseLeave(EventArgs e)
-    {
-        base.OnMouseLeave(e);
-        _isHovered = false;
-        _isPressed = false;
-        Invalidate();
-    }
-
-    protected override void OnMouseDown(MouseEventArgs e)
-    {
-        base.OnMouseDown(e);
-        if (e.Button == MouseButtons.Left)
-        {
-            _isPressed = true;
-            Invalidate();
-        }
-    }
-
-    protected override void OnMouseUp(MouseEventArgs e)
-    {
-        base.OnMouseUp(e);
-        _isPressed = false;
-        Invalidate();
     }
 
     protected override void OnEnabledChanged(EventArgs e)

@@ -501,7 +501,7 @@ public partial class MainForm : Form
             }
         }
         catch { }
-        _aiBtn.Click += (s, e) => ToggleAISidePanel();
+        _aiBtn.Click += OnAiButtonClick;
 
         // 布局
         var toolPanel = new Panel { Dock = DockStyle.Fill, BackColor = _isIncognito ? Color.FromArgb(35, 35, 35) : Color.White };
@@ -1322,6 +1322,19 @@ public partial class MainForm : Form
         _aiSidePanelTimer.Start();
     }
 
+    private void CloseAISidePanel()
+    {
+        if (_aiSidePanelTimer != null && _aiSidePanelTimer.Enabled)
+        {
+            _aiSidePanelTimer.Stop();
+        }
+
+        _aiSidePanelTargetWidth = 0;
+        _aiSidePanel.Width = 0;
+        _aiSidePanel.Visible = false;
+        _aiSplitter.Visible = false;
+    }
+
     private async void SummarizeCurrentPage()
     {
         if (_tabManager.ActiveTab == null) return;
@@ -1659,7 +1672,7 @@ public partial class MainForm : Form
         _refreshBtn.Click += (s, e) => _tabManager?.ActiveTab?.Refresh();
         _stopBtn.Click += (s, e) => _tabManager?.ActiveTab?.Stop();
         _homeBtn.Click += (s, e) => _tabManager?.ActiveTab?.Navigate(_settingsService.Settings.HomePage);
-        _downloadBtn.Click += (s, e) => OpenDownloadDialog();
+        _downloadBtn.Click += OnDownloadButtonClick;
         _settingsBtn.Click += (s, e) => ShowMainMenu();
         _bookmarkBtn.BookmarkClicked += (s, e) => ToggleBookmark();
         _newTabButton.Click += async (s, e) => {
@@ -1766,14 +1779,15 @@ public partial class MainForm : Form
     {
         _userBtn.Focus();
 
-        // 如果弹窗可见，则关闭它
+        CloseAISidePanel();
+        CloseDownloadDialog();
+
         if (_userInfoPopup != null && !_userInfoPopup.IsDisposed && _userInfoPopup.Visible)
         {
             CloseUserInfoPopup();
             return;
         }
 
-        // 冷却时间检查：防止点击头像关闭弹窗时，由于 Deactivate 先触发关闭，导致此处又立即打开
         if ((DateTime.Now - _lastUserInfoPopupCloseTime).TotalMilliseconds < 200)
         {
             return;
@@ -1781,15 +1795,53 @@ public partial class MainForm : Form
 
         _suppressUserInfoPopupClose = true;
         _userInfoPopup = new UserInfoPopup(_loginService, StartLoginFlow, HandleLogout);
-        
-        // 计算弹出位置（在按钮下方对齐）
-        var screenPos = _userBtn.PointToScreen(new Point(0, _userBtn.Height));
-        _userInfoPopup.Location = new Point(screenPos.X - (_userInfoPopup.Width - _userBtn.Width) / 2, screenPos.Y + DpiHelper.Scale(5));
-        
+
+        var location = CalculatePopupLocationBelow(_userBtn, _userInfoPopup.Size, DpiHelper.Scale(5));
+        _userInfoPopup.Location = location;
+
         _userInfoPopup.FormClosed += (s, ev) => _userInfoPopup = null;
         _userInfoPopup.Show(this);
 
         BeginInvoke(() => _suppressUserInfoPopupClose = false);
+    }
+
+    private void OnAiButtonClick(object? sender, EventArgs e)
+    {
+        CloseUserInfoPopup();
+        CloseDownloadDialog();
+
+        if (_aiSidePanel.Visible && _aiSidePanel.Width > 0)
+        {
+            CloseAISidePanel();
+            return;
+        }
+
+        ToggleAISidePanel();
+    }
+
+    private void OnDownloadButtonClick(object? sender, EventArgs e)
+    {
+        CloseUserInfoPopup();
+        CloseAISidePanel();
+        OpenDownloadDialog();
+    }
+
+    private Point CalculatePopupLocationBelow(Control anchor, Size popupSize, int offsetY)
+    {
+        var screenPos = anchor.PointToScreen(new Point(0, anchor.Height));
+        int x = screenPos.X - (popupSize.Width - anchor.Width) / 2;
+        int y = screenPos.Y + offsetY;
+
+        var screen = Screen.FromControl(this);
+
+        if (x < screen.WorkingArea.Left)
+            x = screen.WorkingArea.Left + DpiHelper.Scale(4);
+        if (x + popupSize.Width > screen.WorkingArea.Right)
+            x = screen.WorkingArea.Right - popupSize.Width - DpiHelper.Scale(4);
+        if (y + popupSize.Height > screen.WorkingArea.Bottom)
+            y = screen.WorkingArea.Bottom - popupSize.Height - DpiHelper.Scale(4);
+
+        return new Point(x, y);
     }
 
     private CancellationTokenSource? _loginCts;

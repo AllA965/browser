@@ -38,6 +38,7 @@ public partial class MainForm
         CloseDownloadDialog();
         _bookmarkBar?.CloseDropdowns();
         _tabOverflowPanel?.HidePanel();
+        CloseAISidePanel();
         
         CloseUserInfoPopup();
     }
