@@ -982,9 +982,7 @@ public partial class BrowserTabManager
             {
                 if (_settingsService == null) return;
                 
-                // 传入当前页面URL，用于"使用当前网页"功能
-                var currentUrl = _activeTab?.Url;
-                using var dialog = new Forms.HomePageDialog(_settingsService, currentUrl);
+                using var dialog = new Forms.HomePageDialog(_settingsService);
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     // 刷新设置页面以显示更新后的主页设置

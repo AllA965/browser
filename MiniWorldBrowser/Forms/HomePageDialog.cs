@@ -10,16 +10,13 @@ namespace MiniWorldBrowser.Forms;
 public class HomePageDialog : Form
 {
     private readonly ISettingsService _settingsService;
-    private readonly string? _currentUrl;
     private TextBox _urlTextBox = null!;
-    private Button _useCurrentBtn = null!;
     private Button _okBtn = null!;
     private Button _cancelBtn = null!;
     
-    public HomePageDialog(ISettingsService settingsService, string? currentUrl = null)
+    public HomePageDialog(ISettingsService settingsService)
     {
         _settingsService = settingsService;
-        _currentUrl = currentUrl;
         InitializeUI();
         LoadSettings();
     }
@@ -72,19 +69,6 @@ public class HomePageDialog : Form
         };
         Controls.Add(_urlTextBox);
         
-        // 使用当前网页按钮
-        _useCurrentBtn = new Button
-        {
-            Text = "使用当前网页",
-            Size = new Size(100, 28),
-            Location = new Point(25, 100),
-            FlatStyle = FlatStyle.Flat,
-            BackColor = Color.White
-        };
-        _useCurrentBtn.FlatAppearance.BorderColor = Color.FromArgb(180, 180, 180);
-        _useCurrentBtn.Click += OnUseCurrentClick;
-        Controls.Add(_useCurrentBtn);
-        
         // 确定按钮
         _okBtn = new Button
         {
@@ -131,22 +115,6 @@ public class HomePageDialog : Form
         {
             _urlTextBox.Text = homePage;
             _urlTextBox.ForeColor = Color.Black;
-        }
-    }
-    
-    private void OnUseCurrentClick(object? sender, EventArgs e)
-    {
-        if (!string.IsNullOrEmpty(_currentUrl) && 
-            !_currentUrl.StartsWith("about:") && 
-            !_currentUrl.StartsWith("data:"))
-        {
-            _urlTextBox.Text = _currentUrl;
-            _urlTextBox.ForeColor = Color.Black;
-        }
-        else
-        {
-            MessageBox.Show("当前页面不能设置为启动页。", "提示",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
     

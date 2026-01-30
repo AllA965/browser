@@ -87,6 +87,7 @@ public partial class MainForm : Form
     private Splitter _aiSplitter = null!;
     private Microsoft.Web.WebView2.WinForms.WebView2 _aiWebView = null!;
     private RoundedButton _aiBtn = null!;
+    private Button _aiSummarizeBtn = null!;
     private AiApiBridge? _aiApiBridge;
     
     private readonly List<string> _urlHistory = new();
@@ -200,6 +201,20 @@ public partial class MainForm : Form
     }
     
     #region 初始化
+    
+    private System.Drawing.Drawing2D.GraphicsPath CreateRoundedRectanglePath(Rectangle rect, int radius)
+    {
+        var path = new System.Drawing.Drawing2D.GraphicsPath();
+        int diameter = radius * 2;
+        
+        path.AddArc(rect.X, rect.Y, diameter, diameter, 180, 90);
+        path.AddArc(rect.Right - diameter, rect.Y, diameter, diameter, 270, 90);
+        path.AddArc(rect.Right - diameter, rect.Bottom - diameter, diameter, diameter, 0, 90);
+        path.AddArc(rect.X, rect.Bottom - diameter, diameter, diameter, 90, 90);
+        path.CloseFigure();
+        
+        return path;
+    }
     
     private void InitializeUI()
     {
@@ -953,9 +968,8 @@ public partial class MainForm : Form
             Width = DpiHelper.Scale(150) // 给定一个足够的宽度
         };
 
-        var summarizeBtn = new Button
+        _aiSummarizeBtn = new Button
         {
-            Text = "📝 总结此页",
             Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
             Size = DpiHelper.Scale(new Size(90, 32)),
             FlatStyle = FlatStyle.Flat,
@@ -963,14 +977,81 @@ public partial class MainForm : Form
             Cursor = Cursors.Hand,
             Margin = DpiHelper.Scale(new Padding(0, 6, 4, 6)),
             BackColor = Color.Transparent,
-            ForeColor = Color.FromArgb(74, 85, 104)
+            ForeColor = Color.FromArgb(74, 85, 104),
+            TabStop = false,
+            UseVisualStyleBackColor = false
         };
-        summarizeBtn.FlatAppearance.BorderSize = 0;
-        summarizeBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(237, 242, 247);
-        summarizeBtn.FlatAppearance.MouseDownBackColor = Color.FromArgb(226, 232, 240);
-        summarizeBtn.MouseEnter += (s, e) => summarizeBtn.ForeColor = Color.FromArgb(37, 99, 235);
-        summarizeBtn.MouseLeave += (s, e) => summarizeBtn.ForeColor = Color.FromArgb(74, 85, 104);
-        summarizeBtn.Click += (s, e) => SummarizeCurrentPage();
+        _aiSummarizeBtn.FlatAppearance.BorderSize = 0;
+
+        int summarizeBgAlpha = 0;
+        int summarizeTargetAlpha = 0;
+        var summarizeAnimTimer = new System.Windows.Forms.Timer { Interval = 15 };
+
+        _aiSummarizeBtn.Paint += (s, e) =>
+        {
+            var g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+
+            var rect = _aiSummarizeBtn.ClientRectangle;
+            rect.Width -= 1;
+            rect.Height -= 1;
+            int radius = DpiHelper.Scale(6);
+
+            // 绘制圆角矩形背景
+            if (summarizeBgAlpha > 0)
+            {
+                using (var path = CreateRoundedRectanglePath(rect, radius))
+                using (var brush = new SolidBrush(Color.FromArgb(summarizeBgAlpha, 59, 130, 246))) // 使用更精致的淡蓝色 (Blue 500)
+                {
+                    g.FillPath(brush, path);
+                }
+            }
+
+            // 绘制文字
+            TextRenderer.DrawText(g, _aiSummarizeBtn.Text, _aiSummarizeBtn.Font, rect, _aiSummarizeBtn.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+        };
+
+        summarizeAnimTimer.Tick += (s, e) =>
+        {
+            bool changed = false;
+            if (summarizeBgAlpha != summarizeTargetAlpha)
+            {
+                int step = 25;
+                if (summarizeBgAlpha < summarizeTargetAlpha) summarizeBgAlpha = Math.Min(summarizeTargetAlpha, summarizeBgAlpha + step);
+                else summarizeBgAlpha = Math.Max(summarizeTargetAlpha, summarizeBgAlpha - step);
+                changed = true;
+            }
+
+            if (changed) _aiSummarizeBtn.Invalidate();
+            else if (summarizeTargetAlpha == 0 && summarizeBgAlpha == 0) summarizeAnimTimer.Stop();
+        };
+
+        _aiSummarizeBtn.MouseEnter += (s, e) =>
+        {
+            _aiSummarizeBtn.ForeColor = Color.FromArgb(37, 99, 235);
+            summarizeTargetAlpha = 25; // 悬停时淡淡的蓝色背景
+            summarizeAnimTimer.Start();
+        };
+
+        _aiSummarizeBtn.MouseDown += (s, e) =>
+        {
+            summarizeTargetAlpha = 50; // 按下时加深
+            summarizeAnimTimer.Start();
+        };
+
+        _aiSummarizeBtn.MouseUp += (s, e) =>
+        {
+            summarizeTargetAlpha = 25;
+            summarizeAnimTimer.Start();
+        };
+
+        _aiSummarizeBtn.MouseLeave += (s, e) =>
+        {
+            _aiSummarizeBtn.ForeColor = Color.FromArgb(74, 85, 104);
+            summarizeTargetAlpha = 0;
+            summarizeAnimTimer.Start();
+        };
 
         var closeBtn = new Button
         {
@@ -1080,11 +1161,37 @@ public partial class MainForm : Form
         closeBtn.Click += (s, e) => ToggleAISidePanel();
 
         topPanel.Controls.Add(titleLabel);
-        topPanel.Controls.Add(summarizeBtn);
+        topPanel.Controls.Add(_aiSummarizeBtn);
         topPanel.Controls.Add(closeBtn);
 
         _aiSidePanel.Controls.Add(_aiWebView);
         _aiSidePanel.Controls.Add(topPanel);
+
+        UpdateAiSummarizeButtonUi();
+    }
+
+    private void UpdateAiSummarizeButtonUi()
+    {
+        if (_aiSummarizeBtn == null) return;
+
+        var settings = _settingsService.Settings;
+        bool isApiMode = settings.AiServiceMode == 1;
+
+        _aiSummarizeBtn.Click -= OnAiSummarizeClickSummarize;
+        _aiSummarizeBtn.Click -= OnAiSummarizeClickOpenSettings;
+
+        if (isApiMode)
+        {
+            _aiSummarizeBtn.Text = "📝 总结此页";
+            _aiSummarizeBtn.Enabled = true;
+            _aiSummarizeBtn.Click += OnAiSummarizeClickSummarize;
+        }
+        else
+        {
+            _aiSummarizeBtn.Text = "AI模式";
+            _aiSummarizeBtn.Enabled = true;
+            _aiSummarizeBtn.Click += OnAiSummarizeClickOpenSettings;
+        }
     }
 
     private async void InitializeAIWebView()
@@ -1146,14 +1253,19 @@ public partial class MainForm : Form
                     }));
                 }
                 
-                // 确保 UI 线程更新收藏栏
+                // 确保 UI 线程更新收藏栏和 AI 总结按钮
                 if (InvokeRequired)
                 {
-                    BeginInvoke(new Action(UpdateBookmarkBarVisibility));
+                    BeginInvoke(new Action(() =>
+                    {
+                        UpdateBookmarkBarVisibility();
+                        UpdateAiSummarizeButtonUi();
+                    }));
                 }
                 else
                 {
                     UpdateBookmarkBarVisibility();
+                    UpdateAiSummarizeButtonUi();
                 }
             };
 
@@ -1417,6 +1529,16 @@ public partial class MainForm : Form
         {
             Debug.WriteLine($"总结失败: {ex.Message}");
         }
+    }
+
+    private void OnAiSummarizeClickSummarize(object? sender, EventArgs e)
+    {
+        SummarizeCurrentPage();
+    }
+
+    private void OnAiSummarizeClickOpenSettings(object? sender, EventArgs e)
+    {
+        _ = CreateNewTabWithProtection("about:settings");
     }
     
     

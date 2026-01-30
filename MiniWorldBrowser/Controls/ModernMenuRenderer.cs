@@ -106,7 +106,12 @@ public class ModernMenuRenderer : ToolStripProfessionalRenderer
 
         var textRect = e.TextRectangle;
         textRect.X = DpiHelper.Scale(44);
+        // 强制设置高度为项的高度，并开启垂直居中
+        textRect.Y = 0;
+        textRect.Height = e.Item.Height;
         e.TextRectangle = textRect;
+        
+        e.TextFormat |= TextFormatFlags.VerticalCenter;
 
         base.OnRenderItemText(e);
     }

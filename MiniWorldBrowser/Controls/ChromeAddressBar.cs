@@ -51,11 +51,11 @@ namespace MiniWorldBrowser.Controls
             else
             {
                 _idleBackColor = Color.White;
-                _activeBackColor = Color.White;
+                _activeBackColor = Color.FromArgb(241, 243, 244); // 全部使用灰色，避免白色/灰色混杂
                 _hoverBackColor = Color.FromArgb(241, 243, 244);
                 _textColor = Color.FromArgb(32, 33, 36);
             }
-            _textBox.BackColor = _isFocused || _isDropdownOpen ? _activeBackColor : _idleBackColor;
+            UpdateState();
             _textBox.ForeColor = _textColor;
         }
         
@@ -96,8 +96,8 @@ namespace MiniWorldBrowser.Controls
             // We use a panel or padding to center it. Here we use the control's padding.
             // But standard TextBox ignores Top padding. We need to handle resizing.
 
-            _textBox.MouseEnter += (s, e) => { _isHovered = true; Invalidate(); };
-            _textBox.MouseLeave += (s, e) => { _isHovered = false; Invalidate(); };
+            _textBox.MouseEnter += (s, e) => { _isHovered = true; UpdateState(); };
+            _textBox.MouseLeave += (s, e) => { _isHovered = false; UpdateState(); };
             _textBox.GotFocus += (s, e) => { 
                 _isFocused = true; 
                 UpdateState(); 
@@ -129,6 +129,12 @@ namespace MiniWorldBrowser.Controls
             textContainer.Controls.Add(_textBox);
 
             this.Controls.Add(textContainer);
+            
+            // Handle hover for the control itself
+            this.MouseEnter += (s, e) => { _isHovered = true; UpdateState(); };
+            this.MouseLeave += (s, e) => { _isHovered = false; UpdateState(); };
+            textContainer.MouseEnter += (s, e) => { _isHovered = true; UpdateState(); };
+            textContainer.MouseLeave += (s, e) => { _isHovered = false; UpdateState(); };
             
             // Forward clicks to textbox
             this.Click += (s, e) => _textBox.Focus();
