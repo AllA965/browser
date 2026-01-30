@@ -18,7 +18,7 @@ public class AddressBarDropdown : Form
     private int _selectedIndex = -1;
     private string _currentText = "";
     private string _searchEngine = "https://www.baidu.com/s?wd=";
-    private bool _isInteracting = false;  // 标记是否正在与下拉框交互
+    private bool _isInteracting = false;
     
     public event Action<string>? ItemSelected;
     public event Action<string>? SearchRequested;
@@ -26,16 +26,18 @@ public class AddressBarDropdown : Form
     private Color _backgroundColor = Color.White;
     private Color _hoverColor = Color.FromArgb(245, 245, 245);
     private Color _selectedColor = Color.FromArgb(232, 240, 254);
-    private Color _borderColor = Color.FromArgb(218, 220, 224); // Changed from Blue to Google Grey 300
+    private Color _borderColor = Color.FromArgb(218, 220, 224);
     private Color _textColor = Color.FromArgb(32, 33, 36);
     private Color _secondaryTextColor = Color.FromArgb(95, 99, 104);
     private Color _iconColor = Color.FromArgb(95, 99, 104);
     private Color _actionBorderColor = Color.FromArgb(232, 234, 237);
+    private readonly bool _isDarkMode;
     
     public AddressBarDropdown(IHistoryService historyService, IBookmarkService bookmarkService, bool isDarkMode = false)
     {
         _historyService = historyService;
         _bookmarkService = bookmarkService;
+        _isDarkMode = isDarkMode;
         
         // 设置深色模式颜色
         if (isDarkMode)
@@ -53,10 +55,12 @@ public class AddressBarDropdown : Form
         FormBorderStyle = FormBorderStyle.None;
         ShowInTaskbar = false;
         StartPosition = FormStartPosition.Manual;
-        BackColor = _backgroundColor; // 恢复背景色
-        TransparencyKey = Color.Magenta; // 设置透明键
-        BackColor = Color.Magenta; // 窗体底色设为透明键颜色
+        BackColor = _backgroundColor;
+        TransparencyKey = Color.Magenta;
+        BackColor = Color.Magenta;
         DoubleBuffered = true;
+
+        Paint += OnFormPaint;
         
         // 设置 Padding 以留出边框空间 (左、右、下各 2px，上为 0 以实现无缝连接)
         this.Padding = DpiHelper.Scale(new Padding(2, 0, 2, 2));
@@ -212,57 +216,33 @@ public class AddressBarDropdown : Form
 
     private void OnFormPaint(object? sender, PaintEventArgs e)
     {
-        // 开启抗锯齿
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
         e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-        // Same radius as ChromeAddressBar
         int cornerRadius = DpiHelper.Scale(16); 
         int d = cornerRadius * 2;
-        float borderWidth = DpiHelper.Scale(1f); // Thinner border matches Region better
-        
-        // Region 裁剪是基于像素边界的，绘制时尽量贴合 Region
-        // Region Path 使用的是 0 到 Width/Height
-        // DrawPath 应该在边界内侧绘制，否则会被 Region 切掉一半
-        
-        var rect = new Rectangle(0, 0, this.Width - 1, this.Height - 1);
+        float borderWidth = DpiHelper.Scale(1f);
 
-        // 1. 绘制主体背景
-        using var path = new GraphicsPath();
-        path.AddLine(0, 0, Width, 0);
-        path.AddLine(Width, 0, Width, Height - cornerRadius);
-        path.AddArc(Width - d - DpiHelper.Scale(1), Height - d - DpiHelper.Scale(1), d, d, 0, 90); // 微调 -1 以适应 Pen 宽度
-        path.AddLine(Width - cornerRadius, Height, cornerRadius, Height); // Bottom is at Height? Region uses Height. Draw uses Height-1?
-        // Let's align Draw with Region. Region is 0..Width, 0..Height.
-        // Fill should cover everything visible.
-        // DrawBorder should be inside.
-        
-        // Re-construct path for Fill (match Region roughly, but -1 for GDI+ quirks if needed, or just fill large)
-        // Since Region clips it, we can just FillRectangle the whole thing with background color?
-        // Yes, but we need to draw the border carefully.
-        
-        e.Graphics.Clear(_backgroundColor); // Fill all with background
+        // 1. 填充背景
+        // 直接清除为背景色，避免透明键杂色
+        e.Graphics.Clear(_backgroundColor);
 
         // 2. 绘制边框
         using var pen = new Pen(_borderColor, borderWidth);
-        
         using var borderPath = new GraphicsPath();
-        
-        // 1. 右侧线 (从上到下)
-        borderPath.AddLine(Width - DpiHelper.Scale(1), 0, Width - DpiHelper.Scale(1), Height - cornerRadius);
-        
-        // 2. 右下圆角
-        borderPath.AddArc(Width - d - DpiHelper.Scale(1), Height - d - DpiHelper.Scale(1), d, d, 0, 90);
-        
-        // 3. 底部线
-        borderPath.AddLine(Width - cornerRadius, Height - DpiHelper.Scale(1), cornerRadius, Height - DpiHelper.Scale(1));
-        
-        // 4. 左下圆角
-        borderPath.AddArc(0, Height - d - DpiHelper.Scale(1), d, d, 90, 90);
-        
-        // 5. 左侧线 (从下到上)
-        borderPath.AddLine(0, Height - cornerRadius, 0, 0);
-        
+
+        // 绘制 左右+底部 边框（顶部不画，与地址栏衔接）
+        // 稍微缩进 1 像素绘制，确保在 Region 内部，避免被裁剪或留下杂色
+        float offset = borderWidth / 2;
+        float w = Width - borderWidth;
+        float h = Height - borderWidth;
+
+        borderPath.AddLine(w, 0, w, h - cornerRadius);
+        borderPath.AddArc(w - d, h - d, d, d, 0, 90);
+        borderPath.AddLine(w - cornerRadius, h, cornerRadius, h);
+        borderPath.AddArc(0, h - d, d, d, 90, 90);
+        borderPath.AddLine(0, h - cornerRadius, 0, 0);
+
         e.Graphics.DrawPath(pen, borderPath);
     }
     
@@ -791,9 +771,8 @@ public class AddressBarDropdown : Form
         get
         {
             var cp = base.CreateParams;
-            cp.ExStyle |= 0x00000080; // WS_EX_TOOLWINDOW - 不在任务栏显示
-            cp.ExStyle |= 0x08000000; // WS_EX_NOACTIVATE - 不激活窗口
-            cp.ClassStyle |= 0x00020000; // CS_DROPSHADOW - 阴影效果
+            cp.ExStyle |= 0x00000080;
+            cp.ExStyle |= 0x08000000;
             return cp;
         }
     }
