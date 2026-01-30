@@ -220,12 +220,20 @@ public class HistoryService : IHistoryService, IDisposable
         return title.Length > 12 ? title[..12] + "..." : title;
     }
     
-    public void Clear()
+    public void Clear(DateTime? startTime = null)
     {
         lock (_lock)
         {
-            _items.Clear();
-            _currentIndex = -1;
+            if (startTime == null)
+            {
+                _items.Clear();
+                _currentIndex = -1;
+            }
+            else
+            {
+                _items.RemoveAll(i => i.VisitTime >= startTime.Value);
+                _currentIndex = Math.Min(_currentIndex, _items.Count - 1);
+            }
             _isDirty = true;
         }
         

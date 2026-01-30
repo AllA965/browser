@@ -45,7 +45,8 @@ public interface IHistoryService
     /// <summary>
     /// 清除历史记录
     /// </summary>
-    void Clear();
+    /// <param name="startTime">从哪个时间点开始清除，为 null 则清除全部</param>
+    void Clear(DateTime? startTime = null);
     
     /// <summary>
     /// 获取经常访问的网址（按访问次数排序）

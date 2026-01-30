@@ -1141,8 +1141,14 @@ public class SettingsForm : Form
     
     private void OnClearBrowsingData(object? sender, EventArgs e)
     {
-        using var dialog = new ClearBrowsingDataDialog();
-        dialog.ShowDialog();
+        if (Owner is MainForm mainForm)
+        {
+            mainForm.ShowClearBrowsingDataDialog();
+        }
+        else
+        {
+            MessageBox.Show("请在浏览器主窗口中使用“删除浏览数据”功能。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
     
     private void OnResetSettings(object? sender, EventArgs e)

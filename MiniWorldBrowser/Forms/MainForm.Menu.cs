@@ -1158,14 +1158,14 @@ public partial class MainForm
         }
     }
 
-    private void ShowClearBrowsingDataDialog()
+    public void ShowClearBrowsingDataDialog()
     {
-        using var dialog = new ClearBrowsingDataDialog();
-        if (dialog.ShowDialog() == DialogResult.OK)
-        {
-            _tabManager.ActiveTab?.Refresh();
-            _statusLabel.Text = "浏览数据已清除";
-        }
+        var tab = _tabManager.ActiveTab;
+        if (tab == null) return;
+
+        _tabManager.OpenClearBrowsingData(tab);
+        _tabManager.ActiveTab?.Refresh();
+        _statusLabel.Text = "浏览数据已清除";
     }
 
     private void ShowTaskManager()

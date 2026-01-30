@@ -116,14 +116,8 @@ public partial class MainForm
         // 3. 常见的登录、授权地址
         bool isPopup = e.WindowFeatures.HasPosition || e.WindowFeatures.HasSize || !e.IsUserInitiated;
         
-        string uri = e.Uri.ToLower();
-        string[] loginKeywords = { 
-            "login", "auth", "oauth", "signin", "signup", "wechat", "weixin", 
-            "qq.com", "baidu.com", "weibo.com", "github.com", "google.com", 
-            "microsoft.com", "passport", "cas", "authorize", "callback", "canva.cn/login"
-        };
-
-        if (loginKeywords.Any(k => uri.Contains(k)))
+        // 使用更精确的逻辑判断是否为登录或授权页面
+        if (UrlHelper.IsLoginOrAuthUrl(e.Uri))
         {
             isPopup = true;
         }

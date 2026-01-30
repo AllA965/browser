@@ -188,11 +188,19 @@ public class PasswordService
     }
     
     /// <summary>
-    /// 清除所有密码
+    /// 清除密码
     /// </summary>
-    public void ClearAll()
+    /// <param name="startTime">从哪个时间点开始清除，为 null 则清除全部</param>
+    public void Clear(DateTime? startTime = null)
     {
-        _passwords.Clear();
+        if (startTime == null)
+        {
+            _passwords.Clear();
+        }
+        else
+        {
+            _passwords.RemoveAll(p => p.SavedTime >= startTime.Value);
+        }
         Save();
     }
     

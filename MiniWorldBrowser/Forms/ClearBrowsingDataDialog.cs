@@ -1,6 +1,9 @@
+using Microsoft.Web.WebView2.Core;
+using MiniWorldBrowser.Browser;
 using MiniWorldBrowser.Constants;
-
 using MiniWorldBrowser.Helpers;
+using MiniWorldBrowser.Services;
+using MiniWorldBrowser.Services.Interfaces;
 
 namespace MiniWorldBrowser.Forms;
 
@@ -22,10 +25,17 @@ public class ClearBrowsingDataDialog : Form
     private Button _clearBtn = null!;
     private Button _cancelBtn = null!;
     
+    private readonly BrowserTabManager _tabManager;
+    private readonly IHistoryService? _historyService;
+    private readonly PasswordService? _passwordService;
     private long _cacheSize = 0;
     
-    public ClearBrowsingDataDialog()
+    public ClearBrowsingDataDialog(BrowserTabManager tabManager, IHistoryService? historyService, PasswordService? passwordService)
     {
+        _tabManager = tabManager;
+        _historyService = historyService;
+        _passwordService = passwordService;
+        
         CalculateCacheSize();
         InitializeUI();
     }
@@ -34,7 +44,7 @@ public class ClearBrowsingDataDialog : Form
     {
         try
         {
-            var cacheFolder = AppConstants.UserDataFolder;
+            var cacheFolder = Path.Combine(AppConstants.UserDataFolder, "EBWebView", "Default", "Cache");
             if (Directory.Exists(cacheFolder))
             {
                 var dirInfo = new DirectoryInfo(cacheFolder);
@@ -86,7 +96,7 @@ public class ClearBrowsingDataDialog : Form
         y += DpiHelper.Scale(15);
         
         // 选项
-        _historyCheck = CreateCheckBox("清除浏览记录", "- 无", y, true);
+        _historyCheck = CreateCheckBox("清除浏览记录", "", y, true);
         y += DpiHelper.Scale(30);
         
         _downloadsCheck = CreateCheckBox("清除下载记录", "", y, true);
@@ -178,7 +188,7 @@ public class ClearBrowsingDataDialog : Form
         var items = new List<string>();
         if (_historyCheck.Checked) items.Add("浏览历史记录");
         if (_downloadsCheck.Checked) items.Add("下载记录");
-        if (_cookiesCheck.Checked) items.Add("Cookie");
+        if (_cookiesCheck.Checked) items.Add("Cookie 及其他网站数据");
         if (_cacheCheck.Checked) items.Add("缓存");
         if (_passwordsCheck.Checked) items.Add("密码");
         if (_formDataCheck.Checked) items.Add("表单数据");
@@ -196,16 +206,71 @@ public class ClearBrowsingDataDialog : Form
         
         try
         {
-            // 执行清除操作
-            await Task.Run(() =>
+            // 计算起始时间
+            DateTime? startTime = null;
+            switch (_timeRangeCombo.SelectedIndex)
             {
-                if (_cacheCheck.Checked)
-                {
-                    ClearCache();
-                }
-                // 其他清除操作可以在这里添加
-                Thread.Sleep(500); // 模拟清除过程
-            });
+                case 0: startTime = DateTime.Now.AddHours(-1); break;
+                case 1: startTime = DateTime.Now.AddDays(-1); break;
+                case 2: startTime = DateTime.Now.AddDays(-7); break;
+                case 3: startTime = DateTime.Now.AddDays(-28); break;
+                case 4: startTime = null; break; // 全部时间
+            }
+
+            // 执行清除操作
+            var webViewDataKinds = (CoreWebView2BrowsingDataKinds)0;
+            
+            if (_historyCheck.Checked)
+            {
+                _historyService?.Clear(startTime);
+                webViewDataKinds |= CoreWebView2BrowsingDataKinds.BrowsingHistory;
+            }
+            
+            if (_downloadsCheck.Checked)
+            {
+                _tabManager.ClearDownloads(startTime);
+                webViewDataKinds |= CoreWebView2BrowsingDataKinds.DownloadHistory;
+            }
+            
+            if (_cookiesCheck.Checked)
+            {
+                webViewDataKinds |= CoreWebView2BrowsingDataKinds.Cookies;
+                webViewDataKinds |= CoreWebView2BrowsingDataKinds.LocalStorage;
+                webViewDataKinds |= CoreWebView2BrowsingDataKinds.IndexedDb;
+                webViewDataKinds |= CoreWebView2BrowsingDataKinds.FileSystems;
+                webViewDataKinds |= CoreWebView2BrowsingDataKinds.WebSql;
+            }
+            
+            if (_cacheCheck.Checked)
+            {
+                webViewDataKinds |= CoreWebView2BrowsingDataKinds.DiskCache;
+                webViewDataKinds |= CoreWebView2BrowsingDataKinds.CacheStorage;
+            }
+            
+            if (_passwordsCheck.Checked)
+            {
+                _passwordService?.Clear(startTime);
+            }
+            
+            if (_formDataCheck.Checked)
+            {
+            }
+            
+            if (_hostedAppDataCheck.Checked)
+            {
+                webViewDataKinds |= CoreWebView2BrowsingDataKinds.AllDomStorage;
+            }
+            
+            if (_contentLicensesCheck.Checked)
+            {
+                webViewDataKinds |= CoreWebView2BrowsingDataKinds.Settings;
+            }
+
+            // 调用 WebView2 清除数据
+            if (webViewDataKinds != 0)
+            {
+                await _tabManager.ClearWebView2Data(webViewDataKinds, startTime);
+            }
             
             MessageBox.Show($"已成功清除以下数据：\n• {string.Join("\n• ", items)}", 
                 "清除完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -221,21 +286,5 @@ public class ClearBrowsingDataDialog : Form
             _clearBtn.Enabled = true;
             _clearBtn.Text = "清除浏览数据";
         }
-    }
-    
-    private void ClearCache()
-    {
-        try
-        {
-            var cacheFolder = Path.Combine(AppConstants.UserDataFolder, "EBWebView", "Default", "Cache");
-            if (Directory.Exists(cacheFolder))
-            {
-                foreach (var file in Directory.GetFiles(cacheFolder, "*", SearchOption.AllDirectories))
-                {
-                    try { File.Delete(file); } catch { }
-                }
-            }
-        }
-        catch { }
     }
 }

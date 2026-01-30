@@ -98,4 +98,56 @@ public static class UrlHelper
                url == "about:blank" || 
                url == "about:newtab";
     }
+
+    /// <summary>
+    /// 判断是否为登录或授权页面
+    /// </summary>
+    public static bool IsLoginOrAuthUrl(string url)
+    {
+        if (string.IsNullOrWhiteSpace(url)) return false;
+        
+        try
+        {
+            string lowerUrl = url.ToLower();
+            var uri = new Uri(lowerUrl);
+            var host = uri.Host;
+            var path = uri.AbsolutePath;
+            var query = uri.Query;
+
+            // 1. 明确的登录/授权子域名或路径
+            string[] loginSpecifics = { 
+                "passport.baidu.com", "accounts.google.com", "login.microsoftonline.com", 
+                "graph.qq.com", "api.weibo.com", "github.com/login", "weixin.qq.com/connect",
+                "open.weixin.qq.com", "passport.weibo.com", "cas.baidu.com", "auth.baidu.com",
+                "passport.jd.com", "passport.taobao.com", "login.taobao.com", "canva.cn/login"
+            };
+            if (loginSpecifics.Any(s => lowerUrl.Contains(s))) return true;
+
+            // 2. 常见的登录关键字，但需要排除普通主页导航
+            string[] loginKeywords = { "/login", "/signin", "/authorize", "/oauth", "/auth" };
+            if (loginKeywords.Any(p => path.Contains(p))) 
+            {
+                // 排除一些常见主域名下直接打开的非登录新窗口
+                if (host.EndsWith("baidu.com") && !path.Contains("passport") && !path.Contains("auth")) return false;
+                if (host.EndsWith("qq.com") && !path.Contains("graph") && !path.Contains("connect")) return false;
+                return true;
+            }
+
+            // 3. OAuth 参数检测
+            if (query.Contains("client_id=") && (query.Contains("redirect_uri=") || query.Contains("response_type=")))
+            {
+                // 只有在路径包含 auth/login 相关词汇时才判定为弹窗，防止误杀
+                if (lowerUrl.Contains("auth") || lowerUrl.Contains("login") || lowerUrl.Contains("authorize"))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

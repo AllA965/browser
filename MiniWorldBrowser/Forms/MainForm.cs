@@ -493,7 +493,7 @@ public partial class MainForm : Form
         _aiBtn.UseGrayscale = true;
         try
         {
-            string iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "鲲穹01.ico");
+            string iconPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "app.ico");
             if (File.Exists(iconPath))
             {
                 using var icon = new Icon(iconPath, 16, 16);
