@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls;
 
@@ -136,6 +137,9 @@ public class SecurityInfoPopup : Form
         
         // 绘制边框
         Paint += OnPaintBorder;
+
+        // 设置双缓冲
+        SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
         
         // 点击外部关闭
         Deactivate += (s, e) => Close();
@@ -483,10 +487,19 @@ public class SecurityInfoPopup : Form
         // 绘制边框和阴影效果
         var g = e.Graphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        
-        // 绘制边框
-        using var borderPen = new Pen(Color.FromArgb(200, 200, 200), 1);
-        g.DrawRectangle(borderPen, 0, 0, Width - 1, Height - 1);
+        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+        float penWidth = DpiHelper.Scale(1f);
+
+        // 填充背景
+        using (var brush = new SolidBrush(BackColor))
+        {
+            g.FillRectangle(brush, ClientRectangle);
+        }
+
+        // 绘制边框 (缩进以确保抗锯齿边缘不被裁剪)
+        using var borderPen = new Pen(Color.FromArgb(200, 200, 200), penWidth);
+        g.DrawRectangle(borderPen, penWidth / 2f, penWidth / 2f, Width - penWidth, Height - penWidth);
     }
     
     /// <summary>

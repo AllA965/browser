@@ -1,3 +1,6 @@
+using MiniWorldBrowser.Helpers;
+using System.Drawing.Drawing2D;
+
 namespace MiniWorldBrowser.Controls;
 
 /// <summary>
@@ -65,11 +68,27 @@ public class SavePasswordPopup : Form
         BackColor = Color.White;
         Font = new Font("Microsoft YaHei UI", 9F);
 
+        // 设置双缓冲
+        SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+
         // 绘制边框
         Paint += (s, e) =>
         {
-            using var pen = new Pen(Color.FromArgb(200, 200, 200), 1);
-            e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
+            var g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+            float penWidth = DpiHelper.Scale(1f);
+            
+            // 填充背景
+            using (var brush = new SolidBrush(BackColor))
+            {
+                g.FillRectangle(brush, ClientRectangle);
+            }
+
+            // 绘制边框 (缩进以确保抗锯齿边缘不被裁剪)
+            using var pen = new Pen(Color.FromArgb(200, 200, 200), penWidth);
+            g.DrawRectangle(pen, penWidth / 2f, penWidth / 2f, Width - penWidth, Height - penWidth);
         };
 
         if (_mode == PasswordPopupMode.AskToSave)

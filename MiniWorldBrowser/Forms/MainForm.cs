@@ -11,6 +11,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 
 namespace MiniWorldBrowser.Forms;
 
@@ -2047,6 +2049,64 @@ public partial class MainForm : Form
         dlg.ShowDialog(this);
     }
 
+    private sealed class ModernButton : Button
+    {
+        public int CornerRadius { get; set; } = 8;
+        private bool _isHovered;
+        private bool _isPressed;
+
+        public ModernButton()
+        {
+            SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | 
+                     ControlStyles.AllPaintingInWmPaint | ControlStyles.SupportsTransparentBackColor, true);
+            BackColor = Color.Transparent;
+            FlatStyle = FlatStyle.Flat;
+            FlatAppearance.BorderSize = 0;
+            Cursor = Cursors.Hand;
+
+            MouseEnter += (s, e) => { _isHovered = true; Invalidate(); };
+            MouseLeave += (s, e) => { _isHovered = false; _isPressed = false; Invalidate(); };
+            MouseDown += (s, e) => { _isPressed = true; Invalidate(); };
+            MouseUp += (s, e) => { _isPressed = false; Invalidate(); };
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+
+            var rect = new RectangleF(0.5f, 0.5f, Width - 1f, Height - 1f);
+            var bgColor = _isPressed ? Color.FromArgb(0, 80, 150) : 
+                         (_isHovered ? Color.FromArgb(0, 100, 180) : BackColor);
+
+            if (bgColor == Color.Transparent && BackColor == Color.Transparent)
+            {
+                // 如果是透明背景（如取消按钮），使用特定颜色
+                bgColor = _isHovered ? Color.FromArgb(240, 240, 240) : Color.FromArgb(248, 249, 250);
+            }
+
+            using (var path = CreateRoundedRectPath(rect, CornerRadius))
+            {
+                // 填充背景
+                using (var brush = new SolidBrush(bgColor))
+                {
+                    g.FillPath(brush, path);
+                }
+
+                // 如果有边框要求（如取消按钮）
+                if (FlatAppearance.BorderSize > 0)
+                {
+                    using var pen = new Pen(FlatAppearance.BorderColor, FlatAppearance.BorderSize);
+                    g.DrawPath(pen, path);
+                }
+            }
+
+            // 绘制文字
+            TextRenderer.DrawText(g, Text, Font, ClientRectangle, ForeColor, 
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+        }
+    }
+
     private sealed class ModernDialog : Form
     {
         private const int CornerRadius = 12;
@@ -2112,8 +2172,8 @@ public partial class MainForm : Form
             };
             iconBox.Paint += (s, e) =>
             {
-                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                e.Graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit; // 改进图标抗锯齿
                 
                 using var brush = new SolidBrush(GetIconBackColor(icon));
                 e.Graphics.FillEllipse(brush, 0, 0, iconSize, iconSize);
@@ -2122,7 +2182,6 @@ public partial class MainForm : Form
                 using var iconFont = new Font("Segoe UI Symbol", DpiHelper.Scale(16F), FontStyle.Bold);
                 var ch = GetIconChar(icon);
                 
-                // 使用 StringFormat 确保图标在圆形背景中精确居中
                 using var sf = new StringFormat
                 {
                     Alignment = StringAlignment.Center,
@@ -2140,30 +2199,23 @@ public partial class MainForm : Form
                 ForeColor = Color.FromArgb(70, 70, 70)
             };
 
-            var okBtn = new Button
+            var okBtn = new ModernButton
             {
                 Text = okText,
                 Size = DpiHelper.Scale(new Size(cancelText == null ? 120 : 110, 34)),
                 Location = cancelText == null ? 
                     new Point(ClientSize.Width - DpiHelper.Scale(140), ClientSize.Height - DpiHelper.Scale(54)) : 
                     new Point(ClientSize.Width - DpiHelper.Scale(240), ClientSize.Height - DpiHelper.Scale(54)),
-                FlatStyle = FlatStyle.Flat,
                 BackColor = Color.FromArgb(0, 120, 215),
                 ForeColor = Color.White,
-                Cursor = Cursors.Hand
+                CornerRadius = DpiHelper.Scale(8)
             };
-            okBtn.FlatAppearance.BorderSize = 0;
             okBtn.Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F), FontStyle.Bold);
-            okBtn.MouseEnter += (s, e) => okBtn.BackColor = Color.FromArgb(0, 100, 180);
-            okBtn.MouseLeave += (s, e) => okBtn.BackColor = Color.FromArgb(0, 120, 215);
-            okBtn.MouseDown += (s, e) => okBtn.BackColor = Color.FromArgb(0, 80, 150);
-            okBtn.MouseUp += (s, e) => okBtn.BackColor = Color.FromArgb(0, 100, 180);
             okBtn.Click += (s, e) =>
             {
                 DialogResult = DialogResult.OK;
                 Close();
             };
-            ApplyRoundedRegion(okBtn, DpiHelper.Scale(10));
 
             Controls.Add(titleLabel);
             Controls.Add(closeLabel);
@@ -2173,26 +2225,22 @@ public partial class MainForm : Form
 
             if (cancelText != null)
             {
-                var cancelBtn = new Button
+                var cancelBtn = new ModernButton
                 {
                     Text = cancelText,
                     Size = DpiHelper.Scale(new Size(110, 34)),
                     Location = new Point(ClientSize.Width - DpiHelper.Scale(120), ClientSize.Height - DpiHelper.Scale(54)),
-                    FlatStyle = FlatStyle.Flat,
-                    BackColor = Color.FromArgb(248, 249, 250),
+                    BackColor = Color.Transparent,
                     ForeColor = Color.FromArgb(60, 60, 60),
-                    Cursor = Cursors.Hand
+                    CornerRadius = DpiHelper.Scale(8)
                 };
                 cancelBtn.FlatAppearance.BorderSize = 1;
                 cancelBtn.FlatAppearance.BorderColor = Color.FromArgb(230, 230, 230);
-                cancelBtn.MouseEnter += (s, e) => cancelBtn.BackColor = Color.FromArgb(240, 240, 240);
-                cancelBtn.MouseLeave += (s, e) => cancelBtn.BackColor = Color.FromArgb(248, 249, 250);
                 cancelBtn.Click += (s, e) =>
                 {
                     DialogResult = DialogResult.Cancel;
                     Close();
                 };
-                ApplyRoundedRegion(cancelBtn, DpiHelper.Scale(10));
                 Controls.Add(cancelBtn);
                 CancelButton = cancelBtn;
             }
@@ -2208,7 +2256,8 @@ public partial class MainForm : Form
         {
             base.OnSizeChanged(e);
             if (Width <= 0 || Height <= 0) return;
-            using var path = CreateRoundedRectPath(new Rectangle(0, 0, Width, Height), CornerRadius);
+            // 扩大 Region 1像素，确保抗锯齿边缘不被硬裁剪
+            using var path = CreateRoundedRectPath(new Rectangle(-1, -1, Width + 2, Height + 2), CornerRadius + 1);
             Region = new Region(path);
             Invalidate();
         }
@@ -2216,10 +2265,22 @@ public partial class MainForm : Form
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            using var path = CreateRoundedRectPath(new Rectangle(0, 0, Width - 1, Height - 1), CornerRadius);
-            using var pen = new Pen(Color.FromArgb(220, 220, 220), 1);
-            e.Graphics.DrawPath(pen, path);
+            var g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+            // 1. 填充背景
+            using (var brush = new SolidBrush(BackColor))
+            {
+                using var fillPath = CreateRoundedRectPath(new Rectangle(0, 0, Width, Height), CornerRadius);
+                g.FillPath(brush, fillPath);
+            }
+
+            // 2. 绘制边框
+            float penWidth = DpiHelper.Scale(1f);
+            using var path = CreateRoundedRectPath(new RectangleF(penWidth / 2f, penWidth / 2f, Width - penWidth, Height - penWidth), CornerRadius);
+            using var pen = new Pen(Color.FromArgb(220, 220, 220), penWidth);
+            g.DrawPath(pen, path);
         }
 
         private static string GetIconChar(ModernDialogIcon icon)
@@ -2228,7 +2289,7 @@ public partial class MainForm : Form
             {
                 ModernDialogIcon.Success => "✓",
                 ModernDialogIcon.Warning => "!",
-                ModernDialogIcon.Error => "×",
+                ModernDialogIcon.Error => "✕",
                 ModernDialogIcon.Question => "?",
                 _ => "i"
             };
@@ -2245,28 +2306,33 @@ public partial class MainForm : Form
                 _ => Color.FromArgb(0, 120, 215)
             };
         }
+    }
 
-        private static void ApplyRoundedRegion(Control control, int radius)
-        {
-            if (control.Width <= 0 || control.Height <= 0) return;
-            using var path = CreateRoundedRectPath(new Rectangle(0, 0, control.Width, control.Height), radius);
-            control.Region = new Region(path);
-        }
+    private static void ApplyRoundedRegion(Control control, int radius)
+    {
+        if (control.Width <= 0 || control.Height <= 0) return;
+        using var path = CreateRoundedRectPath(new Rectangle(0, 0, control.Width, control.Height), radius);
+        control.Region = new Region(path);
+    }
 
-        private static System.Drawing.Drawing2D.GraphicsPath CreateRoundedRectPath(Rectangle rect, int radius)
-        {
-            var path = new System.Drawing.Drawing2D.GraphicsPath();
-            int d = radius * 2;
-            if (d > rect.Width) d = rect.Width;
-            if (d > rect.Height) d = rect.Height;
+    private static System.Drawing.Drawing2D.GraphicsPath CreateRoundedRectPath(RectangleF rect, float radius)
+    {
+        var path = new System.Drawing.Drawing2D.GraphicsPath();
+        float d = radius * 2;
+        if (d > rect.Width) d = rect.Width;
+        if (d > rect.Height) d = rect.Height;
 
-            path.AddArc(rect.X, rect.Y, d, d, 180, 90);
-            path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
-            path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
-            path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
-            path.CloseFigure();
-            return path;
-        }
+        path.AddArc(rect.X, rect.Y, d, d, 180, 90);
+        path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
+        path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
+        path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
+        path.CloseFigure();
+        return path;
+    }
+
+    private static System.Drawing.Drawing2D.GraphicsPath CreateRoundedRectPath(Rectangle rect, int radius)
+    {
+        return CreateRoundedRectPath(new RectangleF(rect.X, rect.Y, rect.Width, rect.Height), radius);
     }
 
     #endregion

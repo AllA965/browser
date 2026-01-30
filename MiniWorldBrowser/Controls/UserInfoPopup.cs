@@ -306,7 +306,7 @@ public class UserInfoPopup : Form
         // 包含小三角的完整路径
         using var path = CreateRoundedRectPath(new Rectangle(0, 6, Width, Height - 6), CornerRadius);
         
-        int triangleWidth = 12;
+        int triangleWidth = DpiHelper.Scale(12);
         int centerX = Width / 2;
         Point[] triangle = new Point[]
         {
@@ -325,34 +325,48 @@ public class UserInfoPopup : Form
         base.OnPaint(e);
         var g = e.Graphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        
-        // 绘制主背景圆角矩形边框 (从 y=6 开始)
-        using var path = CreateRoundedRectPath(new Rectangle(0, 6, Width - 1, Height - 7), CornerRadius);
-        using var pen = new Pen(Color.FromArgb(220, 220, 220), 1);
-        g.DrawPath(pen, path);
+        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-        // 绘制顶部引导小三角
-        int triangleWidth = 12;
+        float penWidth = DpiHelper.Scale(1f);
+        int triangleWidth = DpiHelper.Scale(12);
         int centerX = Width / 2;
-        
-        Point[] triangle = new Point[]
+
+        // 1. 填充背景（关键：显式填充白色，避免 Region 边缘出现杂色）
+        using (var brush = new SolidBrush(BackColor))
         {
-            new Point(centerX - triangleWidth / 2, 6),
-            new Point(centerX, 0),
-            new Point(centerX + triangleWidth / 2, 6)
-        };
-        
-        using var brush = new SolidBrush(Color.White);
-        g.FillPolygon(brush, triangle);
-        
-        // 绘制小三角的边框
-        using var trianglePen = new Pen(Color.FromArgb(220, 220, 220), 1);
-        g.DrawLine(trianglePen, triangle[0], triangle[1]);
-        g.DrawLine(trianglePen, triangle[1], triangle[2]);
-        
-        // 擦除小三角底部的边框线，使其与主体融合
-        using var erasePen = new Pen(Color.White, 1);
-        g.DrawLine(erasePen, triangle[0].X + 1, triangle[0].Y, triangle[2].X - 1, triangle[2].Y);
+            using var fillPath = CreateRoundedRectPath(new RectangleF(0, 6, Width, Height - 6), CornerRadius);
+            g.FillPath(brush, fillPath);
+            
+            PointF[] triangleFill = new PointF[]
+            {
+                new PointF(centerX - triangleWidth / 2f, 6),
+                new PointF(centerX, 0),
+                new PointF(centerX + triangleWidth / 2f, 6)
+            };
+            g.FillPolygon(brush, triangleFill);
+        }
+
+        // 2. 绘制圆角矩形边框 (缩进以确保抗锯齿边缘不被裁剪)
+        using (var path = CreateRoundedRectPath(new RectangleF(penWidth / 2f, 6 + penWidth / 2f, Width - penWidth, Height - 6 - penWidth), CornerRadius))
+        {
+            using var pen = new Pen(Color.FromArgb(220, 220, 220), penWidth);
+            g.DrawPath(pen, path);
+
+            // 绘制顶部引导小三角边框
+            PointF[] trianglePoints = new PointF[]
+            {
+                new PointF(centerX - triangleWidth / 2f, 6 + penWidth / 2f),
+                new PointF(centerX, penWidth / 2f),
+                new PointF(centerX + triangleWidth / 2f, 6 + penWidth / 2f)
+            };
+            
+            g.DrawLine(pen, trianglePoints[0], trianglePoints[1]);
+            g.DrawLine(pen, trianglePoints[1], trianglePoints[2]);
+            
+            // 擦除小三角底部的边框线，使其与主体融合
+            using var erasePen = new Pen(BackColor, penWidth + 0.5f);
+            g.DrawLine(erasePen, trianglePoints[0].X + penWidth, 6 + penWidth / 2f, trianglePoints[2].X - penWidth, 6 + penWidth / 2f);
+        }
     }
 
     private static void ApplyRoundedRegion(Control control, int radius)
@@ -362,10 +376,10 @@ public class UserInfoPopup : Form
         control.Region = new Region(path);
     }
 
-    private static GraphicsPath CreateRoundedRectPath(Rectangle rect, int radius)
+    private static GraphicsPath CreateRoundedRectPath(RectangleF rect, float radius)
     {
         var path = new GraphicsPath();
-        int d = radius * 2;
+        float d = radius * 2;
         if (d > rect.Width) d = rect.Width;
         if (d > rect.Height) d = rect.Height;
 
@@ -375,5 +389,10 @@ public class UserInfoPopup : Form
         path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
         path.CloseFigure();
         return path;
+    }
+
+    private static GraphicsPath CreateRoundedRectPath(Rectangle rect, int radius)
+    {
+        return CreateRoundedRectPath(new RectangleF(rect.X, rect.Y, rect.Width, rect.Height), radius);
     }
 }
