@@ -347,6 +347,85 @@ public class BrowserSettings
     
     #endregion
     
+    #region 内容设置 (Global Content Settings)
+
+    /// <summary>
+    /// Cookie 设置: 0=允许设置本地数据, 1=仅保留到退出, 2=阻止网站设置任何数据
+    /// </summary>
+    public int CookieSetting { get; set; } = 0;
+
+    /// <summary>
+    /// 阻止第三方 Cookie
+    /// </summary>
+    public bool BlockThirdPartyCookies { get; set; } = false;
+
+    /// <summary>
+    /// 图片设置: 0=显示所有图片, 1=不显示任何图片
+    /// </summary>
+    public int ImageSetting { get; set; } = 0;
+
+    /// <summary>
+    /// JavaScript 设置: 0=允许所有网站运行, 1=不允许任何网站运行
+    /// </summary>
+    public int JavaScriptSetting { get; set; } = 0;
+
+    /// <summary>
+    /// 处理程序设置: 0=允许网站要求成为默认处理程序, 1=不允许任何网站处理协议
+    /// </summary>
+    public int HandlerSetting { get; set; } = 0;
+
+    /// <summary>
+    /// 插件设置: 0=检测并运行重要内容, 1=运行所有插件内容, 2=让我自行选择
+    /// </summary>
+    public int PluginSetting { get; set; } = 1;
+
+    /// <summary>
+    /// 位置设置: 0=允许所有网站跟踪, 1=询问（推荐）, 2=不允许任何网站跟踪
+    /// </summary>
+    public int LocationSetting { get; set; } = 1;
+
+    /// <summary>
+    /// 通知设置: 0=允许所有网站显示通知, 1=询问（推荐）, 2=不允许任何网站显示通知
+    /// </summary>
+    public int NotificationSetting { get; set; } = 1;
+
+    /// <summary>
+    /// 鼠标锁定设置: 0=允许所有网站隐藏鼠标指针, 1=询问（推荐）, 2=不允许任何网站隐藏鼠标指针
+    /// </summary>
+    public int MouseLockSetting { get; set; } = 1;
+
+    /// <summary>
+    /// 允许将标识符用于受保护内容
+    /// </summary>
+    public bool ProtectedContentSetting { get; set; } = true;
+
+    /// <summary>
+    /// 麦克风设置: 0=询问（推荐）, 1=不允许网站使用麦克风
+    /// </summary>
+    public int MicSetting { get; set; } = 0;
+
+    /// <summary>
+    /// 摄像头设置: 0=询问（推荐）, 1=不允许网站使用摄像头
+    /// </summary>
+    public int CameraSetting { get; set; } = 0;
+
+    /// <summary>
+    /// 未经过沙盒屏蔽的插件访问: 0=允许所有网站使用插件访问, 1=询问（推荐）, 2=不允许任何网站使用插件访问
+    /// </summary>
+    public int UnsandboxedPluginSetting { get; set; } = 1;
+
+    /// <summary>
+    /// 自动下载设置: 0=允许所有网站自动下载多个文件, 1=询问（推荐）, 2=禁止任何网站自动下载多个文件
+    /// </summary>
+    public int AutomaticDownloadSetting { get; set; } = 1;
+
+    /// <summary>
+    /// MIDI 设备设置: 0=允许所有网站访问, 1=询问（推荐）, 2=禁止任何网站访问
+    /// </summary>
+    public int MidiSetting { get; set; } = 1;
+
+    #endregion
+
     #region 收藏夹（兼容旧版）
     
     public List<string> Favorites { get; set; } = new();

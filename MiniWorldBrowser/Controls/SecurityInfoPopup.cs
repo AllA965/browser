@@ -423,7 +423,7 @@ public class SecurityInfoPopup : Form
         var panel = new Panel
         {
             Location = new Point(0, y),
-            Size = new Size(_tabControl.Width - 40, 150),
+            Size = new Size(_tabControl.Width - 40, 180), // 增加高度以容纳文本
             BackColor = Color.White
         };
         
@@ -445,7 +445,7 @@ public class SecurityInfoPopup : Form
                    "请勿在此网站上输入任何敏感信息（例如密码或信用卡信息），" +
                    "因为攻击者可能会窃取这些信息。",
             Location = new Point(35, 5),
-            Size = new Size(panel.Width - 45, 80),
+            Size = new Size(panel.Width - 45, 100), // 增加高度
             Font = new Font("Microsoft YaHei UI", 9F),
             ForeColor = Color.FromArgb(80, 80, 80)
         };
@@ -454,8 +454,8 @@ public class SecurityInfoPopup : Form
         var suggestionLabel = new Label
         {
             Text = "建议：\n• 不要在此页面输入个人信息\n• 检查网址是否正确\n• 联系网站管理员",
-            Location = new Point(35, 90),
-            Size = new Size(panel.Width - 45, 60),
+            Location = new Point(35, 105), // 相应下移
+            Size = new Size(panel.Width - 45, 70), // 增加高度
             Font = new Font("Microsoft YaHei UI", 9F),
             ForeColor = Color.FromArgb(100, 100, 100)
         };

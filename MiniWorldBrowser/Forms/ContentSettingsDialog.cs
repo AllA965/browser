@@ -11,6 +11,7 @@ public class ContentSettingsDialog : Form
 {
     private readonly ISettingsService _settingsService;
     private Panel _scrollPanel = null!;
+    private readonly List<Control> _inputControls = new();
 
     public ContentSettingsDialog(ISettingsService settingsService)
     {
@@ -22,273 +23,365 @@ public class ContentSettingsDialog : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "内容设置";
-        Size = new Size(600, 550);
+        Size = DpiHelper.Scale(new Size(600, 650));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
         BackColor = Color.White;
+        Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
+
+        // 使用 TableLayoutPanel 确保布局稳定
+        var mainLayout = new TableLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            RowCount = 2,
+            ColumnCount = 1,
+            BackColor = Color.White
+        };
+        mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, DpiHelper.Scale(55)));
 
         // 滚动面板
         _scrollPanel = new Panel
         {
-            Location = new Point(0, 0),
-            Size = new Size(580, 460),
+            Dock = DockStyle.Fill,
             AutoScroll = true,
-            Dock = DockStyle.None
+            BackColor = Color.White,
+            Padding = new Padding(0, 0, DpiHelper.Scale(10), DpiHelper.Scale(10))
+        };
+        
+        // 底部按钮面板
+        var bottomPanel = new Panel
+        {
+            Dock = DockStyle.Fill,
+            BackColor = Color.FromArgb(245, 245, 245),
+            Padding = new Padding(0, 0, DpiHelper.Scale(15), 0)
         };
 
         // 完成按钮
         var btnDone = new Button
         {
             Text = "完成",
-            Location = new Point(490, 470),
-            Size = new Size(80, 28),
+            Size = DpiHelper.Scale(new Size(85, 32)),
+            Anchor = AnchorStyles.Right | AnchorStyles.Top,
             FlatStyle = FlatStyle.System,
-            DialogResult = DialogResult.OK
+            DialogResult = DialogResult.OK,
+            Top = DpiHelper.Scale(11),
+            Left = bottomPanel.Width - DpiHelper.Scale(105)
         };
+        btnDone.Click += (s, e) => SaveSettings();
+        bottomPanel.Controls.Add(btnDone);
 
-        Controls.Add(_scrollPanel);
-        Controls.Add(btnDone);
+        mainLayout.Controls.Add(_scrollPanel, 0, 0);
+        mainLayout.Controls.Add(bottomPanel, 0, 1);
+        
+        Controls.Add(mainLayout);
 
         // 构建内容
         BuildContent();
     }
 
+    private void SaveSettings()
+    {
+        var settings = _settingsService.Settings;
+        foreach (var control in _inputControls)
+        {
+            if (control is RadioButton rb && rb.Checked && rb.Tag is ValueTuple<string, int> radioTag)
+            {
+                var propName = radioTag.Item1;
+                var value = radioTag.Item2;
+                var prop = settings.GetType().GetProperty(propName);
+                prop?.SetValue(settings, value);
+            }
+            else if (control is CheckBox cb && cb.Tag is string cbPropName)
+            {
+                var prop = settings.GetType().GetProperty(cbPropName);
+                prop?.SetValue(settings, cb.Checked);
+            }
+        }
+        _settingsService.Save();
+    }
+
     private void BuildContent()
     {
-        var y = 15;
+        _scrollPanel.Controls.Clear();
+        _inputControls.Clear();
+        
+        var flowLayout = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Top,
+            FlowDirection = FlowDirection.TopDown,
+            WrapContents = false,
+            AutoSize = true,
+            Padding = new Padding(DpiHelper.Scale(15), DpiHelper.Scale(5), DpiHelper.Scale(10), DpiHelper.Scale(5)),
+            BackColor = Color.White
+        };
+        _scrollPanel.Controls.Add(flowLayout);
+
+        var settings = _settingsService.Settings;
 
         // Cookie
-        AddSectionTitle("Cookie", ref y);
-        AddRadioButton("允许设置本地数据（推荐）", "cookie", true, ref y);
-        AddRadioButton("仅将本地数据保留到您退出浏览器为止", "cookie", false, ref y);
-        AddRadioButton("阻止网站设置任何数据", "cookie", false, ref y);
-        AddCheckBox("阻止第三方 Cookie 和网站数据", false, ref y);
-        y += 5;
-        AddButtonRow(new[] { ("管理例外情况...", "cookie_exception"), ("所有 Cookie 和网站数据...", "cookie_data") }, ref y);
+        AddSection(flowLayout, "Cookie", new Control[] {
+            CreateRadioButton("允许设置本地数据（推荐）", "CookieSetting", 0, settings.CookieSetting == 0),
+            CreateRadioButton("仅将本地数据保留到您退出浏览器为止", "CookieSetting", 1, settings.CookieSetting == 1),
+            CreateRadioButton("阻止网站设置任何数据", "CookieSetting", 2, settings.CookieSetting == 2),
+            CreateCheckBox("阻止第三方 Cookie 和网站数据", "BlockThirdPartyCookies", settings.BlockThirdPartyCookies)
+        }, new[] {
+            ("管理例外情况...", "cookie_exception"),
+            ("所有 Cookie 和网站数据...", "cookie_data")
+        });
 
         // 图片
-        AddSectionTitle("图片", ref y);
-        AddRadioButton("显示所有图片（推荐）", "image", true, ref y);
-        AddRadioButton("不显示任何图片", "image", false, ref y);
-        AddButton("管理例外情况...", "image_exception", ref y);
+        AddSection(flowLayout, "图片", new Control[] {
+            CreateRadioButton("显示所有图片（推荐）", "ImageSetting", 0, settings.ImageSetting == 0),
+            CreateRadioButton("不显示任何图片", "ImageSetting", 1, settings.ImageSetting == 1)
+        }, new[] { ("管理例外情况...", "image_exception") });
 
         // JavaScript
-        AddSectionTitle("JavaScript", ref y);
-        AddRadioButton("允许所有网站运行 JavaScript（推荐）", "js", true, ref y);
-        AddRadioButton("不允许任何网站运行 JavaScript", "js", false, ref y);
-        AddButton("管理例外情况...", "js_exception", ref y);
+        AddSection(flowLayout, "JavaScript", new Control[] {
+            CreateRadioButton("允许所有网站运行 JavaScript（推荐）", "JavaScriptSetting", 0, settings.JavaScriptSetting == 0),
+            CreateRadioButton("不允许任何网站运行 JavaScript", "JavaScriptSetting", 1, settings.JavaScriptSetting == 1)
+        }, new[] { ("管理例外情况...", "js_exception") });
 
         // 处理程序
-        AddSectionTitle("处理程序", ref y);
-        AddRadioButton("允许网站要求成为协议的默认处理程序（推荐）", "handler", true, ref y);
-        AddRadioButton("不允许任何网站处理协议", "handler", false, ref y);
-        AddButton("管理处理程序...", "handler_manage", ref y);
+        AddSection(flowLayout, "处理程序", new Control[] {
+            CreateRadioButton("允许网站要求成为协议的默认处理程序（推荐）", "HandlerSetting", 0, settings.HandlerSetting == 0),
+            CreateRadioButton("不允许任何网站处理协议", "HandlerSetting", 1, settings.HandlerSetting == 1)
+        }, new[] { ("管理处理程序...", "handler_manage") });
 
         // 插件
-        AddSectionTitle("插件", ref y);
-        AddRadioButton("检测并运行重要插件内容（推荐）", "plugin", false, ref y);
-        AddRadioButton("运行所有插件内容", "plugin", true, ref y);
-        AddRadioButton("让我自行选择何时运行插件内容", "plugin", false, ref y);
-        AddButton("管理例外情况...", "plugin_exception", ref y);
+        AddSection(flowLayout, "插件", new Control[] {
+            CreateRadioButton("检测并运行重要插件内容（推荐）", "PluginSetting", 0, settings.PluginSetting == 0),
+            CreateRadioButton("运行所有插件内容", "PluginSetting", 1, settings.PluginSetting == 1),
+            CreateRadioButton("让我自行选择何时运行插件内容", "PluginSetting", 2, settings.PluginSetting == 2)
+        }, new[] { ("管理例外情况...", "plugin_exception") });
 
         // 广告过滤
-        AddSectionTitle("广告过滤", ref y);
-        AddButton("管理例外情况...", "adblock_exception", ref y);
+        AddSection(flowLayout, "广告过滤", null, new[] { ("管理例外情况...", "adblock_exception") });
 
         // 位置
-        AddSectionTitle("位置", ref y);
-        AddRadioButton("允许所有网站跟踪您所在的位置", "location", false, ref y);
-        AddRadioButton("当网站要跟踪您所在的位置时询问您（推荐）", "location", true, ref y);
-        AddRadioButton("不允许任何网站跟踪您所在的位置", "location", false, ref y);
-        AddButton("管理例外情况...", "location_exception", ref y);
+        AddSection(flowLayout, "位置", new Control[] {
+            CreateRadioButton("允许所有网站跟踪您所在的位置", "LocationSetting", 0, settings.LocationSetting == 0),
+            CreateRadioButton("当网站要跟踪您所在的位置时询问您（推荐）", "LocationSetting", 1, settings.LocationSetting == 1),
+            CreateRadioButton("不允许任何网站跟踪您所在的位置", "LocationSetting", 2, settings.LocationSetting == 2)
+        }, new[] { ("管理例外情况...", "location_exception") });
 
         // 通知
-        AddSectionTitle("通知", ref y);
-        AddRadioButton("允许所有网站显示通知", "notification", false, ref y);
-        AddRadioButton("当网站要显示通知时询问您（推荐）", "notification", true, ref y);
-        AddRadioButton("不允许任何网站显示通知", "notification", false, ref y);
-        AddButton("管理例外情况...", "notification_exception", ref y);
+        AddSection(flowLayout, "通知", new Control[] {
+            CreateRadioButton("允许所有网站显示通知", "NotificationSetting", 0, settings.NotificationSetting == 0),
+            CreateRadioButton("当网站要显示通知时询问您（推荐）", "NotificationSetting", 1, settings.NotificationSetting == 1),
+            CreateRadioButton("不允许任何网站显示通知", "NotificationSetting", 2, settings.NotificationSetting == 2)
+        }, new[] { ("管理例外情况...", "notification_exception") });
 
         // 全屏
-        AddSectionTitle("全屏", ref y);
-        AddButton("管理例外情况...", "fullscreen_exception", ref y);
+        AddSection(flowLayout, "全屏", null, new[] { ("管理例外情况...", "fullscreen_exception") });
 
         // 鼠标指针
-        AddSectionTitle("鼠标指针", ref y);
-        AddRadioButton("允许所有网站隐藏鼠标指针", "mouselock", false, ref y);
-        AddRadioButton("当网站要隐藏鼠标指针时询问您（推荐）", "mouselock", true, ref y);
-        AddRadioButton("不允许任何网站隐藏鼠标指针", "mouselock", false, ref y);
-        AddButton("管理例外情况...", "mouselock_exception", ref y);
+        AddSection(flowLayout, "鼠标指针", new Control[] {
+            CreateRadioButton("允许所有网站隐藏鼠标指针", "MouseLockSetting", 0, settings.MouseLockSetting == 0),
+            CreateRadioButton("当网站要隐藏鼠标指针时询问您（推荐）", "MouseLockSetting", 1, settings.MouseLockSetting == 1),
+            CreateRadioButton("不允许任何网站隐藏鼠标指针", "MouseLockSetting", 2, settings.MouseLockSetting == 2)
+        }, new[] { ("管理例外情况...", "mouselock_exception") });
 
         // 受保护的内容
-        AddSectionTitle("受保护的内容", ref y);
-        AddDescription("有些内容服务会使用机器标识符来标识您的个人身份，以便授予您访问受保护内容的权限。", ref y);
-        AddCheckBox("允许将标识符用于受保护内容（可能需要重新启动计算机）", true, ref y);
+        AddSection(flowLayout, "受保护的内容", new Control[] {
+            CreateDescription("有些内容服务会使用机器标识符来标识您的个人身份，以便授予您访问受保护内容的权限。"),
+            CreateCheckBox("允许将标识符用于受保护内容（可能需要重新启动计算机）", "ProtectedContentSetting", settings.ProtectedContentSetting)
+        }, null);
 
         // 麦克风
-        AddSectionTitle("麦克风", ref y);
-        AddRadioButton("当网站要求使用您的麦克风时询问您（推荐）", "mic", true, ref y);
-        AddRadioButton("不允许网站使用您的麦克风", "mic", false, ref y);
-        AddButton("管理例外情况...", "mic_exception", ref y);
+        AddSection(flowLayout, "麦克风", new Control[] {
+            CreateRadioButton("当网站要求使用您的麦克风时询问您（推荐）", "MicSetting", 0, settings.MicSetting == 0),
+            CreateRadioButton("不允许网站使用您的麦克风", "MicSetting", 1, settings.MicSetting == 1)
+        }, new[] { ("管理例外情况...", "mic_exception") });
 
         // 摄像头
-        AddSectionTitle("摄像头", ref y);
-        AddComboBox("screen-recorder-dev", ref y);
-        AddRadioButton("当网站要求使用您的摄像头时询问您（推荐）", "camera", true, ref y);
-        AddRadioButton("不允许网站使用您的摄像头", "camera", false, ref y);
-        AddButton("管理例外情况...", "camera_exception", ref y);
+        AddSection(flowLayout, "摄像头", new Control[] {
+            CreateComboBox("screen-recorder-dev"),
+            CreateRadioButton("当网站要求使用您的摄像头时询问您（推荐）", "CameraSetting", 0, settings.CameraSetting == 0),
+            CreateRadioButton("不允许网站使用您的摄像头", "CameraSetting", 1, settings.CameraSetting == 1)
+        }, new[] { ("管理例外情况...", "camera_exception") });
 
         // 未经过沙盒屏蔽的插件访问
-        AddSectionTitle("未经过沙盒屏蔽的插件访问", ref y);
-        AddRadioButton("允许所有网站使用插件访问您的计算机", "sandbox", false, ref y);
-        AddRadioButton("当网站要使用插件访问您的计算机时询问您（推荐）", "sandbox", true, ref y);
-        AddRadioButton("不允许任何网站使用插件访问您的计算机", "sandbox", false, ref y);
-        AddButton("管理例外情况...", "sandbox_exception", ref y);
+        AddSection(flowLayout, "未经过沙盒屏蔽的插件访问", new Control[] {
+            CreateRadioButton("允许所有网站使用插件访问您的计算机", "UnsandboxedPluginSetting", 0, settings.UnsandboxedPluginSetting == 0),
+            CreateRadioButton("当网站要使用插件访问您的计算机时询问您（推荐）", "UnsandboxedPluginSetting", 1, settings.UnsandboxedPluginSetting == 1),
+            CreateRadioButton("不允许任何网站使用插件访问您的计算机", "UnsandboxedPluginSetting", 2, settings.UnsandboxedPluginSetting == 2)
+        }, new[] { ("管理例外情况...", "sandbox_exception") });
 
         // 自动下载
-        AddSectionTitle("自动下载", ref y);
-        AddRadioButton("允许所有网站自动下载多个文件", "download", false, ref y);
-        AddRadioButton("当网站下载第一个文件后要自动下载更多文件时询问您（推荐）", "download", true, ref y);
-        AddRadioButton("禁止任何网站自动下载多个文件", "download", false, ref y);
-        AddButton("管理例外情况...", "download_exception", ref y);
+        AddSection(flowLayout, "自动下载", new Control[] {
+            CreateRadioButton("允许所有网站自动下载多个文件", "AutomaticDownloadSetting", 0, settings.AutomaticDownloadSetting == 0),
+            CreateRadioButton("当网站下载第一个文件后要自动下载更多文件时询问您（推荐）", "AutomaticDownloadSetting", 1, settings.AutomaticDownloadSetting == 1),
+            CreateRadioButton("禁止任何网站自动下载多个文件", "AutomaticDownloadSetting", 2, settings.AutomaticDownloadSetting == 2)
+        }, new[] { ("管理例外情况...", "download_exception") });
 
         // 完全控制 MIDI 设备
-        AddSectionTitle("完全控制 MIDI 设备", ref y);
-        AddRadioButton("允许所有网站使用系统专有消息来访问 MIDI 设备", "midi", false, ref y);
-        AddRadioButton("在网站想要使用系统专有消息访问 MIDI 设备时询问我（推荐）", "midi", true, ref y);
-        AddRadioButton("禁止任何网站使用系统专有消息访问 MIDI 设备", "midi", false, ref y);
-        AddButton("管理例外情况...", "midi_exception", ref y);
+        AddSection(flowLayout, "完全控制 MIDI 设备", new Control[] {
+            CreateRadioButton("允许所有网站使用系统专有消息来访问 MIDI 设备", "MidiSetting", 0, settings.MidiSetting == 0),
+            CreateRadioButton("在网站想要使用系统专有消息访问 MIDI 设备时询问我（推荐）", "MidiSetting", 1, settings.MidiSetting == 1),
+            CreateRadioButton("禁止任何网站使用系统专有消息访问 MIDI 设备", "MidiSetting", 2, settings.MidiSetting == 2)
+        }, new[] { ("管理例外情况...", "midi_exception") });
 
         // 缩放级别
-        AddSectionTitle("缩放级别", ref y);
-        AddButton("管理...", "zoom_manage", ref y);
-
-        y += 20;
-        // 设置滚动面板的内容高度
-        _scrollPanel.AutoScrollMinSize = new Size(0, y);
+        AddSection(flowLayout, "缩放级别", null, new[] { ("管理...", "zoom_manage") });
     }
 
-    private void AddSectionTitle(string text, ref int y)
+    private void AddSection(Control parent, string title, Control[]? contentControls, (string text, string action)[]? buttons)
     {
-        y += 10;
-        var lbl = new Label
+        var sectionPanel = new Panel
         {
-            Text = text,
-            Location = new Point(20, y),
+            Width = DpiHelper.Scale(540),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 10, FontStyle.Bold)
+            Margin = new Padding(0, 0, 0, DpiHelper.Scale(8)),
+            BackColor = Color.White
         };
-        _scrollPanel.Controls.Add(lbl);
-        y += 30;
-    }
 
-    private void AddDescription(string text, ref int y)
-    {
-        var lbl = new Label
+        var lblTitle = new Label
         {
-            Text = text,
-            Location = new Point(35, y),
-            Size = new Size(500, 40),
-            Font = new Font("Microsoft YaHei UI", 9),
-            ForeColor = Color.Gray
+            Text = title,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
+            ForeColor = Color.FromArgb(32, 32, 32),
+            AutoSize = true,
+            Location = new Point(0, 0),
+            Margin = Padding.Empty
         };
-        _scrollPanel.Controls.Add(lbl);
-        y += 45;
+        sectionPanel.Controls.Add(lblTitle);
+
+        var currentY = lblTitle.Bottom + DpiHelper.Scale(2);
+
+        if (contentControls != null)
+        {
+            var contentPanel = new Panel
+            {
+                Location = new Point(DpiHelper.Scale(12), currentY),
+                Width = sectionPanel.Width - DpiHelper.Scale(20),
+                AutoSize = true,
+                Margin = Padding.Empty
+            };
+
+            int innerY = 0;
+            foreach (var ctrl in contentControls)
+            {
+                ctrl.Location = new Point(0, innerY);
+                contentPanel.Controls.Add(ctrl);
+                innerY += ctrl.Height;
+            }
+            sectionPanel.Controls.Add(contentPanel);
+            currentY = contentPanel.Bottom;
+        }
+
+        if (buttons != null && buttons.Length > 0)
+        {
+            var btnPanel = new FlowLayoutPanel
+            {
+                Location = new Point(DpiHelper.Scale(12), currentY),
+                Width = sectionPanel.Width - DpiHelper.Scale(20),
+                AutoSize = true,
+                FlowDirection = FlowDirection.LeftToRight,
+                Margin = Padding.Empty,
+                Padding = Padding.Empty
+            };
+
+            foreach (var (text, action) in buttons)
+            {
+                var link = new LinkLabel
+                {
+                    Text = text,
+                    AutoSize = true,
+                    Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+                    LinkColor = Color.FromArgb(0, 120, 212),
+                    ActiveLinkColor = Color.FromArgb(0, 102, 204),
+                    VisitedLinkColor = Color.FromArgb(0, 120, 212),
+                    LinkBehavior = LinkBehavior.HoverUnderline,
+                    Margin = new Padding(0, DpiHelper.Scale(1), DpiHelper.Scale(15), DpiHelper.Scale(1)),
+                    Tag = action
+                };
+                link.Click += OnButtonClick;
+                btnPanel.Controls.Add(link);
+            }
+            sectionPanel.Controls.Add(btnPanel);
+        }
+
+        parent.Controls.Add(sectionPanel);
     }
 
-    private RadioButton AddRadioButton(string text, string group, bool isChecked, ref int y)
+    private RadioButton CreateRadioButton(string text, string propertyName, int value, bool isChecked)
     {
         var rb = new RadioButton
         {
             Text = text,
-            Location = new Point(35, y),
             AutoSize = true,
             Checked = isChecked,
-            Font = new Font("Microsoft YaHei UI", 9),
-            Tag = group
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9.5F)),
+            Tag = (propertyName, value),
+            ForeColor = Color.FromArgb(64, 64, 64),
+            Margin = new Padding(0, 0, 0, 0),
+            Padding = new Padding(0, DpiHelper.Scale(1), 0, DpiHelper.Scale(1))
         };
-        _scrollPanel.Controls.Add(rb);
-        y += 26;
+        _inputControls.Add(rb);
         return rb;
     }
 
-    private CheckBox AddCheckBox(string text, bool isChecked, ref int y)
+    private CheckBox CreateCheckBox(string text, string propertyName, bool isChecked)
     {
         var cb = new CheckBox
         {
             Text = text,
-            Location = new Point(35, y),
             AutoSize = true,
             Checked = isChecked,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9.5F)),
+            Tag = propertyName,
+            ForeColor = Color.FromArgb(64, 64, 64),
+            Margin = new Padding(0, 0, 0, 0),
+            Padding = new Padding(0, DpiHelper.Scale(1), 0, DpiHelper.Scale(1))
         };
-        _scrollPanel.Controls.Add(cb);
-        y += 26;
+        _inputControls.Add(cb);
         return cb;
     }
 
-    private void AddComboBox(string defaultValue, ref int y)
+    private Label CreateDescription(string text)
+    {
+        return new Label
+        {
+            Text = text,
+            Width = DpiHelper.Scale(500),
+            AutoSize = true,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            ForeColor = Color.Gray,
+            Margin = new Padding(0, 0, 0, DpiHelper.Scale(2))
+        };
+    }
+
+    private ComboBox CreateComboBox(string defaultValue)
     {
         var cbo = new ComboBox
         {
-            Location = new Point(35, y),
-            Size = new Size(200, 25),
+            Size = new Size(DpiHelper.Scale(200), DpiHelper.Scale(25)),
             DropDownStyle = ComboBoxStyle.DropDownList,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F))
         };
         cbo.Items.Add(defaultValue);
         cbo.SelectedIndex = 0;
-        _scrollPanel.Controls.Add(cbo);
-        y += 32;
+        return cbo;
     }
 
-    private Button AddButton(string text, string action, ref int y)
-    {
-        var btn = new Button
-        {
-            Text = text,
-            Location = new Point(35, y),
-            AutoSize = true,
-            MinimumSize = new Size(100, 26),
-            FlatStyle = FlatStyle.Flat,
-            Font = new Font("Microsoft YaHei UI", 9),
-            Tag = action
-        };
-        btn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
-        btn.Click += OnButtonClick;
-        _scrollPanel.Controls.Add(btn);
-        y += 35;
-        return btn;
-    }
-
-    private void AddButtonRow(IEnumerable<(string text, string action)> buttons, ref int y)
-    {
-        var x = 35;
-        foreach (var (text, action) in buttons)
-        {
-            var btn = new Button
-            {
-                Text = text,
-                Location = new Point(x, y),
-                AutoSize = true,
-                MinimumSize = new Size(100, 26),
-                FlatStyle = FlatStyle.Flat,
-                Font = new Font("Microsoft YaHei UI", 9),
-                Tag = action
-            };
-            btn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
-            btn.Click += OnButtonClick;
-            _scrollPanel.Controls.Add(btn);
-            x += btn.PreferredSize.Width + 10;
-        }
-        y += 35;
-    }
+    private void AddSectionTitle(string text, ref int y) { }
+    private void AddDescription(string text, ref int y) { }
+    private RadioButton AddRadioButton(string text, string propertyName, int value, bool isChecked, ref int y) { return null!; }
+    private CheckBox AddCheckBox(string text, string propertyName, bool isChecked, ref int y) { return null!; }
+    private void AddComboBox(string defaultValue, ref int y) { }
+    private Button AddButton(string text, string action, ref int y) { return null!; }
+    private void AddButtonRow(IEnumerable<(string text, string action)> buttons, ref int y) { }
 
     private void OnButtonClick(object? sender, EventArgs e)
     {
-        if (sender is not Button btn || btn.Tag is not string action) return;
+        string? action = null;
+        if (sender is Button btn) action = btn.Tag as string;
+        else if (sender is LinkLabel link) action = link.Tag as string;
+
+        if (string.IsNullOrEmpty(action)) return;
 
         switch (action)
         {

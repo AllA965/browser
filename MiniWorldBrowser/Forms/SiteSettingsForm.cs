@@ -37,7 +37,7 @@ public class SiteSettingsForm : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "内容设置";
-        Size = DpiHelper.Scale(new Size(450, 650));
+        Size = DpiHelper.Scale(new Size(480, 680));
         MinimumSize = DpiHelper.Scale(new Size(400, 500));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -45,72 +45,76 @@ public class SiteSettingsForm : Form
         MinimizeBox = false;
         BackColor = Color.White;
         Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
-        
-        // 关闭按钮
-        var closeBtn = new Button
+
+        // 使用 TableLayoutPanel 确保布局稳定
+        var mainLayout = new TableLayoutPanel
         {
-            Text = "×",
-            Size = DpiHelper.Scale(new Size(30, 30)),
-            Location = new Point(Width - DpiHelper.Scale(45), DpiHelper.Scale(5)),
-            FlatStyle = FlatStyle.Flat,
-            Font = new Font("Segoe UI", DpiHelper.Scale(12F)),
-            ForeColor = Color.Gray,
-            Cursor = Cursors.Hand
+            Dock = DockStyle.Fill,
+            RowCount = 2,
+            ColumnCount = 1,
+            BackColor = Color.White
         };
-        closeBtn.FlatAppearance.BorderSize = 0;
-        closeBtn.Click += (s, e) => Close();
-        
+        mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, DpiHelper.Scale(55)));
+
         // 滚动面板
         _contentPanel = new Panel
         {
-            Location = DpiHelper.Scale(new Point(10, 10)),
-            Size = new Size(Width - DpiHelper.Scale(40), Height - DpiHelper.Scale(80)),
+            Dock = DockStyle.Fill,
             AutoScroll = true,
-            BackColor = Color.White
+            BackColor = Color.White,
+            Padding = new Padding(DpiHelper.Scale(10))
         };
         
-        CreateSettingsContent();
-        
-        // 底部按钮
+        // 底部按钮面板
         var bottomPanel = new Panel
         {
-            Dock = DockStyle.Bottom,
-            Height = DpiHelper.Scale(50),
-            BackColor = Color.FromArgb(245, 245, 245)
+            Dock = DockStyle.Fill,
+            BackColor = Color.FromArgb(245, 245, 245),
+            Padding = new Padding(0, 0, DpiHelper.Scale(15), 0)
         };
-        
+
+        // 确定按钮
         var okBtn = new Button
         {
             Text = "确定",
-            Size = DpiHelper.Scale(new Size(80, 30)),
-            Location = new Point(Width - DpiHelper.Scale(200), DpiHelper.Scale(10)),
+            Size = DpiHelper.Scale(new Size(85, 32)),
+            Anchor = AnchorStyles.Right | AnchorStyles.Top,
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.FromArgb(0, 120, 212),
             ForeColor = Color.White,
-            Cursor = Cursors.Hand
+            Cursor = Cursors.Hand,
+            Top = DpiHelper.Scale(11),
+            Left = bottomPanel.Width - DpiHelper.Scale(190)
         };
         okBtn.FlatAppearance.BorderSize = 0;
         okBtn.Click += (s, e) => { SaveSettings(); Close(); };
         
+        // 取消按钮
         var cancelBtn = new Button
         {
             Text = "取消",
-            Size = DpiHelper.Scale(new Size(80, 30)),
-            Location = new Point(Width - DpiHelper.Scale(105), DpiHelper.Scale(10)),
+            Size = DpiHelper.Scale(new Size(85, 32)),
+            Anchor = AnchorStyles.Right | AnchorStyles.Top,
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.White,
             ForeColor = Color.Black,
-            Cursor = Cursors.Hand
+            Cursor = Cursors.Hand,
+            Top = DpiHelper.Scale(11),
+            Left = bottomPanel.Width - DpiHelper.Scale(95)
         };
         cancelBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         cancelBtn.Click += (s, e) => Close();
-        
+
         bottomPanel.Controls.Add(okBtn);
         bottomPanel.Controls.Add(cancelBtn);
+
+        mainLayout.Controls.Add(_contentPanel, 0, 0);
+        mainLayout.Controls.Add(bottomPanel, 0, 1);
         
-        Controls.Add(closeBtn);
-        Controls.Add(_contentPanel);
-        Controls.Add(bottomPanel);
+        Controls.Add(mainLayout);
+
+        CreateSettingsContent();
     }
 
     private void LoadDefaultPermissions()
@@ -133,195 +137,226 @@ public class SiteSettingsForm : Form
     
     private void CreateSettingsContent()
     {
-        int y = 0;
+        _contentPanel.Controls.Clear();
         
-        // Cookie
-        y = AddSettingSection("Cookie", y, new[]
+        // 使用 FlowLayoutPanel 代替手动计算坐标
+        var flowLayout = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Top,
+            FlowDirection = FlowDirection.TopDown,
+            WrapContents = false,
+            AutoSize = true,
+            Padding = new Padding(DpiHelper.Scale(15), DpiHelper.Scale(5), DpiHelper.Scale(10), DpiHelper.Scale(5)),
+            BackColor = Color.White
+        };
+        _contentPanel.Controls.Add(flowLayout);
+
+        // 绑定数据到 UI
+        AddSection(flowLayout, "Cookie", "cookie", new[]
         {
             ("允许设置本地数据（推荐）", 0),
             ("仅将本地数据保留到退出浏览器为止", 1),
             ("阻止网站设置任何数据", 2)
-        }, "cookie", new[]
+        }, new[]
         {
             ("管理例外情况...", (Action)(() => ShowExceptions("Cookie"))),
             ("所有 Cookie 和网站数据...", (Action)(() => ShowAllCookies()))
         });
-        
-        // 图片
-        y = AddSettingSection("图片", y, new[]
+
+        AddSection(flowLayout, "图片", "image", new[]
         {
             ("显示所有图片（推荐）", 0),
             ("不显示任何图片", 1)
-        }, "image", new[]
+        }, new[]
         {
             ("管理例外情况...", (Action)(() => ShowExceptions("图片")))
         });
-        
-        // JavaScript
-        y = AddSettingSection("JavaScript", y, new[]
+
+        AddSection(flowLayout, "JavaScript", "javascript", new[]
         {
             ("允许所有网站运行 JavaScript（推荐）", 0),
             ("不允许任何网站运行 JavaScript", 1)
-        }, "javascript", new[]
+        }, new[]
         {
             ("管理例外情况...", (Action)(() => ShowExceptions("JavaScript")))
         });
-        
-        // 处理程序
-        y = AddSettingSection("处理程序", y, new[]
+
+        AddSection(flowLayout, "处理程序", "handler", new[]
         {
             ("允许网站要求成为协议默认处理程序（推荐）", 0),
             ("不允许任何网站处理协议", 1)
-        }, "handler", new[]
+        }, new[]
         {
             ("管理处理程序...", (Action)(() => ShowHandlers()))
         });
-        
-        // 弹出式窗口
-        y = AddSettingSection("弹出式窗口", y, new[]
+
+        AddSection(flowLayout, "弹出式窗口", "popup", new[]
         {
             ("允许所有网站显示弹出式窗口", 0),
             ("不允许任何网站显示弹出式窗口（推荐）", 1)
-        }, "popup", new[]
+        }, new[]
         {
             ("管理例外情况...", (Action)(() => ShowExceptions("弹出式窗口")))
         });
-        
-        // 位置
-        y = AddSettingSection("位置", y, new[]
+
+        AddSection(flowLayout, "位置", "location", new[]
         {
             ("允许所有网站跟踪我的地理位置", 0),
             ("当网站要求跟踪我的地理位置时询问（推荐）", 1),
             ("不允许任何网站跟踪我的地理位置", 2)
-        }, "location", new[]
+        }, new[]
         {
             ("管理例外情况...", (Action)(() => ShowExceptions("位置")))
         });
-        
-        // 通知
-        y = AddSettingSection("通知", y, new[]
+
+        AddSection(flowLayout, "通知", "notification", new[]
         {
             ("允许所有网站显示桌面通知", 0),
             ("当网站要求显示桌面通知时询问（推荐）", 1),
             ("不允许任何网站显示桌面通知", 2)
-        }, "notification", new[]
+        }, new[]
         {
             ("管理例外情况...", (Action)(() => ShowExceptions("通知")))
         });
-        
-        // 全屏下载
-        y = AddSettingSection("自动下载", y, new[]
+
+        AddSection(flowLayout, "自动下载", "download", new[]
         {
             ("允许所有网站自动下载多个文件", 0),
             ("当网站在自动下载第一个文件后尝试自动下载文件时询问（推荐）", 1),
             ("不允许任何网站自动下载多个文件", 2)
-        }, "download", new[]
+        }, new[]
         {
             ("管理例外情况...", (Action)(() => ShowExceptions("自动下载")))
         });
-        
-        // 常见的 MIDI 设备
-        y = AddSettingSection("常见的 MIDI 设备", y, new[]
+
+        AddSection(flowLayout, "常见的 MIDI 设备", "midi", new[]
         {
             ("允许所有网站使用系统专有消息访问常见的 MIDI 设备", 0),
             ("当网站要求使用系统专有消息访问常见的 MIDI 设备时询问", 1),
             ("禁止任何网站使用系统专有消息访问常见的 MIDI 设备", 2)
-        }, "midi", new[]
+        }, new[]
         {
             ("管理例外情况...", (Action)(() => ShowExceptions("MIDI 设备")))
         });
-        
-        // 摄像头
-        y = AddSettingSection("摄像头", y, new[]
+
+        AddSection(flowLayout, "摄像头", "camera", new[]
         {
             ("允许所有网站使用摄像头", 0),
             ("当网站要求使用摄像头时询问（推荐）", 1),
             ("不允许任何网站使用摄像头", 2)
-        }, "camera", new[]
+        }, new[]
         {
             ("管理例外情况...", (Action)(() => ShowExceptions("摄像头")))
         });
-        
-        // 麦克风
-        y = AddSettingSection("麦克风", y, new[]
+
+        AddSection(flowLayout, "麦克风", "microphone", new[]
         {
             ("允许所有网站使用麦克风", 0),
             ("当网站要求使用麦克风时询问（推荐）", 1),
             ("不允许任何网站使用麦克风", 2)
-        }, "microphone", new[]
+        }, new[]
         {
             ("管理例外情况...", (Action)(() => ShowExceptions("麦克风")))
         });
     }
 
-    private int AddSettingSection(string title, int y, (string text, int value)[] options, 
-        string key, (string text, Action action)[]? buttons = null)
+    private void AddSection(Control parent, string title, string key, (string text, int value)[] options, (string text, Action action)[]? buttons)
     {
+        var sectionPanel = new Panel
+        {
+            Width = DpiHelper.Scale(420),
+            AutoSize = true,
+            Margin = new Padding(0, 0, 0, DpiHelper.Scale(8)),
+            BackColor = Color.White
+        };
+
         // 标题
-        var titleLabel = new Label
+        var lblTitle = new Label
         {
             Text = title,
-            Location = new Point(DpiHelper.Scale(5), y + DpiHelper.Scale(10)),
-            AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
-            ForeColor = Color.Black
+            ForeColor = Color.FromArgb(32, 32, 32),
+            AutoSize = true,
+            Location = new Point(0, 0),
+            Margin = Padding.Empty
         };
-        _contentPanel.Controls.Add(titleLabel);
-        y += DpiHelper.Scale(35);
-        
-        // 选项
-        var currentValue = _permissions.GetValueOrDefault(key, 0);
+        sectionPanel.Controls.Add(lblTitle);
+
+        // 选项容器
+        var optionsPanel = new Panel
+        {
+            Location = new Point(DpiHelper.Scale(12), lblTitle.Bottom + DpiHelper.Scale(2)),
+            Width = sectionPanel.Width - DpiHelper.Scale(20),
+            AutoSize = true,
+            Margin = Padding.Empty
+        };
+
+        int currentY = 0;
+        int selectedValue = _permissions.GetValueOrDefault(key, 0);
+
         foreach (var (text, value) in options)
         {
-            var radio = new RadioButton
+            var rb = new RadioButton
             {
                 Text = text,
-                Location = new Point(DpiHelper.Scale(15), y),
+                Location = new Point(0, currentY),
                 AutoSize = true,
-                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
-                Checked = currentValue == value,
-                Tag = (key, value)
+                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9.5F)),
+                Checked = selectedValue == value,
+                Tag = (key, value),
+                ForeColor = Color.FromArgb(64, 64, 64),
+                Margin = Padding.Empty,
+                Padding = new Padding(0, DpiHelper.Scale(1), 0, DpiHelper.Scale(1))
             };
-            radio.CheckedChanged += (s, e) =>
+            rb.CheckedChanged += (s, e) =>
             {
-                if (radio.Checked && radio.Tag is (string k, int v))
+                if (rb.Checked && rb.Tag is (string k, int v))
                     _permissions[k] = v;
             };
-            _contentPanel.Controls.Add(radio);
-            y += DpiHelper.Scale(24);
+            optionsPanel.Controls.Add(rb);
+            currentY += rb.PreferredSize.Height;
         }
-        
-        // 按钮
-        if (buttons != null)
+        sectionPanel.Controls.Add(optionsPanel);
+
+        // 按钮容器
+        if (buttons != null && buttons.Length > 0)
         {
-            y += DpiHelper.Scale(5);
+            var btnPanel = new FlowLayoutPanel
+            {
+                Location = new Point(DpiHelper.Scale(12), optionsPanel.Bottom),
+                Width = sectionPanel.Width - DpiHelper.Scale(20),
+                AutoSize = true,
+                FlowDirection = FlowDirection.LeftToRight,
+                Margin = Padding.Empty,
+                Padding = Padding.Empty
+            };
+
             foreach (var (text, action) in buttons)
             {
                 var btn = new LinkLabel
                 {
                     Text = text,
-                    Location = new Point(DpiHelper.Scale(15), y),
                     AutoSize = true,
                     Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
-                    LinkColor = Color.FromArgb(0, 102, 204)
+                    LinkColor = Color.FromArgb(0, 120, 212),
+                    ActiveLinkColor = Color.FromArgb(0, 102, 204),
+                    VisitedLinkColor = Color.FromArgb(0, 120, 212),
+                    LinkBehavior = LinkBehavior.HoverUnderline,
+                    Margin = new Padding(0, DpiHelper.Scale(1), DpiHelper.Scale(15), DpiHelper.Scale(1))
                 };
-                btn.Click += (s, e) => action();
-                _contentPanel.Controls.Add(btn);
-                y += DpiHelper.Scale(22);
+                btn.Click += (s, e) => action?.Invoke();
+                btnPanel.Controls.Add(btn);
             }
+            sectionPanel.Controls.Add(btnPanel);
         }
-        
-        // 分隔线
-        y += DpiHelper.Scale(10);
-        var separator = new Panel
-        {
-            Location = new Point(DpiHelper.Scale(5), y),
-            Size = new Size(_contentPanel.Width - DpiHelper.Scale(30), 1), // 1px height usually fine, but can scale
-            BackColor = Color.FromArgb(230, 230, 230)
-        };
-        _contentPanel.Controls.Add(separator);
-        y += DpiHelper.Scale(15);
-        
+
+        parent.Controls.Add(sectionPanel);
+    }
+
+    private int AddSettingSection(string title, int y, (string text, int value)[] options, 
+        string key, (string text, Action action)[]? buttons = null)
+    {
+        // 此方法已废弃，保留签名以防万一，但逻辑已移至 AddSection
         return y;
     }
     

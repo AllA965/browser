@@ -16,7 +16,28 @@ public class SecurityIcon : Control
     public bool IsSecure
     {
         get => _isSecure;
-        set { _isSecure = value; Invalidate(); }
+        set 
+        { 
+            if (_isSecure != value)
+            {
+                _isSecure = value; 
+                UpdateSize();
+                Invalidate(); 
+            }
+        }
+    }
+    
+    private void UpdateSize()
+    {
+        // 安全状态下只显示图标，不安全状态下显示图标+文字+背景
+        if (_isSecure)
+        {
+            Width = DpiHelper.Scale(28);
+        }
+        else
+        {
+            Width = DpiHelper.Scale(72);
+        }
     }
     
     public string CurrentUrl
@@ -35,7 +56,8 @@ public class SecurityIcon : Control
                  ControlStyles.UserPaint |
                  ControlStyles.ResizeRedraw, true);
         
-        Size = DpiHelper.Scale(new Size(22, 22));
+        Height = DpiHelper.Scale(22);
+        UpdateSize();
         Cursor = Cursors.Hand;
         BackColor = Color.Transparent;
         
@@ -54,153 +76,76 @@ public class SecurityIcon : Control
     {
         var g = e.Graphics;
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-        
-        // 悬停背景
-        if (_isHovered)
-        {
-            using var hoverBrush = new SolidBrush(Color.FromArgb(30, 0, 0, 0));
-            g.FillEllipse(hoverBrush, DpiHelper.Scale(1), DpiHelper.Scale(1), Width - DpiHelper.Scale(2), Height - DpiHelper.Scale(2));
-        }
+        g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
         
         if (_isSecure)
-            DrawSecureLock(g);
+        {
+            // 悬停背景 (Chrome 风格：正圆形)
+            if (_isHovered)
+            {
+                float diameter = Math.Min(Width, Height) - DpiHelper.Scale(2);
+                float cx = Width / 2f;
+                float cy = Height / 2f;
+                using var hoverBrush = new SolidBrush(Color.FromArgb(20, 0, 0, 0));
+                g.FillEllipse(hoverBrush, cx - diameter / 2f, cy - diameter / 2f, diameter, diameter);
+            }
+            
+            // 安全状态显示灰色 Tune 图标
+            DrawTuneIcon(g, Color.FromArgb(95, 99, 104));
+        }
         else
-            DrawInsecureLock(g);
+        {
+            // 不安全状态显示胶囊背景 + 警告图标 + "不安全"文字
+            DrawInsecureBadge(g);
+        }
     }
 
-    /// <summary>
-    /// 绘制安全锁图标（绿色锁，参考世界之窗浏览器）
-    /// </summary>
-    private void DrawSecureLock(Graphics g)
+    private void DrawInsecureBadge(Graphics g)
     {
-        int cx = Width / 2;
-        int cy = Height / 2;
+        // 1. 绘制胶囊背景
+        RectangleF rect = new RectangleF(DpiHelper.Scale(2), DpiHelper.Scale(2), Width - DpiHelper.Scale(4), Height - DpiHelper.Scale(4));
+        float radius = rect.Height / 2;
         
-        // 锁的尺寸
-        int lockWidth = DpiHelper.Scale(10);
-        int lockHeight = DpiHelper.Scale(8);
-        int shackleWidth = DpiHelper.Scale(6);
-        int shackleHeight = DpiHelper.Scale(5);
-        
-        // 锁体位置
-        int bodyX = cx - lockWidth / 2;
-        int bodyY = cy - DpiHelper.Scale(1);
-        
-        // 绿色渐变
-        var greenDark = Color.FromArgb(34, 139, 34);   // 深绿
-        var greenLight = Color.FromArgb(50, 205, 50);  // 浅绿
-        var greenMid = Color.FromArgb(60, 179, 60);    // 中绿
-        
-        // 绘制锁扣（U形部分）
-        using (var shacklePen = new Pen(greenDark, DpiHelper.Scale(1.5f)))
+        using (var path = CreateRoundedRectPath(rect, radius))
         {
-            shacklePen.StartCap = LineCap.Round;
-            shacklePen.EndCap = LineCap.Round;
-            
-            int shackleX = cx - shackleWidth / 2;
-            int shackleY = bodyY - shackleHeight + DpiHelper.Scale(1);
-            
-            // 绘制U形锁扣
-            using var path = new GraphicsPath();
-            path.AddArc(shackleX, shackleY, shackleWidth, shackleHeight * 2, 180, 180);
-            g.DrawPath(shacklePen, path);
-            
-            // 绘制两侧竖线
-            g.DrawLine(shacklePen, shackleX, shackleY + shackleHeight, shackleX, bodyY + DpiHelper.Scale(1));
-            g.DrawLine(shacklePen, shackleX + shackleWidth, shackleY + shackleHeight, shackleX + shackleWidth, bodyY + DpiHelper.Scale(1));
+            // 悬停时背景深一点
+            using var bgBrush = new SolidBrush(_isHovered ? Color.FromArgb(230, 230, 230) : Color.FromArgb(241, 243, 244));
+            g.FillPath(bgBrush, path);
         }
+
+        // 2. 绘制警告三角形图标
+        float iconSize = DpiHelper.Scale(12f);
+        float iconX = rect.X + DpiHelper.Scale(6);
+        float iconY = (Height - iconSize) / 2f;
         
-        // 绘制锁体（带渐变的圆角矩形）
-        var bodyRect = new Rectangle(bodyX, bodyY, lockWidth, lockHeight);
-        using (var bodyBrush = new LinearGradientBrush(bodyRect, greenLight, greenDark, LinearGradientMode.Vertical))
+        Color textColor = Color.FromArgb(60, 64, 67);
+        using (var pen = new Pen(textColor, DpiHelper.Scale(1.2f)))
         {
-            using var bodyPath = CreateRoundedRect(bodyRect, DpiHelper.Scale(2));
-            g.FillPath(bodyBrush, bodyPath);
+            // 三角形顶点
+            PointF p1 = new PointF(iconX + iconSize / 2f, iconY);
+            PointF p2 = new PointF(iconX, iconY + iconSize);
+            PointF p3 = new PointF(iconX + iconSize, iconY + iconSize);
+            g.DrawPolygon(pen, new[] { p1, p2, p3 });
+            
+            // 感叹号
+            float centerX = iconX + iconSize / 2f;
+            g.DrawLine(pen, centerX, iconY + DpiHelper.Scale(3), centerX, iconY + DpiHelper.Scale(7));
+            g.FillEllipse(new SolidBrush(textColor), centerX - DpiHelper.Scale(0.6f), iconY + DpiHelper.Scale(8.5f), DpiHelper.Scale(1.2f), DpiHelper.Scale(1.2f));
         }
-        
-        // 绘制锁体边框
-        using (var borderPen = new Pen(greenDark, DpiHelper.Scale(0.5f)))
+
+        // 3. 绘制 "不安全" 文字
+        using (var font = new Font("Microsoft YaHei UI", 9F))
+        using (var brush = new SolidBrush(textColor))
         {
-            using var bodyPath = CreateRoundedRect(bodyRect, DpiHelper.Scale(2));
-            g.DrawPath(borderPen, bodyPath);
-        }
-        
-        // 绘制锁孔（白色小圆点）
-        int holeSize = DpiHelper.Scale(3);
-        int holeX = cx - holeSize / 2;
-        int holeY = bodyY + lockHeight / 2 - holeSize / 2;
-        using (var holeBrush = new SolidBrush(Color.White))
-        {
-            g.FillEllipse(holeBrush, holeX, holeY, holeSize, holeSize);
+            string text = "不安全";
+            g.DrawString(text, font, brush, iconX + iconSize + DpiHelper.Scale(4), (Height - g.MeasureString(text, font).Height) / 2f + DpiHelper.Scale(0.5f));
         }
     }
-    
-    /// <summary>
-    /// 绘制不安全锁图标（灰色开锁）
-    /// </summary>
-    private void DrawInsecureLock(Graphics g)
-    {
-        int cx = Width / 2;
-        int cy = Height / 2;
-        
-        int lockWidth = DpiHelper.Scale(10);
-        int lockHeight = DpiHelper.Scale(8);
-        int shackleWidth = DpiHelper.Scale(6);
-        int shackleHeight = DpiHelper.Scale(5);
-        
-        int bodyX = cx - lockWidth / 2;
-        int bodyY = cy - DpiHelper.Scale(1);
-        
-        var grayDark = Color.FromArgb(120, 120, 120);
-        var grayLight = Color.FromArgb(180, 180, 180);
-        
-        // 绘制开着的锁扣（倾斜的U形）
-        using (var shacklePen = new Pen(grayDark, DpiHelper.Scale(2.0f)))
-        {
-            shacklePen.StartCap = LineCap.Round;
-            shacklePen.EndCap = LineCap.Round;
-            
-            int shackleX = cx - shackleWidth / 2 - DpiHelper.Scale(1);
-            int shackleY = bodyY - shackleHeight - DpiHelper.Scale(2);
-            
-            // 开锁状态 - 锁扣向上打开
-            using var path = new GraphicsPath();
-            path.AddArc(shackleX, shackleY, shackleWidth, shackleHeight * 2, 180, 180);
-            g.DrawPath(shacklePen, path);
-            
-            // 只绘制右侧竖线（左侧打开）
-            g.DrawLine(shacklePen, shackleX + shackleWidth, shackleY + shackleHeight, shackleX + shackleWidth, bodyY + DpiHelper.Scale(1));
-        }
-        
-        // 绘制锁体
-        var bodyRect = new Rectangle(bodyX, bodyY, lockWidth, lockHeight);
-        using (var bodyBrush = new LinearGradientBrush(bodyRect, grayLight, grayDark, LinearGradientMode.Vertical))
-        {
-            using var bodyPath = CreateRoundedRect(bodyRect, DpiHelper.Scale(2));
-            g.FillPath(bodyBrush, bodyPath);
-        }
-        
-        using (var borderPen = new Pen(grayDark, DpiHelper.Scale(0.5f)))
-        {
-            using var bodyPath = CreateRoundedRect(bodyRect, DpiHelper.Scale(2));
-            g.DrawPath(borderPen, bodyPath);
-        }
-        
-        // 锁孔
-        int holeSize = DpiHelper.Scale(3);
-        int holeX = cx - holeSize / 2;
-        int holeY = bodyY + lockHeight / 2 - holeSize / 2;
-        using (var holeBrush = new SolidBrush(Color.White))
-        {
-            g.FillEllipse(holeBrush, holeX, holeY, holeSize, holeSize);
-        }
-    }
-    
-    private static GraphicsPath CreateRoundedRect(Rectangle rect, int radius)
+
+    private static GraphicsPath CreateRoundedRectPath(RectangleF rect, float radius)
     {
         var path = new GraphicsPath();
-        int d = radius * 2;
+        float d = radius * 2;
         
         path.AddArc(rect.X, rect.Y, d, d, 180, 90);
         path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
@@ -209,5 +154,39 @@ public class SecurityIcon : Control
         path.CloseFigure();
         
         return path;
+    }
+
+    /// <summary>
+    /// 绘制 Chrome 风格的“调优/设置(Tune)”图标
+    /// </summary>
+    private void DrawTuneIcon(Graphics g, Color color)
+    {
+        float w = Width;
+        float h = Height;
+        
+        // 调整图标比例：使其更接近正方形，减少扁平感
+        float iconWidth = DpiHelper.Scale(13f);
+        float iconHeight = DpiHelper.Scale(10f); // 稍微缩减高度比例
+        float x = (w - iconWidth) / 2f;
+        float y = (h - iconHeight) / 2f;
+
+        // 使用稍细的笔触，增加精致感
+        using var pen = new Pen(color, DpiHelper.Scale(1.3f));
+        using var brush = new SolidBrush(color);
+
+        // 两根横线之间的间距
+        float lineSpacing = DpiHelper.Scale(6f);
+        // 圆点的直径
+        float dotSize = DpiHelper.Scale(4f);
+        
+        // 1. 第一根横线（圆点在左侧 30% 处）
+        float line1Y = y + (iconHeight - lineSpacing) / 2f;
+        g.DrawLine(pen, x, line1Y, x + iconWidth, line1Y);
+        g.FillEllipse(brush, x + iconWidth * 0.3f - dotSize / 2f, line1Y - dotSize / 2f, dotSize, dotSize);
+
+        // 2. 第二根横线（圆点在右侧 70% 处）
+        float line2Y = line1Y + lineSpacing;
+        g.DrawLine(pen, x, line2Y, x + iconWidth, line2Y);
+        g.FillEllipse(brush, x + iconWidth * 0.7f - dotSize / 2f, line2Y - dotSize / 2f, dotSize, dotSize);
     }
 }
