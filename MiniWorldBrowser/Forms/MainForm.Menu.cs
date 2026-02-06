@@ -541,9 +541,7 @@ public partial class MainForm
 
         // 关于
         menu.Items.Add(CreateMenuItem("关于鲲穹AI浏览器", null, MenuIconDrawer.DrawAbout,
-            () => { CloseMainMenu(); MessageBox.Show(
-                "鲲穹AI浏览器\n版本 1.0\n\n基于 WebView2 内核",
-                "关于", MessageBoxButtons.OK, MessageBoxIcon.Information); }));
+            () => { CloseMainMenu(); new AboutForm().ShowDialog(); }));
 
         if (_isIncognito)
         {

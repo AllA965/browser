@@ -27,6 +27,7 @@ public static class MenuFactory
         Action onOpenDevTools,
         Action<string> onSetEncoding,
         Action onShowSettings,
+        Action onShowAbout,
         Action? onShowIncognitoInfo = null,
         bool isIncognito = false)
     {
@@ -228,6 +229,7 @@ public static class MenuFactory
 
         // 关于
         var about = CreateMenuItem("关于鲲穹AI浏览器", null, MenuIconDrawer.DrawAbout);
+        about.Click += (s, e) => onShowAbout();
         menu.Items.Add(about);
 
         menu.Items.Add(new ToolStripSeparator());

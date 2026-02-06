@@ -7,6 +7,7 @@ public static class AppConstants
 {
     public const string AppName = "鲲穹AI浏览器";
     public const string AppVersion = "1.0.0";
+    public const string AppId = "10014";
     
     // 默认设置
     public const string DefaultHomePage = "about:newtab";
