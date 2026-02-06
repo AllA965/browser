@@ -35,6 +35,7 @@ public partial class MainForm : Form
     private readonly IHistoryService _historyService;
     private readonly ILoginService _loginService;
     private readonly IAdService _adService;
+    private readonly UpdateService _updateService; // 添加更新服务
     private readonly bool _isIncognito;
     private readonly string? _incognitoDataFolder;
     private bool _isInternalAddressUpdate;
@@ -155,6 +156,7 @@ public partial class MainForm : Form
         _historyService = _isIncognito ? new HistoryService(false) : new HistoryService(); 
         _loginService = new LoginService(_settingsService);
         _adService = new AdService();
+        _updateService = new UpdateService(); // 初始化更新服务
         
         InitializeUI();
         InitializeManagers();
@@ -174,6 +176,12 @@ public partial class MainForm : Form
             if (_loginService != null)
             {
                 await _loginService.CheckLoginAsync();
+            }
+
+            // 启动时自动检查更新 (仅在非隐身模式下)
+            if (!_isIncognito)
+            {
+                _ = _updateService.CheckAndPromptUpdateAsync(this);
             }
             
             try

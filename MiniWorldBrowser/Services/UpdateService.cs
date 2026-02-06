@@ -53,6 +53,44 @@ public class UpdateService
         }
     }
 
+    public async Task CheckAndPromptUpdateAsync(Form owner)
+    {
+        try
+        {
+            var info = await CheckForUpdatesAsync();
+            if (info != null && info.HasUpdate)
+            {
+                // 确保在 UI 线程执行
+                owner.Invoke(new Action(() =>
+                {
+                    var msg = $"发现新版本 {info.Version}\n\n更新内容:\n{info.UpdateLog}\n\n是否立即更新？";
+                    var title = "发现更新";
+                    
+                    if (info.IsMandatory)
+                    {
+                        msg = $"发现关键版本 {info.Version}\n\n更新内容:\n{info.UpdateLog}\n\n此版本为强制更新，必须升级后才能继续使用。";
+                        title = "强制更新";
+                        MessageBox.Show(owner, msg, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        StartUpdate(info);
+                        Application.Exit(); // 强制更新启动后退出
+                    }
+                    else
+                    {
+                        var result = MessageBox.Show(owner, msg, title, MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                        if (result == DialogResult.Yes)
+                        {
+                            StartUpdate(info);
+                        }
+                    }
+                }));
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Auto update check failed: {ex.Message}");
+        }
+    }
+
     public void StartUpdate(UpdateInfo updateInfo)
     {
         if (string.IsNullOrEmpty(updateInfo.DownloadUrl)) return;
@@ -71,11 +109,10 @@ public class UpdateService
             appDir = appDir.Substring(0, appDir.Length - 1);
         }
 
-        string exeName = AppDomain.CurrentDomain.FriendlyName;
+        string exeName = "鲲穹AI浏览器.exe";
         int pid = Process.GetCurrentProcess().Id;
 
-        // 构建参数
-        // 格式: --url "url" --hash "hash" --dir "dir" --exe "exe" --pid pid
+        // 恢复为文档要求的 -- 标记参数格式
         string args = $"--url \"{updateInfo.DownloadUrl}\" " +
                       $"--hash \"{updateInfo.PackageHash}\" " +
                       $"--dir \"{appDir}\" " +

@@ -138,6 +138,16 @@ public partial class AboutForm : Form
                 if (result == DialogResult.Yes)
                 {
                     _updateService.StartUpdate(info);
+                    // 如果是强制更新，启动更新程序后直接退出主程序
+                    if (info.IsMandatory)
+                    {
+                        Application.Exit();
+                    }
+                }
+                else if (info.IsMandatory)
+                {
+                    // 强制更新如果不选择更新，则退出
+                    Application.Exit();
                 }
             }
             else
