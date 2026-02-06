@@ -40,7 +40,7 @@ public class CookieExceptionDialog : Form
         };
 
         Text = title;
-        Size = new Size(650, 450);
+        Size = DpiHelper.Scale(new Size(650, 450));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
@@ -51,26 +51,26 @@ public class CookieExceptionDialog : Form
         var lblHost = new Label
         {
             Text = "主机名（可包含通配符）",
-            Location = new Point(20, 20),
+            Location = DpiHelper.Scale(new Point(20, 20)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
 
         // 行为标签
         var lblAction = new Label
         {
             Text = "行为",
-            Location = new Point(450, 20),
+            Location = DpiHelper.Scale(new Point(450, 20)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
 
         // 主机名输入框
         _txtHost = new TextBox
         {
-            Location = new Point(20, 45),
-            Size = new Size(420, 25),
-            Font = new Font("Microsoft YaHei UI", 9)
+            Location = DpiHelper.Scale(new Point(20, 45)),
+            Size = DpiHelper.Scale(new Size(420, 25)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         _txtHost.Text = "[*.]example.com";
         _txtHost.ForeColor = Color.Gray;
@@ -94,10 +94,10 @@ public class CookieExceptionDialog : Form
         // 行为下拉框
         _cboAction = new ComboBox
         {
-            Location = new Point(450, 43),
-            Size = new Size(100, 25),
+            Location = DpiHelper.Scale(new Point(450, 43)),
+            Size = DpiHelper.Scale(new Size(100, 25)),
             DropDownStyle = ComboBoxStyle.DropDownList,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         _cboAction.Items.AddRange(new[] { "允许", "阻止", "仅会话" });
         _cboAction.SelectedIndex = 0;
@@ -106,10 +106,10 @@ public class CookieExceptionDialog : Form
         _btnAdd = new Button
         {
             Text = "+",
-            Location = new Point(560, 42),
-            Size = new Size(30, 26),
+            Location = DpiHelper.Scale(new Point(560, 42)),
+            Size = DpiHelper.Scale(new Size(30, 26)),
             FlatStyle = FlatStyle.Flat,
-            Font = new Font("Microsoft YaHei UI", 10, FontStyle.Bold)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold)
         };
         _btnAdd.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         _btnAdd.Click += BtnAdd_Click;
@@ -117,19 +117,20 @@ public class CookieExceptionDialog : Form
         // 例外列表
         _exceptionList = new ListView
         {
-            Location = new Point(20, 80),
-            Size = new Size(590, 280),
+            Location = DpiHelper.Scale(new Point(20, 80)),
+            Size = DpiHelper.Scale(new Size(590, 280)),
             View = View.Details,
             FullRowSelect = true,
             GridLines = true,
-            BorderStyle = BorderStyle.FixedSingle
+            BorderStyle = BorderStyle.FixedSingle,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
-        _exceptionList.Columns.Add("主机名", 400);
-        _exceptionList.Columns.Add("行为", 150);
+        _exceptionList.Columns.Add("主机名", DpiHelper.Scale(400));
+        _exceptionList.Columns.Add("行为", DpiHelper.Scale(150));
         _exceptionList.KeyDown += ExceptionList_KeyDown;
 
         // 右键菜单
-        var contextMenu = new ContextMenuStrip();
+        var contextMenu = new ContextMenuStrip { Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)) };
         contextMenu.Items.Add("删除", null, (s, e) => DeleteSelected());
         _exceptionList.ContextMenuStrip = contextMenu;
 
@@ -137,10 +138,11 @@ public class CookieExceptionDialog : Form
         var btnDone = new Button
         {
             Text = "完成",
-            Location = new Point(535, 375),
-            Size = new Size(75, 28),
+            Location = DpiHelper.Scale(new Point(535, 375)),
+            Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.System,
-            DialogResult = DialogResult.OK
+            DialogResult = DialogResult.OK,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
 
         Controls.AddRange(new Control[]

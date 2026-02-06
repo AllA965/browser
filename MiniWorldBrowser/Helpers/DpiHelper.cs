@@ -9,24 +9,31 @@ namespace MiniWorldBrowser.Helpers
     /// </summary>
     public static class DpiHelper
     {
-        private static float _dpiScale = 0f;
-
         /// <summary>
-        /// 获取当前系统的 DPI 缩放比例
+        /// 获取当前系统的 DPI 缩放比例（基于主显示器）
         /// </summary>
         public static float DpiScale
         {
             get
             {
-                if (_dpiScale == 0f)
+                // 不再缓存，以支持动态 DPI 切换
+                using (var g = Graphics.FromHwnd(IntPtr.Zero))
                 {
-                    using (var g = Graphics.FromHwnd(IntPtr.Zero))
-                    {
-                        _dpiScale = g.DpiX / 96f;
-                    }
+                    return g.DpiX / 96f;
                 }
-                return _dpiScale;
             }
+        }
+
+        /// <summary>
+        /// 获取指定控件所在显示器的 DPI 缩放比例
+        /// </summary>
+        public static float GetControlDpiScale(Control? control)
+        {
+            if (control != null)
+            {
+                return control.DeviceDpi / 96f;
+            }
+            return DpiScale;
         }
 
         /// <summary>
@@ -35,6 +42,14 @@ namespace MiniWorldBrowser.Helpers
         public static int Scale(int pixels)
         {
             return (int)Math.Round(pixels * DpiScale);
+        }
+
+        /// <summary>
+        /// 基于特定控件的 DPI 进行缩放
+        /// </summary>
+        public static int Scale(int pixels, Control? control)
+        {
+            return (int)Math.Round(pixels * GetControlDpiScale(control));
         }
 
         /// <summary>
@@ -79,8 +94,16 @@ namespace MiniWorldBrowser.Helpers
         /// </summary>
         public static float ScaleFont(float fontSize)
         {
-            // 字体大小缩放通常由系统自动处理，但在某些手动创建字体的地方需要
-            return fontSize; // 暂时返回原值，因为 WinForms 字体通常已经考虑了 DPI
+            // 在 PerMonitorV2 模式下，手动创建的字体需要显式缩放
+            return fontSize * DpiScale;
+        }
+
+        /// <summary>
+        /// 基于特定控件缩放字体大小
+        /// </summary>
+        public static float ScaleFont(float fontSize, Control? control)
+        {
+            return fontSize * GetControlDpiScale(control);
         }
     }
 }

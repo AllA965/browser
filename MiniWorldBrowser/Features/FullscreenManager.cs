@@ -1,5 +1,8 @@
 using System.Runtime.InteropServices;
+using System.Drawing;
+using System.Windows.Forms;
 using MiniWorldBrowser.Controls;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Features;
 
@@ -193,7 +196,7 @@ public class FullscreenManager
         _form.Controls.Add(_fullscreenTip);
         _fullscreenTip.BringToFront();
         // 初始位置在屏幕上方（隐藏状态）
-        _fullscreenTip.Location = new Point((_form.Width - _fullscreenTip.Width) / 2, -50);
+        _fullscreenTip.Location = new Point((_form.Width - _fullscreenTip.Width) / 2, -DpiHelper.Scale(50));
         _tipVisible = true;
         
         if (autoHide)
@@ -246,7 +249,7 @@ public class FullscreenManager
     {
         var panel = new Panel
         {
-            Size = new Size(320, 44),
+            Size = DpiHelper.Scale(new Size(320, 44)),
             BackColor = Color.FromArgb(248, 249, 250)
         };
         
@@ -265,8 +268,8 @@ public class FullscreenManager
         {
             Text = "您已进入全屏模式。",
             AutoSize = true,
-            Location = new Point(24, 14),
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = DpiHelper.Scale(new Point(24, 14)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.FromArgb(60, 64, 67),
             BackColor = Color.Transparent
         };
@@ -275,8 +278,8 @@ public class FullscreenManager
         {
             Text = "退出全屏模式 (F11)",
             AutoSize = true,
-            Location = new Point(156, 14),
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = DpiHelper.Scale(new Point(156, 14)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             LinkColor = Color.FromArgb(26, 115, 232),
             ActiveLinkColor = Color.FromArgb(23, 78, 166),
             BackColor = Color.Transparent
@@ -320,7 +323,7 @@ public class FullscreenManager
         var mousePos = _form.PointToClient(Control.MousePosition);
         
         // 鼠标在顶部 50 像素区域内
-        bool inTopArea = mousePos.Y < 50 && mousePos.X >= 0 && mousePos.X < _form.Width;
+        bool inTopArea = mousePos.Y < DpiHelper.Scale(50) && mousePos.X >= 0 && mousePos.X < _form.Width;
         
         if (inTopArea)
         {
@@ -359,8 +362,8 @@ public class FullscreenManager
     private void AnimateSlideIn(Panel panel)
     {
         var animationTimer = new System.Windows.Forms.Timer { Interval = 16 }; // ~60fps
-        int startY = -50;
-        int endY = 20; // 弹窗最终位置
+        int startY = -DpiHelper.Scale(50);
+        int endY = DpiHelper.Scale(20); // 弹窗最终位置
         int duration = 300; // 动画时长（毫秒）
         long startTime = DateTime.Now.Ticks;
         
@@ -391,7 +394,7 @@ public class FullscreenManager
     {
         var animationTimer = new System.Windows.Forms.Timer { Interval = 16 }; // ~60fps
         int startY = panel.Location.Y;
-        int endY = -50; // 滑出屏幕
+        int endY = -DpiHelper.Scale(50); // 滑出屏幕
         int duration = 200; // 动画时长（毫秒）
         long startTime = DateTime.Now.Ticks;
         

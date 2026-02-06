@@ -1,3 +1,8 @@
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+using MiniWorldBrowser.Helpers;
+
 namespace MiniWorldBrowser.Controls;
 
 /// <summary>
@@ -52,20 +57,20 @@ public class LoginProgressPopup : Form
     {
         FormBorderStyle = FormBorderStyle.None;
         StartPosition = FormStartPosition.CenterScreen;
-        Size = new Size(360, 170);
+        Size = DpiHelper.Scale(new Size(360, 170));
         BackColor = Color.White;
         ShowInTaskbar = false;
         TopMost = true;
         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
 
-        var mainPanel = new Panel { Dock = DockStyle.Fill, Padding = new Padding(18) };
+        var mainPanel = new Panel { Dock = DockStyle.Fill, Padding = DpiHelper.Scale(new Padding(18)) };
 
         var icon = new Label
         {
             Text = "⏳",
-            Location = new Point(18, 18),
-            Size = new Size(36, 36),
-            Font = new Font("Segoe UI Symbol", 18F),
+            Location = DpiHelper.Scale(new Point(18, 18)),
+            Size = DpiHelper.Scale(new Size(36, 36)),
+            Font = new Font("Segoe UI Symbol", DpiHelper.ScaleFont(18F)),
             ForeColor = Color.FromArgb(0, 120, 215),
             TextAlign = ContentAlignment.MiddleCenter
         };
@@ -73,37 +78,38 @@ public class LoginProgressPopup : Form
         var titleLabel = new Label
         {
             Text = "正在登录",
-            Location = new Point(62, 20),
+            Location = DpiHelper.Scale(new Point(62, 20)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(12F), FontStyle.Bold),
             ForeColor = Color.Black
         };
 
         _timerLabel = new Label
         {
             Text = $"正在等待网页登录... ({_remainingSeconds}s)",
-            Location = new Point(62, 48),
-            Size = new Size(280, 20),
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = DpiHelper.Scale(new Point(62, 48)),
+            Size = DpiHelper.Scale(new Size(280, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.Gray
         };
 
         var progress = new ModernProgressBar
         {
-            Location = new Point(62, 74),
-            Size = new Size(280, 10),
+            Location = DpiHelper.Scale(new Point(62, 74)),
+            Size = DpiHelper.Scale(new Size(280, 10)),
             IsMarquee = true
         };
 
         var cancelBtn = new Button
         {
             Text = "取消登录",
-            Size = new Size(324, 38),
-            Location = new Point(18, 112),
+            Size = DpiHelper.Scale(new Size(324, 38)),
+            Location = DpiHelper.Scale(new Point(18, 112)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.FromArgb(248, 249, 250),
             ForeColor = Color.FromArgb(60, 60, 60),
-            Cursor = Cursors.Hand
+            Cursor = Cursors.Hand,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         cancelBtn.FlatAppearance.BorderSize = 1;
         cancelBtn.FlatAppearance.BorderColor = Color.FromArgb(230, 230, 230);
@@ -116,7 +122,7 @@ public class LoginProgressPopup : Form
             Close();
         };
 
-        ApplyRoundedRegion(cancelBtn, 10);
+        ApplyRoundedRegion(cancelBtn, DpiHelper.Scale(10));
 
         mainPanel.Controls.Add(icon);
         mainPanel.Controls.Add(titleLabel);
@@ -132,7 +138,7 @@ public class LoginProgressPopup : Form
     {
         base.OnSizeChanged(e);
         if (Width <= 0 || Height <= 0) return;
-        using var path = CreateRoundedRectPath(new Rectangle(0, 0, Width, Height), CornerRadius);
+        using var path = CreateRoundedRectPath(new Rectangle(0, 0, Width, Height), DpiHelper.Scale(CornerRadius));
         Region = new Region(path);
         Invalidate();
     }
@@ -141,8 +147,8 @@ public class LoginProgressPopup : Form
     {
         base.OnPaint(e);
         e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-        using var path = CreateRoundedRectPath(new Rectangle(0, 0, Width - 1, Height - 1), CornerRadius);
-        using var pen = new Pen(Color.FromArgb(220, 220, 220), 1);
+        using var path = CreateRoundedRectPath(new Rectangle(0, 0, Width - 1, Height - 1), DpiHelper.Scale(CornerRadius));
+        using var pen = new Pen(Color.FromArgb(220, 220, 220), DpiHelper.Scale(1f));
         e.Graphics.DrawPath(pen, path);
     }
 

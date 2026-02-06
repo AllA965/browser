@@ -58,10 +58,10 @@ public class UserInfoPopup : Form
             LoadAvatarAsync(_loginService.CurrentUser.Avatar);
         }
 
-        Size = new Size(260, (_loginService.IsLoggedIn ? 200 : 150) + 6);
+        Size = DpiHelper.Scale(new Size(260, (_loginService.IsLoggedIn ? 200 : 100) + 6));
         BackColor = Color.White;
         ShowInTaskbar = false;
-        Padding = new Padding(1); // 为边框预留
+        Padding = DpiHelper.Scale(new Padding(1)); // 为边框预留
         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
         
         Opacity = 0;
@@ -105,8 +105,8 @@ public class UserInfoPopup : Form
     { 
         var divider = new Panel
         {
-            Location = new Point(18, y),
-            Size = new Size(224, 1),
+            Location = DpiHelper.Scale(new Point(18, y)),
+            Size = DpiHelper.Scale(new Size(224, 1)),
             BackColor = Color.FromArgb(240, 240, 240)
         };
         container.Controls.Add(divider);
@@ -118,19 +118,19 @@ public class UserInfoPopup : Form
         StartPosition = FormStartPosition.Manual;
         
         // 顶部预留 6 像素给小三角
-        var mainPanel = new Panel { Dock = DockStyle.Fill, Padding = new Padding(18, 24, 18, 18) };
+        var mainPanel = new Panel { Dock = DockStyle.Fill, Padding = DpiHelper.Scale(new Padding(18, 24, 18, 18)) };
 
         if (_loginService.IsLoggedIn)
         {
             var userInfo = _loginService.CurrentUser;
             
             // 头像容器
-            _avatarBox = new Panel { Size = new Size(52, 52), Location = new Point(18, 18), BackColor = Color.Transparent };
+            _avatarBox = new Panel { Size = DpiHelper.Scale(new Size(52, 52)), Location = DpiHelper.Scale(new Point(18, 18)), BackColor = Color.Transparent };
             _avatarBox.Paint += (s, e) =>
             {
                 var g = e.Graphics;
                 g.SmoothingMode = SmoothingMode.AntiAlias;
-                var rect = new Rectangle(0, 0, 51, 51);
+                var rect = new Rectangle(0, 0, DpiHelper.Scale(51), DpiHelper.Scale(51));
 
                 if (userInfo != null)
                 {
@@ -148,11 +148,11 @@ public class UserInfoPopup : Form
                         g.FillEllipse(brush, rect);
 
                         var initial = userInfo.DisplayInitial;
-                        using var font = new Font("Microsoft YaHei UI", 18F, FontStyle.Bold);
+                        using var font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(18F), FontStyle.Bold);
                         var size = g.MeasureString(initial, font);
                         g.DrawString(initial, font, Brushes.White, 
-                            (52 - size.Width) / 2, 
-                            (52 - size.Height) / 2 + 2);
+                            (_avatarBox.Width - size.Width) / 2, 
+                            (_avatarBox.Height - size.Height) / 2 + DpiHelper.Scale(2));
                     }
                 }
             };
@@ -161,10 +161,10 @@ public class UserInfoPopup : Form
             var nicknameLabel = new Label
             {
                 Text = userInfo?.DisplayName ?? "未登录",
-                Location = new Point(82, 22),
-                Width = 150,
+                Location = DpiHelper.Scale(new Point(82, 22)),
+                Width = DpiHelper.Scale(150),
                 AutoEllipsis = true,
-                Font = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(11F), FontStyle.Bold),
                 ForeColor = Color.FromArgb(40, 40, 40)
             };
 
@@ -172,9 +172,9 @@ public class UserInfoPopup : Form
             var statusLabel = new Label
             {
                 Text = "已连接云同步",
-                Location = new Point(82, 46),
+                Location = DpiHelper.Scale(new Point(82, 46)),
                 AutoSize = true,
-                Font = new Font("Microsoft YaHei UI", 8.5F),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(8.5F)),
                 ForeColor = Color.FromArgb(120, 120, 120)
             };
 
@@ -185,14 +185,14 @@ public class UserInfoPopup : Form
             var manageBtn = new Button
             {
                 Text = "⚙  个人资料设置",
-                Size = new Size(224, 34),
-                Location = new Point(18, 100),
+                Size = DpiHelper.Scale(new Size(224, 34)),
+                Location = DpiHelper.Scale(new Point(18, 100)),
                 FlatStyle = FlatStyle.Flat,
                 BackColor = Color.White,
                 ForeColor = Color.FromArgb(80, 80, 80),
-                Font = new Font("Microsoft YaHei UI", 9F),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
                 TextAlign = ContentAlignment.MiddleLeft,
-                Padding = new Padding(10, 0, 0, 0),
+                Padding = DpiHelper.Scale(new Padding(10, 0, 0, 0)),
                 Cursor = Cursors.Hand
             };
             manageBtn.FlatAppearance.BorderSize = 0;
@@ -207,20 +207,20 @@ public class UserInfoPopup : Form
                     MessageBox.Show("个人资料设置功能正在开发中...", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }));
             };
-            ApplyRoundedRegion(manageBtn, 6);
+            ApplyRoundedRegion(manageBtn, DpiHelper.Scale(6));
 
             // 退出按钮 (自定义样式)
             var logoutBtn = new Button
             {
                 Text = "⏻  退出登录",
-                Size = new Size(224, 34),
-                Location = new Point(18, 140),
+                Size = DpiHelper.Scale(new Size(224, 34)),
+                Location = DpiHelper.Scale(new Point(18, 140)),
                 FlatStyle = FlatStyle.Flat,
                 BackColor = Color.White,
                 ForeColor = Color.FromArgb(80, 80, 80),
-                Font = new Font("Microsoft YaHei UI", 9F),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
                 TextAlign = ContentAlignment.MiddleLeft,
-                Padding = new Padding(10, 0, 0, 0),
+                Padding = DpiHelper.Scale(new Padding(10, 0, 0, 0)),
                 Cursor = Cursors.Hand
             };
             logoutBtn.FlatAppearance.BorderSize = 0;
@@ -241,7 +241,7 @@ public class UserInfoPopup : Form
                     _onLogoutClick?.Invoke();
                 }));
             };
-            ApplyRoundedRegion(logoutBtn, 6);
+            ApplyRoundedRegion(logoutBtn, DpiHelper.Scale(6));
 
             mainPanel.Controls.Add(_avatarBox);
             mainPanel.Controls.Add(nicknameLabel);
@@ -251,25 +251,15 @@ public class UserInfoPopup : Form
         }
         else
         {
-            var tipLabel = new Label
-            {
-                Text = "登录后同步您的书签和历史记录",
-                Location = new Point(18, 22),
-                Size = new Size(224, 45),
-                TextAlign = ContentAlignment.TopLeft,
-                Font = new Font("Microsoft YaHei UI", 9.5F),
-                ForeColor = Color.FromArgb(100, 100, 100)
-            };
-            
             var loginBtn = new Button
             {
                 Text = "立即登录",
-                Size = new Size(224, 44),
-                Location = new Point(18, 80),
+                Size = DpiHelper.Scale(new Size(224, 44)),
+                Location = DpiHelper.Scale(new Point(18, 24)),
                 FlatStyle = FlatStyle.Flat,
                 BackColor = Color.FromArgb(0, 120, 215),
                 ForeColor = Color.White,
-                Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold),
                 Cursor = Cursors.Hand
             };
             loginBtn.FlatAppearance.BorderSize = 0;
@@ -289,9 +279,8 @@ public class UserInfoPopup : Form
                 }));
             };
 
-            ApplyRoundedRegion(loginBtn, 8);
+            ApplyRoundedRegion(loginBtn, DpiHelper.Scale(8));
 
-            mainPanel.Controls.Add(tipLabel);
             mainPanel.Controls.Add(loginBtn);
         }
 
@@ -304,15 +293,15 @@ public class UserInfoPopup : Form
         if (Width <= 0 || Height <= 0) return;
         
         // 包含小三角的完整路径
-        using var path = CreateRoundedRectPath(new Rectangle(0, 6, Width, Height - 6), CornerRadius);
+        using var path = CreateRoundedRectPath(new Rectangle(0, DpiHelper.Scale(6), Width, Height - DpiHelper.Scale(6)), DpiHelper.Scale(CornerRadius));
         
         int triangleWidth = DpiHelper.Scale(12);
         int centerX = Width / 2;
         Point[] triangle = new Point[]
         {
-            new Point(centerX - triangleWidth / 2, 6),
+            new Point(centerX - triangleWidth / 2, DpiHelper.Scale(6)),
             new Point(centerX, 0),
-            new Point(centerX + triangleWidth / 2, 6)
+            new Point(centerX + triangleWidth / 2, DpiHelper.Scale(6))
         };
         path.AddPolygon(triangle);
 
@@ -334,20 +323,20 @@ public class UserInfoPopup : Form
         // 1. 填充背景（关键：显式填充白色，避免 Region 边缘出现杂色）
         using (var brush = new SolidBrush(BackColor))
         {
-            using var fillPath = CreateRoundedRectPath(new RectangleF(0, 6, Width, Height - 6), CornerRadius);
+            using var fillPath = CreateRoundedRectPath(new RectangleF(0, DpiHelper.Scale(6), Width, Height - DpiHelper.Scale(6)), DpiHelper.Scale(CornerRadius));
             g.FillPath(brush, fillPath);
             
             PointF[] triangleFill = new PointF[]
             {
-                new PointF(centerX - triangleWidth / 2f, 6),
+                new PointF(centerX - triangleWidth / 2f, DpiHelper.Scale(6)),
                 new PointF(centerX, 0),
-                new PointF(centerX + triangleWidth / 2f, 6)
+                new PointF(centerX + triangleWidth / 2f, DpiHelper.Scale(6))
             };
             g.FillPolygon(brush, triangleFill);
         }
 
         // 2. 绘制圆角矩形边框 (缩进以确保抗锯齿边缘不被裁剪)
-        using (var path = CreateRoundedRectPath(new RectangleF(penWidth / 2f, 6 + penWidth / 2f, Width - penWidth, Height - 6 - penWidth), CornerRadius))
+        using (var path = CreateRoundedRectPath(new RectangleF(penWidth / 2f, DpiHelper.Scale(6) + penWidth / 2f, Width - penWidth, Height - DpiHelper.Scale(6) - penWidth), DpiHelper.Scale(CornerRadius)))
         {
             using var pen = new Pen(Color.FromArgb(220, 220, 220), penWidth);
             g.DrawPath(pen, path);
@@ -355,9 +344,9 @@ public class UserInfoPopup : Form
             // 绘制顶部引导小三角边框
             PointF[] trianglePoints = new PointF[]
             {
-                new PointF(centerX - triangleWidth / 2f, 6 + penWidth / 2f),
+                new PointF(centerX - triangleWidth / 2f, DpiHelper.Scale(6) + penWidth / 2f),
                 new PointF(centerX, penWidth / 2f),
-                new PointF(centerX + triangleWidth / 2f, 6 + penWidth / 2f)
+                new PointF(centerX + triangleWidth / 2f, DpiHelper.Scale(6) + penWidth / 2f)
             };
             
             g.DrawLine(pen, trianglePoints[0], trianglePoints[1]);
@@ -365,7 +354,7 @@ public class UserInfoPopup : Form
             
             // 擦除小三角底部的边框线，使其与主体融合
             using var erasePen = new Pen(BackColor, penWidth + 0.5f);
-            g.DrawLine(erasePen, trianglePoints[0].X + penWidth, 6 + penWidth / 2f, trianglePoints[2].X - penWidth, 6 + penWidth / 2f);
+            g.DrawLine(erasePen, trianglePoints[0].X + penWidth, DpiHelper.Scale(6) + penWidth / 2f, trianglePoints[2].X - penWidth, DpiHelper.Scale(6) + penWidth / 2f);
         }
     }
 

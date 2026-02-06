@@ -344,7 +344,7 @@ public partial class BrowserTabManager
         {
             var scroll = _tabContainer.HorizontalScroll;
             var max = Math.Max(0, scroll.Maximum - scroll.LargeChange + 1);
-            var step = 80;
+            var step = DpiHelper.Scale(80);
             var next = scroll.Value + (e.Delta < 0 ? step : -step);
             if (next < 0) next = 0;
             if (next > max) next = max;

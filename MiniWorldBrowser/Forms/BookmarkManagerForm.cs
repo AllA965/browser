@@ -72,14 +72,14 @@ public class BookmarkManagerForm : Form
         var lblName = new Label
         {
             Text = "名字:",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = DpiHelper.Scale(new Point(15, 18)),
             AutoSize = true
         };
         
         _txtName = new TextBox
         {
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = DpiHelper.Scale(new Point(55, 15)),
             Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
             BorderStyle = BorderStyle.FixedSingle
@@ -92,14 +92,14 @@ public class BookmarkManagerForm : Form
         var lblUrl = new Label
         {
             Text = "网址:",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = DpiHelper.Scale(new Point(15, 48)),
             AutoSize = true
         };
         
         _txtUrl = new TextBox
         {
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = DpiHelper.Scale(new Point(55, 45)),
             Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
             BorderStyle = BorderStyle.FixedSingle
@@ -123,7 +123,7 @@ public class BookmarkManagerForm : Form
         _treeView = new TreeView
         {
             Dock = DockStyle.Fill,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             BorderStyle = BorderStyle.None,
             ShowLines = true,
             ShowPlusMinus = true,
@@ -138,7 +138,7 @@ public class BookmarkManagerForm : Form
         _listView = new ListView
         {
             Dock = DockStyle.Fill,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             BorderStyle = BorderStyle.None,
             View = View.Details,
             FullRowSelect = true,
@@ -165,7 +165,7 @@ public class BookmarkManagerForm : Form
         var btnNewFolder = new Button
         {
             Text = "新建文件夹",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = new Point(DpiHelper.Scale(15), ClientSize.Height - DpiHelper.Scale(45)),
             Size = DpiHelper.Scale(new Size(100, 30)),
             Anchor = AnchorStyles.Bottom | AnchorStyles.Left,
@@ -176,7 +176,7 @@ public class BookmarkManagerForm : Form
         var btnExport = new Button
         {
             Text = "导出收藏到HTML文件",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = new Point(DpiHelper.Scale(125), ClientSize.Height - DpiHelper.Scale(45)),
             Size = DpiHelper.Scale(new Size(140, 30)),
             Anchor = AnchorStyles.Bottom | AnchorStyles.Left,
@@ -187,7 +187,7 @@ public class BookmarkManagerForm : Form
         var btnClose = new Button
         {
             Text = "关闭",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = new Point(ClientSize.Width - DpiHelper.Scale(90), ClientSize.Height - DpiHelper.Scale(45)),
             Size = DpiHelper.Scale(new Size(75, 30)),
             Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
@@ -201,8 +201,8 @@ public class BookmarkManagerForm : Form
     
     private void CreateImageLists()
     {
-        _treeImageList = new ImageList { ImageSize = new Size(16, 16), ColorDepth = ColorDepth.Depth32Bit };
-        _listImageList = new ImageList { ImageSize = new Size(16, 16), ColorDepth = ColorDepth.Depth32Bit };
+        _treeImageList = new ImageList { ImageSize = DpiHelper.Scale(new Size(16, 16)), ColorDepth = ColorDepth.Depth32Bit };
+        _listImageList = new ImageList { ImageSize = DpiHelper.Scale(new Size(16, 16)), ColorDepth = ColorDepth.Depth32Bit };
         
         var folderBmp = CreateFolderIcon();
         _treeImageList.Images.Add("folder", folderBmp);
@@ -507,19 +507,19 @@ public class BookmarkManagerForm : Form
         using var inputDialog = new Form
         {
             Text = "新建文件夹",
-            Size = new Size(300, 130),
+            Size = DpiHelper.Scale(new Size(300, 130)),
             StartPosition = FormStartPosition.CenterParent,
             FormBorderStyle = FormBorderStyle.FixedDialog,
             MaximizeBox = false,
             MinimizeBox = false
         };
         
-        var lblName = new Label { Text = "名称:", Location = new Point(15, 20), AutoSize = true };
-        var txtName = new TextBox { Text = "新建文件夹", Location = new Point(60, 17), Width = 210 };
+        var lblName = new Label { Text = "名称:", Location = DpiHelper.Scale(new Point(15, 20)), AutoSize = true };
+        var txtName = new TextBox { Text = "新建文件夹", Location = DpiHelper.Scale(new Point(60, 17)), Width = DpiHelper.Scale(210) };
         txtName.SelectAll();
         
-        var btnOk = new Button { Text = "确定", DialogResult = DialogResult.OK, Location = new Point(110, 55), Width = 75 };
-        var btnCancel = new Button { Text = "取消", DialogResult = DialogResult.Cancel, Location = new Point(195, 55), Width = 75 };
+        var btnOk = new Button { Text = "确定", DialogResult = DialogResult.OK, Location = DpiHelper.Scale(new Point(110, 55)), Width = DpiHelper.Scale(75) };
+        var btnCancel = new Button { Text = "取消", DialogResult = DialogResult.Cancel, Location = DpiHelper.Scale(new Point(195, 55)), Width = DpiHelper.Scale(75) };
         
         inputDialog.Controls.AddRange(new Control[] { lblName, txtName, btnOk, btnCancel });
         inputDialog.AcceptButton = btnOk;

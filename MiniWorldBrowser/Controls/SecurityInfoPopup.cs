@@ -59,13 +59,13 @@ public class SecurityInfoPopup : Form
         // 窗口设置
         FormBorderStyle = FormBorderStyle.None;
         StartPosition = FormStartPosition.Manual;
-        Size = new Size(340, 380);
+        Size = DpiHelper.Scale(new Size(340, 380));
         BackColor = Color.White;
         ShowInTaskbar = false;
         TopMost = true;
         
         // 添加阴影边框效果
-        Padding = new Padding(1);
+        Padding = DpiHelper.Scale(new Padding(1));
         
         // 主面板
         var mainPanel = new Panel
@@ -82,9 +82,9 @@ public class SecurityInfoPopup : Form
         var closeBtn = new Label
         {
             Text = "×",
-            Size = new Size(24, 24),
-            Location = new Point(Width - 30, 8),
-            Font = new Font("Segoe UI", 12F),
+            Size = DpiHelper.Scale(new Size(24, 24)),
+            Location = new Point(Width - DpiHelper.Scale(30), DpiHelper.Scale(8)),
+            Font = new Font("Segoe UI", DpiHelper.ScaleFont(12F)),
             ForeColor = Color.Gray,
             TextAlign = ContentAlignment.MiddleCenter,
             Cursor = Cursors.Hand
@@ -96,9 +96,9 @@ public class SecurityInfoPopup : Form
         // 标签页控件
         _tabControl = new TabControl
         {
-            Location = new Point(10, 80),
-            Size = new Size(Width - 22, Height - 130),
-            Font = new Font("Microsoft YaHei UI", 9F)
+            Location = DpiHelper.Scale(new Point(10, 80)),
+            Size = DpiHelper.Scale(new Size(340 - 22, 380 - 130)), // 修正 Size 计算，使用原始值计算后再缩放
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         
         _permissionsTab = new TabPage("权限");
@@ -114,9 +114,9 @@ public class SecurityInfoPopup : Form
         var bottomLink = new LinkLabel
         {
             Text = "这分别意味着什么?",
-            Location = new Point(10, Height - 35),
+            Location = DpiHelper.Scale(new Point(10, 345)), // 使用 DpiHelper.Scale 缩放 Point
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             LinkColor = Color.FromArgb(0, 102, 204)
         };
         bottomLink.Click += (s, e) => 
@@ -149,8 +149,8 @@ public class SecurityInfoPopup : Form
     {
         var panel = new Panel
         {
-            Location = new Point(10, 10),
-            Size = new Size(Width - 40, 60),
+            Location = DpiHelper.Scale(new Point(10, 10)),
+            Size = DpiHelper.Scale(new Size(340 - 40, 60)),
             BackColor = Color.White
         };
         
@@ -158,9 +158,9 @@ public class SecurityInfoPopup : Form
         var hostLabel = new Label
         {
             Text = _host,
-            Location = new Point(0, 0),
+            Location = DpiHelper.Scale(new Point(0, 0)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(11F), FontStyle.Bold),
             ForeColor = Color.Black
         };
         
@@ -170,9 +170,9 @@ public class SecurityInfoPopup : Form
             Text = _isSecure 
                 ? "此网站提供了安全连接。" 
                 : "此网站未提供安全连接。",
-            Location = new Point(0, 28),
+            Location = DpiHelper.Scale(new Point(0, 28)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.FromArgb(100, 100, 100)
         };
         
@@ -185,7 +185,7 @@ public class SecurityInfoPopup : Form
     private void CreatePermissionsContent()
     {
         _permissionsTab.BackColor = Color.White;
-        _permissionsTab.Padding = new Padding(10);
+        _permissionsTab.Padding = DpiHelper.Scale(new Padding(10));
         
         var permissionsPanel = new Panel
         {
@@ -194,7 +194,7 @@ public class SecurityInfoPopup : Form
             BackColor = Color.White
         };
         
-        int y = 5;
+        int y = DpiHelper.Scale(5);
         
         // 权限项列表
         var permissions = new[]
@@ -212,21 +212,21 @@ public class SecurityInfoPopup : Form
         {
             var itemPanel = CreatePermissionItem(name, status, y);
             permissionsPanel.Controls.Add(itemPanel);
-            y += 28;
+            y += DpiHelper.Scale(28);
         }
         
         // 添加"设置权限"按钮
-        y += 10;
+        y += DpiHelper.Scale(10);
         var settingsBtn = new Button
         {
             Text = "设置权限...",
-            Location = new Point(5, y),
-            Size = new Size(100, 28),
+            Location = DpiHelper.Scale(new Point(5, y)),
+            Size = DpiHelper.Scale(new Size(100, 28)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.FromArgb(0, 120, 212),
             ForeColor = Color.White,
             Cursor = Cursors.Hand,
-            Font = new Font("Microsoft YaHei UI", 9F)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         settingsBtn.FlatAppearance.BorderSize = 0;
         settingsBtn.Click += (s, e) =>
@@ -244,58 +244,58 @@ public class SecurityInfoPopup : Form
     {
         var panel = new Panel
         {
-            Location = new Point(0, y),
-            Size = new Size(_tabControl.Width - 40, 26),
+            Location = DpiHelper.Scale(new Point(0, y)),
+            Size = new Size(_tabControl.Width - DpiHelper.Scale(20), DpiHelper.Scale(26)),
             BackColor = Color.White
         };
-        
+
         var nameLabel = new Label
         {
             Text = name,
-            Location = new Point(0, 4),
+            Location = DpiHelper.Scale(new Point(0, 4)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.Black
         };
-        
+
         var statusLabel = new Label
         {
             Text = status,
-            Location = new Point(panel.Width - 100, 4),
-            Size = new Size(100, 20),
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = new Point(panel.Width - DpiHelper.Scale(100), DpiHelper.Scale(4)),
+            Size = DpiHelper.Scale(new Size(100, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.FromArgb(100, 100, 100),
             TextAlign = ContentAlignment.MiddleRight
         };
-        
+
         panel.Controls.Add(nameLabel);
         panel.Controls.Add(statusLabel);
-        
+
         return panel;
     }
-    
+
     private void CreateConnectionContent()
     {
         _connectionTab.BackColor = Color.White;
-        _connectionTab.Padding = new Padding(10);
-        
+        _connectionTab.Padding = DpiHelper.Scale(new Padding(10));
+
         var connectionPanel = new Panel
         {
             Dock = DockStyle.Fill,
             AutoScroll = true,
             BackColor = Color.White
         };
-        
-        int y = 5;
-        
+
+        int y = DpiHelper.Scale(5);
+
         if (_isSecure)
         {
             // 证书信息区域
             var certPanel = CreateCertificateInfoPanel(ref y);
             connectionPanel.Controls.Add(certPanel);
-            
-            y += 20;
-            
+
+            y += DpiHelper.Scale(20);
+
             // 加密信息区域
             var encryptPanel = CreateEncryptionInfoPanel(ref y);
             connectionPanel.Controls.Add(encryptPanel);
@@ -306,7 +306,7 @@ public class SecurityInfoPopup : Form
             var warningPanel = CreateInsecureWarningPanel(ref y);
             connectionPanel.Controls.Add(warningPanel);
         }
-        
+
         _connectionTab.Controls.Add(connectionPanel);
     }
 
@@ -314,106 +314,106 @@ public class SecurityInfoPopup : Form
     {
         var panel = new Panel
         {
-            Location = new Point(0, y),
-            Size = new Size(_tabControl.Width - 40, 100),
+            Location = DpiHelper.Scale(new Point(0, y)),
+            Size = new Size(_tabControl.Width - DpiHelper.Scale(40), DpiHelper.Scale(100)),
             BackColor = Color.White
         };
-        
+
         // 证书图标（绿色锁）
         var iconLabel = new Label
         {
             Text = "🔒",
-            Location = new Point(0, 5),
-            Size = new Size(30, 30),
-            Font = new Font("Segoe UI Symbol", 14F),
+            Location = DpiHelper.Scale(new Point(0, 5)),
+            Size = DpiHelper.Scale(new Size(30, 30)),
+            Font = new Font("Segoe UI Symbol", DpiHelper.ScaleFont(14F)),
             ForeColor = Color.FromArgb(0, 150, 0),
             TextAlign = ContentAlignment.MiddleCenter
         };
-        
+
         // 证书描述
         var descLabel = new Label
         {
             Text = $"鲲穹AI浏览器已证实此网站的证书是有效的。\n服务器提供了安全的 HTTPS 连接。",
-            Location = new Point(35, 5),
-            Size = new Size(panel.Width - 45, 40),
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = DpiHelper.Scale(new Point(35, 5)),
+            Size = new Size(panel.Width - DpiHelper.Scale(45), DpiHelper.Scale(40)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.Black
         };
-        
+
         // 证书信息链接
         var certLink = new LinkLabel
         {
             Text = "证书信息",
-            Location = new Point(35, 50),
+            Location = DpiHelper.Scale(new Point(35, 50)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             LinkColor = Color.FromArgb(0, 102, 204)
         };
         certLink.Click += (s, e) => ShowCertificateDetails();
-        
+
         panel.Controls.Add(iconLabel);
         panel.Controls.Add(descLabel);
         panel.Controls.Add(certLink);
-        
+
         y += panel.Height;
         return panel;
     }
-    
+
     private Panel CreateEncryptionInfoPanel(ref int y)
     {
         var panel = new Panel
         {
-            Location = new Point(0, y),
-            Size = new Size(_tabControl.Width - 40, 120),
+            Location = DpiHelper.Scale(new Point(0, y)),
+            Size = new Size(_tabControl.Width - DpiHelper.Scale(40), DpiHelper.Scale(120)),
             BackColor = Color.White
         };
-        
+
         // 加密图标（绿色锁）
         var iconLabel = new Label
         {
             Text = "🔐",
-            Location = new Point(0, 5),
-            Size = new Size(30, 30),
-            Font = new Font("Segoe UI Symbol", 14F),
+            Location = DpiHelper.Scale(new Point(0, 5)),
+            Size = DpiHelper.Scale(new Size(30, 30)),
+            Font = new Font("Segoe UI Symbol", DpiHelper.ScaleFont(14F)),
             ForeColor = Color.FromArgb(0, 150, 0),
             TextAlign = ContentAlignment.MiddleCenter
         };
-        
+
         // 加密描述
         var descLabel = new Label
         {
             Text = $"您与 {_host} 之间的连接采用新型加密套件进行了加密。",
-            Location = new Point(35, 5),
-            Size = new Size(panel.Width - 45, 35),
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = DpiHelper.Scale(new Point(35, 5)),
+            Size = new Size(panel.Width - DpiHelper.Scale(45), DpiHelper.Scale(35)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.Black
         };
-        
+
         // TLS 版本
         var tlsLabel = new Label
         {
             Text = "该连接使用 TLS 1.2 或更高版本。",
-            Location = new Point(35, 45),
+            Location = DpiHelper.Scale(new Point(35, 45)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.FromArgb(80, 80, 80)
         };
-        
+
         // 加密算法
         var cipherLabel = new Label
         {
             Text = "该连接使用 AES_128_GCM 进行加密和身份验证，\n并使用 ECDHE_RSA 作为密钥交换机制。",
-            Location = new Point(35, 70),
-            Size = new Size(panel.Width - 45, 40),
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = DpiHelper.Scale(new Point(35, 70)),
+            Size = new Size(panel.Width - DpiHelper.Scale(45), DpiHelper.Scale(40)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.FromArgb(80, 80, 80)
         };
-        
+
         panel.Controls.Add(iconLabel);
         panel.Controls.Add(descLabel);
         panel.Controls.Add(tlsLabel);
         panel.Controls.Add(cipherLabel);
-        
+
         y += panel.Height;
         return panel;
     }
@@ -422,48 +422,48 @@ public class SecurityInfoPopup : Form
     {
         var panel = new Panel
         {
-            Location = new Point(0, y),
-            Size = new Size(_tabControl.Width - 40, 180), // 增加高度以容纳文本
+            Location = DpiHelper.Scale(new Point(0, y)),
+            Size = new Size(_tabControl.Width - DpiHelper.Scale(40), DpiHelper.Scale(180)),
             BackColor = Color.White
         };
-        
+
         // 警告图标（红色）
         var iconLabel = new Label
         {
             Text = "⚠",
-            Location = new Point(0, 5),
-            Size = new Size(30, 30),
-            Font = new Font("Segoe UI Symbol", 16F),
+            Location = DpiHelper.Scale(new Point(0, 5)),
+            Size = DpiHelper.Scale(new Size(30, 30)),
+            Font = new Font("Segoe UI Symbol", DpiHelper.ScaleFont(16F)),
             ForeColor = Color.FromArgb(200, 50, 50),
             TextAlign = ContentAlignment.MiddleCenter
         };
-        
+
         // 警告描述
         var descLabel = new Label
         {
             Text = "您与此网站之间建立的连接不安全。\n\n" +
                    "请勿在此网站上输入任何敏感信息（例如密码或信用卡信息），" +
                    "因为攻击者可能会窃取这些信息。",
-            Location = new Point(35, 5),
-            Size = new Size(panel.Width - 45, 100), // 增加高度
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = DpiHelper.Scale(new Point(35, 5)),
+            Size = new Size(panel.Width - DpiHelper.Scale(45), DpiHelper.Scale(100)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.FromArgb(80, 80, 80)
         };
-        
+
         // 建议
         var suggestionLabel = new Label
         {
             Text = "建议：\n• 不要在此页面输入个人信息\n• 检查网址是否正确\n• 联系网站管理员",
-            Location = new Point(35, 105), // 相应下移
-            Size = new Size(panel.Width - 45, 70), // 增加高度
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = DpiHelper.Scale(new Point(35, 105)),
+            Size = new Size(panel.Width - DpiHelper.Scale(45), DpiHelper.Scale(70)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.FromArgb(100, 100, 100)
         };
-        
+
         panel.Controls.Add(iconLabel);
         panel.Controls.Add(descLabel);
         panel.Controls.Add(suggestionLabel);
-        
+
         y += panel.Height;
         return panel;
     }

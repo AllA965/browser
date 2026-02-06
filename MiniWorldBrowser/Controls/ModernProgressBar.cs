@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Controls
 {
@@ -57,7 +58,7 @@ namespace MiniWorldBrowser.Controls
                      ControlStyles.ResizeRedraw, true);
 
             BackColor = Color.Transparent;
-            Size = new Size(100, 6);
+            Size = DpiHelper.Scale(new Size(100, 6));
 
             _animationTimer = new System.Windows.Forms.Timer { Interval = 20 };
             _animationTimer.Tick += (s, e) =>
@@ -86,14 +87,14 @@ namespace MiniWorldBrowser.Controls
 
             // 考虑内边距
             int barWidth = Width - Padding.Left - Padding.Right;
-            int barHeight = 4;
+            int barHeight = DpiHelper.Scale(4);
             int x = Padding.Left;
             int y = (Height - barHeight) / 2;
 
             if (barWidth <= 0) return;
 
             var rect = new Rectangle(x, y, barWidth, barHeight);
-            var radius = barHeight / 2;
+            int radius = barHeight / 2;
 
             // 绘制背景槽
             using (var bgPath = CreateRoundedRect(rect, radius))

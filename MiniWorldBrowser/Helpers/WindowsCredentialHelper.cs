@@ -148,27 +148,27 @@ public class WindowsPasswordDialog : Form
     private void InitializeUI()
     {
         Text = "鲲穹AI浏览器";
-        Size = new Size(420, 280);
+        Size = DpiHelper.Scale(new Size(420, 280));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
         ShowInTaskbar = false;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", 9F);
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
         KeyPreview = false; // 禁用键盘预览，让控件直接处理按键
 
         // 顶部蓝色横幅（带钥匙图标）
         var bannerPanel = new Panel
         {
             Dock = DockStyle.Top,
-            Height = 60,
+            Height = DpiHelper.Scale(60),
             BackColor = Color.FromArgb(0, 102, 204)
         };
         bannerPanel.Paint += (s, e) =>
         {
             // 绘制钥匙图标
-            e.Graphics.DrawString("🔑", new Font("Segoe UI Emoji", 24F), Brushes.Gold, 15, 10);
+            e.Graphics.DrawString("🔑", new Font("Segoe UI Emoji", DpiHelper.ScaleFont(24F)), Brushes.Gold, DpiHelper.Scale(15), DpiHelper.Scale(10));
         };
         Controls.Add(bannerPanel);
 
@@ -176,10 +176,10 @@ public class WindowsPasswordDialog : Form
         var tipLabel = new Label
         {
             Text = "鲲穹AI浏览器正在尝试显示密码，请输入您的 Windows 密码以\n允许此操作。",
-            Location = new Point(20, 80),
-            Size = new Size(380, 40),
+            Location = DpiHelper.Scale(new Point(20, 80)),
+            Size = DpiHelper.Scale(new Size(380, 40)),
             ForeColor = Color.FromArgb(0, 102, 204),
-            Font = new Font("Microsoft YaHei UI", 9F)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         Controls.Add(tipLabel);
 
@@ -187,7 +187,7 @@ public class WindowsPasswordDialog : Form
         var userLabel = new Label
         {
             Text = "用户名(U):",
-            Location = new Point(20, 135),
+            Location = DpiHelper.Scale(new Point(20, 135)),
             AutoSize = true
         };
         Controls.Add(userLabel);
@@ -196,7 +196,7 @@ public class WindowsPasswordDialog : Form
         var usernameLabel = new Label
         {
             Text = WindowsCredentialHelper.GetCurrentUsername(),
-            Location = new Point(120, 135),
+            Location = DpiHelper.Scale(new Point(120, 135)),
             AutoSize = true,
             ForeColor = Color.FromArgb(51, 51, 51)
         };
@@ -206,7 +206,7 @@ public class WindowsPasswordDialog : Form
         var pwdLabel = new Label
         {
             Text = "密码(P):",
-            Location = new Point(20, 170),
+            Location = DpiHelper.Scale(new Point(20, 170)),
             AutoSize = true
         };
         Controls.Add(pwdLabel);
@@ -214,8 +214,8 @@ public class WindowsPasswordDialog : Form
         // 密码输入框
         _passwordBox = new TextBox
         {
-            Location = new Point(120, 167),
-            Size = new Size(260, 23),
+            Location = DpiHelper.Scale(new Point(120, 167)),
+            Size = DpiHelper.Scale(new Size(260, 23)),
             UseSystemPasswordChar = true
         };
         Controls.Add(_passwordBox);
@@ -224,8 +224,8 @@ public class WindowsPasswordDialog : Form
         var okBtn = new Button
         {
             Text = "确定",
-            Location = new Point(210, 210),
-            Size = new Size(85, 28),
+            Location = DpiHelper.Scale(new Point(210, 210)),
+            Size = DpiHelper.Scale(new Size(85, 28)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.White
         };
@@ -261,8 +261,8 @@ public class WindowsPasswordDialog : Form
         var cancelBtn = new Button
         {
             Text = "取消",
-            Location = new Point(305, 210),
-            Size = new Size(85, 28),
+            Location = DpiHelper.Scale(new Point(305, 210)),
+            Size = DpiHelper.Scale(new Size(85, 28)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.White,
             DialogResult = DialogResult.Cancel

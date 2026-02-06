@@ -111,18 +111,18 @@ public class TabButton : Panel
         };
 
         _titleLabel = new Label
-        {
-            AutoSize = false,
-            Location = DpiHelper.Scale(new Point(30, 8)),
-            Size = DpiHelper.Scale(new Size(120, 16)),
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
-            Text = "新标签页",
-            TextAlign = ContentAlignment.MiddleLeft,
-            ForeColor = TextColor,
-            BackColor = Color.Transparent,
-            AutoEllipsis = true,
-            Cursor = Cursors.Hand
-        };
+            {
+                AutoSize = false,
+                Location = DpiHelper.Scale(new Point(34, 8)),
+                Size = DpiHelper.Scale(new Size(130, 16)),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
+                Text = "新标签页",
+                TextAlign = ContentAlignment.MiddleLeft,
+                ForeColor = TextColor,
+                BackColor = Color.Transparent,
+                AutoEllipsis = true,
+                Cursor = Cursors.Hand
+            };
 
         _closeButton = new TabCloseButton(_isDarkTheme)
         {
@@ -444,7 +444,7 @@ public class TabButton : Panel
     {
         var menu = new ContextMenuStrip
         {
-            Font = new Font("Microsoft YaHei UI", 9),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ShowImageMargin = false
         };
 
@@ -521,28 +521,39 @@ public class TabButton : Panel
 
         if (IsCompact)
         {
-            var x = Math.Max(0, (Width - DpiHelper.Scale(16)) / 2);
-            _favicon.Location = new Point(x, DpiHelper.Scale(8));
-            _loadingIndicator.Location = new Point(x, DpiHelper.Scale(8));
+            var dpiScale = DpiHelper.GetControlDpiScale(this);
+            int iconSize = (int)Math.Round(16 * dpiScale);
+            int topPadding = (int)Math.Round(8 * dpiScale);
+
+            var x = Math.Max(0, (Width - iconSize) / 2);
+            _favicon.Location = new Point(x, topPadding);
+            _loadingIndicator.Location = new Point(x, topPadding);
             _titleLabel.Visible = false;
             _closeButton.HideButton();
         }
         else
         {
-            _favicon.Location = DpiHelper.Scale(new Point(10, 8));
-            _loadingIndicator.Location = DpiHelper.Scale(new Point(10, 8));
-            _titleLabel.Visible = true;
-            _titleLabel.Location = DpiHelper.Scale(new Point(30, 8));
+            int faviconLeft = DpiHelper.Scale(12);
+            int titleLeft = DpiHelper.Scale(34);
+            int topPadding = DpiHelper.Scale(8);
+            int closeButtonWidth = DpiHelper.Scale(28);
+            int closeButtonTop = DpiHelper.Scale(4);
             
-            // 优化：使用 PreferredWidth 而不是当前 Width，防止动画过程中文字逐个出现的卡顿感
-            // 让 Panel 的剪裁机制处理视觉上的缩减，而不是让 Label 频繁重新布局文字
-            int targetLabelWidth = Math.Max(0, PreferredWidth - DpiHelper.Scale(30 + 28));
+            // 增加右侧间距，确保文字不被关闭按钮遮挡
+            int labelRightPadding = DpiHelper.Scale(68); 
+
+            _favicon.Location = new Point(faviconLeft, topPadding);
+            _loadingIndicator.Location = new Point(faviconLeft, topPadding);
+            _titleLabel.Visible = true;
+            _titleLabel.Location = new Point(titleLeft, topPadding);
+
+            int targetLabelWidth = Math.Max(0, Width - labelRightPadding - titleLeft);
             if (_titleLabel.Width != targetLabelWidth)
             {
                 _titleLabel.Width = targetLabelWidth;
             }
 
-            _closeButton.Location = new Point(Width - DpiHelper.Scale(28), DpiHelper.Scale(4));
+            _closeButton.Location = new Point(Width - closeButtonWidth, closeButtonTop);
             
             if (IsActive || _isHovering)
                 _closeButton.ShowButton();

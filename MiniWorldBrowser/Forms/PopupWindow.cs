@@ -53,7 +53,7 @@ public class PopupWindow : Form
         _progressBar = new ProgressBar
         {
             Dock = DockStyle.Top,
-            Height = 2,
+            Height = DpiHelper.Scale(2),
             Style = ProgressBarStyle.Marquee,
             Visible = true,
             MarqueeAnimationSpeed = 30

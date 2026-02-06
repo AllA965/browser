@@ -53,7 +53,7 @@ public class FontSettingsDialog : Form
         var standardLabel = new Label
         {
             Text = "标准字体",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true
         };
@@ -68,7 +68,7 @@ public class FontSettingsDialog : Form
             Text = "16: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
             Location = new Point(DpiHelper.Scale(200), y),
             Size = DpiHelper.Scale(new Size(300, 50)),
-            Font = new Font(_settingsService.Settings.StandardFont, DpiHelper.Scale((float)_settingsService.Settings.StandardFontSize))
+            Font = new Font(_settingsService.Settings.StandardFont, DpiHelper.ScaleFont((float)_settingsService.Settings.StandardFontSize))
         };
         panel.Controls.Add(_standardPreview);
         y += DpiHelper.Scale(35);
@@ -86,8 +86,8 @@ public class FontSettingsDialog : Form
         _standardFontSizeSlider.ValueChanged += (s, e) => UpdateStandardPreview();
         panel.Controls.Add(_standardFontSizeSlider);
         
-        var minLabel = new Label { Text = "最小", Location = new Point(DpiHelper.Scale(20), y + DpiHelper.Scale(30)), AutoSize = true, ForeColor = Color.Gray };
-        var maxLabel = new Label { Text = "最大", Location = new Point(DpiHelper.Scale(145), y + DpiHelper.Scale(30)), AutoSize = true, ForeColor = Color.Gray };
+        var minLabel = new Label { Text = "最小", Location = new Point(DpiHelper.Scale(20), y + DpiHelper.Scale(30)), AutoSize = true, ForeColor = Color.Gray, Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)) };
+        var maxLabel = new Label { Text = "最大", Location = new Point(DpiHelper.Scale(145), y + DpiHelper.Scale(30)), AutoSize = true, ForeColor = Color.Gray, Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)) };
         panel.Controls.Add(minLabel);
         panel.Controls.Add(maxLabel);
         y += DpiHelper.Scale(70);
@@ -96,7 +96,7 @@ public class FontSettingsDialog : Form
         var serifLabel = new Label
         {
             Text = "Serif 字体",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true
         };
@@ -111,7 +111,7 @@ public class FontSettingsDialog : Form
             Text = "16: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
             Location = new Point(DpiHelper.Scale(200), y),
             Size = DpiHelper.Scale(new Size(300, 50)),
-            Font = new Font(_settingsService.Settings.SerifFont, DpiHelper.Scale(16F))
+            Font = new Font(_settingsService.Settings.SerifFont, DpiHelper.ScaleFont(16F))
         };
         panel.Controls.Add(_serifPreview);
         y += DpiHelper.Scale(70);
@@ -120,7 +120,7 @@ public class FontSettingsDialog : Form
         var sansSerifLabel = new Label
         {
             Text = "Sans-serif 字体",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true
         };
@@ -135,16 +135,16 @@ public class FontSettingsDialog : Form
             Text = "16: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
             Location = new Point(DpiHelper.Scale(200), y),
             Size = DpiHelper.Scale(new Size(300, 50)),
-            Font = new Font(_settingsService.Settings.SansSerifFont, DpiHelper.Scale(16F))
+            Font = new Font(_settingsService.Settings.SansSerifFont, DpiHelper.ScaleFont(16F))
         };
         panel.Controls.Add(_sansSerifPreview);
         y += DpiHelper.Scale(70);
-
+        
         // 宽度固定的字体
         var fixedWidthLabel = new Label
         {
             Text = "宽度固定的字体",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true
         };
@@ -159,7 +159,7 @@ public class FontSettingsDialog : Form
             Text = "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
             Location = new Point(DpiHelper.Scale(200), y),
             Size = DpiHelper.Scale(new Size(300, 50)),
-            Font = new Font(_settingsService.Settings.FixedWidthFont, DpiHelper.Scale(14F))
+            Font = new Font(_settingsService.Settings.FixedWidthFont, DpiHelper.ScaleFont(14F))
         };
         panel.Controls.Add(_fixedWidthPreview);
         y += DpiHelper.Scale(70);
@@ -168,7 +168,7 @@ public class FontSettingsDialog : Form
         var minFontSizeLabel = new Label
         {
             Text = "最小字号",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true
         };
@@ -192,7 +192,7 @@ public class FontSettingsDialog : Form
             Text = _settingsService.Settings.MinimumFontSize.ToString(),
             Location = new Point(DpiHelper.Scale(175), y + DpiHelper.Scale(5)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F))
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         panel.Controls.Add(_minFontSizeValue);
         
@@ -201,7 +201,7 @@ public class FontSettingsDialog : Form
             Text = $"{_settingsService.Settings.MinimumFontSize}: Lorem ipsum dolor sit amet, consectetur",
             Location = new Point(DpiHelper.Scale(200), y),
             Size = DpiHelper.Scale(new Size(300, 30)),
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale((float)_settingsService.Settings.MinimumFontSize))
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont((float)_settingsService.Settings.MinimumFontSize))
         };
         panel.Controls.Add(_minFontSizePreview);
         y += DpiHelper.Scale(60);
@@ -243,7 +243,8 @@ public class FontSettingsDialog : Form
             Size = DpiHelper.Scale(new Size(160, 25)),
             DropDownStyle = ComboBoxStyle.DropDownList,
             DrawMode = DrawMode.OwnerDrawFixed,
-            ItemHeight = DpiHelper.Scale(20)
+            ItemHeight = DpiHelper.Scale(20),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         
         combo.Items.AddRange(_fontNames.ToArray());
@@ -266,7 +267,7 @@ public class FontSettingsDialog : Form
             
             try
             {
-                using var font = new Font(fontName, DpiHelper.Scale(10F));
+                using var font = new Font(fontName, DpiHelper.ScaleFont(10F));
                 using var brush = new SolidBrush(e.ForeColor);
                 e.Graphics.DrawString(fontName, font, brush, e.Bounds.X + DpiHelper.Scale(2), e.Bounds.Y + DpiHelper.Scale(2));
             }
@@ -290,7 +291,7 @@ public class FontSettingsDialog : Form
         {
             var fontName = _standardFontCombo.SelectedItem?.ToString() ?? "Microsoft YaHei";
             var fontSize = _standardFontSizeSlider.Value;
-            _standardPreview.Font = new Font(fontName, DpiHelper.Scale((float)fontSize));
+            _standardPreview.Font = new Font(fontName, DpiHelper.ScaleFont((float)fontSize));
             _standardPreview.Text = $"{fontSize}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.";
         }
         catch { }
@@ -301,7 +302,7 @@ public class FontSettingsDialog : Form
         try
         {
             var fontName = _serifFontCombo.SelectedItem?.ToString() ?? "Times New Roman";
-            _serifPreview.Font = new Font(fontName, DpiHelper.Scale(16F));
+            _serifPreview.Font = new Font(fontName, DpiHelper.ScaleFont(16F));
         }
         catch { }
     }
@@ -311,7 +312,7 @@ public class FontSettingsDialog : Form
         try
         {
             var fontName = _sansSerifFontCombo.SelectedItem?.ToString() ?? "Arial";
-            _sansSerifPreview.Font = new Font(fontName, DpiHelper.Scale(16F));
+            _sansSerifPreview.Font = new Font(fontName, DpiHelper.ScaleFont(16F));
         }
         catch { }
     }
@@ -321,7 +322,7 @@ public class FontSettingsDialog : Form
         try
         {
             var fontName = _fixedWidthFontCombo.SelectedItem?.ToString() ?? "Consolas";
-            _fixedWidthPreview.Font = new Font(fontName, DpiHelper.Scale(14F));
+            _fixedWidthPreview.Font = new Font(fontName, DpiHelper.ScaleFont(14F));
         }
         catch { }
     }
@@ -332,7 +333,7 @@ public class FontSettingsDialog : Form
         {
             var fontSize = _minFontSizeSlider.Value;
             _minFontSizeValue.Text = fontSize.ToString();
-            _minFontSizePreview.Font = new Font("Microsoft YaHei UI", DpiHelper.Scale((float)fontSize));
+            _minFontSizePreview.Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont((float)fontSize));
             _minFontSizePreview.Text = $"{fontSize}: Lorem ipsum dolor sit amet, consectetur";
         }
         catch { }

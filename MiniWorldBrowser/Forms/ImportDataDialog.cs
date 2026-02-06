@@ -25,19 +25,19 @@ public class ImportDataDialog : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "导入收藏和设置";
-        Size = new Size(400, 220);
+        Size = DpiHelper.Scale(new Size(400, 220));
         FormBorderStyle = FormBorderStyle.FixedDialog;
         StartPosition = FormStartPosition.CenterParent;
         MaximizeBox = false;
         MinimizeBox = false;
         ShowInTaskbar = false;
-        Font = new Font("Microsoft YaHei UI", 9F);
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
         
         // 来源标签
         var sourceLabel = new Label
         {
             Text = "来源：",
-            Location = new Point(20, 25),
+            Location = DpiHelper.Scale(new Point(20, 25)),
             AutoSize = true
         };
         Controls.Add(sourceLabel);
@@ -45,8 +45,8 @@ public class ImportDataDialog : Form
         // 来源下拉框
         _sourceCombo = new ComboBox
         {
-            Location = new Point(80, 22),
-            Size = new Size(280, 25),
+            Location = DpiHelper.Scale(new Point(80, 22)),
+            Size = DpiHelper.Scale(new Size(280, 25)),
             DropDownStyle = ComboBoxStyle.DropDownList
         };
         _sourceCombo.Items.AddRange(new object[]
@@ -64,7 +64,7 @@ public class ImportDataDialog : Form
         var selectLabel = new Label
         {
             Text = "选择要导入的内容：",
-            Location = new Point(20, 65),
+            Location = DpiHelper.Scale(new Point(20, 65)),
             AutoSize = true
         };
         Controls.Add(selectLabel);
@@ -73,7 +73,7 @@ public class ImportDataDialog : Form
         _bookmarksCheck = new CheckBox
         {
             Text = "收藏夹/书签",
-            Location = new Point(40, 90),
+            Location = DpiHelper.Scale(new Point(40, 90)),
             AutoSize = true,
             Checked = true
         };
@@ -83,8 +83,8 @@ public class ImportDataDialog : Form
         _importBtn = new Button
         {
             Text = "导入",
-            Size = new Size(75, 28),
-            Location = new Point(210, 140),
+            Size = DpiHelper.Scale(new Size(75, 28)),
+            Location = DpiHelper.Scale(new Point(210, 140)),
             DialogResult = DialogResult.OK
         };
         _importBtn.Click += OnImportClick;
@@ -94,8 +94,8 @@ public class ImportDataDialog : Form
         _cancelBtn = new Button
         {
             Text = "取消",
-            Size = new Size(75, 28),
-            Location = new Point(295, 140),
+            Size = DpiHelper.Scale(new Size(75, 28)),
+            Location = DpiHelper.Scale(new Point(295, 140)),
             DialogResult = DialogResult.Cancel
         };
         Controls.Add(_cancelBtn);

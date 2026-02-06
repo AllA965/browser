@@ -23,7 +23,7 @@ public class ZoomLevelDialog : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "缩放级别";
-        Size = new Size(550, 400);
+        Size = DpiHelper.Scale(new Size(550, 400));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
@@ -34,31 +34,31 @@ public class ZoomLevelDialog : Form
         var lblHost = new Label
         {
             Text = "主机名（可包含通配符）",
-            Location = new Point(20, 20),
+            Location = DpiHelper.Scale(new Point(20, 20)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
 
         var lblZoom = new Label
         {
             Text = "缩放",
-            Location = new Point(380, 20),
+            Location = DpiHelper.Scale(new Point(380, 20)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
 
         // 缩放级别列表
         _zoomList = new ListView
         {
-            Location = new Point(20, 50),
-            Size = new Size(490, 260),
+            Location = DpiHelper.Scale(new Point(20, 50)),
+            Size = DpiHelper.Scale(new Size(490, 260)),
             View = View.Details,
             FullRowSelect = true,
             GridLines = true,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _zoomList.Columns.Add("主机名", 350);
-        _zoomList.Columns.Add("缩放", 100);
+        _zoomList.Columns.Add("主机名", DpiHelper.Scale(350));
+        _zoomList.Columns.Add("缩放", DpiHelper.Scale(100));
         _zoomList.KeyDown += ZoomList_KeyDown;
 
         // 右键菜单
@@ -71,8 +71,8 @@ public class ZoomLevelDialog : Form
         var btnDone = new Button
         {
             Text = "完成",
-            Location = new Point(435, 325),
-            Size = new Size(75, 28),
+            Location = DpiHelper.Scale(new Point(435, 325)),
+            Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.System,
             DialogResult = DialogResult.OK
         };

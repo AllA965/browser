@@ -89,12 +89,19 @@ public class SettingsForm : Form
     private NumericUpDown _memoryReleaseNum = null!;
     private Button _resetSettingsBtn = null!;
     
+    // 默认浏览器控件
+    private Button _setDefaultBtn = null!;
+    private Label _defaultStatusLabel = null!;
+    
     public SettingsForm(ISettingsService settingsService, IBookmarkService? bookmarkService = null)
     {
         _settingsService = settingsService;
         _bookmarkService = bookmarkService;
         InitializeUI();
         LoadSettings();
+        
+        // 窗体激活时刷新默认浏览器状态
+        this.Activated += (s, e) => UpdateDefaultBrowserStatus();
     }
     
     protected override CreateParams CreateParams
@@ -138,7 +145,7 @@ public class SettingsForm : Form
         MinimumSize = DpiHelper.Scale(new Size(800, 600));
         StartPosition = FormStartPosition.CenterParent;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
         FormBorderStyle = FormBorderStyle.Sizable;
         MaximizeBox = true;
         MinimizeBox = true;
@@ -173,7 +180,7 @@ public class SettingsForm : Form
         var titleLabel = new Label
         {
             Text = "鲲穹AI浏览器",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(12F), FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(12F), FontStyle.Bold),
             ForeColor = Color.FromArgb(51, 51, 51),
             Dock = DockStyle.Top,
             Height = DpiHelper.Scale(40),
@@ -188,7 +195,7 @@ public class SettingsForm : Form
             Dock = DockStyle.Fill,
             BorderStyle = BorderStyle.None,
             BackColor = Color.FromArgb(245, 245, 245),
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F)),
             ItemHeight = DpiHelper.Scale(36),
             DrawMode = DrawMode.OwnerDrawFixed
         };
@@ -305,7 +312,7 @@ public class SettingsForm : Form
             var headerLabel = new Label
             {
                 Text = "历史记录",
-                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(16F)),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(16F)),
                 Dock = DockStyle.Top,
                 Height = DpiHelper.Scale(50),
                 TextAlign = ContentAlignment.MiddleLeft
@@ -650,15 +657,40 @@ public class SettingsForm : Form
         var group = CreateGroupBox("默认浏览器", DpiHelper.Scale(80));
         group.Location = new Point(0, y);
         
-        var setDefaultBtn = new Button { Text = "设为默认浏览器", Location = DpiHelper.Scale(new Point(15, 25)), Size = DpiHelper.Scale(new Size(140, 28)), FlatStyle = FlatStyle.Flat };
-        setDefaultBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
+        _setDefaultBtn = new Button { Text = "设为默认浏览器", Location = DpiHelper.Scale(new Point(15, 25)), Size = DpiHelper.Scale(new Size(140, 28)), FlatStyle = FlatStyle.Flat };
+        _setDefaultBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
+        _setDefaultBtn.Click += (s, e) => 
+        {
+            DefaultBrowserHelper.SetAsDefaultBrowser();
+        };
         
-        var statusLabel = new Label { Text = "鲲穹AI浏览器目前不是默认浏览器。", Location = DpiHelper.Scale(new Point(15, 55)), AutoSize = true, ForeColor = Color.Gray };
+        _defaultStatusLabel = new Label { Text = "正在检查默认浏览器状态...", Location = DpiHelper.Scale(new Point(15, 55)), AutoSize = true, ForeColor = Color.Gray };
         
-        group.Controls.AddRange(new Control[] { setDefaultBtn, statusLabel });
+        group.Controls.AddRange(new Control[] { _setDefaultBtn, _defaultStatusLabel });
         _basicPanel.Controls.Add(group);
         
+        UpdateDefaultBrowserStatus();
+        
         return y + group.Height + DpiHelper.Scale(15);
+    }
+
+    private void UpdateDefaultBrowserStatus()
+    {
+        if (_defaultStatusLabel == null || _setDefaultBtn == null) return;
+
+        bool isDefault = DefaultBrowserHelper.IsDefaultBrowser();
+        if (isDefault)
+        {
+            _defaultStatusLabel.Text = $"{AppConstants.AppName} 目前是您的默认浏览器。";
+            _defaultStatusLabel.ForeColor = Color.Green;
+            _setDefaultBtn.Enabled = false;
+        }
+        else
+        {
+            _defaultStatusLabel.Text = $"{AppConstants.AppName} 目前不是默认浏览器。";
+            _defaultStatusLabel.ForeColor = Color.Gray;
+            _setDefaultBtn.Enabled = true;
+        }
     }
     
     #endregion
@@ -713,7 +745,7 @@ public class SettingsForm : Form
             Location = DpiHelper.Scale(new Point(120, 200)),
             AutoSize = true,
             ForeColor = Color.Gray,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(8F))
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(8F))
         };
 
         apiGroup.Controls.AddRange(new Control[] { 
@@ -1014,7 +1046,7 @@ public class SettingsForm : Form
         var titleLabel = new Label
         {
             Text = title,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(16F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(16F)),
             Location = DpiHelper.Scale(new Point(0, 15)),
             AutoSize = true
         };
@@ -1102,7 +1134,7 @@ public class SettingsForm : Form
         {
             Text = title,
             Size = DpiHelper.Scale(new Size(550, height)),
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.FromArgb(51, 51, 51)
         };
     }
@@ -1114,7 +1146,7 @@ public class SettingsForm : Form
             Text = text,
             Location = location,
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             LinkColor = Color.FromArgb(0, 102, 204),
             ActiveLinkColor = Color.FromArgb(0, 80, 160)
         };

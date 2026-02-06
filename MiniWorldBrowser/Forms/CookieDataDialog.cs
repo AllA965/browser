@@ -30,7 +30,7 @@ public class CookieDataDialog : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "Cookie 和网站数据";
-        Size = new Size(850, 600);
+        Size = DpiHelper.Scale(new Size(850, 600));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
@@ -41,27 +41,27 @@ public class CookieDataDialog : Form
         var lblSite = new Label
         {
             Text = "网站",
-            Location = new Point(20, 20),
-            Size = new Size(200, 20),
-            Font = new Font("Microsoft YaHei UI", 9, FontStyle.Bold)
+            Location = DpiHelper.Scale(new Point(20, 20)),
+            Size = DpiHelper.Scale(new Size(200, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F), FontStyle.Bold)
         };
 
         var lblData = new Label
         {
             Text = "本地存储的数据",
-            Location = new Point(230, 20),
-            Size = new Size(300, 20),
-            Font = new Font("Microsoft YaHei UI", 9, FontStyle.Bold)
+            Location = DpiHelper.Scale(new Point(230, 20)),
+            Size = DpiHelper.Scale(new Size(300, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F), FontStyle.Bold)
         };
 
         // 全部删除按钮
         _btnDeleteAll = new Button
         {
             Text = "全部删除",
-            Location = new Point(620, 15),
-            Size = new Size(80, 28),
+            Location = DpiHelper.Scale(new Point(620, 15)),
+            Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.Flat,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         _btnDeleteAll.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         _btnDeleteAll.Click += BtnDeleteAll_Click;
@@ -69,9 +69,9 @@ public class CookieDataDialog : Form
         // 搜索框
         _searchBox = new TextBox
         {
-            Location = new Point(710, 17),
-            Size = new Size(110, 25),
-            Font = new Font("Microsoft YaHei UI", 9)
+            Location = DpiHelper.Scale(new Point(710, 17)),
+            Size = DpiHelper.Scale(new Size(110, 25)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         _searchBox.Text = "搜索 Cookie";
         _searchBox.ForeColor = Color.Gray;
@@ -96,24 +96,25 @@ public class CookieDataDialog : Form
         // 网站列表
         _siteList = new ListView
         {
-            Location = new Point(20, 50),
-            Size = new Size(800, 450),
+            Location = DpiHelper.Scale(new Point(20, 50)),
+            Size = DpiHelper.Scale(new Size(800, 450)),
             View = View.Details,
             FullRowSelect = true,
             BorderStyle = BorderStyle.FixedSingle,
-            HeaderStyle = ColumnHeaderStyle.None
+            HeaderStyle = ColumnHeaderStyle.None,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
-        _siteList.Columns.Add("网站", 200);
-        _siteList.Columns.Add("数据", 400);
-        _siteList.Columns.Add("大小", 80);
+        _siteList.Columns.Add("网站", DpiHelper.Scale(200));
+        _siteList.Columns.Add("数据", DpiHelper.Scale(400));
+        _siteList.Columns.Add("大小", DpiHelper.Scale(80));
         _siteList.SelectedIndexChanged += SiteList_SelectedIndexChanged;
         _siteList.DoubleClick += SiteList_DoubleClick;
 
         // 详情面板（初始隐藏）
         _detailPanel = new Panel
         {
-            Location = new Point(230, 50),
-            Size = new Size(590, 450),
+            Location = DpiHelper.Scale(new Point(230, 50)),
+            Size = DpiHelper.Scale(new Size(590, 450)),
             BorderStyle = BorderStyle.None,
             BackColor = Color.FromArgb(245, 245, 245),
             Visible = false
@@ -122,8 +123,8 @@ public class CookieDataDialog : Form
         // Cookie标签面板
         _cookieTagsPanel = new FlowLayoutPanel
         {
-            Location = new Point(10, 30),
-            Size = new Size(570, 80),
+            Location = DpiHelper.Scale(new Point(10, 30)),
+            Size = DpiHelper.Scale(new Size(570, 80)),
             AutoScroll = true,
             WrapContents = true
         };
@@ -132,8 +133,8 @@ public class CookieDataDialog : Form
         // Cookie详情面板
         _cookieDetailPanel = new Panel
         {
-            Location = new Point(10, 120),
-            Size = new Size(570, 280),
+            Location = DpiHelper.Scale(new Point(10, 120)),
+            Size = DpiHelper.Scale(new Size(570, 280)),
             BorderStyle = BorderStyle.FixedSingle,
             BackColor = Color.White,
             AutoScroll = true
@@ -144,10 +145,11 @@ public class CookieDataDialog : Form
         var btnDone = new Button
         {
             Text = "完成",
-            Location = new Point(740, 520),
-            Size = new Size(80, 28),
+            Location = DpiHelper.Scale(new Point(740, 520)),
+            Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.System,
-            DialogResult = DialogResult.OK
+            DialogResult = DialogResult.OK,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
 
         Controls.AddRange(new Control[]
@@ -243,10 +245,10 @@ public class CookieDataDialog : Form
             {
                 Text = cookie,
                 AutoSize = true,
-                MinimumSize = new Size(60, 28),
+                MinimumSize = DpiHelper.Scale(new Size(60, 28)),
                 FlatStyle = FlatStyle.Flat,
-                Font = new Font("Microsoft YaHei UI", 9),
-                Margin = new Padding(3),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+                Margin = DpiHelper.Scale(new Padding(3)),
                 Tag = cookie
             };
             btn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
@@ -305,10 +307,10 @@ public class CookieDataDialog : Form
         var btnDelete = new Button
         {
             Text = "删除",
-            Location = new Point(15, y + 10),
-            Size = new Size(60, 26),
+            Location = DpiHelper.Scale(new Point(15, y + 10)),
+            Size = DpiHelper.Scale(new Size(60, 26)),
             FlatStyle = FlatStyle.Flat,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9))
         };
         btnDelete.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         btnDelete.Click += (s, e) => DeleteCookie(domain, cookieName);
@@ -320,24 +322,24 @@ public class CookieDataDialog : Form
         var lblName = new Label
         {
             Text = label,
-            Location = new Point(15, y),
-            Size = new Size(80, 20),
-            Font = new Font("Microsoft YaHei UI", 9),
+            Location = DpiHelper.Scale(new Point(15, y)),
+            Size = DpiHelper.Scale(new Size(80, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
             ForeColor = Color.Gray
         };
 
         var lblValue = new Label
         {
             Text = value,
-            Location = new Point(100, y),
-            Size = new Size(450, 20),
-            Font = new Font("Microsoft YaHei UI", 9),
+            Location = DpiHelper.Scale(new Point(100, y)),
+            Size = DpiHelper.Scale(new Size(450, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
             AutoEllipsis = true
         };
-
+        
         _cookieDetailPanel.Controls.Add(lblName);
         _cookieDetailPanel.Controls.Add(lblValue);
-        y += 25;
+        y += (int)Math.Round(25 * DpiHelper.GetControlDpiScale(this));
     }
 
     private string GenerateFakeCookieValue()

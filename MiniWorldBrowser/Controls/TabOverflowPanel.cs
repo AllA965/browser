@@ -49,7 +49,7 @@ public class TabOverflowPanel : Control
             Text = "打开的标签页",
             Dock = DockStyle.Top,
             Height = DpiHelper.Scale(32),
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F), FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F), FontStyle.Bold),
             ForeColor = _isDarkTheme ? Color.FromArgb(200, 200, 200) : Color.FromArgb(100, 100, 100),
             Padding = DpiHelper.Scale(new Padding(12, 8, 0, 0)),
             BackColor = _isDarkTheme ? Color.FromArgb(53, 54, 58) : Color.FromArgb(245, 245, 245)
@@ -233,7 +233,7 @@ internal class TabOverflowItem : Control
             Location = DpiHelper.Scale(new Point(36, 8)),
             AutoSize = false,
             Size = DpiHelper.Scale(new Size(200, 20)),
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = _isDarkTheme ? Color.FromArgb(220, 220, 220) : Color.FromArgb(60, 60, 60)
         };
         
@@ -244,7 +244,7 @@ internal class TabOverflowItem : Control
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.Transparent,
             Text = "×",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F)),
             ForeColor = _isDarkTheme ? Color.FromArgb(180, 180, 180) : Color.FromArgb(140, 140, 140),
             Cursor = Cursors.Hand
         };
@@ -312,7 +312,7 @@ internal class TabOverflowItem : Control
             url = bt.Url ?? "";
         }
         
-        _titleLabel.Text = TruncateText(title, 180);
+        _titleLabel.Text = TruncateText(title, DpiHelper.Scale(180));
         
         if (!string.IsNullOrEmpty(url))
         {

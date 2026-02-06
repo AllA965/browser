@@ -26,7 +26,7 @@ public class RoundedButton : BaseToolButton
     public RoundedButton()
     {
         ForeColor = Color.FromArgb(80, 80, 80);
-        Font = new Font("Segoe UI Symbol", DpiHelper.Scale(11F));
+        Font = new Font("Segoe UI Symbol", DpiHelper.ScaleFont(11F));
     }
     
     protected override void DrawContent(Graphics g)

@@ -498,7 +498,7 @@ public class BrowserTab : IDisposable
             try 
             { 
                 WebView.CoreWebView2.DefaultDownloadDialogCornerAlignment = CoreWebView2DefaultDownloadDialogCornerAlignment.TopRight;
-                WebView.CoreWebView2.DefaultDownloadDialogMargin = new System.Drawing.Point(8, 0);
+                WebView.CoreWebView2.DefaultDownloadDialogMargin = DpiHelper.Scale(new System.Drawing.Point(8, 0));
             } 
             catch { }
             

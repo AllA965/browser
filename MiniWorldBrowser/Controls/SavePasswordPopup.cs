@@ -66,7 +66,7 @@ public class SavePasswordPopup : Form
         ShowInTaskbar = false;
         TopMost = true;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", 9F);
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
 
         // 设置双缓冲
         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
@@ -119,15 +119,15 @@ public class SavePasswordPopup : Form
     /// </summary>
     private void InitializeAskToSaveUI()
     {
-        Size = new Size(380, 140);
+        Size = DpiHelper.Scale(new Size(380, 140));
 
         // 标题
         var titleLabel = new Label
         {
             Text = "希望鲲穹AI浏览器保存您在此网站上使用的密码吗？",
-            Location = new Point(15, 15),
-            Size = new Size(320, 20),
-            Font = new Font("Microsoft YaHei UI", 9F)
+            Location = DpiHelper.Scale(new Point(15, 15)),
+            Size = DpiHelper.Scale(new Size(320, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         Controls.Add(titleLabel);
 
@@ -135,8 +135,8 @@ public class SavePasswordPopup : Form
         var usernameLabel = new Label
         {
             Text = _username,
-            Location = new Point(15, 45),
-            Size = new Size(150, 20),
+            Location = DpiHelper.Scale(new Point(15, 45)),
+            Size = DpiHelper.Scale(new Size(150, 20)),
             ForeColor = Color.FromArgb(51, 51, 51)
         };
         Controls.Add(usernameLabel);
@@ -145,8 +145,8 @@ public class SavePasswordPopup : Form
         var passwordLabel = new Label
         {
             Text = new string('*', Math.Min(_password.Length, 12)),
-            Location = new Point(180, 45),
-            Size = new Size(150, 20),
+            Location = DpiHelper.Scale(new Point(180, 45)),
+            Size = DpiHelper.Scale(new Size(150, 20)),
             ForeColor = Color.Gray
         };
         Controls.Add(passwordLabel);
@@ -155,9 +155,9 @@ public class SavePasswordPopup : Form
         var closeBtn = new Label
         {
             Text = "×",
-            Location = new Point(350, 10),
-            Size = new Size(20, 20),
-            Font = new Font("Microsoft YaHei UI", 12F),
+            Location = DpiHelper.Scale(new Point(350, 10)),
+            Size = DpiHelper.Scale(new Size(20, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(12F)),
             ForeColor = Color.Gray,
             Cursor = Cursors.Hand,
             TextAlign = ContentAlignment.MiddleCenter
@@ -171,8 +171,8 @@ public class SavePasswordPopup : Form
         var saveBtn = new Button
         {
             Text = "保存密码",
-            Location = new Point(175, 85),
-            Size = new Size(85, 30),
+            Location = DpiHelper.Scale(new Point(175, 85)),
+            Size = DpiHelper.Scale(new Size(85, 30)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.FromArgb(0, 120, 215),
             ForeColor = Color.White,
@@ -190,8 +190,8 @@ public class SavePasswordPopup : Form
         var neverBtn = new Button
         {
             Text = "一律不",
-            Location = new Point(270, 85),
-            Size = new Size(85, 30),
+            Location = DpiHelper.Scale(new Point(270, 85)),
+            Size = DpiHelper.Scale(new Size(85, 30)),
             FlatStyle = FlatStyle.Flat,
             Cursor = Cursors.Hand
         };
@@ -209,15 +209,15 @@ public class SavePasswordPopup : Form
     /// </summary>
     private void InitializeShowSavedUI()
     {
-        Size = new Size(360, 150);
+        Size = DpiHelper.Scale(new Size(360, 150));
 
         // 标题
         var titleLabel = new Label
         {
             Text = "已保存此网站的密码：",
-            Location = new Point(15, 15),
+            Location = DpiHelper.Scale(new Point(15, 15)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 10F),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F)),
             ForeColor = Color.FromArgb(51, 51, 51)
         };
         Controls.Add(titleLabel);
@@ -226,9 +226,9 @@ public class SavePasswordPopup : Form
         var usernameLabel = new Label
         {
             Text = _username,
-            Location = new Point(30, 50),
-            Size = new Size(140, 20),
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = DpiHelper.Scale(new Point(30, 50)),
+            Size = DpiHelper.Scale(new Size(140, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.FromArgb(51, 51, 51)
         };
         Controls.Add(usernameLabel);
@@ -237,9 +237,9 @@ public class SavePasswordPopup : Form
         var passwordLabel = new Label
         {
             Text = new string('*', Math.Min(_password.Length, 10)),
-            Location = new Point(180, 50),
-            Size = new Size(100, 20),
-            Font = new Font("Microsoft YaHei UI", 9F),
+            Location = DpiHelper.Scale(new Point(180, 50)),
+            Size = DpiHelper.Scale(new Size(100, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.Gray
         };
         Controls.Add(passwordLabel);
@@ -248,9 +248,9 @@ public class SavePasswordPopup : Form
         var closeBtn = new Label
         {
             Text = "×",
-            Location = new Point(330, 50),
-            Size = new Size(20, 20),
-            Font = new Font("Microsoft YaHei UI", 12F),
+            Location = DpiHelper.Scale(new Point(330, 50)),
+            Size = DpiHelper.Scale(new Size(20, 20)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(12F)),
             ForeColor = Color.Gray,
             Cursor = Cursors.Hand,
             TextAlign = ContentAlignment.MiddleCenter
@@ -264,11 +264,11 @@ public class SavePasswordPopup : Form
         var manageLink = new LinkLabel
         {
             Text = "管理已保存的密码",
-            Location = new Point(15, 110),
+            Location = DpiHelper.Scale(new Point(15, 110)),
             AutoSize = true,
             LinkColor = Color.FromArgb(0, 102, 204),
             ActiveLinkColor = Color.FromArgb(0, 80, 160),
-            Font = new Font("Microsoft YaHei UI", 9F)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         manageLink.LinkClicked += (s, e) =>
         {
@@ -284,13 +284,13 @@ public class SavePasswordPopup : Form
         var doneBtn = new Button
         {
             Text = "完成",
-            Location = new Point(265, 105),
-            Size = new Size(75, 28),
+            Location = DpiHelper.Scale(new Point(265, 105)),
+            Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.White,
             ForeColor = Color.FromArgb(51, 51, 51),
             Cursor = Cursors.Hand,
-            Font = new Font("Microsoft YaHei UI", 9F)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         doneBtn.FlatAppearance.BorderColor = Color.FromArgb(180, 180, 180);
         doneBtn.FlatAppearance.BorderSize = 1;

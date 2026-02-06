@@ -33,84 +33,84 @@ public class AddAddressDialog : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "添加地址";
-        Size = new Size(450, 480);
+        Size = DpiHelper.Scale(new Size(450, 480));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", 9F);
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
 
-        var y = 20;
+        var y = DpiHelper.Scale(20);
 
         // 邮编
-        AddLabel("邮编", 20, y);
-        y += 20;
-        _postalCodeBox = AddTextBox(20, y, 200);
-        y += 35;
+        AddLabel("邮编", DpiHelper.Scale(20), y);
+        y += DpiHelper.Scale(20);
+        _postalCodeBox = AddTextBox(DpiHelper.Scale(20), y, DpiHelper.Scale(200));
+        y += DpiHelper.Scale(35);
 
         // 省、城市、区
-        AddLabel("省", 20, y);
-        AddLabel("城市", 160, y);
-        AddLabel("区", 300, y);
-        y += 20;
-        _provinceBox = AddTextBox(20, y, 130);
-        _cityBox = AddTextBox(160, y, 130);
-        _districtBox = AddTextBox(300, y, 120);
-        y += 35;
+        AddLabel("省", DpiHelper.Scale(20), y);
+        AddLabel("城市", DpiHelper.Scale(160), y);
+        AddLabel("区", DpiHelper.Scale(300), y);
+        y += DpiHelper.Scale(20);
+        _provinceBox = AddTextBox(DpiHelper.Scale(20), y, DpiHelper.Scale(130));
+        _cityBox = AddTextBox(DpiHelper.Scale(160), y, DpiHelper.Scale(130));
+        _districtBox = AddTextBox(DpiHelper.Scale(300), y, DpiHelper.Scale(120));
+        y += DpiHelper.Scale(35);
 
         // 街道地址
-        AddLabel("街道地址", 20, y);
-        y += 20;
+        AddLabel("街道地址", DpiHelper.Scale(20), y);
+        y += DpiHelper.Scale(20);
         _streetAddressBox = new TextBox
         {
-            Location = new Point(20, y),
-            Size = new Size(200, 50),
+            Location = new Point(DpiHelper.Scale(20), y),
+            Size = DpiHelper.Scale(new Size(200, 50)),
             Multiline = true
         };
         Controls.Add(_streetAddressBox);
-        y += 60;
+        y += DpiHelper.Scale(60);
 
         // 组织
-        AddLabel("组织", 20, y);
-        y += 20;
-        _organizationBox = AddTextBox(20, y, 200);
-        y += 35;
+        AddLabel("组织", DpiHelper.Scale(20), y);
+        y += DpiHelper.Scale(20);
+        _organizationBox = AddTextBox(DpiHelper.Scale(20), y, DpiHelper.Scale(200));
+        y += DpiHelper.Scale(35);
 
         // 名称
-        AddLabel("名称", 20, y);
-        y += 20;
-        _nameBox = AddTextBox(20, y, 200);
-        y += 35;
+        AddLabel("名称", DpiHelper.Scale(20), y);
+        y += DpiHelper.Scale(20);
+        _nameBox = AddTextBox(DpiHelper.Scale(20), y, DpiHelper.Scale(200));
+        y += DpiHelper.Scale(35);
 
         // 国家/地区
-        AddLabel("国家/地区", 20, y);
-        y += 20;
+        AddLabel("国家/地区", DpiHelper.Scale(20), y);
+        y += DpiHelper.Scale(20);
         _countryCombo = new ComboBox
         {
-            Location = new Point(20, y),
-            Width = 200,
+            Location = new Point(DpiHelper.Scale(20), y),
+            Width = DpiHelper.Scale(200),
             DropDownStyle = ComboBoxStyle.DropDownList
         };
         _countryCombo.Items.AddRange(new object[] { "中国", "美国", "日本", "韩国", "英国", "法国", "德国", "其他" });
         _countryCombo.SelectedIndex = 0;
         Controls.Add(_countryCombo);
-        y += 35;
+        y += DpiHelper.Scale(35);
 
         // 电话和电子邮件
-        AddLabel("电话", 20, y);
-        AddLabel("电子邮件", 230, y);
-        y += 20;
-        _phoneBox = AddTextBox(20, y, 200);
-        _emailBox = AddTextBox(230, y, 180);
-        y += 45;
+        AddLabel("电话", DpiHelper.Scale(20), y);
+        AddLabel("电子邮件", DpiHelper.Scale(230), y);
+        y += DpiHelper.Scale(20);
+        _phoneBox = AddTextBox(DpiHelper.Scale(20), y, DpiHelper.Scale(200));
+        _emailBox = AddTextBox(DpiHelper.Scale(230), y, DpiHelper.Scale(180));
+        y += DpiHelper.Scale(45);
 
         // 按钮
         _okBtn = new Button
         {
             Text = "确定",
-            Location = new Point(260, y),
-            Size = new Size(75, 28),
+            Location = new Point(DpiHelper.Scale(260), y),
+            Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.Flat,
             DialogResult = DialogResult.OK
         };
@@ -120,8 +120,8 @@ public class AddAddressDialog : Form
         _cancelBtn = new Button
         {
             Text = "取消",
-            Location = new Point(345, y),
-            Size = new Size(75, 28),
+            Location = new Point(DpiHelper.Scale(345), y),
+            Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.Flat,
             DialogResult = DialogResult.Cancel
         };

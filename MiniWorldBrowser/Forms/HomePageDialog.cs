@@ -25,20 +25,20 @@ public class HomePageDialog : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "启动页";
-        Size = new Size(450, 180);
+        Size = DpiHelper.Scale(new Size(450, 180));
         FormBorderStyle = FormBorderStyle.FixedDialog;
         StartPosition = FormStartPosition.CenterParent;
         MaximizeBox = false;
         MinimizeBox = false;
         ShowInTaskbar = false;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", 9F);
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
         
         // 添加新网页标签
         var label = new Label
         {
             Text = "添加新网页",
-            Location = new Point(25, 40),
+            Location = DpiHelper.Scale(new Point(25, 40)),
             AutoSize = true,
             ForeColor = Color.FromArgb(51, 51, 51)
         };
@@ -47,8 +47,8 @@ public class HomePageDialog : Form
         // URL 输入框
         _urlTextBox = new TextBox
         {
-            Location = new Point(130, 37),
-            Size = new Size(280, 23),
+            Location = DpiHelper.Scale(new Point(130, 37)),
+            Size = DpiHelper.Scale(new Size(280, 23)),
             BorderStyle = BorderStyle.FixedSingle
         };
         _urlTextBox.GotFocus += (s, e) =>
@@ -73,8 +73,8 @@ public class HomePageDialog : Form
         _okBtn = new Button
         {
             Text = "确定",
-            Size = new Size(75, 28),
-            Location = new Point(255, 100),
+            Size = DpiHelper.Scale(new Size(75, 28)),
+            Location = DpiHelper.Scale(new Point(255, 100)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.White,
             DialogResult = DialogResult.OK
@@ -87,8 +87,8 @@ public class HomePageDialog : Form
         _cancelBtn = new Button
         {
             Text = "取消",
-            Size = new Size(75, 28),
-            Location = new Point(340, 100),
+            Size = DpiHelper.Scale(new Size(75, 28)),
+            Location = DpiHelper.Scale(new Point(340, 100)),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.White,
             DialogResult = DialogResult.Cancel

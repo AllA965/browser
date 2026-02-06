@@ -5,7 +5,7 @@ namespace MiniWorldBrowser;
 static class Program
 {
     [STAThread]
-    static void Main()
+    static void Main(string[] args)
     {
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
         Application.ThreadException += (s, e) =>
@@ -28,9 +28,16 @@ static class Program
         // 设置全局默认字体为微软雅黑，使界面更现代化，接近 Edge 风格
         Application.SetDefaultFont(new Font("Microsoft YaHei UI", 9F));
         
+        // 解析启动参数
+        string? initialUrl = null;
+        if (args.Length > 0)
+        {
+            initialUrl = args[0];
+        }
+        
         // 使用 ApplicationContext 来管理多窗口生命周期
         var context = new MultiWindowApplicationContext();
-        context.ShowMainForm();
+        context.ShowMainForm(initialUrl);
         Application.Run(context);
     }
 }
@@ -43,9 +50,9 @@ public class MultiWindowApplicationContext : ApplicationContext
     private int _formCount = 0;
     private readonly object _lock = new();
     
-    public void ShowMainForm()
+    public void ShowMainForm(string? initialUrl = null)
     {
-        var form = new MainForm();
+        var form = new MainForm(false);
         RegisterForm(form);
         form.Show();
     }

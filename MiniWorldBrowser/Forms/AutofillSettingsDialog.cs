@@ -22,89 +22,89 @@ public class AutofillSettingsDialog : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "自动填充设置";
-        Size = new Size(550, 550);
+        Size = DpiHelper.Scale(new Size(550, 550));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", 9F);
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
 
-        var y = 20;
+        var y = DpiHelper.Scale(20);
 
         // 地址标题
         var addressLabel = new Label
         {
             Text = "地址",
-            Location = new Point(20, y),
+            Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold)
         };
         Controls.Add(addressLabel);
-        y += 30;
+        y += DpiHelper.Scale(30);
 
         // 地址列表
         _addressList = new ListView
         {
-            Location = new Point(20, y),
-            Size = new Size(500, 150),
+            Location = new Point(DpiHelper.Scale(20), y),
+            Size = DpiHelper.Scale(new Size(500, 150)),
             View = View.Details,
             FullRowSelect = true,
             GridLines = false,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _addressList.Columns.Add("名称", 150);
-        _addressList.Columns.Add("地址", 200);
-        _addressList.Columns.Add("电话", 120);
+        _addressList.Columns.Add("名称", DpiHelper.Scale(150));
+        _addressList.Columns.Add("地址", DpiHelper.Scale(200));
+        _addressList.Columns.Add("电话", DpiHelper.Scale(120));
         Controls.Add(_addressList);
-        y += 160;
+        y += DpiHelper.Scale(160);
 
         // 添加新地址按钮
         _addAddressBtn = new Button
         {
             Text = "添加新地址...",
-            Location = new Point(20, y),
-            Size = new Size(100, 28),
+            Location = new Point(DpiHelper.Scale(20), y),
+            Size = DpiHelper.Scale(new Size(100, 28)),
             FlatStyle = FlatStyle.Flat
         };
         _addAddressBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         _addAddressBtn.Click += OnAddAddress;
         Controls.Add(_addAddressBtn);
-        y += 45;
+        y += DpiHelper.Scale(45);
 
         // 信用卡标题
         var creditCardLabel = new Label
         {
             Text = "信用卡",
-            Location = new Point(20, y),
+            Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold)
         };
         Controls.Add(creditCardLabel);
-        y += 30;
+        y += DpiHelper.Scale(30);
 
         // 信用卡列表
         _creditCardList = new ListView
         {
-            Location = new Point(20, y),
-            Size = new Size(500, 150),
+            Location = new Point(DpiHelper.Scale(20), y),
+            Size = DpiHelper.Scale(new Size(500, 150)),
             View = View.Details,
             FullRowSelect = true,
             GridLines = false,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _creditCardList.Columns.Add("持卡人", 150);
-        _creditCardList.Columns.Add("卡号", 200);
-        _creditCardList.Columns.Add("有效期", 120);
+        _creditCardList.Columns.Add("持卡人", DpiHelper.Scale(150));
+        _creditCardList.Columns.Add("卡号", DpiHelper.Scale(200));
+        _creditCardList.Columns.Add("有效期", DpiHelper.Scale(120));
         Controls.Add(_creditCardList);
-        y += 160;
+        y += DpiHelper.Scale(160);
 
         // 添加新信用卡按钮
         _addCreditCardBtn = new Button
         {
             Text = "添加新信用卡...",
-            Location = new Point(20, y),
-            Size = new Size(110, 28),
+            Location = new Point(DpiHelper.Scale(20), y),
+            Size = DpiHelper.Scale(new Size(110, 28)),
             FlatStyle = FlatStyle.Flat
         };
         _addCreditCardBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
@@ -115,8 +115,8 @@ public class AutofillSettingsDialog : Form
         _doneBtn = new Button
         {
             Text = "完成",
-            Location = new Point(440, 475),
-            Size = new Size(80, 28),
+            Location = DpiHelper.Scale(new Point(440, 475)),
+            Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.Flat,
             DialogResult = DialogResult.OK
         };

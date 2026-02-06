@@ -32,7 +32,7 @@ public static class MenuFactory
     {
         var menu = new ContextMenuStrip
         {
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             AutoClose = false,
             BackColor = isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249),
             ForeColor = isIncognito ? Color.White : Color.Black,
@@ -64,7 +64,8 @@ public static class MenuFactory
         var showBar = new ToolStripMenuItem("显示收藏栏(S)")
         {
             ShortcutKeyDisplayString = "Ctrl+Shift+B",
-            Checked = bookmarkBar.Visible
+            Checked = bookmarkBar.Visible,
+            Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
         };
         showBar.Click += (s, e) =>
         {
@@ -77,7 +78,8 @@ public static class MenuFactory
 
         var addBookmark = new ToolStripMenuItem("为此页添加收藏...")
         {
-            ShortcutKeyDisplayString = "Ctrl+D"
+            ShortcutKeyDisplayString = "Ctrl+D",
+            Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
         };
         addBookmark.Click += (s, e) => onToggleBookmark();
         bookmarks.DropDownItems.Add(addBookmark);
@@ -87,7 +89,10 @@ public static class MenuFactory
         var barItems = bookmarkService.GetBookmarkBarItems();
         foreach (var item in barItems.Take(10))
         {
-            var bmItem = new ToolStripMenuItem(item.IsFolder ? "📁 " + item.Title : item.Title);
+            var bmItem = new ToolStripMenuItem(item.IsFolder ? "📁 " + item.Title : item.Title)
+            {
+                Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
+            };
             if (item.IsFolder)
             {
                 AddBookmarkFolderItems(bmItem, item.Id, bookmarkService, onNavigate);
@@ -112,7 +117,8 @@ public static class MenuFactory
 
         var showHistory = new ToolStripMenuItem("显示全部历史记录")
         {
-            ShortcutKeyDisplayString = "Ctrl+H"
+            ShortcutKeyDisplayString = "Ctrl+H",
+            Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
         };
         showHistory.Click += (s, e) => onShowSettings();
         history.DropDownItems.Add(showHistory);
@@ -154,9 +160,12 @@ public static class MenuFactory
         tools.DropDownDirection = ToolStripDropDownDirection.Left;
         tools.DropDown.Renderer = new ModernMenuRenderer();
 
-        var encoding = new ToolStripMenuItem("编码(E)");
+        var encoding = new ToolStripMenuItem("编码(E)")
+        {
+            Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
+        };
         encoding.DropDownDirection = ToolStripDropDownDirection.Left;
-        var encodingAuto = new ToolStripMenuItem("自动检测") { Checked = true };
+        var encodingAuto = new ToolStripMenuItem("自动检测") { Checked = true, Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6)) };
         encodingAuto.Click += (s, e) => onSetEncoding("auto");
         encoding.DropDownItems.Add(encodingAuto);
         encoding.DropDownItems.Add(new ToolStripSeparator());
@@ -165,7 +174,10 @@ public static class MenuFactory
             ("简体中文 (GB2312)", "GB2312"), ("繁体中文 (Big5)", "Big5"),
             ("日语 (Shift_JIS)", "Shift_JIS"), ("韩语 (EUC-KR)", "EUC-KR") })
         {
-            var encItem = new ToolStripMenuItem(name);
+            var encItem = new ToolStripMenuItem(name)
+            {
+                Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
+            };
             encItem.Click += (s, e) => onSetEncoding(code);
             encoding.DropDownItems.Add(encItem);
         }
@@ -174,7 +186,8 @@ public static class MenuFactory
 
         var devTools = new ToolStripMenuItem("开发者工具(D)")
         {
-            ShortcutKeyDisplayString = "F12"
+            ShortcutKeyDisplayString = "F12",
+            Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
         };
         devTools.Click += (s, e) => onOpenDevTools();
         tools.DropDownItems.Add(devTools);
@@ -200,7 +213,10 @@ public static class MenuFactory
         // 隐身模式相关菜单项
         if (isIncognito && onShowIncognitoInfo != null)
         {
-            var aboutIncognito = new ToolStripMenuItem("关于隐身浏览");
+            var aboutIncognito = new ToolStripMenuItem("关于隐身浏览")
+            {
+                Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
+            };
             aboutIncognito.Click += (s, e) => onShowIncognitoInfo();
             menu.Items.Add(aboutIncognito);
         }
@@ -219,7 +235,7 @@ public static class MenuFactory
         // 退出/关闭
         var exit = new ToolStripMenuItem(isIncognito ? "关闭隐身窗口" : "关闭鲲穹AI浏览器")
         {
-            Padding = new Padding(8, 6, 8, 6)
+            Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
         };
         menu.Items.Add(exit);
 
@@ -231,16 +247,17 @@ public static class MenuFactory
         var item = new ToolStripMenuItem(text)
         {
             ShortcutKeyDisplayString = shortcut,
-            Padding = new Padding(8, 6, 8, 6)
+            Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
         };
 
         if (iconDrawer != null)
         {
-            var iconBitmap = new Bitmap(20, 20);
+            var iconSize = DpiHelper.Scale(20);
+            var iconBitmap = new Bitmap(iconSize, iconSize);
             using (var g = Graphics.FromImage(iconBitmap))
             {
                 g.Clear(Color.Transparent);
-                iconDrawer(g, new Rectangle(0, 0, 20, 20));
+                iconDrawer(g, new Rectangle(0, 0, iconSize, iconSize));
             }
             item.Image = iconBitmap;
             item.ImageScaling = ToolStripItemImageScaling.None;
@@ -254,7 +271,10 @@ public static class MenuFactory
         var children = bookmarkService.GetChildren(folderId);
         foreach (var child in children)
         {
-            var item = new ToolStripMenuItem(child.IsFolder ? "📁 " + child.Title : child.Title);
+            var item = new ToolStripMenuItem(child.IsFolder ? "📁 " + child.Title : child.Title)
+            {
+                Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
+            };
             if (child.IsFolder)
             {
                 AddBookmarkFolderItems(item, child.Id, bookmarkService, onNavigate);

@@ -29,7 +29,7 @@ public class ContentSettingsDialog : Form
         MaximizeBox = false;
         MinimizeBox = false;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
 
         // 使用 TableLayoutPanel 确保布局稳定
         var mainLayout = new TableLayoutPanel
@@ -48,7 +48,7 @@ public class ContentSettingsDialog : Form
             Dock = DockStyle.Fill,
             AutoScroll = true,
             BackColor = Color.White,
-            Padding = new Padding(0, 0, DpiHelper.Scale(10), DpiHelper.Scale(10))
+            Padding = DpiHelper.Scale(new Padding(0, 0, 10, 10))
         };
         
         // 底部按钮面板
@@ -56,7 +56,7 @@ public class ContentSettingsDialog : Form
         {
             Dock = DockStyle.Fill,
             BackColor = Color.FromArgb(245, 245, 245),
-            Padding = new Padding(0, 0, DpiHelper.Scale(15), 0)
+            Padding = DpiHelper.Scale(new Padding(0, 0, 15, 0))
         };
 
         // 完成按钮
@@ -68,7 +68,7 @@ public class ContentSettingsDialog : Form
             FlatStyle = FlatStyle.System,
             DialogResult = DialogResult.OK,
             Top = DpiHelper.Scale(11),
-            Left = bottomPanel.Width - DpiHelper.Scale(105)
+            Left = DpiHelper.Scale(500) // 600 - 15 - 85 = 500
         };
         btnDone.Click += (s, e) => SaveSettings();
         bottomPanel.Controls.Add(btnDone);
@@ -114,7 +114,7 @@ public class ContentSettingsDialog : Form
             FlowDirection = FlowDirection.TopDown,
             WrapContents = false,
             AutoSize = true,
-            Padding = new Padding(DpiHelper.Scale(15), DpiHelper.Scale(5), DpiHelper.Scale(10), DpiHelper.Scale(5)),
+            Padding = DpiHelper.Scale(new Padding(15, 5, 10, 5)),
             BackColor = Color.White
         };
         _scrollPanel.Controls.Add(flowLayout);
@@ -241,7 +241,7 @@ public class ContentSettingsDialog : Form
         var lblTitle = new Label
         {
             Text = title,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold),
             ForeColor = Color.FromArgb(32, 32, 32),
             AutoSize = true,
             Location = new Point(0, 0),
@@ -290,7 +290,7 @@ public class ContentSettingsDialog : Form
                 {
                     Text = text,
                     AutoSize = true,
-                    Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+                    Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
                     LinkColor = Color.FromArgb(0, 120, 212),
                     ActiveLinkColor = Color.FromArgb(0, 102, 204),
                     VisitedLinkColor = Color.FromArgb(0, 120, 212),
@@ -314,11 +314,11 @@ public class ContentSettingsDialog : Form
             Text = text,
             AutoSize = true,
             Checked = isChecked,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9.5F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9.5F)),
             Tag = (propertyName, value),
             ForeColor = Color.FromArgb(64, 64, 64),
-            Margin = new Padding(0, 0, 0, 0),
-            Padding = new Padding(0, DpiHelper.Scale(1), 0, DpiHelper.Scale(1))
+            Margin = Padding.Empty,
+            Padding = DpiHelper.Scale(new Padding(0, 1, 0, 1))
         };
         _inputControls.Add(rb);
         return rb;
@@ -331,11 +331,11 @@ public class ContentSettingsDialog : Form
             Text = text,
             AutoSize = true,
             Checked = isChecked,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9.5F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9.5F)),
             Tag = propertyName,
             ForeColor = Color.FromArgb(64, 64, 64),
-            Margin = new Padding(0, 0, 0, 0),
-            Padding = new Padding(0, DpiHelper.Scale(1), 0, DpiHelper.Scale(1))
+            Margin = Padding.Empty,
+            Padding = DpiHelper.Scale(new Padding(0, 1, 0, 1))
         };
         _inputControls.Add(cb);
         return cb;
@@ -348,7 +348,7 @@ public class ContentSettingsDialog : Form
             Text = text,
             Width = DpiHelper.Scale(500),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = Color.Gray,
             Margin = new Padding(0, 0, 0, DpiHelper.Scale(2))
         };
@@ -360,7 +360,7 @@ public class ContentSettingsDialog : Form
         {
             Size = new Size(DpiHelper.Scale(200), DpiHelper.Scale(25)),
             DropDownStyle = ComboBoxStyle.DropDownList,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F))
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         cbo.Items.Add(defaultValue);
         cbo.SelectedIndex = 0;

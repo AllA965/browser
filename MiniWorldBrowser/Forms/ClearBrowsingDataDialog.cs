@@ -64,7 +64,7 @@ public class ClearBrowsingDataDialog : Form
         MinimizeBox = false;
         StartPosition = FormStartPosition.CenterParent;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
         
         var y = DpiHelper.Scale(20);
         

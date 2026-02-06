@@ -23,7 +23,7 @@ namespace MiniWorldBrowser.Controls
         private Color _textColor = Color.FromArgb(32, 33, 36);
         
         // Expanded corner radius
-        private int _expandedCornerRadius = DpiHelper.Scale(16);
+        private int ExpandedCornerRadius => (int)Math.Round(16 * DpiHelper.GetControlDpiScale(this));
 
         public bool IsDarkMode
         {
@@ -38,6 +38,8 @@ namespace MiniWorldBrowser.Controls
                 }
             }
         }
+
+        private Panel _textContainer;
 
         private void UpdateColors()
         {
@@ -78,24 +80,17 @@ namespace MiniWorldBrowser.Controls
         public ChromeAddressBar()
         {
             this.DoubleBuffered = true;
-            this.Padding = DpiHelper.Scale(new Padding(16, 0, 12, 0)); // Left padding for icon space, right for buttons
-            this.Size = DpiHelper.Scale(new Size(500, 34));
             this.BackColor = Color.Transparent;
 
             _textBox = new TextBox
             {
                 BorderStyle = BorderStyle.None,
                 BackColor = _idleBackColor,
-                Font = new Font("Segoe UI", DpiHelper.Scale(10.5f)),
                 ForeColor = _textColor,
                 Dock = DockStyle.Fill,
                 Margin = Padding.Empty
             };
             
-            // Adjust vertical centering manually since TextBox doesn't support vertical alignment directly
-            // We use a panel or padding to center it. Here we use the control's padding.
-            // But standard TextBox ignores Top padding. We need to handle resizing.
-
             _textBox.MouseEnter += (s, e) => { _isHovered = true; UpdateState(); };
             _textBox.MouseLeave += (s, e) => { _isHovered = false; UpdateState(); };
             _textBox.GotFocus += (s, e) => { 
@@ -120,25 +115,47 @@ namespace MiniWorldBrowser.Controls
             };
 
             // Container for TextBox to handle vertical alignment
-            var textContainer = new Panel 
+            _textContainer = new Panel 
             { 
                 Dock = DockStyle.Fill, 
-                BackColor = Color.Transparent,
-                Padding = DpiHelper.Scale(new Padding(0, 8, 0, 0)) // Push text down
+                BackColor = Color.Transparent
             };
-            textContainer.Controls.Add(_textBox);
+            _textContainer.Controls.Add(_textBox);
 
-            this.Controls.Add(textContainer);
+            this.Controls.Add(_textContainer);
             
             // Handle hover for the control itself
             this.MouseEnter += (s, e) => { _isHovered = true; UpdateState(); };
             this.MouseLeave += (s, e) => { _isHovered = false; UpdateState(); };
-            textContainer.MouseEnter += (s, e) => { _isHovered = true; UpdateState(); };
-            textContainer.MouseLeave += (s, e) => { _isHovered = false; UpdateState(); };
+            _textContainer.MouseEnter += (s, e) => { _isHovered = true; UpdateState(); };
+            _textContainer.MouseLeave += (s, e) => { _isHovered = false; UpdateState(); };
             
             // Forward clicks to textbox
             this.Click += (s, e) => _textBox.Focus();
-            textContainer.Click += (s, e) => _textBox.Focus();
+            _textContainer.Click += (s, e) => _textBox.Focus();
+
+            UpdateLayout();
+        }
+
+        private void UpdateLayout()
+        {
+            // Modern Chrome style padding: Reduce left padding to avoid double spacing with docked icon
+            this.Padding = DpiHelper.Scale(new Padding(8, 0, 8, 0));
+
+            _textBox.Font = new Font("Segoe UI", DpiHelper.ScaleFont(10.5f));
+            
+            // Dynamically center text box vertically
+            int textHeight = _textBox.PreferredHeight;
+            int topPadding = Math.Max(0, (this.Height - textHeight) / 2);
+            _textContainer.Padding = new Padding(0, topPadding, 0, 0);
+            
+            this.Invalidate();
+        }
+
+        protected override void OnDpiChangedAfterParent(EventArgs e)
+        {
+            base.OnDpiChangedAfterParent(e);
+            UpdateLayout();
         }
 
         [System.ComponentModel.Browsable(true)]
@@ -193,7 +210,7 @@ namespace MiniWorldBrowser.Controls
             if (_isDropdownOpen)
             {
                 // Expanded state: Top rounded, bottom flat
-                int d = _expandedCornerRadius * 2;
+                int d = ExpandedCornerRadius * 2;
                 path.AddArc(rect.X, rect.Y, d, d, 180, 90); // Top-left
                 path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90); // Top-right
                 path.AddLine(rect.Right, rect.Bottom, rect.X, rect.Bottom); // Bottom edge
@@ -224,13 +241,13 @@ namespace MiniWorldBrowser.Controls
                 {
                     // Draw top and sides only
                     using var borderPath = new GraphicsPath();
-                    int d = _expandedCornerRadius * 2;
+                    int d = ExpandedCornerRadius * 2;
                     
                     // Start from bottom-left
-                    borderPath.AddLine(rect.X, rect.Bottom, rect.X, rect.Y + _expandedCornerRadius);
+                    borderPath.AddLine(rect.X, rect.Bottom, rect.X, rect.Y + ExpandedCornerRadius);
                     borderPath.AddArc(rect.X, rect.Y, d, d, 180, 90); // Top-left
                     borderPath.AddArc(rect.Right - d, rect.Y, d, d, 270, 90); // Top-right
-                    borderPath.AddLine(rect.Right, rect.Y + _expandedCornerRadius, rect.Right, rect.Bottom);
+                    borderPath.AddLine(rect.Right, rect.Y + ExpandedCornerRadius, rect.Right, rect.Bottom);
                     
                     e.Graphics.DrawPath(pen, borderPath);
                 }
@@ -261,7 +278,7 @@ namespace MiniWorldBrowser.Controls
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            this.Invalidate();
+            UpdateLayout();
         }
     }
 }

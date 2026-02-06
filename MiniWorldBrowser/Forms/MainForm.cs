@@ -380,7 +380,7 @@ public partial class MainForm : Form
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.Transparent,
             Text = "﹀", // 或者使用 unicode 字符
-            Font = new Font("Segoe UI Symbol", DpiHelper.Scale(9F)),
+            Font = new Font("Segoe UI Symbol", DpiHelper.ScaleFont(9F)),
             ForeColor = _isIncognito ? Color.White : Color.Black,
             Cursor = Cursors.Hand,
             Visible = false, // 默认隐藏
@@ -423,7 +423,7 @@ public partial class MainForm : Form
             Text = "🕵️ InPrivate",
             Dock = DockStyle.Fill,
             TextAlign = ContentAlignment.MiddleCenter,
-            Font = new Font("Segoe UI", DpiHelper.Scale(9F)),
+            Font = new Font("Segoe UI", DpiHelper.ScaleFont(9F)),
             ForeColor = IncognitoAccent,
             BackColor = Color.Transparent,
             Cursor = Cursors.Hand
@@ -573,7 +573,7 @@ public partial class MainForm : Form
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.Transparent,
             Text = "🌐",
-            Font = new Font("Segoe UI Emoji", DpiHelper.Scale(12F)),
+            Font = new Font("Segoe UI Emoji", DpiHelper.ScaleFont(12F)),
             Cursor = Cursors.Hand,
             Visible = false,
             Margin = DpiHelper.Scale(new Padding(2, 0, 2, 0)),
@@ -592,7 +592,7 @@ public partial class MainForm : Form
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.Transparent,
             Text = "🔍",
-            Font = new Font("Segoe UI Emoji", DpiHelper.Scale(10F)),
+            Font = new Font("Segoe UI Emoji", DpiHelper.ScaleFont(10F)),
             Cursor = Cursors.Hand,
             Visible = false,
             Margin = DpiHelper.Scale(new Padding(2, 0, 2, 0)),
@@ -609,7 +609,7 @@ public partial class MainForm : Form
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.Transparent,
             Text = "🔑",
-            Font = new Font("Segoe UI Emoji", DpiHelper.Scale(10F)),
+            Font = new Font("Segoe UI Emoji", DpiHelper.ScaleFont(10F)),
             Cursor = Cursors.Hand,
             Visible = false,
             Margin = DpiHelper.Scale(new Padding(2, 0, 2, 0)),
@@ -825,7 +825,7 @@ public partial class MainForm : Form
             Dock = DockStyle.Left,
             AutoSize = true,
             Padding = DpiHelper.Scale(new Padding(4, 3, 0, 0)),
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(8F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(8F)),
             ForeColor = _isIncognito ? Color.FromArgb(150, 150, 150) : Color.Black,
             Text = _isIncognito ? "InPrivate - 您的浏览活动不会保存到此设备" : "就绪"
         };
@@ -962,7 +962,7 @@ public partial class MainForm : Form
         var titleLabel = new Label
         {
             Text = "智能助手",
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold),
             ForeColor = Color.FromArgb(45, 55, 72),
             Dock = DockStyle.Left,
             TextAlign = ContentAlignment.MiddleLeft,
@@ -972,7 +972,7 @@ public partial class MainForm : Form
 
         _aiSummarizeBtn = new Button
         {
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Size = DpiHelper.Scale(new Size(90, 32)),
             FlatStyle = FlatStyle.Flat,
             Dock = DockStyle.Right,
@@ -1954,7 +1954,7 @@ public partial class MainForm : Form
     {
         var screenPos = anchor.PointToScreen(new Point(0, anchor.Height));
         int x = screenPos.X - (popupSize.Width - anchor.Width) / 2;
-        int y = screenPos.Y + offsetY;
+        int y = screenPos.Y + DpiHelper.Scale(offsetY);
 
         var screen = Screen.FromControl(this);
 
@@ -2131,7 +2131,7 @@ public partial class MainForm : Form
             StartPosition = FormStartPosition.CenterParent;
             ShowInTaskbar = false;
             BackColor = Color.White;
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
             ClientSize = DpiHelper.Scale(new Size(360, cancelText == null ? 170 : 180));
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
 
@@ -2140,7 +2140,7 @@ public partial class MainForm : Form
                 Text = title,
                 Location = DpiHelper.Scale(new Point(20, 18)),
                 AutoSize = true,
-                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(11F), FontStyle.Bold),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(11F), FontStyle.Bold),
                 ForeColor = Color.FromArgb(40, 40, 40)
             };
 
@@ -2149,7 +2149,7 @@ public partial class MainForm : Form
                 Text = "×",
                 Location = new Point(ClientSize.Width - DpiHelper.Scale(36), DpiHelper.Scale(12)),
                 Size = DpiHelper.Scale(new Size(24, 24)),
-                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(12F)),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(12F)),
                 ForeColor = Color.FromArgb(140, 140, 140),
                 Cursor = Cursors.Hand,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -2179,7 +2179,7 @@ public partial class MainForm : Form
                 e.Graphics.FillEllipse(brush, 0, 0, iconSize, iconSize);
 
                 using var textBrush = new SolidBrush(Color.White);
-                using var iconFont = new Font("Segoe UI Symbol", DpiHelper.Scale(16F), FontStyle.Bold);
+                using var iconFont = new Font("Segoe UI Symbol", DpiHelper.ScaleFont(16F), FontStyle.Bold);
                 var ch = GetIconChar(icon);
                 
                 using var sf = new StringFormat
@@ -2195,7 +2195,7 @@ public partial class MainForm : Form
                 Text = message,
                 Location = DpiHelper.Scale(new Point(72, 56)),
                 Size = new Size(ClientSize.Width - DpiHelper.Scale(92), DpiHelper.Scale(64)),
-                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9.5F)),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9.5F)),
                 ForeColor = Color.FromArgb(70, 70, 70)
             };
 
@@ -2210,7 +2210,7 @@ public partial class MainForm : Form
                 ForeColor = Color.White,
                 CornerRadius = DpiHelper.Scale(8)
             };
-            okBtn.Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F), FontStyle.Bold);
+            okBtn.Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F), FontStyle.Bold);
             okBtn.Click += (s, e) =>
             {
                 DialogResult = DialogResult.OK;
@@ -2257,7 +2257,7 @@ public partial class MainForm : Form
             base.OnSizeChanged(e);
             if (Width <= 0 || Height <= 0) return;
             // 扩大 Region 1像素，确保抗锯齿边缘不被硬裁剪
-            using var path = CreateRoundedRectPath(new Rectangle(-1, -1, Width + 2, Height + 2), CornerRadius + 1);
+            using var path = CreateRoundedRectPath(new Rectangle(-1, -1, Width + 2, Height + 2), DpiHelper.Scale(CornerRadius) + 1);
             Region = new Region(path);
             Invalidate();
         }
@@ -2272,13 +2272,13 @@ public partial class MainForm : Form
             // 1. 填充背景
             using (var brush = new SolidBrush(BackColor))
             {
-                using var fillPath = CreateRoundedRectPath(new Rectangle(0, 0, Width, Height), CornerRadius);
+                using var fillPath = CreateRoundedRectPath(new Rectangle(0, 0, Width, Height), DpiHelper.Scale(CornerRadius));
                 g.FillPath(brush, fillPath);
             }
 
             // 2. 绘制边框
             float penWidth = DpiHelper.Scale(1f);
-            using var path = CreateRoundedRectPath(new RectangleF(penWidth / 2f, penWidth / 2f, Width - penWidth, Height - penWidth), CornerRadius);
+            using var path = CreateRoundedRectPath(new RectangleF(penWidth / 2f, penWidth / 2f, Width - penWidth, Height - penWidth), DpiHelper.Scale(CornerRadius));
             using var pen = new Pen(Color.FromArgb(220, 220, 220), penWidth);
             g.DrawPath(pen, path);
         }
@@ -2345,7 +2345,7 @@ public partial class MainForm : Form
         {
             Size = DpiHelper.Scale(new Size(32, 32)),
             Text = text,
-            Font = new Font("Segoe UI", DpiHelper.Scale(11F)),
+            Font = new Font("Segoe UI", DpiHelper.ScaleFont(11F)),
             Margin = DpiHelper.Scale(new Padding(2))
         };
         new ToolTip().SetToolTip(btn, tooltip);
@@ -2374,7 +2374,7 @@ public partial class MainForm : Form
             Dock = DockStyle.Right,
             FlatStyle = FlatStyle.Flat,
             Text = text,
-            Font = new Font("Segoe UI", DpiHelper.Scale(10F)),
+            Font = new Font("Segoe UI", DpiHelper.ScaleFont(10F)),
             Cursor = Cursors.Hand,
             BackColor = Color.Transparent,
             ForeColor = Color.Black,

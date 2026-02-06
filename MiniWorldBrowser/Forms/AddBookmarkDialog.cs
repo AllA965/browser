@@ -94,7 +94,7 @@ public class AddBookmarkDialog : Form
         AppIconHelper.SetIcon(this);
         FormBorderStyle = FormBorderStyle.None;
         BackColor = Color.FromArgb(240, 240, 240); // 背景改为内容色
-        Size = new Size(400, 175);
+        Size = DpiHelper.Scale(new Size(400, 175));
         StartPosition = FormStartPosition.CenterParent;
         ShowInTaskbar = false;
         
@@ -106,16 +106,16 @@ public class AddBookmarkDialog : Form
         {
             Dock = DockStyle.Fill,
             BackColor = Color.Transparent, // 改为透明
-            Padding = new Padding(2) // 为边框留出空间
+            Padding = DpiHelper.Scale(new Padding(2)) // 为边框留出空间
         };
         
         // 标题
         _lblTitle = new Label
         {
             Text = "已添加收藏！",
-            Font = new Font("Microsoft YaHei UI", 12, FontStyle.Regular),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(12), FontStyle.Regular),
             ForeColor = Color.FromArgb(51, 51, 51),
-            Location = new Point(19, 14),
+            Location = DpiHelper.Scale(new Point(19, 14)),
             AutoSize = true
         };
         
@@ -123,18 +123,18 @@ public class AddBookmarkDialog : Form
         var lblName = new Label
         {
             Text = "名字:",
-            Font = new Font("Microsoft YaHei UI", 9),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
             ForeColor = Color.FromArgb(51, 51, 51),
-            Location = new Point(19, 54),
+            Location = DpiHelper.Scale(new Point(19, 54)),
             AutoSize = true
         };
         
         // 名字输入框
         _txtName = new TextBox
         {
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(79, 51),
-            Width = 295,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+            Location = DpiHelper.Scale(new Point(79, 51)),
+            Width = Width - DpiHelper.Scale(79 + 25), // 动态计算宽度，保留右边距
             BorderStyle = BorderStyle.FixedSingle
         };
         
@@ -142,34 +142,34 @@ public class AddBookmarkDialog : Form
         var lblFolder = new Label
         {
             Text = "文件夹:",
-            Font = new Font("Microsoft YaHei UI", 9),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
             ForeColor = Color.FromArgb(51, 51, 51),
-            Location = new Point(19, 89),
+            Location = DpiHelper.Scale(new Point(19, 89)),
             AutoSize = true
         };
         
         // 文件夹下拉框
         _cmbFolder = new ComboBox
         {
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(79, 86),
-            Width = 295,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+            Location = DpiHelper.Scale(new Point(79, 86)),
+            Width = Width - DpiHelper.Scale(79 + 25), // 动态计算宽度
             DropDownStyle = ComboBoxStyle.DropDownList
         };
         
         // 删除按钮
         _btnDelete = CreateButton("删除", 80);
-        _btnDelete.Location = new Point(114, 129);
+        _btnDelete.Location = DpiHelper.Scale(new Point(114, 129));
         _btnDelete.Click += BtnDelete_Click;
         
         // 修改按钮
         _btnEdit = CreateButton("修改...", 80);
-        _btnEdit.Location = new Point(204, 129);
+        _btnEdit.Location = DpiHelper.Scale(new Point(204, 129));
         _btnEdit.Click += BtnEdit_Click;
         
         // 完成按钮
         _btnDone = CreateButton("完成", 80);
-        _btnDone.Location = new Point(294, 129);
+        _btnDone.Location = DpiHelper.Scale(new Point(294, 129));
         _btnDone.Click += BtnDone_Click;
         
         contentPanel.Controls.AddRange(new Control[] 
@@ -189,8 +189,8 @@ public class AddBookmarkDialog : Form
         return new Button
         {
             Text = text,
-            Font = new Font("Microsoft YaHei UI", 9),
-            Size = new Size(width, 28),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+            Size = DpiHelper.Scale(new Size(width, 28)),
             FlatStyle = FlatStyle.System,
             UseVisualStyleBackColor = true
         };
@@ -200,7 +200,7 @@ public class AddBookmarkDialog : Form
     {
         e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         var rect = new Rectangle(0, 0, Width - 1, Height - 1);
-        int radius = 8;
+        int radius = DpiHelper.Scale(8);
 
         // 绘制背景
         using (var path = FormExtensions.GetRoundedRectanglePath(rect, radius))

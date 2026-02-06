@@ -491,6 +491,26 @@ public partial class MainForm
     protected override void WndProc(ref Message m)
     {
         const int WM_NCHITTEST = 0x84;
+        const int WM_DPICHANGED = 0x02E0;
+
+        if (m.Msg == WM_DPICHANGED)
+        {
+            try
+            {
+                var newRect = Marshal.PtrToStructure<RECT>(m.LParam);
+                Bounds = Rectangle.FromLTRB(newRect.Left, newRect.Top, newRect.Right, newRect.Bottom);
+
+                PerformLayout();
+                _tabManager?.UpdateTabLayout();
+                RefreshAllControls();
+            }
+            catch
+            {
+                // 忽略 DPI 变更处理中可能出现的异常，保持系统默认行为
+            }
+
+            return;
+        }
 
         // 处理 WM_NCCALCSIZE：在保留系统边框/用户区域的前提下，吃掉顶部多余的 1px 间隙
         if (m.Msg == Win32Constants.WM_NCCALCSIZE && m.WParam != IntPtr.Zero)

@@ -29,15 +29,29 @@ public class SecurityIcon : Control
     
     private void UpdateSize()
     {
+        Height = DpiHelper.Scale(22);
         // 安全状态下只显示图标，不安全状态下显示图标+文字+背景
         if (_isSecure)
         {
-            Width = DpiHelper.Scale(28);
+            Width = DpiHelper.Scale(32); // Increased from 28
         }
         else
         {
-            Width = DpiHelper.Scale(72);
+            Width = DpiHelper.Scale(80); // Increased from 72
         }
+    }
+
+    protected override void OnDpiChangedAfterParent(EventArgs e)
+    {
+        base.OnDpiChangedAfterParent(e);
+        UpdateSize();
+        Invalidate();
+    }
+
+    protected override void OnResize(EventArgs e)
+    {
+        base.OnResize(e);
+        Invalidate();
     }
     
     public string CurrentUrl
@@ -56,7 +70,6 @@ public class SecurityIcon : Control
                  ControlStyles.UserPaint |
                  ControlStyles.ResizeRedraw, true);
         
-        Height = DpiHelper.Scale(22);
         UpdateSize();
         Cursor = Cursors.Hand;
         BackColor = Color.Transparent;
@@ -134,7 +147,7 @@ public class SecurityIcon : Control
         }
 
         // 3. 绘制 "不安全" 文字
-        using (var font = new Font("Microsoft YaHei UI", 9F))
+        using (var font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)))
         using (var brush = new SolidBrush(textColor))
         {
             string text = "不安全";

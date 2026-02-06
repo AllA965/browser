@@ -75,7 +75,7 @@ public class UserButton : BaseToolButton
                 g.FillEllipse(brush, contentRect);
 
                 var initial = _userInfo.Nickname[0].ToString().ToUpper();
-                using var font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold);
+                using var font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold);
                 var size = g.MeasureString(initial, font);
                 g.DrawString(initial, font, Brushes.White, 
                     contentRect.X + (contentRect.Width - size.Width) / 2, 

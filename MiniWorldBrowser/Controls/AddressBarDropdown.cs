@@ -432,7 +432,7 @@ public class AddressBarDropdown : Form
         {
             Text = "筛选搜索:",
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(8.5F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(8.5F)),
             ForeColor = _secondaryTextColor,
             Padding = DpiHelper.Scale(new Padding(0, 6, 8, 0))
         };
@@ -548,7 +548,7 @@ public class AddressBarDropdown : Form
             AutoSize = true,
             Height = DpiHelper.Scale(28),
             Padding = DpiHelper.Scale(new Padding(8, 0, 8, 0)),
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(8.5F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(8.5F)),
             ForeColor = _secondaryTextColor,
             BackColor = Color.Transparent,
             Cursor = Cursors.Hand,
@@ -628,7 +628,7 @@ public class AddressBarDropdown : Form
             using (var iconBrush = new SolidBrush(_iconColor))
             {
                 // Use Segoe UI Emoji or Symbol for better icon rendering
-                using var iconFont = new Font("Segoe UI Emoji", DpiHelper.Scale(11F));
+                using var iconFont = new Font("Segoe UI Emoji", DpiHelper.ScaleFont(11F));
                 // Center icon
                 using var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
                 e.Graphics.DrawString(item.Icon, iconFont, iconBrush, iconRect, format);
@@ -640,7 +640,7 @@ public class AddressBarDropdown : Form
             
             using (var textBrush = new SolidBrush(_textColor))
             {
-                using var textFont = new Font("Segoe UI", DpiHelper.Scale(10F)); // Chrome font
+                using var textFont = new Font("Segoe UI", DpiHelper.ScaleFont(10F)); // Chrome font
                 using var format = new StringFormat
                 {
                     LineAlignment = StringAlignment.Center,
@@ -657,7 +657,7 @@ public class AddressBarDropdown : Form
                 var deleteRect = new Rectangle(itemRect.Right - DpiHelper.Scale(32), itemRect.Y + (itemHeight - deleteSize) / 2, deleteSize, deleteSize);
                 // Draw 'X'
                 using var deleteBrush = new SolidBrush(_secondaryTextColor);
-                using var deleteFont = new Font("Segoe UI", DpiHelper.Scale(9F));
+                using var deleteFont = new Font("Segoe UI", DpiHelper.ScaleFont(9F));
                 using var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
                 e.Graphics.DrawString("✕", deleteFont, deleteBrush, deleteRect, format);
             }

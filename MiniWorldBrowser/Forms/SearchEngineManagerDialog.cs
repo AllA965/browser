@@ -38,7 +38,7 @@ public class SearchEngineManagerDialog : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "默认搜索引擎";
-        Size = new Size(700, 550);
+        Size = DpiHelper.Scale(new Size(700, 550));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
@@ -49,16 +49,16 @@ public class SearchEngineManagerDialog : Form
         var lblDefault = new Label
         {
             Text = "默认搜索设置",
-            Font = new Font("Microsoft YaHei UI", 11, FontStyle.Bold),
-            Location = new Point(20, 15),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(11F), FontStyle.Bold),
+            Location = DpiHelper.Scale(new Point(20, 15)),
             AutoSize = true
         };
         
         // 默认搜索引擎列表
         _defaultEnginesList = new ListView
         {
-            Location = new Point(20, 45),
-            Size = new Size(640, 130),
+            Location = DpiHelper.Scale(new Point(20, 45)),
+            Size = DpiHelper.Scale(new Size(640, 130)),
             View = View.Details,
             FullRowSelect = true,
             GridLines = false,
@@ -66,9 +66,9 @@ public class SearchEngineManagerDialog : Form
             CheckBoxes = true,
             HeaderStyle = ColumnHeaderStyle.Nonclickable
         };
-        _defaultEnginesList.Columns.Add("名称", 180);
-        _defaultEnginesList.Columns.Add("域名", 150);
-        _defaultEnginesList.Columns.Add("网址", 280);
+        _defaultEnginesList.Columns.Add("名称", DpiHelper.Scale(180));
+        _defaultEnginesList.Columns.Add("域名", DpiHelper.Scale(150));
+        _defaultEnginesList.Columns.Add("网址", DpiHelper.Scale(280));
         _defaultEnginesList.ItemCheck += DefaultEnginesList_ItemCheck;
         
         // 加载默认搜索引擎数据
@@ -78,43 +78,43 @@ public class SearchEngineManagerDialog : Form
         var lblOther = new Label
         {
             Text = "其他搜索引擎",
-            Font = new Font("Microsoft YaHei UI", 11, FontStyle.Bold),
-            Location = new Point(20, 190),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(11F), FontStyle.Bold),
+            Location = DpiHelper.Scale(new Point(20, 190)),
             AutoSize = true
         };
         
         // 添加新搜索引擎的输入框
         _txtName = new TextBox
         {
-            Location = new Point(20, 220),
-            Width = 150,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Location = DpiHelper.Scale(new Point(20, 220)),
+            Width = DpiHelper.Scale(150),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         SetPlaceholder(_txtName, "添加新的搜索引擎");
         
         _txtKeyword = new TextBox
         {
-            Location = new Point(180, 220),
-            Width = 120,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Location = DpiHelper.Scale(new Point(180, 220)),
+            Width = DpiHelper.Scale(120),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         SetPlaceholder(_txtKeyword, "关键字");
         
         _txtUrl = new TextBox
         {
-            Location = new Point(310, 220),
-            Width = 280,
-            Font = new Font("Microsoft YaHei UI", 9)
+            Location = DpiHelper.Scale(new Point(310, 220)),
+            Width = DpiHelper.Scale(280),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         SetPlaceholder(_txtUrl, "网址（用\"%s\"代替搜索字词）");
         
         _btnAdd = new Button
         {
             Text = "+",
-            Location = new Point(600, 218),
-            Size = new Size(30, 25),
+            Location = DpiHelper.Scale(new Point(600, 218)),
+            Size = DpiHelper.Scale(new Size(30, 25)),
             FlatStyle = FlatStyle.Flat,
-            Font = new Font("Microsoft YaHei UI", 10, FontStyle.Bold)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold)
         };
         _btnAdd.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         _btnAdd.Click += BtnAdd_Click;
@@ -122,16 +122,16 @@ public class SearchEngineManagerDialog : Form
         // 自定义搜索引擎列表
         _customEnginesList = new ListView
         {
-            Location = new Point(20, 255),
-            Size = new Size(640, 200),
+            Location = DpiHelper.Scale(new Point(20, 255)),
+            Size = DpiHelper.Scale(new Size(640, 200)),
             View = View.Details,
             FullRowSelect = true,
             GridLines = false,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _customEnginesList.Columns.Add("名称", 150);
-        _customEnginesList.Columns.Add("关键字", 120);
-        _customEnginesList.Columns.Add("网址", 340);
+        _customEnginesList.Columns.Add("名称", DpiHelper.Scale(150));
+        _customEnginesList.Columns.Add("关键字", DpiHelper.Scale(120));
+        _customEnginesList.Columns.Add("网址", DpiHelper.Scale(340));
         _customEnginesList.KeyDown += CustomEnginesList_KeyDown;
         
         // 右键菜单
@@ -144,8 +144,8 @@ public class SearchEngineManagerDialog : Form
         var btnDone = new Button
         {
             Text = "完成",
-            Location = new Point(585, 470),
-            Size = new Size(75, 30),
+            Location = DpiHelper.Scale(new Point(585, 470)),
+            Size = DpiHelper.Scale(new Size(75, 30)),
             FlatStyle = FlatStyle.System,
             DialogResult = DialogResult.OK
         };

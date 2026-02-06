@@ -233,7 +233,7 @@ public partial class MainForm
         
         _mainMenu = new ContextMenuStrip
         {
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             AutoClose = false,
             BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249),
             ForeColor = _isIncognito ? Color.White : Color.Black,
@@ -622,7 +622,7 @@ public partial class MainForm
             Text = "缩放",
             Location = DpiHelper.Scale(new Point(40, 9)),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = _isIncognito ? Color.White : Color.FromArgb(32, 32, 32)
         };
 
@@ -634,7 +634,7 @@ public partial class MainForm
             Size = DpiHelper.Scale(new Size(50, 24)),
             Location = DpiHelper.Scale(new Point(154, 7)),
             TextAlign = ContentAlignment.MiddleCenter,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             ForeColor = _isIncognito ? Color.White : Color.FromArgb(32, 32, 32)
         };
 
@@ -646,7 +646,7 @@ public partial class MainForm
             CloseMainMenu();
             _fullscreenManager.Toggle();
         }, keepMenuOpen: false);
-        btnFullscreen.Font = new Font("Segoe UI Symbol", DpiHelper.Scale(11F));
+        btnFullscreen.Font = new Font("Segoe UI Symbol", DpiHelper.ScaleFont(11F));
 
         _zoomPanel.Controls.AddRange(new Control[] { iconPanel, lblZoom, btnMinus, _zoomLevelLabel, btnPlus, btnFullscreen });
         return _zoomPanel;
@@ -660,7 +660,7 @@ public partial class MainForm
             Size = size,
             Location = location,
             TextAlign = ContentAlignment.MiddleCenter,
-            Font = new Font("Segoe UI", DpiHelper.Scale(10F)),
+            Font = new Font("Segoe UI", DpiHelper.ScaleFont(10F)),
             Cursor = Cursors.Hand,
             BackColor = Color.Transparent,
             ForeColor = _isIncognito ? Color.White : Color.FromArgb(32, 32, 32)
@@ -774,7 +774,7 @@ public partial class MainForm
             _zoomPopupLabel = new Label
             {
                 Text = $"缩放：{(int)(_zoomLevel * 100)}%",
-                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F)),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F)),
                 ForeColor = Color.Black,
                 Location = DpiHelper.Scale(new Point(10, 10)),
                 AutoSize = true
@@ -784,7 +784,7 @@ public partial class MainForm
             var resetBtn = new Button
             {
                 Text = "重置为默认设置",
-                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
                 Location = DpiHelper.Scale(new Point(10, 35)),
                 Size = DpiHelper.Scale(new Size(140, 28)),
                 FlatStyle = FlatStyle.Flat,

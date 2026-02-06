@@ -44,7 +44,7 @@ public class SiteSettingsForm : Form
         MaximizeBox = false;
         MinimizeBox = false;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F));
 
         // 使用 TableLayoutPanel 确保布局稳定
         var mainLayout = new TableLayoutPanel
@@ -63,7 +63,7 @@ public class SiteSettingsForm : Form
             Dock = DockStyle.Fill,
             AutoScroll = true,
             BackColor = Color.White,
-            Padding = new Padding(DpiHelper.Scale(10))
+            Padding = DpiHelper.Scale(new Padding(10))
         };
         
         // 底部按钮面板
@@ -71,7 +71,7 @@ public class SiteSettingsForm : Form
         {
             Dock = DockStyle.Fill,
             BackColor = Color.FromArgb(245, 245, 245),
-            Padding = new Padding(0, 0, DpiHelper.Scale(15), 0)
+            Padding = DpiHelper.Scale(new Padding(0, 0, 15, 0))
         };
 
         // 确定按钮
@@ -85,7 +85,7 @@ public class SiteSettingsForm : Form
             ForeColor = Color.White,
             Cursor = Cursors.Hand,
             Top = DpiHelper.Scale(11),
-            Left = bottomPanel.Width - DpiHelper.Scale(190)
+            Left = DpiHelper.Scale(280) // 480 - 15 - 85 - 15 - 85 = 280
         };
         okBtn.FlatAppearance.BorderSize = 0;
         okBtn.Click += (s, e) => { SaveSettings(); Close(); };
@@ -101,7 +101,7 @@ public class SiteSettingsForm : Form
             ForeColor = Color.Black,
             Cursor = Cursors.Hand,
             Top = DpiHelper.Scale(11),
-            Left = bottomPanel.Width - DpiHelper.Scale(95)
+            Left = DpiHelper.Scale(380) // 480 - 15 - 85 = 380
         };
         cancelBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         cancelBtn.Click += (s, e) => Close();
@@ -274,7 +274,7 @@ public class SiteSettingsForm : Form
         var lblTitle = new Label
         {
             Text = title,
-            Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(10F), FontStyle.Bold),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold),
             ForeColor = Color.FromArgb(32, 32, 32),
             AutoSize = true,
             Location = new Point(0, 0),
@@ -301,7 +301,7 @@ public class SiteSettingsForm : Form
                 Text = text,
                 Location = new Point(0, currentY),
                 AutoSize = true,
-                Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9.5F)),
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9.5F)),
                 Checked = selectedValue == value,
                 Tag = (key, value),
                 ForeColor = Color.FromArgb(64, 64, 64),
@@ -337,7 +337,7 @@ public class SiteSettingsForm : Form
                 {
                     Text = text,
                     AutoSize = true,
-                    Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F)),
+                    Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
                     LinkColor = Color.FromArgb(0, 120, 212),
                     ActiveLinkColor = Color.FromArgb(0, 102, 204),
                     VisitedLinkColor = Color.FromArgb(0, 120, 212),
@@ -417,7 +417,7 @@ public class ExceptionsDialog : Form
         MaximizeBox = false;
         MinimizeBox = false;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", DpiHelper.Scale(9F));
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
         
         // 说明标签
         var descLabel = new Label

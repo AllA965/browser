@@ -105,7 +105,7 @@ public class BookmarkBar : Panel
             Text = "»",
             Size = DpiHelper.Scale(new Size(20, 20)),
             FlatStyle = FlatStyle.Flat,
-            Font = new Font("Segoe UI", DpiHelper.Scale(9F), FontStyle.Bold),
+            Font = new Font("Segoe UI", DpiHelper.ScaleFont(9F), FontStyle.Bold),
             Cursor = Cursors.Hand,
             Visible = false,
             Dock = DockStyle.Right
@@ -117,9 +117,10 @@ public class BookmarkBar : Panel
         
         _overflowMenu = new ContextMenuStrip { Renderer = new ModernMenuRenderer(_isIncognito) };
         
-        Controls.Add(_container);
+        // 按照正确的停靠顺序添加：先添加 Dock != Fill 的，最后添加 Dock = Fill 的
         Controls.Add(_overflowBtn);
         Controls.Add(_otherBookmarksBtn);
+        Controls.Add(_container);
         
         _container.Resize += (s, e) => UpdateOverflow();
         
@@ -660,10 +661,11 @@ public class BookmarkButton : Control
         SetStyle(ControlStyles.SupportsTransparentBackColor |
                  ControlStyles.OptimizedDoubleBuffer |
                  ControlStyles.AllPaintingInWmPaint |
+                 ControlStyles.ResizeRedraw |
                  ControlStyles.UserPaint, true);
         BackColor = Color.Transparent;
         Cursor = Cursors.Hand;
-        Font = new Font("Segoe UI", DpiHelper.Scale(9F));
+        Font = new Font("Segoe UI", DpiHelper.ScaleFont(9F));
         Height = DpiHelper.Scale(28);
     }
 
@@ -676,21 +678,25 @@ public class BookmarkButton : Control
     private void UpdateWidth()
     {
         int iconSize = DpiHelper.Scale(16);
-        int padding = DpiHelper.Scale(8);
-        int iconTextGap = DpiHelper.Scale(4);
+        int padding = DpiHelper.Scale(12); // 进一步增加总内边距
+        int iconTextGap = DpiHelper.Scale(4); // 减小图标文字间距
 
-        int width = padding;
+        int width = padding; // 左边距
         if (_icon != null)
             width += iconSize + iconTextGap;
 
         if (!string.IsNullOrEmpty(Text))
         {
-            using var g = CreateGraphics();
-            width += (int)g.MeasureString(Text, Font).Width;
+            // 使用 TextRenderer 测量，并指定没有边距的标志
+            var size = TextRenderer.MeasureText(Text, Font, new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPadding);
+            width += size.Width + DpiHelper.Scale(2); // 额外增加 2 像素缓冲，防止渲染截断
         }
-        width += padding;
+        width += padding; // 右边距
 
-        Width = width;
+        if (Width != width)
+        {
+            Width = width;
+        }
     }
 
     protected override void OnPaint(PaintEventArgs e)
@@ -705,11 +711,11 @@ public class BookmarkButton : Control
             Color hoverColor;
             if (_isIncognito)
             {
-                hoverColor = Color.FromArgb(80, 255, 255, 255); // 隐身模式下使用半透明白色
+                hoverColor = Color.FromArgb(80, 255, 255, 255);
             }
             else
             {
-                hoverColor = Color.FromArgb(20, 0, 0, 0); // 普通模式下使用半透明黑色
+                hoverColor = Color.FromArgb(20, 0, 0, 0);
             }
 
             using var hoverBrush = new SolidBrush(hoverColor);
@@ -719,7 +725,7 @@ public class BookmarkButton : Control
         }
 
         int iconSize = DpiHelper.Scale(16);
-        int padding = DpiHelper.Scale(8);
+        int padding = DpiHelper.Scale(12);
         int iconTextGap = DpiHelper.Scale(4);
 
         int x = padding;
@@ -743,10 +749,11 @@ public class BookmarkButton : Control
         if (!string.IsNullOrEmpty(Text))
         {
             Color textColor = _isIncognito ? Color.FromArgb(240, 240, 240) : Color.FromArgb(32, 32, 32);
-            using var brush = new SolidBrush(textColor);
-            var textSize = g.MeasureString(Text, Font);
-            float textY = (Height - textSize.Height) / 2;
-            g.DrawString(Text, Font, brush, x, textY);
+            // 使用 TextRenderer 绘制，并指定相同的 TextFormatFlags
+            var flags = TextFormatFlags.NoPadding | TextFormatFlags.VerticalCenter | TextFormatFlags.Left;
+            // 确保绘制区域足够大
+            var textRect = new Rectangle(x, 0, Width - x - padding + DpiHelper.Scale(2), Height);
+            TextRenderer.DrawText(g, Text, Font, textRect, textColor, flags);
         }
     }
 
@@ -796,6 +803,7 @@ public class BookmarkEditDialog : Form
         StartPosition = FormStartPosition.CenterParent;
         MaximizeBox = false;
         MinimizeBox = false;
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
         
         var panel = new TableLayoutPanel
         {

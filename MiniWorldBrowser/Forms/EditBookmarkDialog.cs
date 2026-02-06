@@ -38,7 +38,7 @@ public class EditBookmarkDialog : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "修改收藏夹";
-        Size = new Size(400, 350);
+        Size = DpiHelper.Scale(new Size(400, 350));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
@@ -50,17 +50,17 @@ public class EditBookmarkDialog : Form
         var lblName = new Label
         {
             Text = "名字:",
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(15, 20),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+            Location = DpiHelper.Scale(new Point(15, 20)),
             AutoSize = true
         };
         
         // 名字输入框
         _txtName = new TextBox
         {
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(55, 17),
-            Width = 315,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+            Location = DpiHelper.Scale(new Point(55, 17)),
+            Width = DpiHelper.Scale(315),
             BorderStyle = BorderStyle.FixedSingle
         };
         
@@ -68,26 +68,26 @@ public class EditBookmarkDialog : Form
         var lblUrl = new Label
         {
             Text = "网址:",
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(15, 50),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+            Location = DpiHelper.Scale(new Point(15, 50)),
             AutoSize = true
         };
         
         // 网址输入框
         _txtUrl = new TextBox
         {
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(55, 47),
-            Width = 315,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+            Location = DpiHelper.Scale(new Point(55, 47)),
+            Width = DpiHelper.Scale(315),
             BorderStyle = BorderStyle.FixedSingle
         };
         
         // 文件夹树形视图
         _treeView = new TreeView
         {
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(15, 80),
-            Size = new Size(355, 180),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+            Location = DpiHelper.Scale(new Point(15, 80)),
+            Size = DpiHelper.Scale(new Size(355, 180)),
             BorderStyle = BorderStyle.FixedSingle,
             ShowLines = true,
             ShowPlusMinus = true,
@@ -100,9 +100,9 @@ public class EditBookmarkDialog : Form
         _btnNewFolder = new Button
         {
             Text = "新建文件夹",
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(15, 270),
-            Size = new Size(90, 28),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+            Location = DpiHelper.Scale(new Point(15, 270)),
+            Size = DpiHelper.Scale(new Size(90, 28)),
             FlatStyle = FlatStyle.System
         };
         _btnNewFolder.Click += BtnNewFolder_Click;
@@ -111,9 +111,9 @@ public class EditBookmarkDialog : Form
         _btnSave = new Button
         {
             Text = "保存",
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(210, 270),
-            Size = new Size(75, 28),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+            Location = DpiHelper.Scale(new Point(210, 270)),
+            Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.System
         };
         _btnSave.Click += BtnSave_Click;
@@ -122,9 +122,9 @@ public class EditBookmarkDialog : Form
         _btnCancel = new Button
         {
             Text = "取消",
-            Font = new Font("Microsoft YaHei UI", 9),
-            Location = new Point(295, 270),
-            Size = new Size(75, 28),
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
+            Location = DpiHelper.Scale(new Point(295, 270)),
+            Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.System,
             DialogResult = DialogResult.Cancel
         };
@@ -141,18 +141,18 @@ public class EditBookmarkDialog : Form
     
     private ImageList CreateImageList()
     {
-        var imageList = new ImageList { ImageSize = new Size(16, 16) };
+        var imageList = new ImageList { ImageSize = DpiHelper.Scale(new Size(16, 16)) };
         
         // 创建文件夹图标
-        var folderBmp = new Bitmap(16, 16);
+        var folderBmp = new Bitmap(DpiHelper.Scale(16), DpiHelper.Scale(16));
         using (var g = Graphics.FromImage(folderBmp))
         {
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             // 文件夹主体
             using var brush = new SolidBrush(Color.FromArgb(255, 200, 80));
-            g.FillRectangle(brush, 1, 4, 14, 10);
+            g.FillRectangle(brush, DpiHelper.Scale(1), DpiHelper.Scale(4), DpiHelper.Scale(14), DpiHelper.Scale(10));
             // 文件夹标签
-            g.FillRectangle(brush, 1, 2, 6, 3);
+            g.FillRectangle(brush, DpiHelper.Scale(1), DpiHelper.Scale(2), DpiHelper.Scale(6), DpiHelper.Scale(3));
         }
         imageList.Images.Add("folder", folderBmp);
         
@@ -243,19 +243,20 @@ public class EditBookmarkDialog : Form
         using var inputDialog = new Form
         {
             Text = "新建文件夹",
-            Size = new Size(300, 130),
+            Size = DpiHelper.Scale(new Size(300, 130)),
             StartPosition = FormStartPosition.CenterParent,
             FormBorderStyle = FormBorderStyle.FixedDialog,
             MaximizeBox = false,
-            MinimizeBox = false
+            MinimizeBox = false,
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9))
         };
         
-        var lblName = new Label { Text = "名称:", Location = new Point(15, 20), AutoSize = true };
-        var txtName = new TextBox { Text = "新建文件夹", Location = new Point(60, 17), Width = 210 };
+        var lblName = new Label { Text = "名称:", Location = DpiHelper.Scale(new Point(15, 20)), AutoSize = true };
+        var txtName = new TextBox { Text = "新建文件夹", Location = DpiHelper.Scale(new Point(60, 17)), Width = DpiHelper.Scale(210) };
         txtName.SelectAll();
         
-        var btnOk = new Button { Text = "确定", DialogResult = DialogResult.OK, Location = new Point(110, 55), Width = 75 };
-        var btnCancel = new Button { Text = "取消", DialogResult = DialogResult.Cancel, Location = new Point(195, 55), Width = 75 };
+        var btnOk = new Button { Text = "确定", DialogResult = DialogResult.OK, Location = DpiHelper.Scale(new Point(110, 55)), Width = DpiHelper.Scale(75) };
+        var btnCancel = new Button { Text = "取消", DialogResult = DialogResult.Cancel, Location = DpiHelper.Scale(new Point(195, 55)), Width = DpiHelper.Scale(75) };
         
         inputDialog.Controls.AddRange(new Control[] { lblName, txtName, btnOk, btnCancel });
         inputDialog.AcceptButton = btnOk;

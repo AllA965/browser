@@ -30,30 +30,30 @@ public class PasswordManagerDialog : Form
     {
         AppIconHelper.SetIcon(this);
         Text = "清除已保存的密码";
-        Size = new Size(600, 520);
+        Size = DpiHelper.Scale(new Size(600, 520));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
         BackColor = Color.White;
-        Font = new Font("Microsoft YaHei UI", 9F);
+        Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
 
-        var y = 20;
+        var y = DpiHelper.Scale(20);
 
         // 已保存的密码标题和搜索框
         var savedLabel = new Label
         {
             Text = "已保存的密码",
-            Location = new Point(20, y),
+            Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold)
         };
         Controls.Add(savedLabel);
 
         _searchBox = new TextBox
         {
-            Location = new Point(400, y - 3),
-            Width = 170,
+            Location = new Point(DpiHelper.Scale(400), y - DpiHelper.Scale(3)),
+            Width = DpiHelper.Scale(170),
             Text = "搜索密码"
         };
         _searchBox.GotFocus += (s, e) =>
@@ -74,24 +74,24 @@ public class PasswordManagerDialog : Form
         };
         _searchBox.ForeColor = Color.Gray;
         Controls.Add(_searchBox);
-        y += 30;
+        y += DpiHelper.Scale(30);
 
         // 已保存的密码列表
         _savedPasswordsList = new ListView
         {
-            Location = new Point(20, y),
-            Size = new Size(550, 180),
+            Location = new Point(DpiHelper.Scale(20), y),
+            Size = DpiHelper.Scale(new Size(550, 180)),
             View = View.Details,
             FullRowSelect = true,
             GridLines = false,
             BorderStyle = BorderStyle.FixedSingle,
             OwnerDraw = true
         };
-        _savedPasswordsList.Columns.Add("网站", 180);
-        _savedPasswordsList.Columns.Add("用户名", 130);
-        _savedPasswordsList.Columns.Add("密码", 120);
-        _savedPasswordsList.Columns.Add("", 70);  // 显示/隐藏按钮
-        _savedPasswordsList.Columns.Add("", 30);  // 删除按钮
+        _savedPasswordsList.Columns.Add("网站", DpiHelper.Scale(180));
+        _savedPasswordsList.Columns.Add("用户名", DpiHelper.Scale(130));
+        _savedPasswordsList.Columns.Add("密码", DpiHelper.Scale(120));
+        _savedPasswordsList.Columns.Add("", DpiHelper.Scale(70));  // 显示/隐藏按钮
+        _savedPasswordsList.Columns.Add("", DpiHelper.Scale(30));  // 删除按钮
 
         // 自定义绘制
         _savedPasswordsList.DrawColumnHeader += OnDrawColumnHeader;
@@ -99,30 +99,30 @@ public class PasswordManagerDialog : Form
         _savedPasswordsList.MouseClick += OnListViewMouseClick;
 
         Controls.Add(_savedPasswordsList);
-        y += 195;
+        y += DpiHelper.Scale(195);
 
         // 一律不保存标题
         var neverSaveLabel = new Label
         {
             Text = "一律不保存",
-            Location = new Point(20, y),
+            Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true,
-            Font = new Font("Microsoft YaHei UI", 10F, FontStyle.Bold)
+            Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold)
         };
         Controls.Add(neverSaveLabel);
-        y += 30;
+        y += DpiHelper.Scale(30);
 
         // 一律不保存列表
         _neverSaveList = new ListView
         {
-            Location = new Point(20, y),
-            Size = new Size(550, 130),
+            Location = new Point(DpiHelper.Scale(20), y),
+            Size = DpiHelper.Scale(new Size(550, 130)),
             View = View.Details,
             FullRowSelect = true,
             GridLines = false,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _neverSaveList.Columns.Add("网站", 500);
+        _neverSaveList.Columns.Add("网站", DpiHelper.Scale(500));
 
         Controls.Add(_neverSaveList);
 
@@ -130,8 +130,8 @@ public class PasswordManagerDialog : Form
         _doneBtn = new Button
         {
             Text = "完成",
-            Location = new Point(490, 450),
-            Size = new Size(80, 28),
+            Location = DpiHelper.Scale(new Point(490, 450)),
+            Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.Flat,
             DialogResult = DialogResult.OK
         };
@@ -173,7 +173,7 @@ public class PasswordManagerDialog : Form
         // 显示/隐藏按钮列
         if (e.ColumnIndex == 3 && id != null)
         {
-            var btnRect = new Rectangle(e.Bounds.X + 5, e.Bounds.Y + 2, 55, e.Bounds.Height - 4);
+            var btnRect = new Rectangle(e.Bounds.X + DpiHelper.Scale(5), e.Bounds.Y + DpiHelper.Scale(2), DpiHelper.Scale(55), e.Bounds.Height - DpiHelper.Scale(4));
             var btnText = isRevealed ? "隐藏" : "显示";
 
             // 绘制按钮背景
@@ -191,11 +191,12 @@ public class PasswordManagerDialog : Form
         else if (e.ColumnIndex == 4 && id != null)
         {
             var deleteText = "×";
-            using var deleteBrush = new SolidBrush(Color.Gray);
-            var textSize = e.Graphics.MeasureString(deleteText, new Font(Font.FontFamily, 12F));
+            using var deleteBrush = new SolidBrush(Color.FromArgb(200, 50, 50));
+            using var deleteFont = new Font(Font.FontFamily, DpiHelper.ScaleFont(12F), FontStyle.Bold);
+            var textSize = e.Graphics.MeasureString(deleteText, deleteFont);
             var textX = e.Bounds.X + (e.Bounds.Width - textSize.Width) / 2;
             var textY = e.Bounds.Y + (e.Bounds.Height - textSize.Height) / 2;
-            e.Graphics.DrawString(deleteText, new Font(Font.FontFamily, 12F), deleteBrush, textX, textY);
+            e.Graphics.DrawString(deleteText, deleteFont, deleteBrush, textX, textY);
         }
         else
         {
@@ -203,7 +204,7 @@ public class PasswordManagerDialog : Form
             var text = e.SubItem?.Text ?? "";
             using var textBrush = new SolidBrush(e.Item.ForeColor);
             var textY = e.Bounds.Y + (e.Bounds.Height - Font.Height) / 2;
-            e.Graphics.DrawString(text, Font, textBrush, e.Bounds.X + 5, textY);
+            e.Graphics.DrawString(text, Font, textBrush, e.Bounds.X + DpiHelper.Scale(5), textY);
         }
     }
 
