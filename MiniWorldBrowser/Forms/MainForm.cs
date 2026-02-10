@@ -1282,7 +1282,19 @@ public partial class MainForm : Form
             // 拦截 AI 面板内的导航
             _aiWebView.CoreWebView2.NewWindowRequested += async (s, e) =>
             {
-                // 检查是否应该是弹窗
+                var uri = e.Uri?.ToLower() ?? string.Empty;
+
+                if (!e.IsUserInitiated)
+                {
+                    if (string.IsNullOrEmpty(uri) || uri == "about:blank" || uri.StartsWith("data:image") ||
+                        uri.EndsWith(".jpg") || uri.EndsWith(".jpeg") || uri.EndsWith(".png") || uri.EndsWith(".gif") ||
+                        uri.EndsWith(".webp") || uri.EndsWith(".bmp"))
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
                 bool isPopup = e.WindowFeatures.HasPosition || e.WindowFeatures.HasSize || !e.IsUserInitiated;
                 if (e.Uri.Contains("weixin.qq.com") || e.Uri.Contains("graph.qq.com") || e.Uri.Contains("passport.baidu.com"))
                 {

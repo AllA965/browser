@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+langchain-openai
+playwright
+pydantic-settings
+# browser-use is installed from source manually or via run_bridge.bat

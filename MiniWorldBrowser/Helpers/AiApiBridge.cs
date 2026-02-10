@@ -15,11 +15,13 @@ namespace MiniWorldBrowser.Helpers
     /// WebView2 与 C# 之间的桥接类，用于处理 AI API 调用
     /// </summary>
     [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDual)]
     public class AiApiBridge
     {
         private readonly ISettingsService _settingsService;
         private readonly IBrowserController? _browserController;
         private static readonly HttpClient _httpClient;
+        private readonly System.Threading.SynchronizationContext? _syncContext;
         
         // 维护聊天上下文
         private List<object> _chatHistory = new List<object>();
@@ -88,7 +90,7 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
 
             _httpClient = new HttpClient(handler)
             {
-                Timeout = TimeSpan.FromSeconds(60)
+                Timeout = TimeSpan.FromMinutes(5) // 增加到 5 分钟，因为 Browser-Use 任务可能很长
             };
 
             try 
@@ -103,6 +105,7 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
         {
             _settingsService = settingsService;
             _browserController = browserController;
+            _syncContext = System.Threading.SynchronizationContext.Current;
             
             // 初始化历史记录
             _chatHistory.Add(new { role = "system", content = SystemPrompt });
@@ -139,6 +142,27 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
             }
         }
 
+        private void SafeNotifyChunk(string content, string type)
+        {
+            if (_syncContext != null)
+            {
+                _syncContext.Post(_ => OnStreamChunk?.Invoke(content, type), null);
+            }
+            else
+            {
+                OnStreamChunk?.Invoke(content, type);
+            }
+        }
+
+        /// <summary>
+        /// 清除聊天历史
+        /// </summary>
+        public void ClearHistory()
+        {
+            _chatHistory.Clear();
+            _contextSummary = "";
+        }
+
         /// <summary>
         /// 由 JavaScript 调用，发送消息（包含可选的文件数据）
         /// </summary>
@@ -146,59 +170,83 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
         {
             try
             {
-                var settings = _settingsService.Settings;
-
-                // 如果有文件，在消息中加入文件描述
-                if (!string.IsNullOrEmpty(fileJson) && fileJson != "[]")
+                // 确保在正确的线程上运行 API 调用，避免 COM 接口错误
+                if (_syncContext != null && System.Threading.SynchronizationContext.Current != _syncContext)
                 {
-                    try
+                    var tcs = new TaskCompletionSource<string>();
+                    _syncContext.Post(async _ =>
                     {
-                        var files = JsonSerializer.Deserialize<List<FileData>>(fileJson);
-                        if (files != null && files.Count > 0)
+                        try
                         {
-                            var fileDesc = new StringBuilder("\n\n[用户上传了以下文件]:\n");
-                            foreach (var file in files)
-                            {
-                                fileDesc.AppendLine($"- 文件名: {file.Name} (类型: {file.Type})");
-                                
-                                // 如果是文本文件，尝试读取内容并附加
-                                if (file.Type.StartsWith("text/") || file.Name.EndsWith(".txt") || file.Name.EndsWith(".md") || file.Name.EndsWith(".json") || file.Name.EndsWith(".js") || file.Name.EndsWith(".py") || file.Name.EndsWith(".cs"))
-                                {
-                                    try
-                                    {
-                                        if (!string.IsNullOrEmpty(file.Data))
-                                        {
-                                            string content = Encoding.UTF8.GetString(Convert.FromBase64String(file.Data));
-                                            fileDesc.AppendLine($"  内容摘要:\n```\n{content}\n```");
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        fileDesc.AppendLine($"  (无法读取内容: {ex.Message})");
-                                    }
-                                }
-                                else if (file.Type.StartsWith("image/"))
-                                {
-                                    fileDesc.AppendLine($"  (图片文件，已上传至上下文)");
-                                    // 注意：这里可以根据 API 是否支持多模态来进一步处理，
-                                    // 目前先简单告知 AI 已有图片。
-                                }
-                            }
-                            message += fileDesc.ToString();
+                            var result = await InternalSendMessage(message, fileJson, mode);
+                            tcs.SetResult(result);
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"解析上传文件 JSON 失败: {ex.Message}");
-                    }
+                        catch (Exception ex)
+                        {
+                            tcs.SetException(ex);
+                        }
+                    }, null);
+                    return await tcs.Task;
                 }
 
-                return await CallAiApi(message, mode);
+                return await InternalSendMessage(message, fileJson, mode);
             }
             catch (Exception ex)
             {
                 return $"发送失败: {ex.Message}";
             }
+        }
+
+        private async Task<string> InternalSendMessage(string message, string fileJson, string mode)
+        {
+            var settings = _settingsService.Settings;
+
+            // 如果有文件，在消息中加入文件描述
+            if (!string.IsNullOrEmpty(fileJson) && fileJson != "[]")
+            {
+                try
+                {
+                    var files = JsonSerializer.Deserialize<List<FileData>>(fileJson);
+                    if (files != null && files.Count > 0)
+                    {
+                        var fileDesc = new StringBuilder("\n\n[用户上传了以下文件]:\n");
+                        foreach (var file in files)
+                        {
+                            fileDesc.AppendLine($"- 文件名: {file.Name} (类型: {file.Type})");
+                            
+                            // 如果是文本文件，尝试读取内容并附加
+                            if (file.Type.StartsWith("text/") || file.Name.EndsWith(".txt") || file.Name.EndsWith(".md") || file.Name.EndsWith(".json") || file.Name.EndsWith(".js") || file.Name.EndsWith(".py") || file.Name.EndsWith(".cs"))
+                            {
+                                try
+                                {
+                                    if (!string.IsNullOrEmpty(file.Data))
+                                    {
+                                        string content = Encoding.UTF8.GetString(Convert.FromBase64String(file.Data));
+                                        fileDesc.AppendLine($"  内容摘要:\n```\n{content}\n```");
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    fileDesc.AppendLine($"  (无法读取内容: {ex.Message})");
+                                }
+                            }
+                            else if (file.Type.StartsWith("image/"))
+                            {
+                                fileDesc.AppendLine($"  (图片文件，已上传至上下文)");
+                                // 注意：这里可以根据 API 是否支持多模态来进一步处理，
+                                // 目前先简单告知 AI 已有图片。
+                            }
+                        }
+                        message += fileDesc.ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"解析上传文件 JSON 失败: {ex.Message}");
+                }
+            }
+
+            return await CallAiApi(message, mode);
         }
 
         public class FileData
@@ -228,147 +276,85 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
                 return await CallAiApiChatMode(message, settings, token);
             }
 
-            // 工具模式：原有逻辑
+            // 工具模式：使用 Browser-Use Python Bridge
             // 1. 将用户消息加入历史
             _chatHistory.Add(new { role = "user", content = message });
 
-            // 限制历史记录长度，保留最近的 20 条，但保留第一条 system prompt
-            if (_chatHistory.Count > 21)
+            return await CallBrowserUseAgent(message, settings, token);
+        }
+
+        private async Task<string> CallBrowserUseAgent(string task, dynamic settings, CancellationToken token)
+        {
+            try
             {
-                // 触发历史记录摘要生成
-                await SummarizeHistoryAsync();
-            }
-
-            // 2. ReAct 循环
-            int maxSteps = 15; // 增加最大步数，支持自动连续执行
-            int currentStep = 0;
-            string lastResponse = "";
-
-            Debug.WriteLine($"[AiApiBridge] ToolMode Request - Model: {settings.AiModelName}");
-
-            while (currentStep < maxSteps)
-            {
-                // 检查取消请求
-                if (token.IsCancellationRequested) return "操作已由用户手动取消。";
-
-                currentStep++;
-
-                // 如果步数较多，自动进行历史摘要以避免上下文溢出
-                if (currentStep % 5 == 0)
-                {
-                     await SummarizeHistoryAsync();
-                }
-
-                // 准备请求
-                string baseUrl = settings.AiApiBaseUrl.Trim().TrimEnd('/');
-                
-                // 处理厂商特定的 URL 修正逻辑 (MiniMax / DashScope)
-                bool isMiniMax = baseUrl.Contains("minimax.io", StringComparison.OrdinalIgnoreCase) || baseUrl.Contains("minimaxi.com", StringComparison.OrdinalIgnoreCase);
-                bool isDashScope = baseUrl.Contains("dashscope", StringComparison.OrdinalIgnoreCase) || baseUrl.Contains("aliyuncs.com", StringComparison.OrdinalIgnoreCase);
-
-                if (isMiniMax)
-                {
-                    try { if (!baseUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)) baseUrl = "https://" + baseUrl; var uri = new Uri(baseUrl); baseUrl = $"{uri.Scheme}://{uri.Host}/v1"; } catch { }
-                }
-                if (isDashScope)
-                {
-                    try { if (!baseUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)) baseUrl = "https://" + baseUrl; var uri = new Uri(baseUrl); var path = uri.AbsolutePath.TrimEnd('/'); if (!path.Contains("compatible-mode", StringComparison.OrdinalIgnoreCase)) baseUrl = $"{uri.Scheme}://{uri.Host}/compatible-mode/v1"; else if (!path.EndsWith("/v1", StringComparison.OrdinalIgnoreCase)) baseUrl = $"{uri.Scheme}://{uri.Host}{path}/v1"; } catch { }
-                }
-
                 var requestBody = new
                 {
-                    model = settings.AiModelName,
-                    messages = BuildMessagesWithSummary(), // 使用带有摘要的历史记录
-                    stream = false
+                    task = task,
+                    api_key = settings.AiApiKey,
+                    base_url = settings.AiApiBaseUrl,
+                    model = settings.AiModelName
                 };
 
-                // 发送请求
-                try
+                var json = JsonSerializer.Serialize(requestBody);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                
+                // 调用本地 Python Bridge 服务
+                // 确保 Python 服务已启动 (python_bridge/main.py)
+                using var request = new HttpRequestMessage(HttpMethod.Post, "http://127.0.0.1:8000/agent/run");
+                request.Content = content;
+
+                SafeNotifyChunk("正在调用 Browser-Use Agent... (请确保 python_bridge/main.py 已运行)\n", "chunk");
+
+                var response = await _httpClient.SendAsync(request, token);
+                var responseJson = await response.Content.ReadAsStringAsync(token);
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    var json = JsonSerializer.Serialize(requestBody);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    using var request = new HttpRequestMessage(HttpMethod.Post, baseUrl.TrimEnd('/') + "/chat/completions");
-                    request.Headers.Add("Authorization", $"Bearer {settings.AiApiKey}");
-                    request.Content = content;
-
-                    var response = await _httpClient.SendAsync(request, token);
-                    var responseJson = await response.Content.ReadAsStringAsync(token);
-
-                    if (!response.IsSuccessStatusCode) return $"API 错误: {responseJson}";
-
-                    using var doc = JsonDocument.Parse(responseJson);
-                    var root = doc.RootElement;
-                    if (root.TryGetProperty("choices", out var choices) && choices.GetArrayLength() > 0)
-                    {
-                        var choice = choices[0];
-                        if (choice.TryGetProperty("message", out var msg) && msg.TryGetProperty("content", out var aiContent))
-                        {
-                            string responseText = aiContent.GetString() ?? "";
-                            
-                            // 过滤特殊 Token
-                            responseText = responseText.Replace("<|endoftext|>", "").Replace("<|im_end|>", "").Replace("<|im_start|>", "").Trim();
-                            
-                            lastResponse = responseText;
-                            
-                            // 将 AI 回复加入历史
-                            _chatHistory.Add(new { role = "assistant", content = responseText });
-
-                            // 解析指令
-                            if (_browserController != null)
-                            {
-                                var commands = ParseCommands(responseText);
-                                if (commands.Count > 0)
-                                {
-                                    // 执行指令
-                                    StringBuilder observationBuilder = new StringBuilder();
-                                    bool hasReadPage = false;
-
-                                    foreach (var cmd in commands)
-                                    {
-                                        if (token.IsCancellationRequested) return "操作已由用户手动取消。";
-                                        
-                                        string? result = await ExecuteCommandAsync(cmd);
-                                        if (!string.IsNullOrEmpty(result))
-                                        {
-                                            observationBuilder.AppendLine($"Command '{cmd.Command}' result: {result}");
-                                        }
-                                        if (cmd.Command == "read_page") hasReadPage = true;
-                                        if (commands.Count > 1) await Task.Delay(500, token);
-                                    }
-
-                                    string observation = observationBuilder.ToString();
-                                    if (string.IsNullOrWhiteSpace(observation)) observation = "Action executed successfully.";
-                                    
-                                    // 将观察结果加入历史
-                                    _chatHistory.Add(new { role = "user", content = $"Observation (系统反馈): {observation}" });
-                                    
-                                    // 如果包含 read_page，继续循环让 AI 分析页面
-                                    if (hasReadPage) continue;
-                                    
-                                    // 如果有命令执行，继续循环让 AI 决定下一步
-                                    continue; 
-                                }
-                                else
-                                {
-                                    // 没有解析出指令，说明是普通回复，任务结束
-                                    return responseText;
-                                }
-                            }
-                            return responseText;
-                        }
-                    }
+                    return $"Browser-Use Agent Error: {response.StatusCode} - {responseJson}\n\n请检查 python_bridge 服务是否运行: `python python_bridge/main.py`";
                 }
-                catch (OperationCanceledException)
+
+                using var doc = JsonDocument.Parse(responseJson);
+                var root = doc.RootElement;
+                
+                string result = "";
+                if (root.TryGetProperty("result", out var resultProp))
                 {
-                    return "操作已由用户手动取消。";
+                    result = resultProp.GetString() ?? "任务完成";
                 }
-                catch (Exception ex)
+
+                bool isSuccessful = true;
+                if (root.TryGetProperty("is_successful", out var successProp) && successProp.ValueKind != JsonValueKind.Null)
                 {
-                    return $"调用异常: {ex.Message}";
+                    if (successProp.ValueKind == JsonValueKind.True) isSuccessful = true;
+                    else if (successProp.ValueKind == JsonValueKind.False) isSuccessful = false;
                 }
+
+                if (!isSuccessful)
+                {
+                    result = "⚠️ 任务执行未完全成功\n\n" + result;
+                }
+
+                if (!string.IsNullOrEmpty(result))
+                {
+                    _chatHistory.Add(new { role = "assistant", content = result });
+                    return result;
+                }
+                
+                return "任务完成，但未收到返回结果。";
             }
-
-            return $"已自动执行 {maxSteps} 步，但任务似乎尚未结束。当前状态摘要：\n{_contextSummary}\n\n最后回复：\n{lastResponse}"; // 超过最大步数
+            catch (HttpRequestException)
+            {
+                return "连接 Python Bridge 失败。\n请运行以下命令启动服务：\n`python python_bridge/main.py`\n\n(确保已安装依赖: pip install -r python_bridge/requirements.txt)";
+            }
+            catch (OperationCanceledException)
+            {
+                // 静默处理取消操作，不返回错误信息
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                return $"调用 Browser-Use 异常: {ex.Message}";
+            }
         }
 
         private async Task<string> CallAiApiChatMode(string message, dynamic settings, CancellationToken token)
@@ -438,7 +424,7 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
                 string? line;
                 
                 // 通知前端开始流式接收
-                OnStreamChunk?.Invoke("", "start");
+                SafeNotifyChunk("", "start");
 
                 while ((line = await reader.ReadLineAsync()) != null)
                 {
@@ -462,7 +448,7 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
                                     {
                                         fullResponse.Append(text);
                                         // 发送 chunk 给前端
-                                        OnStreamChunk?.Invoke(text, "chunk");
+                                        SafeNotifyChunk(text, "chunk");
                                     }
                                 }
                             }
@@ -477,7 +463,7 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
                 _chatHistory.Add(new { role = "assistant", content = finalResponse });
                 
                 // 通知前端结束
-                OnStreamChunk?.Invoke("", "done");
+                SafeNotifyChunk("", "done");
 
                 return "__STREAMING__"; // 告诉前端已通过事件发送，无需显示返回值
             }

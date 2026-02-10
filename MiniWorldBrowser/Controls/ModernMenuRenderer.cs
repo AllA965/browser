@@ -422,6 +422,32 @@ public static class MenuIconDrawer
         g.FillEllipse(new SolidBrush(IconColor), cx - DpiHelper.Scale(1), cy + DpiHelper.Scale(3), DpiHelper.Scale(2), DpiHelper.Scale(2));
     }
 
+    public static void DrawFeedback(Graphics g, Rectangle rect)
+    {
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round, LineJoin = LineJoin.Round };
+
+        var cx = rect.X + rect.Width / 2;
+        var cy = rect.Y + rect.Height / 2;
+
+        // 气泡框
+        var bubbleRect = new Rectangle(cx - DpiHelper.Scale(7), cy - DpiHelper.Scale(5), DpiHelper.Scale(14), DpiHelper.Scale(10));
+        g.DrawRectangle(pen, bubbleRect);
+        
+        // 气泡尾巴
+        var tailPoints = new PointF[]
+        {
+            new PointF(cx - DpiHelper.Scale(3), cy + DpiHelper.Scale(5)),
+            new PointF(cx - DpiHelper.Scale(3), cy + DpiHelper.Scale(8)),
+            new PointF(cx + DpiHelper.Scale(1), cy + DpiHelper.Scale(5))
+        };
+        g.DrawLines(pen, tailPoints);
+        
+        // 气泡内的线条
+        g.DrawLine(pen, cx - DpiHelper.Scale(4), cy - DpiHelper.Scale(1), cx + DpiHelper.Scale(4), cy - DpiHelper.Scale(1));
+        g.DrawLine(pen, cx - DpiHelper.Scale(4), cy + DpiHelper.Scale(2), cx + DpiHelper.Scale(1), cy + DpiHelper.Scale(2));
+    }
+
     public static void DrawAdBlock(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;

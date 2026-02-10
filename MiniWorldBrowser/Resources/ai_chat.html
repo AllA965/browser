@@ -152,7 +152,40 @@
             margin: 0.5rem 0;
         }
 
-        /* Input Container Styles */
+        .message-actions {
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: none;
+            border: 1px solid var(--border-color);
+            padding: 2px;
+            z-index: 10;
+        }
+
+        .message:hover .message-actions {
+            display: flex;
+            gap: 2px;
+        }
+
+        .action-btn {
+            padding: 4px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
         #input-outer-container {
             padding: 1rem;
             background-color: var(--bg-secondary);
@@ -436,10 +469,15 @@
             <span id="mode-dot"></span>
             <span id="mode-text">AI 助手就绪</span>
         </div>
-        <select id="mode-select">
-            <option value="tool">工具模式</option>
-            <option value="chat">对话模式</option>
-        </select>
+        <div style="display:flex; gap:8px; align-items:center;">
+            <button id="clear-btn" class="icon-btn" title="清除历史记录" style="width:28px; height:28px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            </button>
+            <select id="mode-select">
+                <option value="tool">工具模式</option>
+                <option value="chat">对话模式</option>
+            </select>
+        </div>
     </div>
     
     <div id="chat-container">
@@ -495,6 +533,7 @@
         const modeSelect = document.getElementById('mode-select');
         const filePreviewContainer = document.getElementById('file-preview-container');
         const fileInput = document.getElementById('file-input');
+        const clearBtn = document.getElementById('clear-btn');
         const toast = document.getElementById('toast');
 
         let selectedFiles = [];
@@ -876,23 +915,57 @@
             const div = document.createElement('div');
             div.className = `message ${role}-message`;
             
+            // 添加操作按钮容器（仅在非系统消息显示）
+            if (role !== 'system') {
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'message-actions';
+                
+                // 复制按钮
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'action-btn';
+                copyBtn.title = '复制';
+                copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+                copyBtn.onclick = () => {
+                    navigator.clipboard.writeText(div.innerText);
+                    showToast('已复制');
+                };
+                
+                // 删除按钮
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'action-btn';
+                deleteBtn.title = '删除';
+                deleteBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
+                deleteBtn.onclick = () => {
+                    div.remove();
+                };
+                
+                actionsDiv.appendChild(copyBtn);
+                actionsDiv.appendChild(deleteBtn);
+                div.appendChild(actionsDiv);
+            }
+            
             if (role === 'ai') {
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
                 if (typeof marked !== 'undefined' && text) {
                     try {
-                        div.innerHTML = marked.parse(text);
+                        contentDiv.innerHTML = marked.parse(text);
                     } catch (e) {
-                        div.innerText = text;
+                        contentDiv.innerText = text;
                     }
                 } else {
-                    div.innerText = text;
+                    contentDiv.innerText = text;
                 }
+                div.appendChild(contentDiv);
             } else {
-                div.innerText = text;
+                const contentDiv = document.createElement('div');
+                contentDiv.innerText = text;
+                div.appendChild(contentDiv);
             }
             
             chatContainer.appendChild(div);
             scrollToBottom();
-            return div;
+            return role === 'ai' ? div.querySelector('.message-content') : div;
         }
 
         sendBtn.onclick = () => sendMessage();
@@ -918,6 +991,34 @@
 
         window.setAiPrompt = (prompt, silent = false) => {
             sendMessage(prompt, silent);
+        };
+
+        clearBtn.onclick = async () => {
+            if (confirm('确定要清除所有聊天记录吗？')) {
+                // 清除 UI
+                const messages = chatContainer.querySelectorAll('.message:not(.system-message)');
+                messages.forEach(msg => {
+                    // 保留初始的欢迎消息（如果它被标记为 ai-message 但其实是硬编码的）
+                    // 这里简单处理：清除除了第一个之外的所有消息，或者全部清除并重新添加欢迎语
+                    if (msg !== chatContainer.firstElementChild) {
+                        msg.remove();
+                    }
+                });
+                
+                // 如果第一个也是 ai-message 且不是硬编码的欢迎语（通常不会发生，因为欢迎语在 HTML 里），也清除
+                // 为了保险，直接重置
+                chatContainer.innerHTML = '<div class="message ai-message">你好！我是你的智能浏览器助手。我可以帮你总结网页、回答问题，或者执行浏览器操作。</div>';
+
+                // 调用后端清除
+                try {
+                    if (window.chrome && window.chrome.webview && window.chrome.webview.hostObjects && window.chrome.webview.hostObjects.bridge) {
+                        await window.chrome.webview.hostObjects.bridge.ClearHistory();
+                        showToast('聊天记录已清除');
+                    }
+                } catch (e) {
+                    console.error('Failed to clear history:', e);
+                }
+            }
         };
     </script>
 </body>

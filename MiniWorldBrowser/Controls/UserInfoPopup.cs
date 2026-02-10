@@ -161,21 +161,11 @@ public class UserInfoPopup : Form
             var nicknameLabel = new Label
             {
                 Text = userInfo?.DisplayName ?? "未登录",
-                Location = DpiHelper.Scale(new Point(82, 22)),
+                Location = DpiHelper.Scale(new Point(82, 32)), // 稍微下移，居中对齐头像
                 Width = DpiHelper.Scale(150),
                 AutoEllipsis = true,
                 Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(11F), FontStyle.Bold),
                 ForeColor = Color.FromArgb(40, 40, 40)
-            };
-
-            // 状态/ID
-            var statusLabel = new Label
-            {
-                Text = "已连接云同步",
-                Location = DpiHelper.Scale(new Point(82, 46)),
-                AutoSize = true,
-                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(8.5F)),
-                ForeColor = Color.FromArgb(120, 120, 120)
             };
 
             // 分割线
@@ -245,7 +235,6 @@ public class UserInfoPopup : Form
 
             mainPanel.Controls.Add(_avatarBox);
             mainPanel.Controls.Add(nicknameLabel);
-            mainPanel.Controls.Add(statusLabel);
             mainPanel.Controls.Add(manageBtn);
             mainPanel.Controls.Add(logoutBtn);
         }

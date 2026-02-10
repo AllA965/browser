@@ -130,7 +130,8 @@ public class BrowserTab : IDisposable
                                            "--enable-features=SharedArrayBuffer,Canvas2dLayers " +
                                            "--use-angle=d3d11 " +
                                            "--enable-accelerated-2d-canvas " +
-                                           "--enable-accelerated-video-decode"
+                                           "--enable-accelerated-video-decode " +
+                                           "--remote-debugging-port=9222"
             };
 
             // 加载 AI 扩展

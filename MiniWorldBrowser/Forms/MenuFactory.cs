@@ -232,6 +232,11 @@ public static class MenuFactory
         about.Click += (s, e) => onShowAbout();
         menu.Items.Add(about);
 
+        // 反馈
+        var feedback = CreateMenuItem("反馈", null, MenuIconDrawer.DrawFeedback);
+        feedback.Click += (s, e) => onNavigate("https://www.kunqiongai.com/feedback?soft_number=10014");
+        menu.Items.Add(feedback);
+
         menu.Items.Add(new ToolStripSeparator());
 
         // 退出/关闭

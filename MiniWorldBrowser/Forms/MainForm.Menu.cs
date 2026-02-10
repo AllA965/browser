@@ -539,6 +539,10 @@ public partial class MainForm
         menu.Items.Add(CreateMenuItem("设置(S)", null, MenuIconDrawer.DrawSettings,
             () => { CloseMainMenu(); ShowSettings(); }));
 
+        // 反馈
+        menu.Items.Add(CreateMenuItem("反馈", null, MenuIconDrawer.DrawFeedback,
+            () => { CloseMainMenu(); _tabManager.ActiveTab?.Navigate("https://www.kunqiongai.com/feedback?soft_number=10014"); }));
+
         // 关于
         menu.Items.Add(CreateMenuItem("关于鲲穹AI浏览器", null, MenuIconDrawer.DrawAbout,
             () => { CloseMainMenu(); new AboutForm().ShowDialog(); }));

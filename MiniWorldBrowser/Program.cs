@@ -1,4 +1,5 @@
 using MiniWorldBrowser.Forms;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser;
 
@@ -27,6 +28,9 @@ static class Program
         
         // 设置全局默认字体为微软雅黑，使界面更现代化，接近 Edge 风格
         Application.SetDefaultFont(new Font("Microsoft YaHei UI", 9F));
+        
+        // 启动 Python Bridge 服务
+        PythonBridgeManager.StartBridge();
         
         // 解析启动参数
         string? initialUrl = null;
@@ -76,6 +80,9 @@ public class MultiWindowApplicationContext : ApplicationContext
                 // 当所有窗口都关闭时，退出应用
                 if (_formCount <= 0)
                 {
+                    // 停止 Python Bridge 服务
+                    PythonBridgeManager.StopBridge();
+                    
                     ExitThread();
                 }
             }

@@ -17,8 +17,12 @@ bld/
 [Ll]og/
 [Ll]ogs/
 publish/
+publish_portable/
+publish_浏览器/
 TestResults/
 *.pdb
+*.zip
+鲲穹AI浏览器_便携版.zip
 
 # Visual Studio / IDEs
 .vs/

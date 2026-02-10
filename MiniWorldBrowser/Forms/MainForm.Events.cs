@@ -110,13 +110,21 @@ public partial class MainForm
     /// </summary>
     private void OnNewWindowRequestedWithArgs(MiniWorldBrowser.Browser.BrowserTab tab, Microsoft.Web.WebView2.Core.CoreWebView2NewWindowRequestedEventArgs e)
     {
-        // 判定是否需要作为弹窗打开
-        // 1. 有明确的窗口特征（位置、大小）
-        // 2. 脚本自动弹出（非用户主动触发）
-        // 3. 常见的登录、授权地址
+        var uri = e.Uri?.ToLower() ?? string.Empty;
+
+        if (!e.IsUserInitiated)
+        {
+            if (string.IsNullOrEmpty(uri) || uri == "about:blank" || uri.StartsWith("data:image") ||
+                uri.EndsWith(".jpg") || uri.EndsWith(".jpeg") || uri.EndsWith(".png") || uri.EndsWith(".gif") ||
+                uri.EndsWith(".webp") || uri.EndsWith(".bmp"))
+            {
+                e.Handled = true;
+                return;
+            }
+        }
+
         bool isPopup = e.WindowFeatures.HasPosition || e.WindowFeatures.HasSize || !e.IsUserInitiated;
         
-        // 使用更精确的逻辑判断是否为登录或授权页面
         if (UrlHelper.IsLoginOrAuthUrl(e.Uri))
         {
             isPopup = true;
@@ -124,10 +132,7 @@ public partial class MainForm
 
         if (isPopup)
         {
-            // 获取当前标签页的 WebView2 环境
             var env = tab.WebView.CoreWebView2.Environment;
-            
-            // 创建弹出窗口
             var popup = new PopupWindow(env, e);
             popup.Owner = this;
             popup.Show();
@@ -136,7 +141,6 @@ public partial class MainForm
         }
         else
         {
-            // 普通链接，让 MainForm 的 NewWindowRequested 事件处理（打开新标签页）
             e.Handled = false;
         }
     }
