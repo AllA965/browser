@@ -112,8 +112,16 @@ def setup_logging(stream=None, log_level=None, force_setup=False, debug_log_file
 			return super().format(record)
 
 	# Setup single handler for all loggers
-	console = logging.StreamHandler(stream or sys.stderr)
-
+	# Ensure stream handler uses UTF-8 encoding if possible
+	try:
+		# For newer Python versions or if stream is sys.stdout/sys.stderr with buffer
+		console = logging.StreamHandler(stream or sys.stderr)
+		if hasattr(console.stream, 'buffer'):
+			import io
+			console.stream = io.TextIOWrapper(console.stream.buffer, encoding='utf-8')
+	except:
+		console = logging.StreamHandler(stream or sys.stderr)
+	
 	# Determine the log level to use first
 	if log_type == 'result':
 		log_level = 35  # RESULT level value

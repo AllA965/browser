@@ -681,6 +681,18 @@ public class BrowserTab : IDisposable
                 AppendResourceLog($"[NavCompleted] success={e.IsSuccess} status={e.WebErrorStatus} url={Url}");
             }
             catch { }
+
+            // 如果导航失败，显示美化的错误页面
+            if (!e.IsSuccess && WebView?.CoreWebView2 != null)
+            {
+                // 排除一些不需要显示错误页面的情况
+                if (e.WebErrorStatus != CoreWebView2WebErrorStatus.OperationCanceled && 
+                    !Url.StartsWith("about:") && !Url.StartsWith("data:"))
+                {
+                    string errorHtml = HtmlGenerator.GenerateFromWebErrorStatus(Url, e.WebErrorStatus);
+                    WebView.CoreWebView2.NavigateToString(errorHtml);
+                }
+            }
             
             // 对于 about: 页面，跳过密码检测
             if (Url.StartsWith("about:") || Url.StartsWith("data:"))

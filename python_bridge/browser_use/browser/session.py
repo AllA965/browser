@@ -427,7 +427,6 @@ class BrowserSession(BaseModel):
 	# Watchdogs
 	_crash_watchdog: Any | None = PrivateAttr(default=None)
 	_downloads_watchdog: Any | None = PrivateAttr(default=None)
-	_aboutblank_watchdog: Any | None = PrivateAttr(default=None)
 	_security_watchdog: Any | None = PrivateAttr(default=None)
 	_storage_state_watchdog: Any | None = PrivateAttr(default=None)
 	_local_browser_watchdog: Any | None = PrivateAttr(default=None)
@@ -507,7 +506,6 @@ class BrowserSession(BaseModel):
 
 		self._crash_watchdog = None
 		self._downloads_watchdog = None
-		self._aboutblank_watchdog = None
 		self._security_watchdog = None
 		self._storage_state_watchdog = None
 		self._local_browser_watchdog = None
@@ -1353,8 +1351,6 @@ class BrowserSession(BaseModel):
 			self.logger.debug('Watchdogs already attached, skipping duplicate attachment')
 			return
 
-		from browser_use.browser.watchdogs.aboutblank_watchdog import AboutBlankWatchdog
-
 		# from browser_use.browser.crash_watchdog import CrashWatchdog
 		from browser_use.browser.watchdogs.default_action_watchdog import DefaultActionWatchdog
 		from browser_use.browser.watchdogs.dom_watchdog import DOMWatchdog
@@ -1423,15 +1419,6 @@ class BrowserSession(BaseModel):
 		# Core navigation is now handled in BrowserSession directly
 		# SecurityWatchdog only handles security policy enforcement
 		self._security_watchdog.attach_to_session()
-
-		# Initialize AboutBlankWatchdog (handles about:blank pages and DVD loading animation on first load)
-		AboutBlankWatchdog.model_rebuild()
-		self._aboutblank_watchdog = AboutBlankWatchdog(event_bus=self.event_bus, browser_session=self)
-		# self.event_bus.on(BrowserStopEvent, self._aboutblank_watchdog.on_BrowserStopEvent)
-		# self.event_bus.on(BrowserStoppedEvent, self._aboutblank_watchdog.on_BrowserStoppedEvent)
-		# self.event_bus.on(TabCreatedEvent, self._aboutblank_watchdog.on_TabCreatedEvent)
-		# self.event_bus.on(TabClosedEvent, self._aboutblank_watchdog.on_TabClosedEvent)
-		self._aboutblank_watchdog.attach_to_session()
 
 		# Initialize PopupsWatchdog (handles accepting and dismissing JS dialogs, alerts, confirm, onbeforeunload, etc.)
 		PopupsWatchdog.model_rebuild()

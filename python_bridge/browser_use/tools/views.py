@@ -100,11 +100,11 @@ class StructuredOutputAction(BaseModel, Generic[T]):
 
 
 class SwitchTabAction(BaseModel):
-	tab_id: str = Field(min_length=4, max_length=4, description='4-char id')
+	tab_id: str = Field(description='4-char id')
 
 
 class CloseTabAction(BaseModel):
-	tab_id: str = Field(min_length=4, max_length=4, description='4-char id')
+	tab_id: str = Field(description='4-char id')
 
 
 class ScrollAction(BaseModel):

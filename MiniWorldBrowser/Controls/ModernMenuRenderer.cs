@@ -301,6 +301,21 @@ public static class MenuIconDrawer
         g.DrawLine(pen, points[3], points[0]);
     }
 
+    public static void DrawAi(Graphics g, Rectangle rect)
+    {
+        g.SmoothingMode = SmoothingMode.AntiAlias;
+        using var pen = new Pen(IconColor, DpiHelper.Scale(1.5f)) { StartCap = LineCap.Round, EndCap = LineCap.Round };
+
+        var cx = rect.X + rect.Width / 2;
+        var cy = rect.Y + rect.Height / 2;
+
+        // 绘制类似闪亮的星星/AI 标识
+        g.DrawLine(pen, cx, cy - DpiHelper.Scale(7), cx, cy + DpiHelper.Scale(7));
+        g.DrawLine(pen, cx - DpiHelper.Scale(7), cy, cx + DpiHelper.Scale(7), cy);
+        g.DrawLine(pen, cx - DpiHelper.Scale(4), cy - DpiHelper.Scale(4), cx + DpiHelper.Scale(4), cy + DpiHelper.Scale(4));
+        g.DrawLine(pen, cx + DpiHelper.Scale(4), cy - DpiHelper.Scale(4), cx - DpiHelper.Scale(4), cy + DpiHelper.Scale(4));
+    }
+
     public static void DrawHistory(Graphics g, Rectangle rect)
     {
         g.SmoothingMode = SmoothingMode.AntiAlias;

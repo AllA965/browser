@@ -42,7 +42,7 @@ class SchemaOptimizer:
 				flattened_ref: dict[str, Any] | None = None
 
 				# Skip unnecessary fields AND $defs (we'll inline everything)
-				skip_fields = ['additionalProperties', '$defs']
+				skip_fields = ['additionalProperties', '$defs', 'minLength', 'maxLength']
 
 				for key, value in obj.items():
 					if key in skip_fields:

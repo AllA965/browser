@@ -619,6 +619,7 @@ public static class HtmlGenerator
                         <select id='aiProviderSelect' onchange='applyAiProviderPreset(this.value)'>
                             <option value='custom'>自定义</option>
                             <option value='deepseek' {(settings.AiApiBaseUrl?.Contains("deepseek") == true ? "selected" : "")}>DeepSeek</option>
+                            <option value='volcengine' {(settings.AiApiBaseUrl?.Contains("volces.com") == true || settings.AiApiBaseUrl?.Contains("volcengine") == true ? "selected" : "")}>火山引擎 (Volcengine Ark)</option>
                             <option value='openai' {(settings.AiApiBaseUrl?.Contains("openai") == true ? "selected" : "")}>OpenAI</option>
                             <option value='anthropic' {(settings.AiApiBaseUrl?.Contains("anthropic") == true ? "selected" : "")}>Anthropic (Claude)</option>
                             <option value='groq' {(settings.AiApiBaseUrl?.Contains("groq") == true ? "selected" : "")}>Groq</option>
@@ -970,6 +971,22 @@ public static class HtmlGenerator
             'deepseek': {{
                 baseUrl: 'https://api.deepseek.com/v1',
                 models: ['deepseek-chat', 'deepseek-reasoner']
+            }},
+            'volcengine': {{
+                baseUrl: 'https://ark.cn-beijing.volces.com/api/v3',
+                models: [
+                    {{ id: 'doubao-seed-2-0-pro-260215', name: 'Doubao-Seed-2-0-pro (旗舰级)' }},
+                    {{ id: 'doubao-seed-2-0-lite-260215', name: 'Doubao-Seed-2-0-lite (均衡型)' }},
+                    {{ id: 'doubao-seed-2-0-mini-260215', name: 'Doubao-Seed-2-0-mini (低时延)' }},
+                    {{ id: 'doubao-seed-2-0-code-preview-260215', name: 'Doubao-Seed-2-0-code (编程增强)' }},
+                    {{ id: 'doubao-seed-1-8-251228', name: 'Doubao-Seed-1.8' }},
+                    {{ id: 'doubao-seed-1-6-251015', name: 'Doubao-Seed-1.6' }},
+                    {{ id: 'doubao-seed-1-6-vision-250815', name: 'Doubao-Seed-1.6-vision (视觉)' }},
+                    {{ id: 'glm-4-7-251222', name: 'GLM-4.7 (智谱)' }},
+                    {{ id: 'deepseek-r1', name: 'DeepSeek-R1 (方舟版)' }},
+                    {{ id: 'deepseek-v3', name: 'DeepSeek-V3 (方舟版)' }},
+                    {{ id: 'ep-2024xxxxxxxx-xxxxx', name: '手动输入推理接入点 ID (ep-xxx)' }}
+                ]
             }},
             'openai': {{
                 baseUrl: 'https://api.openai.com/v1',
@@ -1615,53 +1632,173 @@ public static class HtmlGenerator
     private static string GenerateErrorPage(string title, string errorCode, string description, 
         string[] suggestions, bool isWarning = false)
     {
-        var color = isWarning ? "#c53929" : "#5f6368";
-        var icon = isWarning ? "⚠️" : "😕";
-        var suggestionsHtml = string.Join("", suggestions.Select(s => $"<li>{s}</li>"));
+        var accentColor = isWarning ? "#ef4444" : "#3b82f6";
+        var iconColor = isWarning ? "#fee2e2" : "#dbeafe";
+        var iconSvg = isWarning 
+            ? "<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' /></svg>"
+            : "<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' /></svg>";
+        
+        var suggestionsHtml = string.Join("", suggestions.Select(s => $@"
+            <div class='suggestion-item'>
+                <svg class='suggestion-icon' viewBox='0 0 20 20' fill='currentColor'>
+                    <path fill-rule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clip-rule='evenodd' />
+                </svg>
+                <span>{s}</span>
+            </div>"));
         
         return $@"<!DOCTYPE html>
-<html>
+<html lang='zh-CN'>
 <head>
     <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
     <title>{Escape(title)}</title>
     <style>
+        :root {{
+            --accent: {accentColor};
+            --accent-bg: {iconColor};
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --bg-page: #f9fafb;
+            --bg-card: #ffffff;
+        }}
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
-            font-family: 'Microsoft YaHei UI', 'Segoe UI', sans-serif;
-            background: #f8f9fa; color: #202124;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; padding: 20px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.5;
         }}
-        .container {{ max-width: 600px; text-align: center; }}
-        .icon {{ font-size: 72px; margin-bottom: 20px; }}
-        h1 {{ font-size: 24px; font-weight: 400; color: {color}; margin-bottom: 16px; }}
-        .error-code {{ font-size: 12px; color: #5f6368; margin-bottom: 24px; }}
-        .description {{ font-size: 14px; color: #5f6368; line-height: 1.6; margin-bottom: 24px; }}
-        .suggestions {{
-            text-align: left; background: white; border-radius: 8px;
-            padding: 20px 20px 20px 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        .container {{
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            padding: 40px 20px;
         }}
-        .suggestions h3 {{ font-size: 14px; font-weight: 500; margin-bottom: 12px; margin-left: -20px; }}
-        .suggestions ul {{ font-size: 13px; color: #5f6368; line-height: 1.8; }}
-        .retry-btn {{
-            margin-top: 24px; padding: 10px 24px; font-size: 14px;
-            color: white; background: #1a73e8; border: none; border-radius: 4px;
-            cursor: pointer; transition: background 0.2s;
+        .icon-wrapper {{
+            width: 80px;
+            height: 80px;
+            background: var(--accent-bg);
+            color: var(--accent);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
         }}
-        .retry-btn:hover {{ background: #1557b0; }}
+        .icon-wrapper svg {{ width: 40px; height: 40px; }}
+        h1 {{
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }}
+        .error-code {{
+            display: inline-block;
+            font-family: ui-monospace, monospace;
+            font-size: 12px;
+            font-weight: 600;
+            background: #f3f4f6;
+            color: var(--text-muted);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            margin-bottom: 24px;
+        }}
+        .description {{
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }}
+        .card {{
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            text-align: left;
+            margin-bottom: 32px;
+        }}
+        .card h3 {{
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }}
+        .suggestion-item {{
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }}
+        .suggestion-icon {{
+            width: 18px;
+            height: 18px;
+            color: #10b981;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }}
+        .actions {{
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }}
+        .btn {{
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+        }}
+        .btn-primary {{
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+        }}
+        .btn-primary:hover {{
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }}
+        .btn-secondary {{
+            background: #fff;
+            color: var(--text-main);
+            border: 1px solid #e5e7eb;
+        }}
+        .btn-secondary:hover {{
+            background: #f9fafb;
+        }}
     </style>
 </head>
 <body>
     <div class='container'>
-        <div class='icon'>{icon}</div>
+        <div class='icon-wrapper'>{iconSvg}</div>
         <h1>{Escape(title)}</h1>
         <div class='error-code'>{Escape(errorCode)}</div>
         <div class='description'>{description}</div>
-        <div class='suggestions'>
-            <h3>请尝试以下操作：</h3>
-            <ul>{suggestionsHtml}</ul>
+        
+        <div class='card'>
+            <h3>
+                <svg width='16' height='16' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9.663 17h4.674M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z' />
+                </svg>
+                您可以尝试以下操作
+            </h3>
+            {suggestionsHtml}
         </div>
-        <button class='retry-btn' onclick='location.reload()'>重新加载</button>
+        
+        <div class='actions'>
+            <button class='btn btn-primary' onclick='location.reload()'>重新加载页面</button>
+            <button class='btn btn-secondary' onclick='history.back()'>返回上一页</button>
+        </div>
     </div>
 </body>
 </html>";

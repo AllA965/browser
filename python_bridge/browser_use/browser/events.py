@@ -188,7 +188,7 @@ class ScreenshotEvent(BaseEvent[str]):
 	full_page: bool = False
 	clip: dict[str, float] | None = None  # {x, y, width, height}
 
-	event_timeout: float | None = Field(default_factory=lambda: _get_timeout('TIMEOUT_ScreenshotEvent', 15.0))  # seconds
+	event_timeout: float | None = Field(default_factory=lambda: _get_timeout('TIMEOUT_ScreenshotEvent', 30.0))  # seconds (increased from 15.0 to handle slow pages)
 
 
 class BrowserStateRequestEvent(BaseEvent[BrowserStateSummary]):
@@ -198,7 +198,7 @@ class BrowserStateRequestEvent(BaseEvent[BrowserStateSummary]):
 	include_screenshot: bool = True
 	include_recent_events: bool = False
 
-	event_timeout: float | None = Field(default_factory=lambda: _get_timeout('TIMEOUT_BrowserStateRequestEvent', 30.0))  # seconds
+	event_timeout: float | None = Field(default_factory=lambda: _get_timeout('TIMEOUT_BrowserStateRequestEvent', 45.0))  # seconds (increased to accommodate screenshot)
 
 
 # class WaitForConditionEvent(BaseEvent):
@@ -557,13 +557,6 @@ class FileDownloadedEvent(BaseEvent):
 	auto_download: bool = False  # Whether this was an automatic download (e.g., PDF auto-download)
 
 	event_timeout: float | None = Field(default_factory=lambda: _get_timeout('TIMEOUT_FileDownloadedEvent', 30.0))  # seconds
-
-
-class AboutBlankDVDScreensaverShownEvent(BaseEvent):
-	"""AboutBlankWatchdog has shown DVD screensaver animation on an about:blank tab."""
-
-	target_id: TargetID
-	error: str | None = None
 
 
 class DialogOpenedEvent(BaseEvent):

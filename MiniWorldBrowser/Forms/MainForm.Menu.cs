@@ -3,6 +3,9 @@ using MiniWorldBrowser.Controls;
 using MiniWorldBrowser.Services;
 using MiniWorldBrowser.Helpers;
 using System.Diagnostics;
+using System.Text;
+using System.Text.Json;
+using System.Net.Http;
 
 namespace MiniWorldBrowser.Forms;
 
@@ -433,6 +436,18 @@ public partial class MainForm
         // 下载
         menu.Items.Add(CreateMenuItem("下载(D)", "Ctrl+J", MenuIconDrawer.DrawDownload,
             () => { CloseMainMenu(); OpenDownloadDialog(); }));
+
+        // 媒体提取
+        var mediaMenu = CreateMenuItem("媒体提取", null, MenuIconDrawer.DrawAi); // 借用 AI 图标或以后自定义
+        mediaMenu.DropDownDirection = ToolStripDropDownDirection.Left;
+        mediaMenu.DropDown.Renderer = new ModernMenuRenderer(_isIncognito);
+        mediaMenu.DropDown.BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249);
+        mediaMenu.DropDown.ForeColor = _isIncognito ? Color.White : Color.Black;
+
+        mediaMenu.DropDownItems.Add(new ToolStripMenuItem("提取本页图片", null, (s, e) => { CloseMainMenu(); _ = ExtractImagesAsync(); }));
+        mediaMenu.DropDownItems.Add(new ToolStripMenuItem("提取本页视频", null, (s, e) => { CloseMainMenu(); _ = ExtractVideosAsync(); }));
+        
+        menu.Items.Add(mediaMenu);
 
         menu.Items.Add(new ToolStripSeparator());
 
@@ -1040,6 +1055,117 @@ public partial class MainForm
         }
 
         return count;
+    }
+
+    #endregion
+
+    #region 媒体提取
+    
+    private async Task ExtractImagesAsync()
+    {
+        var activeTab = _tabManager.ActiveTab;
+        if (activeTab?.WebView?.CoreWebView2 == null) return;
+
+        using (var dialog = new FolderBrowserDialog())
+        {
+            dialog.Description = "选择保存图片的文件夹";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                _statusLabel.Text = "正在提取图片...";
+                try
+                {
+                    int count = await _mediaDownloadService.ExtractAndDownloadImagesAsync(activeTab.WebView.CoreWebView2, dialog.SelectedPath);
+                    _statusLabel.Text = $"成功提取 {count} 张图片";
+                    Process.Start("explorer.exe", dialog.SelectedPath);
+                }
+                catch (Exception ex)
+                {
+                    _statusLabel.Text = "图片提取失败";
+                    MessageBox.Show($"提取失败: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+    }
+
+    private async Task ExtractVideosAsync()
+    {
+        var activeTab = _tabManager.ActiveTab;
+        if (activeTab == null) return;
+        
+        var url = activeTab.Url;
+        if (string.IsNullOrEmpty(url) || url.StartsWith("about:"))
+        {
+            MessageBox.Show("当前页面不支持视频提取", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        using (var dialog = new FolderBrowserDialog())
+        {
+            dialog.Description = "选择保存视频的文件夹";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                _statusLabel.Text = "正在解析视频信息...";
+                try
+                {
+                    var client = new HttpClient();
+                    client.Timeout = TimeSpan.FromSeconds(30); // 增加超时时间，解析视频信息可能较慢
+                    
+                    var infoRequest = new { url = url };
+                    var infoContent = new StringContent(JsonSerializer.Serialize(infoRequest), Encoding.UTF8, "application/json");
+                    var infoResponse = await client.PostAsync("http://localhost:8000/video/info", infoContent);
+                    
+                    if (infoResponse.IsSuccessStatusCode)
+                    {
+                        var infoJson = await infoResponse.Content.ReadAsStringAsync();
+                        using (var selectionDialog = new VideoSelectionDialog(infoJson))
+                        {
+                            if (selectionDialog.ShowDialog(this) == DialogResult.OK)
+                            {
+                                string formatId = selectionDialog.SelectedFormatId;
+                                _statusLabel.Text = "视频下载已开始...";
+                                
+                                var downloadRequest = new
+                                {
+                                    url = url,
+                                    save_path = dialog.SelectedPath,
+                                    format_id = formatId
+                                };
+                                
+                                var downloadContent = new StringContent(JsonSerializer.Serialize(downloadRequest), Encoding.UTF8, "application/json");
+                                var downloadResponse = await client.PostAsync("http://localhost:8000/video/download", downloadContent);
+                                
+                                if (downloadResponse.IsSuccessStatusCode)
+                                {
+                                    _statusLabel.Text = "视频下载已开始";
+                                    Process.Start("explorer.exe", dialog.SelectedPath);
+                                }
+                                else
+                                {
+                                    var error = await downloadResponse.Content.ReadAsStringAsync();
+                                    _statusLabel.Text = "视频下载失败";
+                                    MessageBox.Show($"下载失败: {error}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                            }
+                            else
+                            {
+                                _statusLabel.Text = "已取消下载";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var error = await infoResponse.Content.ReadAsStringAsync();
+                        _statusLabel.Text = "解析视频失败";
+                        MessageBox.Show($"解析失败: {error}\n请确保 Python 桥接服务已启动。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _statusLabel.Text = "操作失败";
+                    MessageBox.Show($"操作失败: {ex.Message}\n请确保 Python 桥接服务已启动且安装了 yt-dlp。\n\n提示：您需要先在命令行运行 python_bridge/main.py", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
     }
 
     #endregion

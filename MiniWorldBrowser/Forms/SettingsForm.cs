@@ -723,7 +723,7 @@ public class SettingsForm : Form
         
         var providerLabel = new Label { Text = "服务商预设:", Location = DpiHelper.Scale(new Point(15, 30)), AutoSize = true };
         _aiProviderCombo = new ComboBox { Location = DpiHelper.Scale(new Point(120, 27)), Width = DpiHelper.Scale(300), DropDownStyle = ComboBoxStyle.DropDownList };
-        _aiProviderCombo.Items.AddRange(new object[] { "自定义", "DeepSeek", "OpenAI", "Anthropic (Claude)", "Groq", "MiniMax", "阿里百炼 (DashScope)", "Ollama (本地)" });
+        _aiProviderCombo.Items.AddRange(new object[] { "自定义", "DeepSeek", "火山引擎 (Volcengine Ark)", "OpenAI", "Anthropic (Claude)", "Groq", "MiniMax", "阿里百炼 (DashScope)", "Ollama (本地)" });
         _aiProviderCombo.SelectedIndexChanged += OnAiProviderChanged;
 
         var apiKeyLabel = new Label { Text = "API Key:", Location = DpiHelper.Scale(new Point(15, 65)), AutoSize = true };
@@ -798,9 +798,18 @@ public class SettingsForm : Form
 
         if (_aiApiTipLabel != null)
         {
-            _aiApiTipLabel.Text = provider == "阿里百炼 (DashScope)"
-                ? "提示：百炼 OpenAI 兼容接口 BaseUrl 默认 https://dashscope.aliyuncs.com/compatible-mode/v1，可按需替换为 -intl/-us 地域"
-                : "提示：适用于 DeepSeek, OpenAI, Ollama 等兼容接口";
+            if (provider == "阿里百炼 (DashScope)")
+            {
+                _aiApiTipLabel.Text = "提示：百炼 OpenAI 兼容接口 BaseUrl 默认 https://dashscope.aliyuncs.com/compatible-mode/v1";
+            }
+            else if (provider == "火山引擎 (Volcengine Ark)")
+            {
+                _aiApiTipLabel.Text = "提示：火山方舟 V3 必须使用【推理接入点 ID (Endpoint ID)】，格式如 ep-2024xxxxxxxx-xxxxx";
+            }
+            else
+            {
+                _aiApiTipLabel.Text = "提示：适用于 DeepSeek, OpenAI, Ollama 等兼容接口";
+            }
         }
 
         switch (provider)
@@ -808,6 +817,23 @@ public class SettingsForm : Form
             case "DeepSeek":
                 _aiApiBaseUrlBox.Text = "https://api.deepseek.com/v1";
                 _aiModelPresetCombo.Items.AddRange(new object[] { "deepseek-chat", "deepseek-reasoner" });
+                _aiModelPresetCombo.SelectedIndex = 0;
+                break;
+            case "火山引擎 (Volcengine Ark)":
+                _aiApiBaseUrlBox.Text = "https://ark.cn-beijing.volces.com/api/v3";
+                _aiModelPresetCombo.Items.AddRange(new object[] { 
+                    "doubao-seed-2-0-pro-260215",
+                    "doubao-seed-2-0-lite-260215",
+                    "doubao-seed-2-0-mini-260215",
+                    "doubao-seed-2-0-code-preview-260215",
+                    "doubao-seed-1-8-251228",
+                    "doubao-seed-1-6-251015",
+                    "doubao-seed-1-6-vision-250815",
+                    "glm-4-7-251222",
+                    "deepseek-r1",
+                    "deepseek-v3",
+                    "手动输入 Endpoint ID (ep-xxx)"
+                });
                 _aiModelPresetCombo.SelectedIndex = 0;
                 break;
             case "OpenAI":
@@ -874,6 +900,13 @@ public class SettingsForm : Form
             {
                 modelId = selectedItem.Split(" (")[0].Trim();
             }
+
+            if (modelId == "手动输入 Endpoint ID (ep-xxx)")
+            {
+                _aiModelNameBox.Text = "ep-2024xxxxxxxx-xxxxx";
+                return;
+            }
+            
             _aiModelNameBox.Text = modelId;
         }
     }
@@ -887,14 +920,15 @@ public class SettingsForm : Form
         // 尝试匹配预设服务商
         if (string.IsNullOrEmpty(settings.AiApiBaseUrl)) _aiProviderCombo.SelectedIndex = 0;
         else if (settings.AiApiBaseUrl.Contains("deepseek")) _aiProviderCombo.SelectedIndex = 1;
-        else if (settings.AiApiBaseUrl.Contains("openai")) _aiProviderCombo.SelectedIndex = 2;
-        else if (settings.AiApiBaseUrl.Contains("anthropic")) _aiProviderCombo.SelectedIndex = 3;
-        else if (settings.AiApiBaseUrl.Contains("groq")) _aiProviderCombo.SelectedIndex = 4;
-        else if (settings.AiApiBaseUrl.Contains("minimax")) _aiProviderCombo.SelectedIndex = 5;
-        else if (settings.AiApiBaseUrl.Contains("minimaxi")) _aiProviderCombo.SelectedIndex = 5;
-        else if (settings.AiApiBaseUrl.Contains("dashscope")) _aiProviderCombo.SelectedIndex = 6;
-        else if (settings.AiApiBaseUrl.Contains("aliyuncs")) _aiProviderCombo.SelectedIndex = 6;
-        else if (settings.AiApiBaseUrl.Contains("localhost")) _aiProviderCombo.SelectedIndex = 7;
+        else if (settings.AiApiBaseUrl.Contains("volces.com") || settings.AiApiBaseUrl.Contains("volcengine")) _aiProviderCombo.SelectedIndex = 2;
+        else if (settings.AiApiBaseUrl.Contains("openai")) _aiProviderCombo.SelectedIndex = 3;
+        else if (settings.AiApiBaseUrl.Contains("anthropic")) _aiProviderCombo.SelectedIndex = 4;
+        else if (settings.AiApiBaseUrl.Contains("groq")) _aiProviderCombo.SelectedIndex = 5;
+        else if (settings.AiApiBaseUrl.Contains("minimax")) _aiProviderCombo.SelectedIndex = 6;
+        else if (settings.AiApiBaseUrl.Contains("minimaxi")) _aiProviderCombo.SelectedIndex = 6;
+        else if (settings.AiApiBaseUrl.Contains("dashscope")) _aiProviderCombo.SelectedIndex = 7;
+        else if (settings.AiApiBaseUrl.Contains("aliyuncs")) _aiProviderCombo.SelectedIndex = 7;
+        else if (settings.AiApiBaseUrl.Contains("localhost")) _aiProviderCombo.SelectedIndex = 8;
         else _aiProviderCombo.SelectedIndex = 0;
 
         _aiApiKeyBox.Text = settings.AiApiKey;

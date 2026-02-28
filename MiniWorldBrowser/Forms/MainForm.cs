@@ -36,6 +36,7 @@ public partial class MainForm : Form
     private readonly ILoginService _loginService;
     private readonly IAdService _adService;
     private readonly UpdateService _updateService; // 添加更新服务
+    private readonly MediaDownloadService _mediaDownloadService; // 添加媒体下载服务
     private readonly bool _isIncognito;
     private readonly string? _incognitoDataFolder;
     private bool _isInternalAddressUpdate;
@@ -157,6 +158,7 @@ public partial class MainForm : Form
         _loginService = new LoginService(_settingsService);
         _adService = new AdService();
         _updateService = new UpdateService(); // 初始化更新服务
+        _mediaDownloadService = new MediaDownloadService(); // 初始化媒体下载服务
         
         InitializeUI();
         InitializeManagers();
@@ -1630,8 +1632,11 @@ public partial class MainForm : Form
         
         _downloadBtn.StartBounceAnimation();
         
-        // 显示下载提示
-        ShowModernMessage("下载开始", $"正在下载: {item.FileName}", ModernDialogIcon.Info);
+        // 更新状态栏提示
+        if (_statusLabel != null)
+        {
+            _statusLabel.Text = $"正在下载: {item.FileName}";
+        }
     }
 
     private void InitializeEvents()

@@ -130,17 +130,40 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
         /// <summary>
         /// 取消当前的 AI 生成任务
         /// </summary>
-        public void CancelGeneration()
+        public void StopGeneration()
         {
             try
             {
+                // 1. 取消 C# 端的任务
                 _cts?.Cancel();
+
+                // 2. 调用 Python Bridge 停止 Agent 任务
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        using var request = new HttpRequestMessage(HttpMethod.Post, "http://127.0.0.1:8000/agent/stop");
+                        await _httpClient.SendAsync(request);
+                        Debug.WriteLine("[AiApiBridge] Sent stop request to Python Bridge");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"[AiApiBridge] Failed to stop Python agent: {ex.Message}");
+                    }
+                });
+
+                SafeNotifyChunk("任务已停止。", "done");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"取消任务失败: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// 旧方法名，为了兼容性保留
+        /// </summary>
+        public void CancelGeneration() => StopGeneration();
 
         private void SafeNotifyChunk(string content, string type)
         {
@@ -373,14 +396,28 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
                 // 处理厂商 URL
                 bool isMiniMax = baseUrl.Contains("minimax.io", StringComparison.OrdinalIgnoreCase) || baseUrl.Contains("minimaxi.com", StringComparison.OrdinalIgnoreCase);
                 bool isDashScope = baseUrl.Contains("dashscope", StringComparison.OrdinalIgnoreCase) || baseUrl.Contains("aliyuncs.com", StringComparison.OrdinalIgnoreCase);
+                bool isVolcengine = baseUrl.Contains("volces.com", StringComparison.OrdinalIgnoreCase) || baseUrl.Contains("volcengine", StringComparison.OrdinalIgnoreCase);
 
                 if (isMiniMax)
                 {
-                    try { if (!baseUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)) baseUrl = "https://" + baseUrl; var uri = new Uri(baseUrl); baseUrl = $"{uri.Scheme}://{uri.Host}/v1"; } catch { }
+                    try { if (!baseUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)) baseUrl = "https://" + baseUrl; var uri = new Uri(baseUrl); baseUrl = $"{uri.Scheme}://{uri.Authority}/v1"; } catch { }
                 }
                 if (isDashScope)
                 {
-                    try { if (!baseUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)) baseUrl = "https://" + baseUrl; var uri = new Uri(baseUrl); var path = uri.AbsolutePath.TrimEnd('/'); if (!path.Contains("compatible-mode", StringComparison.OrdinalIgnoreCase)) baseUrl = $"{uri.Scheme}://{uri.Host}/compatible-mode/v1"; else if (!path.EndsWith("/v1", StringComparison.OrdinalIgnoreCase)) baseUrl = $"{uri.Scheme}://{uri.Host}{path}/v1"; } catch { }
+                    try { if (!baseUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)) baseUrl = "https://" + baseUrl; var uri = new Uri(baseUrl); var path = uri.AbsolutePath.TrimEnd('/'); if (!path.Contains("compatible-mode", StringComparison.OrdinalIgnoreCase)) baseUrl = $"{uri.Scheme}://{uri.Authority}/compatible-mode/v1"; else if (!path.EndsWith("/v1", StringComparison.OrdinalIgnoreCase)) baseUrl = $"{uri.Scheme}://{uri.Authority}{path}/v1"; } catch { }
+                }
+                if (isVolcengine)
+                {
+                    try { if (!baseUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)) baseUrl = "https://" + baseUrl; var uri = new Uri(baseUrl); var path = uri.AbsolutePath.TrimEnd('/'); if (!path.EndsWith("/v3", StringComparison.OrdinalIgnoreCase) && !path.EndsWith("/v3/", StringComparison.OrdinalIgnoreCase) && !path.Contains("/v3/")) baseUrl = $"{uri.Scheme}://{uri.Authority}/api/v3"; } catch { }
+                }
+
+                // 智能拼接端点：如果 URL 已经包含完整端点（如 /chat/completions 或 /responses），则不再追加
+                string finalUrl = baseUrl;
+                bool isResponsesApi = finalUrl.EndsWith("/responses", StringComparison.OrdinalIgnoreCase);
+                
+                if (!finalUrl.EndsWith("/chat/completions", StringComparison.OrdinalIgnoreCase) && !isResponsesApi)
+                {
+                    finalUrl = finalUrl.TrimEnd('/') + "/chat/completions";
                 }
 
                 // 构造专门用于对话的 Messages
@@ -394,16 +431,30 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
                     try { return d.role != "system"; } catch { return true; }
                 }).TakeLast(20));
 
-                var requestBody = new
+                // 动态构造请求体：原生 Responses API 使用 "input" 字段
+                object requestBody;
+                if (isResponsesApi)
                 {
-                    model = settings.AiModelName,
-                    messages = chatMessages,
-                    stream = true // 启用流式
-                };
+                    requestBody = new
+                    {
+                        model = settings.AiModelName,
+                        input = chatMessages,
+                        stream = true
+                    };
+                }
+                else
+                {
+                    requestBody = new
+                    {
+                        model = settings.AiModelName,
+                        messages = chatMessages,
+                        stream = true // 启用流式
+                    };
+                }
 
                 var json = JsonSerializer.Serialize(requestBody);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                using var request = new HttpRequestMessage(HttpMethod.Post, baseUrl.TrimEnd('/') + "/chat/completions");
+                using var request = new HttpRequestMessage(HttpMethod.Post, finalUrl);
                 request.Headers.Add("Authorization", $"Bearer {settings.AiApiKey}");
                 request.Content = content;
 
@@ -414,6 +465,21 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
                 if (!response.IsSuccessStatusCode)
                 {
                     var error = await response.Content.ReadAsStringAsync(token);
+                    
+                    // 解析常见厂商错误码并提供中文友好提示
+                    try
+                    {
+                        using var errDoc = JsonDocument.Parse(error);
+                        if (errDoc.RootElement.TryGetProperty("error", out var errObj) && errObj.TryGetProperty("code", out var codeProp))
+                        {
+                            string code = codeProp.GetString() ?? "";
+                            if (code == "ModelNotOpen") return "API 错误: 您尚未在火山方舟控制台开通该模型服务。请访问控制台 - 模型广场 - 找到 doubao-seed 系列并点击【立即开通】。";
+                            if (code == "AuthenticationError" || code == "Unauthorized") return "API 错误: API Key 无效或已过期。请检查设置中的 API Key 是否正确。";
+                            if (code == "EndpointNotFound") return "API 错误: 找不到指定的推理接入点。请检查设置中的模型名称是否正确。";
+                        }
+                    }
+                    catch { }
+
                     return $"API 错误: {error}";
                 }
 
@@ -438,6 +504,8 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
                         try
                         {
                             using var doc = JsonDocument.Parse(data);
+                            
+                            // 1. 标准 OpenAI 格式 (/chat/completions)
                             if (doc.RootElement.TryGetProperty("choices", out var choices) && choices.GetArrayLength() > 0)
                             {
                                 var choice = choices[0];
@@ -447,8 +515,37 @@ Assistant: Thought: 我需要先获取页面内容才能进行总结。
                                     if (!string.IsNullOrEmpty(text))
                                     {
                                         fullResponse.Append(text);
-                                        // 发送 chunk 给前端
                                         SafeNotifyChunk(text, "chunk");
+                                    }
+                                }
+                            }
+                            // 2. 火山引擎原生 Responses 格式 (/responses)
+                            else if (doc.RootElement.TryGetProperty("output", out var output))
+                            {
+                                // Responses API 的流式输出通常在 output.text 或 output.choices[0].delta.content
+                                if (output.TryGetProperty("text", out var textProp))
+                                {
+                                    // 某些模式下返回全量或增量文本
+                                    string text = textProp.GetString() ?? "";
+                                    if (!string.IsNullOrEmpty(text))
+                                    {
+                                        // 注意：Responses API 如果是流式增量，逻辑可能略有不同
+                                        // 这里简单处理：如果是增量则追加，如果是全量则需逻辑判断
+                                        fullResponse.Append(text);
+                                        SafeNotifyChunk(text, "chunk");
+                                    }
+                                }
+                                else if (output.TryGetProperty("choices", out var resChoices) && resChoices.GetArrayLength() > 0)
+                                {
+                                    var choice = resChoices[0];
+                                    if (choice.TryGetProperty("delta", out var delta) && delta.TryGetProperty("content", out var chunk))
+                                    {
+                                        string text = chunk.GetString() ?? "";
+                                        if (!string.IsNullOrEmpty(text))
+                                        {
+                                            fullResponse.Append(text);
+                                            SafeNotifyChunk(text, "chunk");
+                                        }
                                     }
                                 }
                             }

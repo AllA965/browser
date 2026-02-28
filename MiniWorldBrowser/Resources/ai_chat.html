@@ -461,9 +461,93 @@
             align-items: center;
             gap: 0.5rem;
         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(2px);
+        }
+
+        .modal {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            max-width: 85%;
+            width: 320px;
+            animation: modalIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .modal-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-cancel {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .modal-btn-confirm {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
+            background-color: var(--primary-hover);
+        }
     </style>
 </head>
 <body>
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal">
+            <div id="modal-title" class="modal-title">提示</div>
+            <div id="modal-body" class="modal-body">确定执行该操作吗？</div>
+            <div class="modal-footer">
+                <button id="modal-cancel" class="modal-btn modal-btn-cancel">取消</button>
+                <button id="modal-confirm" class="modal-btn modal-btn-confirm">确定</button>
+            </div>
+        </div>
+    </div>
     <div id="header">
         <div id="mode-badge">
             <span id="mode-dot"></span>
@@ -535,8 +619,30 @@
         const fileInput = document.getElementById('file-input');
         const clearBtn = document.getElementById('clear-btn');
         const toast = document.getElementById('toast');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalCancel = document.getElementById('modal-cancel');
+        const modalConfirm = document.getElementById('modal-confirm');
 
         let selectedFiles = [];
+        let confirmCallback = null;
+
+        function showConfirm(title, message, callback) {
+            modalTitle.innerText = title;
+            modalBody.innerText = message;
+            modalOverlay.style.display = 'flex';
+            confirmCallback = callback;
+        }
+
+        modalCancel.onclick = () => {
+            modalOverlay.style.display = 'none';
+        };
+
+        modalConfirm.onclick = () => {
+            modalOverlay.style.display = 'none';
+            if (confirmCallback) confirmCallback();
+        };
 
         // 支持的文件类型
         const SUPPORTED_TYPES = {
@@ -993,8 +1099,8 @@
             sendMessage(prompt, silent);
         };
 
-        clearBtn.onclick = async () => {
-            if (confirm('确定要清除所有聊天记录吗？')) {
+        clearBtn.onclick = () => {
+            showConfirm('清除历史记录', '确定要清除所有聊天记录吗？此操作不可撤销。', async () => {
                 // 清除 UI
                 const messages = chatContainer.querySelectorAll('.message:not(.system-message)');
                 messages.forEach(msg => {
@@ -1018,7 +1124,7 @@
                 } catch (e) {
                     console.error('Failed to clear history:', e);
                 }
-            }
+            });
         };
     </script>
 </body>
