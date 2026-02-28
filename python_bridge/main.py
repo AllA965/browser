@@ -200,10 +200,18 @@ async def get_video_info(request: VideoDownloadRequest):
         ydl_opts = {
             'quiet': True,
             'no_warnings': True,
+            'no_color': True, # Disable ANSI colors in error messages
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             loop = asyncio.get_event_loop()
-            info = await loop.run_in_executor(None, lambda: ydl.extract_info(request.url, download=False))
+            try:
+                info = await loop.run_in_executor(None, lambda: ydl.extract_info(request.url, download=False))
+            except yt_dlp.utils.DownloadError as de:
+                # Provide a more user-friendly message for unsupported or invalid URLs
+                error_msg = str(de)
+                if "Unsupported URL" in error_msg:
+                    raise HTTPException(status_code=400, detail="不支持的 URL。请提供具体的视频播放页面地址。")
+                raise HTTPException(status_code=400, detail=f"视频解析失败: {error_msg}")
             
             formats = []
             if 'formats' in info:
@@ -227,10 +235,12 @@ async def get_video_info(request: VideoDownloadRequest):
                 "duration": info.get('duration'),
                 "formats": formats
             }
+    except HTTPException:
+        raise
     except Exception as e:
         import traceback
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"服务器内部错误: {str(e)}")
 
 @app.post("/video/download")
 async def download_video(request: VideoDownloadRequest):
@@ -251,17 +261,23 @@ async def download_video(request: VideoDownloadRequest):
             'format': request.format_id if request.format_id else 'best', # 优先下载最佳质量
             'quiet': True,
             'no_warnings': True,
+            'no_color': True, # Disable ANSI colors
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             loop = asyncio.get_event_loop()
-            await loop.run_in_executor(None, lambda: ydl.download([request.url]))
+            try:
+                await loop.run_in_executor(None, lambda: ydl.download([request.url]))
+            except yt_dlp.utils.DownloadError as de:
+                raise HTTPException(status_code=400, detail=f"视频下载失败: {str(de)}")
             
         return {"status": "success", "message": "视频下载成功"}
+    except HTTPException:
+        raise
     except Exception as e:
         import traceback
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"下载过程中发生错误: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

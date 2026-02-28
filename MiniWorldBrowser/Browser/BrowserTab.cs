@@ -44,6 +44,7 @@ public class BrowserTab : IDisposable
     public event Action<BrowserTab, string, string, string>? PasswordDetected; // host, username, password
     public event Action<BrowserTab, double>? ZoomChanged; // 缩放变化事件
     public event Action<BrowserTab>? TranslationRequested; // 翻译请求事件
+    public event Action<BrowserTab, string>? MediaExtractionRequested; // 媒体提取请求事件 ("image" 或 "video")
     
     private readonly Panel _container;
     private readonly ISettingsService _settingsService;
@@ -993,7 +994,27 @@ public class BrowserTab : IDisposable
                 TranslationRequested?.Invoke(this);
             };
 
-            // 寻找“全选”后的位置插入翻译选项
+            // 4. 处理媒体提取菜单
+            var mediaExtractionItem = coreWebView2.Environment.CreateContextMenuItem(
+                "媒体提取",
+                null,
+                CoreWebView2ContextMenuItemKind.Submenu);
+
+            var extractImagesItem = coreWebView2.Environment.CreateContextMenuItem(
+                "提取本页图片",
+                null,
+                CoreWebView2ContextMenuItemKind.Command);
+            extractImagesItem.CustomItemSelected += (s, args) => MediaExtractionRequested?.Invoke(this, "image");
+            mediaExtractionItem.Children.Add(extractImagesItem);
+
+            var extractVideosItem = coreWebView2.Environment.CreateContextMenuItem(
+                "提取本页视频",
+                null,
+                CoreWebView2ContextMenuItemKind.Command);
+            extractVideosItem.CustomItemSelected += (s, args) => MediaExtractionRequested?.Invoke(this, "video");
+            mediaExtractionItem.Children.Add(extractVideosItem);
+
+            // 寻找“全选”后的位置插入翻译和媒体提取选项
             int insertIndex = menuItems.Count;
             for (int i = 0; i < menuItems.Count; i++)
             {
@@ -1003,19 +1024,21 @@ public class BrowserTab : IDisposable
                     break;
                 }
             }
-            
-            var transSeparator = coreWebView2.Environment.CreateContextMenuItem(
+
+            var menuSeparator = coreWebView2.Environment.CreateContextMenuItem(
                 string.Empty, null, CoreWebView2ContextMenuItemKind.Separator);
-            
+
             if (insertIndex < menuItems.Count)
             {
-                menuItems.Insert(insertIndex, transSeparator);
+                menuItems.Insert(insertIndex, menuSeparator);
                 menuItems.Insert(insertIndex + 1, translateItem);
+                menuItems.Insert(insertIndex + 2, mediaExtractionItem);
             }
             else
             {
-                menuItems.Add(transSeparator);
+                menuItems.Add(menuSeparator);
                 menuItems.Add(translateItem);
+                menuItems.Add(mediaExtractionItem);
             }
         }
         catch { }

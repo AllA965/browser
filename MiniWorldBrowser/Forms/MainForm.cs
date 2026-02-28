@@ -1598,6 +1598,7 @@ public partial class MainForm : Form
         };
         _tabManager.TabZoomChanged += OnTabZoomChanged;
         _tabManager.TabTranslationRequested += t => { if (t == _tabManager.ActiveTab) TranslateCurrentPageWithAI(); };
+        _tabManager.TabMediaExtractionRequested += (t, type) => { if (t == _tabManager.ActiveTab) OnMediaExtractionRequested(type); };
         _tabManager.NewWindowRequested += url => _ = CreateNewTabWithProtection(url, _settingsService.Settings.OpenLinksInBackground);
         _tabManager.NewWindowRequestedWithArgs += OnNewWindowRequestedWithArgs;
         _tabManager.SettingChanged += OnSettingChanged;

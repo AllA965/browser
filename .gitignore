@@ -18,6 +18,7 @@ bld/
 [Ll]ogs/
 publish/
 publish_portable/
+publish_installer/
 publish_浏览器/
 TestResults/
 *.pdb
@@ -27,6 +28,11 @@ TestResults/
 # Visual Studio / IDEs
 .vs/
 .vscode/
+.history/
+LocalHistory/
+Generated/
+Generated Files/
+IntelliSense/
 *.rsuser
 *.suo
 *.user

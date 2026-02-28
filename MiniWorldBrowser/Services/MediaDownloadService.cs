@@ -27,9 +27,15 @@ namespace MiniWorldBrowser.Services
         /// </summary>
         public async Task<int> ExtractAndDownloadImagesAsync(CoreWebView2 webView, string targetFolder)
         {
-            if (!Directory.Exists(targetFolder))
-                Directory.CreateDirectory(targetFolder);
+            var imageUrls = await ExtractImageUrlsAsync(webView);
+            return await DownloadImagesAsync(imageUrls, targetFolder);
+        }
 
+        /// <summary>
+        /// 仅从网页中提取所有图片 URL
+        /// </summary>
+        public async Task<List<string>> ExtractImageUrlsAsync(CoreWebView2 webView)
+        {
             // 提取脚本：获取 img 标签和 CSS background-image
             const string script = @"(function() {
                 const urls = new Set();
@@ -58,9 +64,18 @@ namespace MiniWorldBrowser.Services
             var result = await webView.ExecuteScriptAsync(script);
             var json = UnescapeJsString(result);
             
-            var imageUrls = JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
-            int count = 0;
+            return JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
+        }
 
+        /// <summary>
+        /// 批量下载图片到目标文件夹
+        /// </summary>
+        public async Task<int> DownloadImagesAsync(List<string> imageUrls, string targetFolder)
+        {
+            if (!Directory.Exists(targetFolder))
+                Directory.CreateDirectory(targetFolder);
+
+            int count = 0;
             var tasks = imageUrls.Select(async url =>
             {
                 try

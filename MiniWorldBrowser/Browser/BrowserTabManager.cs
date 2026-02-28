@@ -42,6 +42,7 @@ public partial class BrowserTabManager
     public event Action<BrowserTab, string>? TabStatusTextChanged;
     public event Action<BrowserTab, double>? TabZoomChanged;
     public event Action<BrowserTab>? TabTranslationRequested;
+    public event Action<BrowserTab, string>? TabMediaExtractionRequested; // 媒体提取请求事件
     public event Action<string>? NewWindowRequested;
     public event Action<BrowserTab, CoreWebView2NewWindowRequestedEventArgs>? NewWindowRequestedWithArgs;
     public event Action<string, object>? SettingChanged;
@@ -450,6 +451,7 @@ public partial class BrowserTabManager
         tab.StatusTextChanged += (t, text) => OnTabStatusTextChanged(t, text);
         tab.ZoomChanged += (t, zoom) => OnTabZoomChanged(t, zoom);
         tab.TranslationRequested += t => TabTranslationRequested?.Invoke(t);
+        tab.MediaExtractionRequested += (t, type) => TabMediaExtractionRequested?.Invoke(t, type);
         tab.DownloadStarting += OnDownloadStarting;
         tab.PasswordDetected += (t, host, username, password) => ShowSavePasswordPrompt(t, host, username, password);
         
@@ -558,6 +560,7 @@ public partial class BrowserTabManager
             tab.StatusTextChanged += (t, text) => OnTabStatusTextChanged(t, text);
             tab.ZoomChanged += (t, zoom) => OnTabZoomChanged(t, zoom);
             tab.TranslationRequested += t => TabTranslationRequested?.Invoke(t);
+            tab.MediaExtractionRequested += (t, type) => TabMediaExtractionRequested?.Invoke(t, type);
             tab.DownloadStarting += OnDownloadStarting;
             tab.PasswordDetected += (t, host, username, password) => ShowSavePasswordPrompt(t, host, username, password);
             
