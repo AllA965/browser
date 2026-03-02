@@ -1133,10 +1133,75 @@ public partial class MainForm
         _statusLabel.Text = "正在解析视频信息...";
         try
         {
+            string extractionResult = url;
+            // 针对 Feed 流页面（如抖音首页），尝试提取实际视频地址或数据
+            if (activeTab.WebView?.CoreWebView2 != null)
+            {
+                extractionResult = await _mediaDownloadService.GetEffectiveVideoUrlAsync(activeTab.WebView.CoreWebView2, url);
+            }
+
             var client = new HttpClient();
             client.Timeout = TimeSpan.FromSeconds(30);
             
-            var infoRequest = new { url = url };
+            // 解析提取结果
+            object infoRequest;
+            JsonElement? directData = null;
+            string cookies = null;
+            string userAgent = null;
+            string effectiveUrl = url;
+
+            try {
+                using (var doc = JsonDocument.Parse(extractionResult)) {
+                    var root = doc.RootElement;
+                    
+                    // 提取 Cookie 和 UA
+                    if (root.TryGetProperty("cookies", out var cookieProp)) {
+                        cookies = cookieProp.GetString();
+                    }
+                    if (root.TryGetProperty("ua", out var uaProp)) {
+                        userAgent = uaProp.GetString();
+                    }
+
+                    if (root.TryGetProperty("type", out var type) && type.GetString() == "direct_data") {
+                        directData = root.Clone();
+                        // 优先使用提取出的详情页 URL (如果 JS 返回了)
+                        if (root.TryGetProperty("url", out var dUrl)) effectiveUrl = dUrl.GetString();
+                        
+                        infoRequest = new { 
+                            url = effectiveUrl, 
+                            direct_data = directData,
+                            cookies = cookies,
+                            user_agent = userAgent
+                        };
+                    } else if (root.TryGetProperty("url", out var extractedUrl)) {
+                        effectiveUrl = extractedUrl.GetString();
+                        infoRequest = new { 
+                            url = effectiveUrl,
+                            cookies = cookies,
+                            user_agent = userAgent
+                        };
+                    } else {
+                        infoRequest = new { 
+                            url = url,
+                            cookies = cookies,
+                            user_agent = userAgent
+                        };
+                    }
+                }
+            } catch {
+                infoRequest = new { url = url };
+            }
+
+            // 针对抖音进行最后一道检查：如果是首页链接且没有 direct_data，说明提取失败
+            if (effectiveUrl.Contains("douyin.com") && 
+                (effectiveUrl.EndsWith("/") || effectiveUrl.Contains("?recommend=") || effectiveUrl.Contains("/discover")) && 
+                directData == null)
+            {
+                _statusLabel.Text = "提取失败";
+                MessageBox.Show("未能识别到当前播放的视频，请尝试：\n1. 确保视频正在播放\n2. 刷新页面后重试\n3. 点击视频进入详情页后再提取", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             var infoContent = new StringContent(JsonSerializer.Serialize(infoRequest), Encoding.UTF8, "application/json");
             var infoResponse = await client.PostAsync("http://localhost:8000/video/info", infoContent);
             
@@ -1178,11 +1243,15 @@ public partial class MainForm
                         
                         _statusLabel.Text = "视频下载已开始...";
                         
+                        // 构造下载请求，包含原始提取的信息
                         var downloadRequest = new
                         {
                             url = url,
                             save_path = savePath,
-                            format_id = formatId
+                            format_id = formatId,
+                            direct_data = directData,
+                            cookies = cookies,
+                            user_agent = userAgent
                         };
                         
                         var downloadContent = new StringContent(JsonSerializer.Serialize(downloadRequest), Encoding.UTF8, "application/json");
@@ -1196,8 +1265,16 @@ public partial class MainForm
                         else
                         {
                             var error = await downloadResponse.Content.ReadAsStringAsync();
+                            string displayError = error;
+                            try {
+                                using (var doc = JsonDocument.Parse(error)) {
+                                    if (doc.RootElement.TryGetProperty("detail", out var detail)) {
+                                        displayError = detail.GetString() ?? error;
+                                    }
+                                }
+                            } catch { }
                             _statusLabel.Text = "视频下载失败";
-                            MessageBox.Show($"下载失败: {error}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show($"下载失败: {displayError}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                     else
@@ -1209,8 +1286,16 @@ public partial class MainForm
             else
             {
                 var error = await infoResponse.Content.ReadAsStringAsync();
+                string displayError = error;
+                try {
+                    using (var doc = JsonDocument.Parse(error)) {
+                        if (doc.RootElement.TryGetProperty("detail", out var detail)) {
+                            displayError = detail.GetString() ?? error;
+                        }
+                    }
+                } catch { }
                 _statusLabel.Text = "解析视频失败";
-                MessageBox.Show($"解析失败: {error}\n请确保 Python 桥接服务已启动。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"解析失败: {displayError}\n请确保 Python 桥接服务已启动。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         catch (Exception ex)
