@@ -606,9 +606,12 @@ public partial class MainForm : Form
             Cursor = Cursors.Hand,
             Visible = false,
             Margin = DpiHelper.Scale(new Padding(2, 0, 2, 0)),
-            ForeColor = _isIncognito ? Color.White : Color.Black
+            ForeColor = _isIncognito ? Color.White : Color.Black,
+            TabStop = false // 禁用 Tab 停靠，防止获得焦点显示黑色边框
         };
         _zoomBtn.FlatAppearance.BorderSize = 0;
+        _zoomBtn.FlatAppearance.BorderColor = Color.FromArgb(0, 0, 0, 0); // 彻底透明边框
+        _zoomBtn.FlatAppearance.MouseDownBackColor = _isIncognito ? Color.FromArgb(90, 90, 90) : Color.FromArgb(200, 200, 200);
         _zoomBtn.FlatAppearance.MouseOverBackColor = _isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(220, 220, 220);
         _zoomBtn.Click += (s, e) => ShowZoomPopup();
         new ToolTip().SetToolTip(_zoomBtn, "缩放");

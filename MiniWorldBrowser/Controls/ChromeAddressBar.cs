@@ -13,6 +13,7 @@ namespace MiniWorldBrowser.Controls
         private bool _isFocused = false;
         private bool _isDropdownOpen = false;
         private bool _isDarkMode = false;
+        private bool _shouldSelectAllOnMouseUp = false;
         
         // Chrome Colors
         private Color _idleBackColor = Color.White; // Changed to White for modern look
@@ -95,13 +96,22 @@ namespace MiniWorldBrowser.Controls
             _textBox.MouseLeave += (s, e) => { _isHovered = false; UpdateState(); };
             _textBox.GotFocus += (s, e) => { 
                 _isFocused = true; 
+                _shouldSelectAllOnMouseUp = true;
                 UpdateState(); 
                 base.OnGotFocus(e); // Bubble up
             };
             _textBox.LostFocus += (s, e) => { 
                 _isFocused = false; 
+                _shouldSelectAllOnMouseUp = false;
                 UpdateState(); 
                 base.OnLostFocus(e); // Bubble up
+            };
+            _textBox.MouseUp += (s, e) => {
+                if (_shouldSelectAllOnMouseUp)
+                {
+                    _textBox.SelectAll();
+                    _shouldSelectAllOnMouseUp = false;
+                }
             };
             _textBox.TextChanged += (s, e) => TextChanged?.Invoke(this, e);
             _textBox.KeyDown += (s, e) => 
@@ -131,8 +141,24 @@ namespace MiniWorldBrowser.Controls
             _textContainer.MouseLeave += (s, e) => { _isHovered = false; UpdateState(); };
             
             // Forward clicks to textbox
-            this.Click += (s, e) => _textBox.Focus();
-            _textContainer.Click += (s, e) => _textBox.Focus();
+            this.MouseDown += (s, e) => _textBox.Focus();
+            _textContainer.MouseDown += (s, e) => _textBox.Focus();
+            this.MouseUp += (s, e) => {
+                if (_shouldSelectAllOnMouseUp)
+                {
+                    _textBox.SelectAll();
+                    _shouldSelectAllOnMouseUp = false;
+                    base.OnGotFocus(EventArgs.Empty); // 手动触发 base 的 GotFocus，确保外部（MainForm）能感知并显示下拉框
+                }
+            };
+            _textContainer.MouseUp += (s, e) => {
+                if (_shouldSelectAllOnMouseUp)
+                {
+                    _textBox.SelectAll();
+                    _shouldSelectAllOnMouseUp = false;
+                    base.OnGotFocus(EventArgs.Empty); // 手动触发 base 的 GotFocus，确保外部（MainForm）能感知并显示下拉框
+                }
+            };
 
             UpdateLayout();
         }

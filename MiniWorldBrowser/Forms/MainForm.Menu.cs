@@ -26,6 +26,7 @@ public partial class MainForm
 
     private void CloseMainMenu()
     {
+        _reopenMenuAfterZoom = false; // 确保关闭菜单时不会因为之前的缩放操作而重新打开
         StopMenuCloseTimer();
         if (_mainMenu != null && _mainMenu.Visible)
         {
@@ -698,13 +699,8 @@ public partial class MainForm
         btn.MouseDown += (s, e) => 
         {
             btn.BackColor = _isIncognito ? Color.FromArgb(90, 90, 90) : Color.FromArgb(210, 210, 210);
-            // 如果需要保持菜单打开，设置重新打开标志
-            if (keepMenuOpen)
-            {
-                _reopenMenuAfterZoom = true;
-                // 立即执行操作
-                onClick?.Invoke();
-            }
+            // 立即执行操作
+            onClick?.Invoke();
         };
         btn.MouseUp += (s, e) =>
         {
@@ -783,31 +779,64 @@ public partial class MainForm
         {
             _zoomPopup = new Panel
             {
-                Size = DpiHelper.Scale(new Size(160, 70)),
+                Size = DpiHelper.Scale(new Size(140, 72)),
                 BackColor = Color.White,
-                BorderStyle = BorderStyle.FixedSingle
+                BorderStyle = BorderStyle.None, // 移除系统边框
+                Padding = DpiHelper.Scale(new Padding(1))
             };
             
+            // 启用圆角绘制
+            _zoomPopup.Paint += (s, e) =>
+            {
+                var g = e.Graphics;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                var rect = new Rectangle(0, 0, _zoomPopup.Width - 1, _zoomPopup.Height - 1);
+                using var pen = new Pen(Color.FromArgb(220, 220, 220));
+                using var path = CreateRoundedRect(rect, DpiHelper.Scale(8));
+                g.DrawPath(pen, path);
+            };
+
+            // 缩放百分比标签
             _zoomPopupLabel = new Label
             {
-                Text = $"缩放：{(int)(_zoomLevel * 100)}%",
-                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F)),
-                ForeColor = Color.Black,
-                Location = DpiHelper.Scale(new Point(10, 10)),
-                AutoSize = true
+                Text = $"{(int)(_zoomLevel * 100)}%",
+                Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(11F), FontStyle.Bold),
+                ForeColor = Color.FromArgb(32, 32, 32),
+                Location = DpiHelper.Scale(new Point(2, 10)), // 增加 2px 偏移避免遮挡边框
+                Size = DpiHelper.Scale(new Size(136, 24)),   // 减小宽度避免遮挡
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.Transparent                // 透明背景
             };
             _zoomPopup.Controls.Add(_zoomPopupLabel);
             
-            var resetBtn = new Button
+            // 重置按钮美化
+            var resetBtn = new Label
             {
-                Text = "重置为默认设置",
+                Text = "重置",
                 Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
-                Location = DpiHelper.Scale(new Point(10, 35)),
-                Size = DpiHelper.Scale(new Size(140, 28)),
-                FlatStyle = FlatStyle.Flat,
-                Cursor = Cursors.Hand
+                Location = DpiHelper.Scale(new Point(20, 38)),
+                Size = DpiHelper.Scale(new Size(100, 26)),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Cursor = Cursors.Hand,
+                BackColor = Color.FromArgb(245, 245, 245),
+                ForeColor = Color.FromArgb(64, 64, 64)
             };
-            resetBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
+
+            resetBtn.Paint += (s, e) =>
+            {
+                var g = e.Graphics;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                var rect = new Rectangle(0, 0, resetBtn.Width - 1, resetBtn.Height - 1);
+                using var path = CreateRoundedRect(rect, DpiHelper.Scale(4));
+                using var pen = new Pen(Color.FromArgb(210, 210, 210));
+                g.DrawPath(pen, path);
+            };
+
+            resetBtn.MouseEnter += (s, e) => { resetBtn.BackColor = Color.FromArgb(235, 235, 235); };
+            resetBtn.MouseLeave += (s, e) => { resetBtn.BackColor = Color.FromArgb(245, 245, 245); };
+            resetBtn.MouseDown += (s, e) => { resetBtn.BackColor = Color.FromArgb(225, 225, 225); };
+            resetBtn.MouseUp += (s, e) => { resetBtn.BackColor = Color.FromArgb(235, 235, 235); };
+            
             resetBtn.Click += (s, e) => { ResetZoom(); HideZoomPopup(); };
             _zoomPopup.Controls.Add(resetBtn);
             
@@ -817,21 +846,33 @@ public partial class MainForm
         
         // 更新标签文本
         if (_zoomPopupLabel != null)
-            _zoomPopupLabel.Text = $"缩放：{(int)(_zoomLevel * 100)}%";
+            _zoomPopupLabel.Text = $"{(int)(_zoomLevel * 100)}%";
         
-        // 定位到放大镜按钮下方
-        Control anchorBtn = _zoomBtn.Visible ? _zoomBtn : _downloadBtn;
-        var btnScreenPos = anchorBtn.PointToScreen(Point.Empty);
-        var formPos = PointToClient(btnScreenPos);
-        var x = formPos.X + anchorBtn.Width - _zoomPopup.Width;
-        var y = formPos.Y + anchorBtn.Height + DpiHelper.Scale(2);
-        _zoomPopup.Location = new Point(x, y);
-        _zoomPopup.Visible = true;
+        // 定位到锚点按钮下方
+        Control? anchorBtn = null;
+        if (_zoomBtn != null && _zoomBtn.Visible) anchorBtn = _zoomBtn;
+        else if (_downloadBtn != null) anchorBtn = _downloadBtn;
+        else if (_settingsBtn != null) anchorBtn = _settingsBtn;
+
+        if (anchorBtn != null)
+        {
+            var btnScreenPos = anchorBtn.PointToScreen(Point.Empty);
+            var formPos = PointToClient(btnScreenPos);
+            var x = formPos.X + (anchorBtn.Width / 2) - (_zoomPopup.Width / 2);
+            var y = formPos.Y + anchorBtn.Height + DpiHelper.Scale(8); // 增加一点间距
+            
+            // 确保不超出窗体边界
+            if (x < 0) x = 5;
+            if (x + _zoomPopup.Width > ClientSize.Width) x = ClientSize.Width - _zoomPopup.Width - 5;
+
+            _zoomPopup.Location = new Point(x, y);
+            _zoomPopup.Visible = true;
+        }
         
         // 设置自动隐藏定时器
         _zoomPopupTimer?.Stop();
         _zoomPopupTimer?.Dispose();
-        _zoomPopupTimer = new System.Windows.Forms.Timer { Interval = 2000 };
+        _zoomPopupTimer = new System.Windows.Forms.Timer { Interval = 2500 };
         _zoomPopupTimer.Tick += (s, e) => HideZoomPopup();
         _zoomPopupTimer.Start();
     }
