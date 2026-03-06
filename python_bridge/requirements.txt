@@ -5,3 +5,5 @@ playwright
 pydantic-settings
 yt-dlp
 # browser-use is installed from source manually or via run_bridge.bat
+psutil
+screeninfo

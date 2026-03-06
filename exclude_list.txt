@@ -1,0 +1,13 @@
+.git\
+.vscode\
+__pycache__\
+.pytest_cache\
+venv\
+.env
+*.pyc
+*.pyo
+*.pdb
+*.log
+*.md
+LICENSE
+LICENSE.txt

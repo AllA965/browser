@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 using Microsoft.Web.WebView2.Core;
 
 namespace MiniWorldBrowser.Services
@@ -581,7 +582,9 @@ namespace MiniWorldBrowser.Services
             public string Status { get; set; } = "";
             public double Progress { get; set; }
             public string Filename { get; set; } = "";
+            [JsonPropertyName("total_bytes")]
             public long TotalBytes { get; set; }
+            [JsonPropertyName("downloaded_bytes")]
             public long DownloadedBytes { get; set; }
             public double Speed { get; set; }
             public double Eta { get; set; }

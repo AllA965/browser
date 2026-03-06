@@ -10,6 +10,40 @@ public static class PythonBridgeManager
     private const int BridgePort = 8000;
 
     /// <summary>
+    /// 获取应用安装根目录（兼容单文件发布场景）
+    /// </summary>
+    private static string GetAppRootPath()
+    {
+        try
+        {
+            // .NET 6+ 推荐方式，返回可执行文件所在目录（安装目录）
+            var processPath = Environment.ProcessPath;
+            if (!string.IsNullOrEmpty(processPath))
+            {
+                var dir = Path.GetDirectoryName(processPath);
+                if (!string.IsNullOrEmpty(dir))
+                {
+                    return dir;
+                }
+            }
+        }
+        catch { }
+        
+        try
+        {
+            // 回退到 AppContext.BaseDirectory（单文件时可能是临时解压目录）
+            if (!string.IsNullOrEmpty(AppContext.BaseDirectory))
+            {
+                return AppContext.BaseDirectory;
+            }
+        }
+        catch { }
+        
+        // 最后兜底
+        return AppDomain.CurrentDomain.BaseDirectory;
+    }
+
+    /// <summary>
     /// 检查端口是否被占用
     /// </summary>
     private static bool IsPortInUse(int port)
@@ -84,7 +118,7 @@ public static class PythonBridgeManager
             }
 
             // 3. 寻找 main.py 路径
-            string rootPath = AppDomain.CurrentDomain.BaseDirectory;
+            string rootPath = GetAppRootPath();
             string pythonBridgePath = Path.GetFullPath(Path.Combine(rootPath, "python_bridge", "main.py"));
             string triedPaths = $"Tried: {pythonBridgePath}";
 
@@ -171,7 +205,7 @@ public static class PythonBridgeManager
         catch (Exception ex)
         {
             Debug.WriteLine($"Failed to start Python Bridge: {ex.Message}");
-            string rootPath = AppDomain.CurrentDomain.BaseDirectory;
+            string rootPath = GetAppRootPath();
             string pythonLogPath = Path.Combine(rootPath, "python_bridge.log");
             File.AppendAllText(pythonLogPath, $"[{DateTime.Now:HH:mm:ss}] [FATAL] Failed to start Python Bridge: {ex.Message}{Environment.NewLine}{ex.StackTrace}{Environment.NewLine}");
         }

@@ -1192,8 +1192,15 @@ public partial class MainForm
 
                     if (root.TryGetProperty("type", out var type) && type.GetString() == "direct_data") {
                         directData = root.Clone();
-                        // 优先使用提取出的详情页 URL (如果 JS 返回了)
-                        if (root.TryGetProperty("url", out var dUrl)) effectiveUrl = dUrl.GetString();
+                        // 默认仍然使用当前页 URL 作为解析入口，避免将某些站点的 CDN 直链
+                        // （例如 bilivideo.com 的 m4s 分片）错误地当成解析入口。
+                        if (root.TryGetProperty("url", out var dUrl)) {
+                            var extractedUrl = dUrl.GetString();
+                            // 对于非 bilibili 直链，仍然允许覆盖为提取出的详情页地址
+                            if (!string.IsNullOrEmpty(extractedUrl) && !extractedUrl.Contains("bilivideo.com", StringComparison.OrdinalIgnoreCase)) {
+                                effectiveUrl = extractedUrl;
+                            }
+                        }
                         
                         infoRequest = new { 
                             url = effectiveUrl, 

@@ -86,7 +86,12 @@ def check_and_update_ytdlp():
     except Exception as e:
         print(f"Failed to update yt-dlp: {e}")
 
-def get_common_ydl_opts(url: str, cookies_str: Optional[str] = None, custom_ua: Optional[str] = None):
+def get_common_ydl_opts(
+    url: str,
+    cookies_str: Optional[str] = None,
+    custom_ua: Optional[str] = None,
+    referer: Optional[str] = None,
+):
     """
     Get common yt-dlp options with improved compatibility.
     """
@@ -110,16 +115,19 @@ def get_common_ydl_opts(url: str, cookies_str: Optional[str] = None, custom_ua: 
         print(f"Using standard Netscape cookie file: {cookie_path}")
 
     headers = {
-        'User-Agent': ua,
-        'Accept': '*/*',
-        'Accept-Language': 'zh-CN,zh;q=0.9',
+        "User-Agent": ua,
+        "Accept": "*/*",
+        "Accept-Language": "zh-CN,zh;q=0.9",
     }
 
     if "douyin.com" in url or "snssdk.com" in url or "amemv.com" in url:
-        opts['referer'] = 'https://www.douyin.com/'
-        opts['socket_timeout'] = 30
-        headers['Referer'] = 'https://www.douyin.com/'
-        headers['Range'] = 'bytes=0-'
+        opts["referer"] = "https://www.douyin.com/"
+        opts["socket_timeout"] = 30
+        headers["Referer"] = "https://www.douyin.com/"
+        headers["Range"] = "bytes=0-"
+    elif referer:
+        opts["referer"] = referer
+        headers["Referer"] = referer
         
     # 注意：如果使用了 cookiefile，则不应在 headers 中再传 Cookie，避免 yt-dlp 冲突
     opts['http_headers'] = headers
@@ -322,24 +330,35 @@ async def get_video_info(request: VideoDownloadRequest):
     # Debug print the request
     print(f"DEBUG: Request payload URL: {request.url}")
     
-    # 如果提供了直接数据，跳过 yt-dlp 解析
+    # 如果提供了直接数据，优先尝试直接返回；但对部分站点（如 bilibili 的 m4s 分片）
+    # 仍然需要通过 yt-dlp 从网页地址解析完整音视频流
     if request.direct_data:
-        print(f"Received direct video data for: {request.direct_data.get('title')}")
-        return {
-            "status": "success",
-            "title": request.direct_data.get('title'),
-            "thumbnail": request.direct_data.get('cover'),
-            "duration": request.direct_data.get('duration'),
-            "formats": [
-                {
-                    "format_id": "direct",
-                    "ext": "mp4",
-                    "resolution": "original",
-                    "note": "直接抓取的源地址",
-                    "url": request.direct_data.get('url') # 内部使用
-                }
-            ]
-        }
+        direct_url_raw = request.direct_data.get("url") or ""
+        direct_url = direct_url_raw.lower()
+        # bilibili 的直链几乎都是 *.bilivideo.com 且可能是 m4s 分片，
+        # 统一交给 yt-dlp 通过页面地址解析完整音视频，避免只下到单路流
+        if "bilivideo.com" in direct_url:
+            print(
+                "Direct data points to bilivideo CDN URL "
+                f"({direct_url_raw}), falling back to yt-dlp info parsing."
+            )
+        else:
+            print(f"Received direct video data for: {request.direct_data.get('title')}")
+            return {
+                "status": "success",
+                "title": request.direct_data.get('title'),
+                "thumbnail": request.direct_data.get('cover'),
+                "duration": request.direct_data.get('duration'),
+                "formats": [
+                    {
+                        "format_id": "direct",
+                        "ext": "mp4",
+                        "resolution": "original",
+                        "note": "直接抓取的源地址",
+                        "url": request.direct_data.get('url') # 内部使用
+                    }
+                ]
+            }
 
     cleaned_url = clean_video_url(request.url)
     print(f"Received video info request for URL: {request.url} -> Cleaned: {cleaned_url}")
@@ -455,7 +474,9 @@ async def do_download_video(task_id: str, request: VideoDownloadRequest):
             os.makedirs(request.save_path)
 
         # 获取通用配置
-        ydl_opts = get_common_ydl_opts(cleaned_url, request.cookies, request.user_agent)
+        # 对于 direct_data 下载，使用原始页面 URL 作为 Referer，提升直链下载成功率
+        referer = request.url if request.direct_data and request.format_id == "direct" else None
+        ydl_opts = get_common_ydl_opts(cleaned_url, request.cookies, request.user_agent, referer=referer)
         
         # 针对直接下载模式的特殊优化
         if request.format_id == "direct":
@@ -465,18 +486,22 @@ async def do_download_video(task_id: str, request: VideoDownloadRequest):
             
         def progress_hook(d):
             if d['status'] == 'downloading':
-                # 计算进度百分比
                 total = d.get('total_bytes') or d.get('total_bytes_estimate') or 0
                 downloaded = d.get('downloaded_bytes') or 0
                 percent = (downloaded / total * 100) if total > 0 else 0
-                
+
+                raw_speed = d.get('speed')
+                elapsed = d.get('elapsed') or 0
+                if not raw_speed and elapsed > 0:
+                    raw_speed = downloaded / elapsed
+
                 download_progress[task_id].update({
                     "status": "downloading",
                     "progress": round(percent, 1),
                     "filename": os.path.basename(d.get('filename', 'video')),
                     "total_bytes": total,
                     "downloaded_bytes": downloaded,
-                    "speed": d.get('speed', 0),
+                    "speed": raw_speed or 0,
                     "eta": d.get('eta', 0)
                 })
             elif d['status'] == 'finished':
