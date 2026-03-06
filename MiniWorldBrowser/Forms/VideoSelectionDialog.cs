@@ -128,12 +128,18 @@ namespace MiniWorldBrowser.Forms
                 Cursor = Cursors.Hand
             };
             _btnBrowse.FlatAppearance.BorderColor = Color.FromArgb(37, 99, 235);
-            _btnBrowse.Click += (s, e) => {
-                using var fbd = new FolderBrowserDialog();
-                fbd.SelectedPath = SelectedSavePath;
-                if (fbd.ShowDialog(this) == DialogResult.OK)
+            _btnBrowse.Enabled = true;
+            _btnBrowse.Visible = true;
+            _btnBrowse.Click += (s, e) =>
+            {
+                using var dlg = new FolderBrowserDialog
                 {
-                    SelectedSavePath = fbd.SelectedPath;
+                    Description = "选择下载保存目录",
+                    SelectedPath = !string.IsNullOrWhiteSpace(_txtSavePath.Text) ? _txtSavePath.Text : SelectedSavePath
+                };
+                if (dlg.ShowDialog(this) == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.SelectedPath))
+                {
+                    SelectedSavePath = dlg.SelectedPath;
                     _txtSavePath.Text = SelectedSavePath;
                 }
             };
@@ -156,6 +162,7 @@ namespace MiniWorldBrowser.Forms
                 if (_listView.SelectedItems.Count > 0)
                 {
                     SelectedFormatId = _listView.SelectedItems[0].Tag?.ToString() ?? "";
+                    SelectedSavePath = _txtSavePath.Text;
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }

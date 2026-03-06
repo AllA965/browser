@@ -2523,27 +2523,35 @@ public partial class MainForm : Form
     {
         try
         {
-            if (_downloadPanel == null)
+            // 工具栏下载按钮：呼出 WebView2 的默认下载浮窗（与点击链接弹出一致）
+            if (_downloadPanel != null) _downloadPanel.Visible = false; // 确保不与自定义面板重叠
+
+            var core = _tabManager.ActiveTab?.WebView?.CoreWebView2;
+            if (core != null)
             {
-                _downloadPanel = new Controls.DownloadPanel(_tabManager)
+                try
                 {
-                    Visible = false,
-                    Anchor = AnchorStyles.Top | AnchorStyles.Right
-                };
-                this.Controls.Add(_downloadPanel);
-                _downloadPanel.BringToFront();
+                    var mi = core.GetType().GetMethod("OpenDefaultDownloadDialog");
+                    if (mi != null)
+                    {
+                        mi.Invoke(core, null);
+                        return;
+                    }
+                }
+                catch { }
             }
 
-            // 计算显示位置 (在下载按钮下方)
-            var buttonPos = _downloadBtn.PointToScreen(Point.Empty);
-            var formPos = this.PointToClient(buttonPos);
-            _downloadPanel.Location = new Point(formPos.X - _downloadPanel.Width + _downloadBtn.Width, formPos.Y + _downloadBtn.Height + DpiHelper.Scale(5));
-            
-            _downloadPanel.Visible = !_downloadPanel.Visible;
-            if (_downloadPanel.Visible)
+            // 兼容旧版 SDK：无法打开浮窗时退化为打开下载目录
+            var path = _settingsService.Settings.DownloadPath;
+            if (string.IsNullOrWhiteSpace(path))
+                path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            try { Process.Start("explorer.exe", $"\"{path}\""); }
+            catch
             {
-                _downloadPanel.BringToFront();
-                _downloadPanel.RefreshList();
+                try { Process.Start(new ProcessStartInfo { FileName = path, UseShellExecute = true }); }
+                catch { }
             }
         }
         catch { }
@@ -2551,10 +2559,7 @@ public partial class MainForm : Form
 
     private void CloseDownloadDialog()
     {
-        if (_downloadPanel != null)
-        {
-            _downloadPanel.Visible = false;
-        }
+        if (_downloadPanel != null) _downloadPanel.Visible = false;
     }
     
     #endregion

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 using System.Net.Http;
+using System.IO;
 
 namespace MiniWorldBrowser.Forms;
 
@@ -1113,25 +1114,29 @@ public partial class MainForm
                 return;
             }
 
-            // 默认保存到桌面上的“鲲穹提取”文件夹
-            string defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "鲲穹提取_图片");
-            if (!Directory.Exists(defaultPath)) Directory.CreateDirectory(defaultPath);
+            // 使用设置中的下载目录（仅展示给用户，不在此修改）
+            string defaultPath = _settingsService.Settings.DownloadPath;
+            if (string.IsNullOrWhiteSpace(defaultPath))
+                defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+            if (!Directory.Exists(defaultPath))
+                Directory.CreateDirectory(defaultPath);
 
             using (var dialog = new ImageSelectionDialog(imageUrls, defaultPath))
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    string savePath = dialog.SelectedSavePath;
                     var urlsToDownload = dialog.SelectedUrls;
-
-                    _statusLabel.Text = $"正在下载 {urlsToDownload.Count} 张图片...";
-                    int count = await _mediaDownloadService.DownloadImagesAsync(urlsToDownload, savePath);
+                    _statusLabel.Text = $"已提交 {urlsToDownload.Count} 个图片下载任务";
                     
-                    _statusLabel.Text = $"成功下载 {count} 张图片";
-                    if (count > 0)
+                    var chosenPath = dialog.SelectedSavePath;
+                    foreach (var imgUrl in urlsToDownload)
                     {
-                        Process.Start("explorer.exe", savePath);
+                        try { _tabManager.RegisterDownloadPathOverride(imgUrl, chosenPath); } catch { }
+                        StartWebViewDownload(activeTab, imgUrl, referer: activeTab.Url ?? "");
                     }
+                    
+                    // 呼出默认下载面板方便查看
+                    OpenDownloadDialog();
                 }
                 else
                 {
@@ -1265,25 +1270,51 @@ public partial class MainForm
                     return;
                 }
 
-                // 默认保存到桌面上的“鲲穹提取”文件夹
-                string defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "鲲穹提取_视频");
-                if (!Directory.Exists(defaultPath)) Directory.CreateDirectory(defaultPath);
+                // 使用设置中的下载目录
+                string defaultPath = _settingsService.Settings.DownloadPath;
+                if (string.IsNullOrWhiteSpace(defaultPath))
+                    defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+                if (!Directory.Exists(defaultPath))
+                    Directory.CreateDirectory(defaultPath);
 
                 using (var selectionDialog = new VideoSelectionDialog(infoJson, defaultPath))
                 {
                     if (selectionDialog.ShowDialog(this) == DialogResult.OK)
                     {
                         string formatId = selectionDialog.SelectedFormatId;
-                        string savePath = selectionDialog.SelectedSavePath;
+                        string chosenPath = selectionDialog.SelectedSavePath;
                         
+                        // 优先尝试使用可直接下载的直链，通过 WebView2 发起以显示在默认下载面板
+                        string? directDownloadUrl = null;
+                        try
+                        {
+                            using var docAll = JsonDocument.Parse(infoJson);
+                            if (docAll.RootElement.TryGetProperty("formats", out var fmts) && fmts.ValueKind == JsonValueKind.Array)
+                            {
+                                foreach (var f in fmts.EnumerateArray())
+                                {
+                                    if (f.TryGetProperty("format_id", out var idProp) && idProp.GetString() == formatId)
+                                    {
+                                        if (f.TryGetProperty("url", out var urlProp))
+                                        {
+                                            directDownloadUrl = urlProp.GetString();
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        catch { }
+                        
+                        // 统一走后端下载，避免直链在标签页导航导致不可访问
                         _statusLabel.Text = "视频下载已开始...";
                         
-                        // 构造下载请求，包含原始提取的信息
+                        var effectiveFormatId = !string.IsNullOrEmpty(directDownloadUrl) ? "direct" : formatId;
                         var downloadRequest = new
                         {
                             url = url,
-                            save_path = savePath,
-                            format_id = formatId,
+                            save_path = chosenPath,
+                            format_id = effectiveFormatId,
                             direct_data = directData,
                             cookies = cookies,
                             user_agent = userAgent
@@ -1297,21 +1328,28 @@ public partial class MainForm
                             var respJson = await downloadResponse.Content.ReadAsStringAsync();
                             var taskInfo = JsonDocument.Parse(respJson);
                             string taskId = taskInfo.RootElement.GetProperty("task_id").GetString() ?? "";
-
-                            _statusLabel.Text = "视频下载已开始";
                             
-                            // 创建下载项并加入管理器
+                            _statusLabel.Text = "视频下载已开始（外部任务）";
+                            
                             var downloadItem = new MiniWorldBrowser.Models.DownloadItem
                             {
                                 Id = taskId,
                                 FileName = "正在初始化...",
                                 Status = MiniWorldBrowser.Models.DownloadStatus.Downloading,
                                 Url = url,
-                                FilePath = savePath
+                                FilePath = chosenPath
                             };
                             _tabManager.AddExternalDownload(downloadItem);
-
-                            // 开始轮询进度
+                            
+                            // 显示右下角进度条
+                            BeginInvoke(new Action(() =>
+                            {
+                                _progressBar.IsMarquee = false;
+                                _progressBar.Maximum = 100;
+                                _progressBar.Value = 0;
+                                _progressBar.Visible = true;
+                            }));
+                            
                             _ = Task.Run(async () => {
                                 while (true) {
                                     await Task.Delay(1000);
@@ -1326,19 +1364,25 @@ public partial class MainForm
                                             downloadItem.EndTime = DateTime.Now;
                                             BeginInvoke(new Action(() => {
                                                 _statusLabel.Text = $"下载完成: {progress.Filename}";
+                                                _progressBar.Value = 100;
+                                                var t = new System.Windows.Forms.Timer { Interval = 1200 };
+                                                t.Tick += (s2, e2) => { t.Stop(); t.Dispose(); _progressBar.Visible = false; };
+                                                t.Start();
                                             }));
                                             break;
                                         } else if (progress.Status == "failed") {
                                             downloadItem.Status = MiniWorldBrowser.Models.DownloadStatus.Failed;
                                             BeginInvoke(new Action(() => {
                                                 _statusLabel.Text = "下载失败";
+                                                _progressBar.Visible = false;
                                             }));
                                             break;
                                         }
                                         
-                                        // 更新 UI 提示（可选，因为 DownloadItem 本身会被面板监听）
                                         BeginInvoke(new Action(() => {
-                                            _statusLabel.Text = $"正在下载 ({progress.Progress}%): {progress.Filename}";
+                                            _statusLabel.Text = $"正在下载: {progress.Filename}";
+                                            var pct = Math.Max(0, Math.Min(100, (int)Math.Round(progress.Progress)));
+                                            _progressBar.Value = pct;
                                         }));
                                     }
                                 }
@@ -1385,6 +1429,22 @@ public partial class MainForm
             _statusLabel.Text = "操作失败";
             MessageBox.Show($"操作失败: {ex.Message}\n请确保 Python 桥接服务已启动且安装了 yt-dlp。\n\n提示：您需要先在命令行运行 python_bridge/main.py", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+    }
+
+    private void StartWebViewDownload(BrowserTab tab, string url, string? cookies = null, string? userAgent = null, string? referer = null)
+    {
+        try
+        {
+            var core = tab.WebView?.CoreWebView2;
+            if (core == null) return;
+            var headers = new StringBuilder();
+            if (!string.IsNullOrEmpty(cookies)) headers.Append("Cookie: ").Append(cookies).Append("\r\n");
+            if (!string.IsNullOrEmpty(userAgent)) headers.Append("User-Agent: ").Append(userAgent).Append("\r\n");
+            if (!string.IsNullOrEmpty(referer)) headers.Append("Referer: ").Append(referer).Append("\r\n");
+            var req = core.Environment.CreateWebResourceRequest(url, "GET", Stream.Null, headers.ToString());
+            core.NavigateWithWebResourceRequest(req);
+        }
+        catch { }
     }
 
     #endregion

@@ -24,6 +24,7 @@ public partial class BrowserTabManager
     private readonly IBookmarkService? _bookmarkService;
     private readonly string? _incognitoUserDataFolder;
     private readonly PasswordService _passwordService = new();
+    private readonly Dictionary<string, string> _downloadPathOverrides = new();
     
     private BrowserTab? _activeTab;
     
@@ -1843,6 +1844,21 @@ public partial class BrowserTabManager
         try
         {
             var downloadOperation = e.DownloadOperation;
+            try
+            {
+                var url = downloadOperation.Uri;
+                if (!string.IsNullOrEmpty(url) && _downloadPathOverrides.TryGetValue(url, out var targetDir) && !string.IsNullOrWhiteSpace(targetDir))
+                {
+                    try { if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir); } catch { }
+                    var originalPath = downloadOperation.ResultFilePath;
+                    var fileName = !string.IsNullOrEmpty(originalPath) ? Path.GetFileName(originalPath) : Path.GetFileName(new Uri(url).LocalPath);
+                    if (string.IsNullOrEmpty(fileName)) fileName = "download";
+                    var newPath = Path.Combine(targetDir, fileName);
+                    try { e.ResultFilePath = newPath; } catch { }
+                    _downloadPathOverrides.Remove(url);
+                }
+            }
+            catch { }
             var downloadItem = new MiniWorldBrowser.Models.DownloadItem
             {
                 Url = downloadOperation.Uri,
@@ -1907,6 +1923,12 @@ public partial class BrowserTabManager
     {
         _downloads.Add(item);
         DownloadStarted?.Invoke(item);
+    }
+    
+    public void RegisterDownloadPathOverride(string url, string directory)
+    {
+        if (string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(directory)) return;
+        _downloadPathOverrides[url] = directory;
     }
     
 
