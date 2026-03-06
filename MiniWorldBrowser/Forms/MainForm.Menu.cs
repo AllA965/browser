@@ -47,19 +47,6 @@ public partial class MainForm
         CloseUserInfoPopup();
     }
 
-    private void CloseDownloadDialog()
-    {
-        try
-        {
-            var coreWebView = _tabManager?.ActiveTab?.WebView?.CoreWebView2;
-            if (coreWebView?.IsDefaultDownloadDialogOpen == true)
-            {
-                coreWebView.CloseDefaultDownloadDialog();
-            }
-        }
-        catch { }
-    }
-
     private void StartMenuCloseTimer()
     {
         StopMenuCloseTimer();
@@ -1175,10 +1162,10 @@ public partial class MainForm
         try
         {
             string extractionResult = url;
-            // 针对 Feed 流页面（如抖音首页），尝试提取实际视频地址或数据
+            // 针对不同页面，尝试提取实际视频地址或数据
             if (activeTab.WebView?.CoreWebView2 != null)
             {
-                extractionResult = await _mediaDownloadService.GetEffectiveVideoUrlAsync(activeTab.WebView.CoreWebView2, url);
+                extractionResult = await _mediaDownloadService.GetEffectiveVideoUrlAsync(activeTab, url);
             }
 
             var client = new HttpClient();
@@ -1300,8 +1287,55 @@ public partial class MainForm
                         
                         if (downloadResponse.IsSuccessStatusCode)
                         {
+                            var respJson = await downloadResponse.Content.ReadAsStringAsync();
+                            var taskInfo = JsonDocument.Parse(respJson);
+                            string taskId = taskInfo.RootElement.GetProperty("task_id").GetString() ?? "";
+
                             _statusLabel.Text = "视频下载已开始";
-                            Process.Start("explorer.exe", savePath);
+                            
+                            // 创建下载项并加入管理器
+                            var downloadItem = new MiniWorldBrowser.Models.DownloadItem
+                            {
+                                Id = taskId,
+                                FileName = "正在初始化...",
+                                Status = MiniWorldBrowser.Models.DownloadStatus.Downloading,
+                                Url = url,
+                                FilePath = savePath
+                            };
+                            _tabManager.AddExternalDownload(downloadItem);
+
+                            // 开始轮询进度
+                            _ = Task.Run(async () => {
+                                while (true) {
+                                    await Task.Delay(1000);
+                                    var progress = await _mediaDownloadService.GetDownloadProgressAsync(taskId);
+                                    if (progress != null) {
+                                        downloadItem.ReceivedBytes = progress.DownloadedBytes;
+                                        downloadItem.TotalBytes = progress.TotalBytes;
+                                        downloadItem.FileName = progress.Filename;
+                                        
+                                        if (progress.Status == "completed") {
+                                            downloadItem.Status = MiniWorldBrowser.Models.DownloadStatus.Completed;
+                                            downloadItem.EndTime = DateTime.Now;
+                                            BeginInvoke(new Action(() => {
+                                                _statusLabel.Text = $"下载完成: {progress.Filename}";
+                                            }));
+                                            break;
+                                        } else if (progress.Status == "failed") {
+                                            downloadItem.Status = MiniWorldBrowser.Models.DownloadStatus.Failed;
+                                            BeginInvoke(new Action(() => {
+                                                _statusLabel.Text = "下载失败";
+                                            }));
+                                            break;
+                                        }
+                                        
+                                        // 更新 UI 提示（可选，因为 DownloadItem 本身会被面板监听）
+                                        BeginInvoke(new Action(() => {
+                                            _statusLabel.Text = $"正在下载 ({progress.Progress}%): {progress.Filename}";
+                                        }));
+                                    }
+                                }
+                            });
                         }
                         else
                         {

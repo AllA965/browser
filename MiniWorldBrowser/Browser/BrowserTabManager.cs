@@ -1900,6 +1900,15 @@ public partial class BrowserTabManager
     
     public List<MiniWorldBrowser.Models.DownloadItem> GetDownloads() => _downloads.ToList();
     
+    /// <summary>
+    /// 添加外部下载任务（如 yt-dlp）
+    /// </summary>
+    public void AddExternalDownload(MiniWorldBrowser.Models.DownloadItem item)
+    {
+        _downloads.Add(item);
+        DownloadStarted?.Invoke(item);
+    }
+    
 
     
     #endregion

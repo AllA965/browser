@@ -19,6 +19,10 @@
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     
+    <!-- 排除不必要的调试符号 -->
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    
     <Version>1.0.0</Version>
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
     <ForceResizelessScaling>true</ForceResizelessScaling>
@@ -30,8 +34,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2210.55" />
-    <!-- 打包 WebView2 Runtime，用户无需单独安装 -->
-    <PackageReference Include="WebView2.Runtime.X64" Version="130.0.2849.56" />
+    <!-- 不再捆绑 WebView2 运行时，减小约 150MB 安装包大小。
+         现代 Windows 系统已内置此运行时。若缺失，程序将提示安装。 -->
+    <!-- <PackageReference Include="WebView2.Runtime.X64" Version="130.0.2849.56" /> -->
   </ItemGroup>
 
   <ItemGroup>

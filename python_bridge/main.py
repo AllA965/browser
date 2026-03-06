@@ -73,6 +73,19 @@ def create_cookie_file(cookies_str: str):
         print(f"Error creating cookie file: {e}")
         return None
 
+def check_and_update_ytdlp():
+    """
+    Check for yt-dlp updates on startup.
+    """
+    try:
+        import subprocess
+        print("Checking for yt-dlp updates...")
+        subprocess.run([sys.executable, "-m", "pip", "install", "-U", "yt-dlp"], 
+                       capture_output=True, timeout=30)
+        print("yt-dlp update check completed.")
+    except Exception as e:
+        print(f"Failed to update yt-dlp: {e}")
+
 def get_common_ydl_opts(url: str, cookies_str: Optional[str] = None, custom_ua: Optional[str] = None):
     """
     Get common yt-dlp options with improved compatibility.
@@ -128,6 +141,9 @@ app = FastAPI()
 
 # Track running agent tasks to allow cancellation
 running_agents = {}
+
+# 下载进度跟踪
+download_progress = {}
 
 class AgentRequest(BaseModel):
     task: str
@@ -392,75 +408,147 @@ async def get_video_info(request: VideoDownloadRequest):
 async def download_video(request: VideoDownloadRequest):
     """
     Download video using yt-dlp from the provided URL.
+    Returns a task_id immediately and starts the download in the background.
     """
     if not request.save_path:
         raise HTTPException(status_code=400, detail="save_path is required for download")
     
-    # 如果提供了直接数据且选择了 direct 格式，直接下载 URL
-    target_url = request.url
-    if request.direct_data and request.format_id == "direct":
-        target_url = request.direct_data.get("url")
-        print(f"Downloading direct URL: {target_url}")
+    task_id = f"dl_{int(time.time())}_{id(request)}"
+    download_progress[task_id] = {
+        "status": "starting",
+        "progress": 0,
+        "filename": "video",
+        "total_bytes": 0,
+        "downloaded_bytes": 0,
+        "speed": 0,
+        "eta": 0
+    }
 
-    cleaned_url = clean_video_url(target_url)
-    print(f"Received video download request for URL: {target_url} -> Cleaned: {cleaned_url}, format_id: {request.format_id}")
+    # 在后台启动下载
+    asyncio.create_task(do_download_video(task_id, request))
     
-    cookie_file = None
+    return {"status": "started", "task_id": task_id}
+
+@app.get("/video/progress/{task_id}")
+async def get_download_progress(task_id: str):
+    """
+    Get progress of a specific download task.
+    """
+    if task_id not in download_progress:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return download_progress[task_id]
+
+async def do_download_video(task_id: str, request: VideoDownloadRequest):
+    """
+    Background worker for video download.
+    """
     try:
+        # 如果提供了直接数据且选择了 direct 格式，直接下载 URL
+        target_url = request.url
+        if request.direct_data and request.format_id == "direct":
+            target_url = request.direct_data.get("url")
+
+        cleaned_url = clean_video_url(target_url)
+        
         # 确保保存路径存在
         if not os.path.exists(request.save_path):
             os.makedirs(request.save_path)
 
         # 获取通用配置
         ydl_opts = get_common_ydl_opts(cleaned_url, request.cookies, request.user_agent)
-        cookie_file = ydl_opts.get('cookiefile')
         
         # 针对直接下载模式的特殊优化
         if request.format_id == "direct":
-            # 抖音直接地址通常需要 generic extractor
             ydl_opts['format'] = 'best'
         else:
             ydl_opts['format'] = request.format_id if request.format_id else 'best'
             
+        def progress_hook(d):
+            if d['status'] == 'downloading':
+                # 计算进度百分比
+                total = d.get('total_bytes') or d.get('total_bytes_estimate') or 0
+                downloaded = d.get('downloaded_bytes') or 0
+                percent = (downloaded / total * 100) if total > 0 else 0
+                
+                download_progress[task_id].update({
+                    "status": "downloading",
+                    "progress": round(percent, 1),
+                    "filename": os.path.basename(d.get('filename', 'video')),
+                    "total_bytes": total,
+                    "downloaded_bytes": downloaded,
+                    "speed": d.get('speed', 0),
+                    "eta": d.get('eta', 0)
+                })
+            elif d['status'] == 'finished':
+                download_progress[task_id].update({
+                    "status": "completed",
+                    "progress": 100,
+                    "filename": os.path.basename(d.get('filename', 'video'))
+                })
+
         ydl_opts.update({
             'outtmpl': os.path.join(request.save_path, '%(title)s.%(ext)s'),
-            # 如果是直接 URL 模式，手动设置标题，因为 yt-dlp 可能无法从流中解析出标题
-            'default_search': 'auto',
+            'progress_hooks': [progress_hook],
+            'noprogress': True, # Disable console progress
         })
 
         # 如果有 direct_data，设置标题
         if request.direct_data:
             title = request.direct_data.get('title', 'video')
-            # 过滤非法字符
             safe_title = "".join([c for c in title if c.isalnum() or c in (' ', '.', '_', '-')]).rstrip()
             ydl_opts['outtmpl'] = os.path.join(request.save_path, f'{safe_title}.%(ext)s')
 
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            loop = asyncio.get_event_loop()
-            try:
-                await loop.run_in_executor(None, lambda: ydl.download([cleaned_url]))
-            except yt_dlp.utils.DownloadError as de:
-                raise HTTPException(status_code=400, detail=f"视频下载失败: {str(de)}")
-        
-        return {"status": "success", "message": "视频下载成功"}
+        # 运行下载 (在线程池中执行以避免阻塞事件循环)
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, lambda: yt_dlp.YoutubeDL(ydl_opts).download([cleaned_url]))
 
-    except HTTPException:
-        raise
     except Exception as e:
         import traceback
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"下载过程中发生错误: {str(e)}")
-    finally:
-        # 清理临时文件
-        if cookie_file and os.path.exists(cookie_file):
-            try:
-                os.remove(cookie_file)
-                print(f"Cleaned up temporary cookie file: {cookie_file}")
-            except:
-                pass
+        download_progress[task_id].update({
+            "status": "failed",
+            "error": str(e)
+        })
 
 if __name__ == "__main__":
     import uvicorn
+    import os
+    
+    # 获取当前脚本所在目录
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    log_file = os.path.join(current_dir, "startup_diagnostic.log")
+    
+    with open(log_file, "w", encoding="utf-8") as f:
+        f.write(f"--- Startup Diagnostic at {time.strftime('%Y-%m-%d %H:%M:%S')} ---\n")
+        f.write(f"Python Executable: {sys.executable}\n")
+        f.write(f"Python Version: {sys.version}\n")
+        f.write(f"Working Directory: {os.getcwd()}\n")
+        f.write(f"Script Path: {__file__}\n")
+        f.write(f"PYTHONPATH: {os.environ.get('PYTHONPATH', 'Not Set')}\n")
+        
+        try:
+            import fastapi
+            f.write(f"FastAPI Version: {fastapi.__version__}\n")
+        except ImportError:
+            f.write("ERROR: FastAPI not found. Please run 'pip install -r requirements.txt'\n")
+            
+        try:
+            import uvicorn
+            f.write(f"Uvicorn Version: {uvicorn.__version__}\n")
+        except ImportError:
+            f.write("ERROR: Uvicorn not found. Please run 'pip install -r requirements.txt'\n")
+
+        try:
+            import yt_dlp
+            f.write(f"yt-dlp Version: {yt_dlp.version.__version__}\n")
+        except ImportError:
+            f.write("ERROR: yt-dlp not found. Please run 'pip install -r requirements.txt'\n")
+
+    # 启动时检查更新 (如果不想等待，可以注释掉这一行)
+    # check_and_update_ytdlp()
+    
     print("Starting Browser-Use Bridge on port 8000...")
+    print(f"Diagnostics written to {log_file}")
     print("Ensure your C# Browser is running with --remote-debugging-port=9222")
+    
     uvicorn.run(app, host="127.0.0.1", port=8000)

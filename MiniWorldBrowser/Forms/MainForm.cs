@@ -69,6 +69,7 @@ public partial class MainForm : Form
     private DownloadButton _downloadBtn = null!;
     private RoundedButton _settingsBtn = null!;
     private UserButton _userBtn = null!;
+    private Controls.DownloadPanel? _downloadPanel;
     private UserInfoPopup? _userInfoPopup;
     private bool _suppressUserInfoPopupClose;
     private DateTime _lastUserInfoPopupCloseTime = DateTime.MinValue;
@@ -2522,20 +2523,38 @@ public partial class MainForm : Form
     {
         try
         {
-            var coreWebView = _tabManager.ActiveTab?.WebView?.CoreWebView2;
-            if (coreWebView == null) return;
-            
-            // 切换下载对话框：如果已打开则关闭，否则打开
-            if (coreWebView.IsDefaultDownloadDialogOpen)
+            if (_downloadPanel == null)
             {
-                coreWebView.CloseDefaultDownloadDialog();
+                _downloadPanel = new Controls.DownloadPanel(_tabManager)
+                {
+                    Visible = false,
+                    Anchor = AnchorStyles.Top | AnchorStyles.Right
+                };
+                this.Controls.Add(_downloadPanel);
+                _downloadPanel.BringToFront();
             }
-            else
+
+            // 计算显示位置 (在下载按钮下方)
+            var buttonPos = _downloadBtn.PointToScreen(Point.Empty);
+            var formPos = this.PointToClient(buttonPos);
+            _downloadPanel.Location = new Point(formPos.X - _downloadPanel.Width + _downloadBtn.Width, formPos.Y + _downloadBtn.Height + DpiHelper.Scale(5));
+            
+            _downloadPanel.Visible = !_downloadPanel.Visible;
+            if (_downloadPanel.Visible)
             {
-                coreWebView.OpenDefaultDownloadDialog();
+                _downloadPanel.BringToFront();
+                _downloadPanel.RefreshList();
             }
         }
         catch { }
+    }
+
+    private void CloseDownloadDialog()
+    {
+        if (_downloadPanel != null)
+        {
+            _downloadPanel.Visible = false;
+        }
     }
     
     #endregion

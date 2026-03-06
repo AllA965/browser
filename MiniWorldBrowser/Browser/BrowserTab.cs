@@ -45,6 +45,10 @@ public class BrowserTab : IDisposable
     public event Action<BrowserTab, double>? ZoomChanged; // 缩放变化事件
     public event Action<BrowserTab>? TranslationRequested; // 翻译请求事件
     public event Action<BrowserTab, string>? MediaExtractionRequested; // 媒体提取请求事件 ("image" 或 "video")
+
+    // 已检测到的视频资源 (URL -> ContentType)
+    private readonly Dictionary<string, string> _detectedVideoResources = new();
+    public IReadOnlyDictionary<string, string> DetectedVideoResources => _detectedVideoResources;
     
     private readonly Panel _container;
     private readonly ISettingsService _settingsService;
@@ -264,10 +268,33 @@ public class BrowserTab : IDisposable
                         var status = 0;
                         try { status = e.Response.StatusCode; } catch { }
 
+                        var contentType = "";
+                        try { contentType = e.Response.Headers.GetHeader("Content-Type") ?? ""; } catch { }
+
+                        // 捕获视频资源
+                        if (status >= 200 && status < 300)
+                        {
+                            var uri = e.Request.Uri.ToLower();
+                            bool isVideo = contentType.StartsWith("video/", StringComparison.OrdinalIgnoreCase) ||
+                                         contentType.Contains("application/vnd.apple.mpegurl") || // m3u8
+                                         contentType.Contains("application/x-mpegurl") ||
+                                         uri.Contains(".m3u8") || uri.Contains(".mp4") || uri.Contains(".flv");
+
+                            if (isVideo)
+                            {
+                                lock (_detectedVideoResources)
+                                {
+                                    if (!_detectedVideoResources.ContainsKey(e.Request.Uri))
+                                    {
+                                        _detectedVideoResources[e.Request.Uri] = contentType;
+                                        AppendResourceLog($"[VideoSniffer] Detected: {e.Request.Uri} ({contentType})");
+                                    }
+                                }
+                            }
+                        }
+
                         if (status >= 400 || status == 0)
                         {
-                            var contentType = "";
-                            try { contentType = e.Response.Headers.GetHeader("Content-Type") ?? ""; } catch { }
                             AppendResourceLog($"[HTTP] {status} {e.Request.Uri} ct={contentType}");
                         }
                     }
@@ -580,6 +607,13 @@ public class BrowserTab : IDisposable
         {
             IsTranslated = false;
             IsLoading = true;
+            
+            // 清除上一页检测到的视频资源
+            lock (_detectedVideoResources)
+            {
+                _detectedVideoResources.Clear();
+            }
+
             LoadingStateChanged?.Invoke(this);
             
             // 对于 about: 页面，跳过密码捕获
