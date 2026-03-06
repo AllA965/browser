@@ -1,34 +1,46 @@
 @echo off
 setlocal enabledelayedexpansion
 
-echo [提示] 正在准备打包便携版...
+echo [INFO] Preparing portable version...
 
-:: 设置输出目录
 set "PUBLISH_DIR=publish_portable"
-set "ZIP_FILE=鲲穹AI浏览器_便携版.zip"
+set "ZIP_FILE=KunQiongBrowser_Portable.zip"
 
-:: 清理旧的发布目录
 if exist "%PUBLISH_DIR%" (
-    echo [提示] 正在清理旧的发布目录...
+    echo [INFO] Cleaning old publish directory...
     rd /s /q "%PUBLISH_DIR%"
 )
 
-:: 执行 dotnet publish
-echo [提示] 正在编译并发布项目 (Single-File, Self-Contained)...
-dotnet publish MiniWorldBrowser\MiniWorldBrowser.csproj -c Release -r win-x64 --self-contained true -o "%PUBLISH_DIR%"
+rem Create exclude list for xcopy
+(
+echo .git\
+echo .vscode\
+echo __pycache__\
+echo .pytest_cache\
+echo venv\
+echo .env
+echo *.pyc
+echo *.pyo
+echo *.pdb
+echo *.log
+echo *.md
+echo LICENSE
+echo LICENSE.txt
+) > exclude_list.txt
+
+echo [INFO] Publishing project (Single-File, Self-Contained, Optimized)...
+dotnet publish MiniWorldBrowser\MiniWorldBrowser.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o "%PUBLISH_DIR%"
 
 if %ERRORLEVEL% neq 0 (
-    echo [错误] dotnet publish 失败。
+    echo [ERROR] dotnet publish failed.
     pause
     exit /b %ERRORLEVEL%
 )
 
-:: 复制 python_bridge
-echo [提示] 正在复制 Python Bridge...
-xcopy "python_bridge" "%PUBLISH_DIR%\python_bridge" /E /I /H /Y
+echo [INFO] Copying Python Bridge (Excluding unnecessary files)...
+xcopy "python_bridge" "%PUBLISH_DIR%\python_bridge" /E /I /H /Y /EXCLUDE:exclude_list.txt
 
-:: 创建内置 Python 环境并安装依赖
-echo [提示] 正在创建内置 Python 环境 (python_env) 并安装依赖...
+echo [INFO] Creating embedded Python environment (python_env)...
 set "VENV_DIR=%PUBLISH_DIR%\python_env"
 if exist "%VENV_DIR%" rd /s /q "%VENV_DIR%"
 
@@ -39,13 +51,13 @@ if %ERRORLEVEL%==0 (
     )
 )
 if defined PY311 (
-    echo 使用 Python: %PY311%
+    echo Using Python: %PY311%
     "%PY311%" -m venv "%VENV_DIR%"
 ) else (
-    echo 未检测到 py 启动器或 3.11+，尝试使用 python...
+    echo No py launcher or 3.11+, trying python...
     python -V
     if %ERRORLEVEL% neq 0 (
-        echo [错误] 未找到可用的 Python 3.11+，请在打包机上安装 Python 3.11 或更高版本。
+        echo [ERROR] Python 3.11+ not found.
         pause
         exit /b 1
     )
@@ -53,58 +65,54 @@ if defined PY311 (
 )
 
 if not exist "%VENV_DIR%\Scripts\python.exe" (
-    echo [错误] 虚拟环境创建失败。
+    echo [ERROR] Virtual environment creation failed.
     pause
     exit /b 1
 )
 
-echo 升级 pip ...
+echo Upgrading pip...
 "%VENV_DIR%\Scripts\python.exe" -m pip install --upgrade pip
 
-echo 安装 Python 依赖...
+echo Installing Python dependencies...
 "%VENV_DIR%\Scripts\pip.exe" install -r "python_bridge\requirements.txt"
 if %ERRORLEVEL% neq 0 (
-    echo [错误] 依赖安装失败，请检查网络或 requirements.txt。
+    echo [ERROR] Dependencies installation failed.
     pause
     exit /b 1
 )
 
-echo [提示] 正在精简 Python 环境...
-:: Remove __pycache__
-for /d /r "%VENV_DIR%" %%d in (__pycache__) do @if exist "%%d" rd /s /q "%%d"
-:: Remove tests, docs, etc.
-for /d /r "%VENV_DIR%\Lib\site-packages" %%d in (tests, test, docs, doc, examples, sample, samples) do @if exist "%%d" rd /s /q "%%d"
-:: Remove .dist-info and .egg-info (metadata)
-for /d /r "%VENV_DIR%\Lib\site-packages" %%d in (*.dist-info, *.egg-info) do @if exist "%%d" rd /s /q "%%d"
-:: Remove compiled files .pyc .pyo
+echo [INFO] Optimizing Python environment (Installing Chromium and cleaning up)...
+set "PLAYWRIGHT_BROWSERS_PATH=%PUBLISH_DIR%\python_browsers"
+if not exist "%PLAYWRIGHT_BROWSERS_PATH%" mkdir "%PLAYWRIGHT_BROWSERS_PATH%"
+
+"%VENV_DIR%\Scripts\python.exe" -m playwright install chromium
+if %ERRORLEVEL% neq 0 (
+    echo [WARNING] Playwright browser installation failed.
+)
+
+echo Cleaning up Python environment...
+for /d /r "%VENV_DIR%" %%d in (__pycache__) do if exist "%%d" rd /s /q "%%d"
 del /s /q "%VENV_DIR%\*.pyc" 2>nul
 del /s /q "%VENV_DIR%\*.pyo" 2>nul
-:: Remove pip and setuptools from venv to save space
-"%VENV_DIR%\Scripts\python.exe" -m pip uninstall -y pip setuptools
-:: Remove unnecessary directories in venv
-if exist "%VENV_DIR%\include" rd /s /q "%VENV_DIR%\include"
+del /s /q "%VENV_DIR%\*.pdb" 2>nul
+for /d /r "%VENV_DIR%\Lib\site-packages" %%d in (tests test docs examples) do if exist "%%d" rd /s /q "%%d"
 
-:: 移除不必要的文件 (如果有)
-if exist "%PUBLISH_DIR%\updater.pdb" del "%PUBLISH_DIR%\updater.pdb"
-if exist "%PUBLISH_DIR%\鲲穹AI浏览器.pdb" del "%PUBLISH_DIR%\鲲穹AI浏览器.pdb"
-:: Remove any remaining .pdb files
+echo [INFO] Removing debug symbols (.pdb) and extra files...
 del /s /q "%PUBLISH_DIR%\*.pdb" 2>nul
-:: Remove WebView2 runtime symbols if any
-if exist "%PUBLISH_DIR%\WebView2\*.pdb" del /s /q "%PUBLISH_DIR%\WebView2\*.pdb" 2>nul
+if exist "exclude_list.txt" del "exclude_list.txt"
 
-:: 创建 ZIP 压缩包 (使用 PowerShell)
-echo [提示] 正在创建压缩包 %ZIP_FILE%...
+echo [INFO] Creating ZIP package %ZIP_FILE%...
 if exist "%ZIP_FILE%" del "%ZIP_FILE%"
 powershell -Command "Compress-Archive -Path '%PUBLISH_DIR%\*' -DestinationPath '%ZIP_FILE%' -Force"
 
 if %ERRORLEVEL% equ 0 (
     echo.
-    echo [成功] 便携版已生成：
-    echo 1. 文件夹: %PUBLISH_DIR%
-    echo 2. 压缩包: %ZIP_FILE%
+    echo [SUCCESS] Portable version generated:
+    echo 1. Folder: %PUBLISH_DIR%
+    echo 2. ZIP: %ZIP_FILE%
 ) else (
     echo.
-    echo [警告] 压缩包创建失败，但发布目录已就绪。
+    echo [WARNING] ZIP creation failed, but publish directory is ready.
 )
 
 pause

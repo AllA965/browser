@@ -8,8 +8,25 @@ echo [1/4] Cleaning old publish directory...
 if exist "%PUBLISH_DIR%" rd /s /q "%PUBLISH_DIR%"
 mkdir "%PUBLISH_DIR%"
 
-echo [2/4] Publishing project (Win-x64, Self-Contained)...
-dotnet publish MiniWorldBrowser\MiniWorldBrowser.csproj -c Release -r win-x64 --self-contained true -o "%PUBLISH_DIR%"
+rem Create exclude list for xcopy
+(
+echo .git\
+echo .vscode\
+echo __pycache__\
+echo .pytest_cache\
+echo venv\
+echo .env
+echo *.pyc
+echo *.pyo
+echo *.pdb
+echo *.log
+echo *.md
+echo LICENSE
+echo LICENSE.txt
+) > exclude_list.txt
+
+echo [2/4] Publishing project (Win-x64, Self-Contained, Optimized)...
+dotnet publish MiniWorldBrowser\MiniWorldBrowser.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o "%PUBLISH_DIR%"
 
 if %ERRORLEVEL% neq 0 (
     echo [ERROR] dotnet publish failed.
@@ -17,14 +34,13 @@ if %ERRORLEVEL% neq 0 (
     exit /b %ERRORLEVEL%
 )
 
-echo [3/4] Copying Python Bridge...
-xcopy "python_bridge" "%PUBLISH_DIR%\python_bridge" /E /I /H /Y
+echo [3/4] Copying Python Bridge (Excluding unnecessary files)...
+xcopy "python_bridge" "%PUBLISH_DIR%\python_bridge" /E /I /H /Y /EXCLUDE:exclude_list.txt
 
 echo [3.1/4] Creating embedded Python environment (python_env)...
 set "VENV_DIR=%PUBLISH_DIR%\python_env"
 if exist "%VENV_DIR%" rd /s /q "%VENV_DIR%"
 
-:: Try py -3.11 first, then python
 where py >nul 2>nul
 if %ERRORLEVEL%==0 (
     for /f "tokens=2 delims= " %%v in ('py -0p 2^>nul ^| findstr /r /c:".\*3\.1[1-9].\*"') do (
@@ -51,42 +67,40 @@ if not exist "%VENV_DIR%\Scripts\python.exe" (
     exit /b 1
 )
 
-echo Upgrading pip...
-"%VENV_DIR%\Scripts\python.exe" -m pip install --upgrade pip
-if %ERRORLEVEL% neq 0 (
-    echo [WARNING] pip upgrade failed, continuing...
-)
+rem Skipping pip upgrade to avoid lock issues on some Windows systems
+rem echo Upgrading pip...
+rem "%VENV_DIR%\Scripts\python.exe" -m pip install --upgrade pip
+rem if %ERRORLEVEL% neq 0 (
+rem     echo [WARNING] pip upgrade failed, continuing...
+rem )
 
 echo Installing Python dependencies...
-"%VENV_DIR%\Scripts\pip.exe" install -r "python_bridge\requirements.txt"
+"%VENV_DIR%\Scripts\python.exe" -m pip install -r "python_bridge\requirements.txt"
 if %ERRORLEVEL% neq 0 (
     echo [ERROR] Dependencies installation failed.
     pause
     exit /b 1
 )
 
-echo [3.2/4] Cleaning up Python environment...
-:: Remove __pycache__
-for /d /r "%VENV_DIR%" %%d in (__pycache__) do @if exist "%%d" rd /s /q "%%d"
-:: Remove tests, docs, etc.
-for /d /r "%VENV_DIR%\Lib\site-packages" %%d in (tests, test, docs, doc, examples, sample, samples) do @if exist "%%d" rd /s /q "%%d"
-:: Remove .dist-info and .egg-info (metadata)
-for /d /r "%VENV_DIR%\Lib\site-packages" %%d in (*.dist-info, *.egg-info) do @if exist "%%d" rd /s /q "%%d"
-:: Remove compiled files .pyc .pyo
+echo [3.2/4] Optimizing Python environment (Installing only Chromium and cleaning up)...
+set "PLAYWRIGHT_BROWSERS_PATH=%PUBLISH_DIR%\python_browsers"
+if not exist "%PLAYWRIGHT_BROWSERS_PATH%" mkdir "%PLAYWRIGHT_BROWSERS_PATH%"
+
+"%VENV_DIR%\Scripts\python.exe" -m playwright install chromium
+if %ERRORLEVEL% neq 0 (
+    echo [WARNING] Playwright browser installation failed.
+)
+
+echo Cleaning up Python environment...
+for /d /r "%VENV_DIR%" %%d in (__pycache__) do if exist "%%d" rd /s /q "%%d"
 del /s /q "%VENV_DIR%\*.pyc" 2>nul
 del /s /q "%VENV_DIR%\*.pyo" 2>nul
-:: Remove pip and setuptools from venv to save space
-"%VENV_DIR%\Scripts\python.exe" -m pip uninstall -y pip setuptools
-:: Remove unnecessary directories in venv
-if exist "%VENV_DIR%\include" rd /s /q "%VENV_DIR%\include"
+del /s /q "%VENV_DIR%\*.pdb" 2>nul
+for /d /r "%VENV_DIR%\Lib\site-packages" %%d in (tests test docs examples) do if exist "%%d" rd /s /q "%%d"
 
-:: Remove unnecessary files in publish directory
-if exist "%PUBLISH_DIR%\updater.pdb" del "%PUBLISH_DIR%\updater.pdb"
-if exist "%PUBLISH_DIR%\鲲穹AI浏览器.pdb" del "%PUBLISH_DIR%\鲲穹AI浏览器.pdb"
-:: Remove any remaining .pdb files
+echo [3.3/4] Removing all debug symbols (.pdb) and extra files...
 del /s /q "%PUBLISH_DIR%\*.pdb" 2>nul
-:: Remove WebView2 runtime symbols if any
-if exist "%PUBLISH_DIR%\WebView2\*.pdb" del /s /q "%PUBLISH_DIR%\WebView2\*.pdb" 2>nul
+if exist "exclude_list.txt" del "exclude_list.txt"
 
 echo [4/4] Generating installer with Inno Setup 6...
 if not exist "%ISCC%" (

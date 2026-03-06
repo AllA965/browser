@@ -26,9 +26,12 @@ PrivilegesRequired=lowest
 OutputDir=.
 OutputBaseFilename=KunQiongBrowserSetup
 SetupIconFile=MiniWorldBrowser\Resources\鲲穹AI浏览器.ico
-; 降低压缩强度，某些杀毒软件会扫描高压缩包内的特征码
-Compression=zip
-SolidCompression=no
+; 提高压缩率，lzma2/ultra64 是 Inno Setup 最高强度的压缩算法
+Compression=lzma2/ultra64
+SolidCompression=yes
+InternalCompressLevel=max
+ArchitecturesInstallIn64BitMode=x64
+ArchitecturesAllowed=x64
 WizardStyle=modern
 
 [Languages]

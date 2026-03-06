@@ -132,6 +132,14 @@ public static class PythonBridgeManager
             };
 
             startInfo.Environment["PYTHONUTF8"] = "1";
+            
+            // 设置 Playwright 浏览器路径，指向安装目录下的 python_browsers 文件夹
+            string browsersPath = Path.Combine(rootPath, "python_browsers");
+            if (Directory.Exists(browsersPath))
+            {
+                startInfo.Environment["PLAYWRIGHT_BROWSERS_PATH"] = browsersPath;
+            }
+
             startInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
             startInfo.StandardErrorEncoding = System.Text.Encoding.UTF8;
 
