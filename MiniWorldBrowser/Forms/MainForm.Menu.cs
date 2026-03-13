@@ -1266,7 +1266,10 @@ public partial class MainForm
                 if (!hasFormats)
                 {
                     _statusLabel.Text = "未识别到视频资源";
-                    MessageBox.Show("当前页面未识别到可供提取的视频资源。\n\n提示：某些加密视频或动态加载的视频可能无法直接提取。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ShowModernMessage(
+                        "未识别到视频资源",
+                        "当前页面未检测到可供提取的视频资源。\n\n说明：该网页可能未内嵌视频，或使用了加密/DRM 播放器，因此暂无法直接提取。\n\n建议：请确认这是具体的视频播放页面，并在视频开始播放后再次尝试提取。",
+                        ModernDialogIcon.Warning);
                     return;
                 }
 
@@ -1413,15 +1416,44 @@ public partial class MainForm
             {
                 var error = await infoResponse.Content.ReadAsStringAsync();
                 string displayError = error;
-                try {
-                    using (var doc = JsonDocument.Parse(error)) {
-                        if (doc.RootElement.TryGetProperty("detail", out var detail)) {
+                try
+                {
+                    using (var doc = JsonDocument.Parse(error))
+                    {
+                        if (doc.RootElement.TryGetProperty("detail", out var detail))
+                        {
                             displayError = detail.GetString() ?? error;
                         }
                     }
-                } catch { }
-                _statusLabel.Text = "解析视频失败";
-                MessageBox.Show($"解析失败: {displayError}\n请确保 Python 桥接服务已启动。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch { }
+
+                var lowerError = displayError?.ToLowerInvariant() ?? string.Empty;
+
+                if (lowerError.Contains("不支持的 url") || lowerError.Contains("unsupported url"))
+                {
+                    _statusLabel.Text = "未识别到视频资源";
+                    ShowModernMessage(
+                        "未识别到视频资源",
+                        "当前页面未能解析出可提取的视频资源，或不在支持的网站范围内。\n\n建议：\n• 确认已打开具体的视频播放页面，而非列表或个人主页；\n• 如为短视频站点，请进入单个视频详情页后再尝试提取。",
+                        ModernDialogIcon.Warning);
+                }
+                else if (lowerError.Contains("未能获取视频信息") || lowerError.Contains("yt-dlp"))
+                {
+                    _statusLabel.Text = "未识别到视频资源";
+                    ShowModernMessage(
+                        "未识别到视频资源",
+                        "未能从当前页面解析出视频流。\n\n可能原因：页面尚未完全加载，或视频通过加密/DRM 播放器播放。\n\n建议：刷新页面，等待视频开始播放后再次尝试提取。",
+                        ModernDialogIcon.Warning);
+                }
+                else
+                {
+                    _statusLabel.Text = "解析视频失败";
+                    ShowModernMessage(
+                        "解析失败",
+                        $"解析失败：{displayError}\n\n请确保 Python 桥接服务已启动且已安装 yt-dlp。",
+                        ModernDialogIcon.Error);
+                }
             }
         }
         catch (Exception ex)

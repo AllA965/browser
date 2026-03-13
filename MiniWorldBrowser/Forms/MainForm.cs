@@ -2100,10 +2100,19 @@ public partial class MainForm : Form
             MouseUp += (s, e) => { _isPressed = false; Invalidate(); };
         }
 
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            if (Width <= 0 || Height <= 0) return;
+            using var path = CreateRoundedRectPath(new RectangleF(0, 0, Width, Height), CornerRadius);
+            Region = new Region(path);
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
             var rect = new RectangleF(0.5f, 0.5f, Width - 1f, Height - 1f);
             var bgColor = _isPressed ? Color.FromArgb(0, 80, 150) : 
@@ -2141,19 +2150,6 @@ public partial class MainForm : Form
     {
         private const int CornerRadius = 12;
 
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                const int WS_EX_TOOLWINDOW = 0x00000080;
-                const int CS_DROPSHADOW = 0x00020000;
-                var cp = base.CreateParams;
-                cp.ExStyle |= WS_EX_TOOLWINDOW;
-                cp.ClassStyle |= CS_DROPSHADOW;
-                return cp;
-            }
-        }
-
         public ModernDialog(string title, string message, ModernDialogIcon icon, string okText, string? cancelText)
         {
             Text = string.Empty;
@@ -2162,7 +2158,7 @@ public partial class MainForm : Form
             ShowInTaskbar = false;
             BackColor = Color.White;
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F));
-            ClientSize = DpiHelper.Scale(new Size(360, cancelText == null ? 170 : 180));
+            ClientSize = DpiHelper.Scale(new Size(360, cancelText == null ? 210 : 220));
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
 
             var titleLabel = new Label
@@ -2224,7 +2220,7 @@ public partial class MainForm : Form
             {
                 Text = message,
                 Location = DpiHelper.Scale(new Point(72, 56)),
-                Size = new Size(ClientSize.Width - DpiHelper.Scale(92), DpiHelper.Scale(64)),
+                Size = new Size(ClientSize.Width - DpiHelper.Scale(92), DpiHelper.Scale(96)),
                 Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9.5F)),
                 ForeColor = Color.FromArgb(70, 70, 70)
             };

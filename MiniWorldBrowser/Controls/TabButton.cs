@@ -80,7 +80,7 @@ public class TabButton : Panel
     {
         _isDarkTheme = darkTheme;
 
-        Height = DpiHelper.Scale(32);
+        Height = DpiHelper.Scale(34);
         Width = PreferredWidth;
         Margin = new Padding(DpiHelper.Scale(1), 0, 0, 0);
         Cursor = Cursors.Hand;
@@ -94,18 +94,23 @@ public class TabButton : Panel
                  ControlStyles.SupportsTransparentBackColor |
                  ControlStyles.ResizeRedraw, true);
 
+        int labelHeight = DpiHelper.Scale(20);
+        int iconSize = DpiHelper.Scale(16);
+        int iconTop = Math.Max(0, (Height - iconSize) / 2);
+        int titleTop = Math.Max(0, (Height - labelHeight) / 2);
+
         _favicon = new PictureBox
         {
-            Size = DpiHelper.Scale(new Size(16, 16)),
-            Location = DpiHelper.Scale(new Point(10, 8)),
+            Size = new Size(iconSize, iconSize),
+            Location = new Point(DpiHelper.Scale(10), iconTop),
             SizeMode = PictureBoxSizeMode.Zoom,
             BackColor = Color.Transparent
         };
 
         _loadingIndicator = new PictureBox
         {
-            Size = DpiHelper.Scale(new Size(16, 16)),
-            Location = DpiHelper.Scale(new Point(10, 8)),
+            Size = new Size(iconSize, iconSize),
+            Location = new Point(DpiHelper.Scale(10), iconTop),
             BackColor = Color.Transparent,
             Visible = false
         };
@@ -113,8 +118,8 @@ public class TabButton : Panel
         _titleLabel = new Label
             {
                 AutoSize = false,
-                Location = DpiHelper.Scale(new Point(34, 8)),
-                Size = DpiHelper.Scale(new Size(130, 16)),
+                Location = new Point(DpiHelper.Scale(34), titleTop),
+                Size = new Size(DpiHelper.Scale(130), labelHeight),
                 Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
                 Text = "新标签页",
                 TextAlign = ContentAlignment.MiddleLeft,
@@ -523,7 +528,7 @@ public class TabButton : Panel
         {
             var dpiScale = DpiHelper.GetControlDpiScale(this);
             int iconSize = (int)Math.Round(16 * dpiScale);
-            int topPadding = (int)Math.Round(8 * dpiScale);
+            int topPadding = Math.Max(0, (Height - iconSize) / 2);
 
             var x = Math.Max(0, (Width - iconSize) / 2);
             _favicon.Location = new Point(x, topPadding);
@@ -535,15 +540,18 @@ public class TabButton : Panel
         {
             int faviconLeft = DpiHelper.Scale(12);
             int titleLeft = DpiHelper.Scale(34);
-            int topPadding = DpiHelper.Scale(8);
             int closeButtonWidth = DpiHelper.Scale(28);
-            int closeButtonTop = DpiHelper.Scale(4);
+            int labelHeight = DpiHelper.Scale(20);
+            int iconSize = _favicon.Height;
+            int topPadding = Math.Max(0, (Height - labelHeight) / 2);
+            int iconTop = Math.Max(0, (Height - iconSize) / 2);
+            int closeButtonTop = Math.Max(0, (Height - _closeButton.Height) / 2);
             
             // 增加右侧间距，确保文字不被关闭按钮遮挡
             int labelRightPadding = DpiHelper.Scale(68); 
 
-            _favicon.Location = new Point(faviconLeft, topPadding);
-            _loadingIndicator.Location = new Point(faviconLeft, topPadding);
+            _favicon.Location = new Point(faviconLeft, iconTop);
+            _loadingIndicator.Location = new Point(faviconLeft, iconTop);
             _titleLabel.Visible = true;
             _titleLabel.Location = new Point(titleLeft, topPadding);
 
@@ -551,6 +559,10 @@ public class TabButton : Panel
             if (_titleLabel.Width != targetLabelWidth)
             {
                 _titleLabel.Width = targetLabelWidth;
+            }
+            if (_titleLabel.Height != labelHeight)
+            {
+                _titleLabel.Height = labelHeight;
             }
 
             _closeButton.Location = new Point(Width - closeButtonWidth, closeButtonTop);

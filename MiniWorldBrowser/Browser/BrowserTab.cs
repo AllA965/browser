@@ -139,20 +139,33 @@ public class BrowserTab : IDisposable
                                            "--remote-debugging-port=9222"
             };
 
-            // 加载 AI 扩展
-            var extensionPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "AiExtension");
-            if (Directory.Exists(extensionPath))
-            {
-                options.AdditionalBrowserArguments += $" --load-extension=\"{extensionPath}\"";
-            }
+            var extensionPaths = new List<string>();
+            var aiExtPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "AiExtension");
+            if (Directory.Exists(aiExtPath)) extensionPaths.Add(aiExtPath);
             else
             {
-                // 开发环境下尝试查找源码目录
-                var sourceExtensionPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Resources", "AiExtension");
-                if (Directory.Exists(sourceExtensionPath))
+                var devAiPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Resources", "AiExtension");
+                if (Directory.Exists(devAiPath)) extensionPaths.Add(Path.GetFullPath(devAiPath));
+            }
+
+            var extRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Extensions");
+            if (Directory.Exists(extRoot))
+            {
+                foreach (var dir in Directory.GetDirectories(extRoot))
                 {
-                    options.AdditionalBrowserArguments += $" --load-extension=\"{Path.GetFullPath(sourceExtensionPath)}\"";
+                    try
+                    {
+                        var manifest = Path.Combine(dir, "manifest.json");
+                        if (File.Exists(manifest)) extensionPaths.Add(dir);
+                    }
+                    catch { }
                 }
+            }
+
+            if (extensionPaths.Count > 0)
+            {
+                var joined = string.Join(",", extensionPaths.Select(p => p));
+                options.AdditionalBrowserArguments += $" --load-extension=\"{joined}\"";
             }
 
             var env = await CoreWebView2Environment.CreateAsync(
