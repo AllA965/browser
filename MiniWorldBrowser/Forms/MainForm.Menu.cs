@@ -251,15 +251,15 @@ public partial class MainForm
         };
 
         // 新建标签页
-        menu.Items.Add(CreateMenuItem("新建标签页(T)", "Ctrl+T", MenuIconDrawer.DrawNewTab,
+        menu.Items.Add(CreateMenuItem(Localization.T("menu.new_tab"), "Ctrl+T", MenuIconDrawer.DrawNewTab,
             async () => { CloseMainMenu(); await CreateNewTabWithProtection("about:newtab"); }));
 
         // 新建窗口
-        menu.Items.Add(CreateMenuItem("新建窗口(N)", "Ctrl+N", MenuIconDrawer.DrawNewWindow,
+        menu.Items.Add(CreateMenuItem(Localization.T("menu.new_window"), "Ctrl+N", MenuIconDrawer.DrawNewWindow,
             () => { CloseMainMenu(); System.Diagnostics.Process.Start(Application.ExecutablePath); }));
 
         // 新建隐私窗口
-        menu.Items.Add(CreateMenuItem("新建 InPrivate 窗口(I)", "Ctrl+Shift+N", MenuIconDrawer.DrawIncognito,
+        menu.Items.Add(CreateMenuItem(Localization.T("menu.new_incognito"), "Ctrl+Shift+N", MenuIconDrawer.DrawIncognito,
             () => { CloseMainMenu(); OpenIncognitoWindow(); }));
 
         menu.Items.Add(new ToolStripSeparator());
@@ -271,14 +271,14 @@ public partial class MainForm
         menu.Items.Add(new ToolStripSeparator());
 
         // 收藏夹
-        var bookmarks = CreateMenuItem("收藏夹(B)", null, MenuIconDrawer.DrawBookmark);
+        var bookmarks = CreateMenuItem(Localization.T("menu.bookmarks"), null, MenuIconDrawer.DrawBookmark);
         bookmarks.DropDownDirection = ToolStripDropDownDirection.Left;
         bookmarks.DropDown.Renderer = new ModernMenuRenderer(_isIncognito);
         bookmarks.DropDown.BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249);
         bookmarks.DropDown.ForeColor = _isIncognito ? Color.White : Color.Black;
 
         // 显示收藏栏 - 切换开关，不关闭菜单
-        var showBar = new ToolStripMenuItem("显示收藏栏(S)")
+        var showBar = new ToolStripMenuItem(Localization.T("menu.show_bookmark_bar"))
         {
             ShortcutKeyDisplayString = "Ctrl+Shift+B",
             Checked = _settingsService.Settings.AlwaysShowBookmarkBar
@@ -293,7 +293,7 @@ public partial class MainForm
         bookmarks.DropDownItems.Add(showBar);
 
         // 收藏夹管理器
-        var bookmarkManager = new ToolStripMenuItem("收藏夹管理器(B)")
+        var bookmarkManager = new ToolStripMenuItem(Localization.T("menu.bookmark_manager"))
         {
             ShortcutKeyDisplayString = "Ctrl+Shift+O"
         };
@@ -301,14 +301,14 @@ public partial class MainForm
         bookmarks.DropDownItems.Add(bookmarkManager);
 
         // 导入收藏和设置
-        var importBookmarks = new ToolStripMenuItem("导入收藏和设置...");
+        var importBookmarks = new ToolStripMenuItem(Localization.T("menu.import_bookmarks"));
         importBookmarks.Click += (s, e) => { CloseMainMenu(); ImportBookmarks(); };
         bookmarks.DropDownItems.Add(importBookmarks);
 
         bookmarks.DropDownItems.Add(new ToolStripSeparator());
 
         // 为此网页添加收藏
-        var addBookmark = new ToolStripMenuItem("为此网页添加收藏...")
+        var addBookmark = new ToolStripMenuItem(Localization.T("menu.add_bookmark"))
         {
             ShortcutKeyDisplayString = "Ctrl+D"
         };
@@ -316,7 +316,7 @@ public partial class MainForm
         bookmarks.DropDownItems.Add(addBookmark);
 
         // 为打开的网页添加收藏（批量收藏所有标签页）
-        var addAllBookmarks = new ToolStripMenuItem("为打开的网页添加收藏...")
+        var addAllBookmarks = new ToolStripMenuItem(Localization.T("menu.add_all_bookmarks"))
         {
             ShortcutKeyDisplayString = "Ctrl+Shift+D"
         };
@@ -356,27 +356,27 @@ public partial class MainForm
             if (barItems.Count > 15)
             {
                 bookmarks.DropDownItems.Add(new ToolStripSeparator());
-                var moreBookmarks = new ToolStripMenuItem($"更多收藏 ({barItems.Count - 15})...");
+                var moreBookmarks = new ToolStripMenuItem($"{Localization.T("menu.more_bookmarks")} ({barItems.Count - 15})...");
                 moreBookmarks.Click += (s, e) => { CloseMainMenu(); ShowBookmarkManager(); };
                 bookmarks.DropDownItems.Add(moreBookmarks);
             }
         }
         else
         {
-            var emptyItem = new ToolStripMenuItem("暂无收藏") { Enabled = false };
+            var emptyItem = new ToolStripMenuItem(Localization.T("menu.no_bookmarks")) { Enabled = false };
             bookmarks.DropDownItems.Add(emptyItem);
         }
 
         menu.Items.Add(bookmarks);
 
         // 历史记录
-        var history = CreateMenuItem("历史记录(H)", "Ctrl+H", MenuIconDrawer.DrawHistory);
+        var history = CreateMenuItem(Localization.T("menu.history"), "Ctrl+H", MenuIconDrawer.DrawHistory);
         history.DropDownDirection = ToolStripDropDownDirection.Left;
         history.DropDown.Renderer = new ModernMenuRenderer(_isIncognito);
         history.DropDown.BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249);
         history.DropDown.ForeColor = _isIncognito ? Color.White : Color.Black;
 
-        var showHistory = new ToolStripMenuItem("显示全部历史记录")
+        var showHistory = new ToolStripMenuItem(Localization.T("menu.show_all_history"))
         {
             ShortcutKeyDisplayString = "Ctrl+H"
         };
@@ -402,20 +402,20 @@ public partial class MainForm
         }
         else
         {
-            var emptyItem = new ToolStripMenuItem("暂无历史记录") { Enabled = false };
+            var emptyItem = new ToolStripMenuItem(Localization.T("menu.no_history")) { Enabled = false };
             history.DropDownItems.Add(emptyItem);
         }
 
         history.DropDownItems.Add(new ToolStripSeparator());
 
-        var clearHistory = new ToolStripMenuItem("清除浏览历史记录");
+        var clearHistory = new ToolStripMenuItem(Localization.T("menu.clear_history"));
         clearHistory.Click += (s, e) =>
         {
             CloseMainMenu();
-            if (MessageBox.Show("确定要清除所有历史记录吗？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show(Localization.T("confirm.clear_history_all"), Localization.T("confirm.title"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 _historyService.Clear();
-                _statusLabel.Text = "历史记录已清除";
+                _statusLabel.Text = Localization.T("status.history_cleared");
             }
         };
         history.DropDownItems.Add(clearHistory);
@@ -423,56 +423,56 @@ public partial class MainForm
         menu.Items.Add(history);
 
         // 下载
-        menu.Items.Add(CreateMenuItem("下载(D)", "Ctrl+J", MenuIconDrawer.DrawDownload,
+        menu.Items.Add(CreateMenuItem(Localization.T("menu.downloads"), "Ctrl+J", MenuIconDrawer.DrawDownload,
             () => { CloseMainMenu(); OpenDownloadDialog(); }));
 
         // 媒体提取
-        var mediaMenu = CreateMenuItem("媒体提取", null, MenuIconDrawer.DrawAi); // 借用 AI 图标或以后自定义
+        var mediaMenu = CreateMenuItem(Localization.T("menu.media_extract"), null, MenuIconDrawer.DrawAi);
         mediaMenu.DropDownDirection = ToolStripDropDownDirection.Left;
         mediaMenu.DropDown.Renderer = new ModernMenuRenderer(_isIncognito);
         mediaMenu.DropDown.BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249);
         mediaMenu.DropDown.ForeColor = _isIncognito ? Color.White : Color.Black;
 
-        mediaMenu.DropDownItems.Add(new ToolStripMenuItem("提取本页图片", null, (s, e) => { CloseMainMenu(); _ = ExtractImagesAsync(); }));
-        mediaMenu.DropDownItems.Add(new ToolStripMenuItem("提取本页视频", null, (s, e) => { CloseMainMenu(); _ = ExtractVideosAsync(); }));
+        mediaMenu.DropDownItems.Add(new ToolStripMenuItem(Localization.T("menu.extract_images"), null, (s, e) => { CloseMainMenu(); _ = ExtractImagesAsync(); }));
+        mediaMenu.DropDownItems.Add(new ToolStripMenuItem(Localization.T("menu.extract_videos"), null, (s, e) => { CloseMainMenu(); _ = ExtractVideosAsync(); }));
         
         menu.Items.Add(mediaMenu);
 
         menu.Items.Add(new ToolStripSeparator());
 
         // 清除浏览数据
-        menu.Items.Add(CreateMenuItem("删除浏览数据", "Ctrl+Shift+Delete", MenuIconDrawer.DrawClear,
+        menu.Items.Add(CreateMenuItem(Localization.T("menu.clear_data"), "Ctrl+Shift+Delete", MenuIconDrawer.DrawClear,
             () => { CloseMainMenu(); ShowClearBrowsingDataDialog(); }));
 
         // 打印
-        menu.Items.Add(CreateMenuItem("打印(P)", "Ctrl+P", MenuIconDrawer.DrawPrint,
+        menu.Items.Add(CreateMenuItem(Localization.T("menu.print"), "Ctrl+P", MenuIconDrawer.DrawPrint,
             () => { CloseMainMenu(); PrintPage(); }));
 
         menu.Items.Add(new ToolStripSeparator());
 
         // 网页另存为
-        menu.Items.Add(CreateMenuItem("网页另存为(A)...", "Ctrl+S", MenuIconDrawer.DrawSave,
+        menu.Items.Add(CreateMenuItem(Localization.T("menu.save_page_as"), "Ctrl+S", MenuIconDrawer.DrawSave,
             () => { CloseMainMenu(); SavePageAs(); }));
 
         // 在页面上查找
-        menu.Items.Add(CreateMenuItem("在页面上查找", "Ctrl+F", MenuIconDrawer.DrawFind,
+        menu.Items.Add(CreateMenuItem(Localization.T("menu.find_in_page"), "Ctrl+F", MenuIconDrawer.DrawFind,
             () => { CloseMainMenu(); OpenFindInPage(); }));
 
         // 更多工具
-        var tools = CreateMenuItem("更多工具", null, MenuIconDrawer.DrawTools);
+        var tools = CreateMenuItem(Localization.T("menu.more_tools"), null, MenuIconDrawer.DrawTools);
         tools.DropDownDirection = ToolStripDropDownDirection.Left;
         tools.DropDown.Renderer = new ModernMenuRenderer(_isIncognito);
         tools.DropDown.BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249);
         tools.DropDown.ForeColor = _isIncognito ? Color.White : Color.Black;
 
-        var taskManager = new ToolStripMenuItem("任务管理器(T)")
+        var taskManager = new ToolStripMenuItem(Localization.T("menu.task_manager"))
         {
             ShortcutKeyDisplayString = "Shift+Esc"
         };
         taskManager.Click += (s, e) => { CloseMainMenu(); ShowTaskManager(); };
         tools.DropDownItems.Add(taskManager);
 
-        var encoding = new ToolStripMenuItem("编码(E)");
+        var encoding = new ToolStripMenuItem(Localization.T("menu.encoding"));
         encoding.DropDownDirection = ToolStripDropDownDirection.Left;
         encoding.DropDown.Renderer = new ModernMenuRenderer(_isIncognito);
         encoding.DropDown.BackColor = _isIncognito ? Color.FromArgb(45, 45, 45) : Color.FromArgb(249, 249, 249);
@@ -495,14 +495,14 @@ public partial class MainForm
         tools.DropDownItems.Add(encoding);
         tools.DropDownItems.Add(new ToolStripSeparator());
 
-        var devTools = new ToolStripMenuItem("开发者工具(D)")
+        var devTools = new ToolStripMenuItem(Localization.T("menu.devtools"))
         {
             ShortcutKeyDisplayString = "F12"
         };
         devTools.Click += (s, e) => { CloseMainMenu(); OpenDevTools(); };
         tools.DropDownItems.Add(devTools);
 
-        var resourceLog = new ToolStripMenuItem("查看资源加载日志(L)")
+        var resourceLog = new ToolStripMenuItem(Localization.T("menu.view_resource_log"))
         {
             ShortcutKeyDisplayString = "Ctrl+Shift+L"
         };
@@ -514,7 +514,7 @@ public partial class MainForm
         menu.Items.Add(new ToolStripSeparator());
 
         // 广告过滤
-        var adBlock = CreateMenuItem("广告过滤(G)", null, _adBlockService.Enabled ? MenuIconDrawer.DrawAdBlockEnabled : MenuIconDrawer.DrawAdBlock);
+        var adBlock = CreateMenuItem(Localization.T("menu.adblock"), null, _adBlockService.Enabled ? MenuIconDrawer.DrawAdBlockEnabled : MenuIconDrawer.DrawAdBlock);
         adBlock.Checked = _adBlockService.Enabled;
         adBlock.Click += (s, e) =>
         {
@@ -540,27 +540,27 @@ public partial class MainForm
         menu.Items.Add(new ToolStripSeparator());
 
         // 设置
-        menu.Items.Add(CreateMenuItem("设置(S)", null, MenuIconDrawer.DrawSettings,
+        menu.Items.Add(CreateMenuItem(Localization.T("menu.settings"), null, MenuIconDrawer.DrawSettings,
             () => { CloseMainMenu(); ShowSettings(); }));
 
         // 反馈
-        menu.Items.Add(CreateMenuItem("反馈", null, MenuIconDrawer.DrawFeedback,
+        menu.Items.Add(CreateMenuItem(Localization.T("menu.feedback"), null, MenuIconDrawer.DrawFeedback,
             () => { CloseMainMenu(); _tabManager.ActiveTab?.Navigate("https://www.kunqiongai.com/feedback?soft_number=10014"); }));
 
         // 关于
-        menu.Items.Add(CreateMenuItem("关于鲲穹AI浏览器", null, MenuIconDrawer.DrawAbout,
+        menu.Items.Add(CreateMenuItem(Localization.T("menu.about_app"), null, MenuIconDrawer.DrawAbout,
             () => { CloseMainMenu(); new AboutForm().ShowDialog(); }));
 
         if (_isIncognito)
         {
-            menu.Items.Add(CreateMenuItem("关于 InPrivate 浏览", null, MenuIconDrawer.DrawIncognito,
+            menu.Items.Add(CreateMenuItem(Localization.T("menu.about_incognito"), null, MenuIconDrawer.DrawIncognito,
                 () => { CloseMainMenu(); ShowIncognitoInfo(); }));
         }
 
         menu.Items.Add(new ToolStripSeparator());
 
         // 退出
-        var exit = new ToolStripMenuItem(_isIncognito ? "关闭隐身窗口" : "关闭鲲穹AI浏览器")
+        var exit = new ToolStripMenuItem(_isIncognito ? Localization.T("menu.exit_incognito") : Localization.T("menu.exit_app"))
         {
             Padding = DpiHelper.Scale(new Padding(8, 6, 8, 6))
         };
@@ -625,7 +625,7 @@ public partial class MainForm
 
         var lblZoom = new Label
         {
-            Text = "缩放",
+            Text = Localization.T("menu_zoom.label"),
             Location = DpiHelper.Scale(new Point(40, 9)),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -800,7 +800,7 @@ public partial class MainForm
             // 重置按钮美化
             var resetBtn = new Label
             {
-                Text = "重置",
+                Text = Localization.T("menu_zoom.reset"),
                 Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
                 Location = DpiHelper.Scale(new Point(20, 38)),
                 Size = DpiHelper.Scale(new Size(100, 26)),
@@ -910,13 +910,13 @@ public partial class MainForm
     private void AddCurrentPageToBookmarks()
     {
         var url = _tabManager.ActiveTab?.Url;
-        var title = _tabManager.ActiveTab?.Title ?? "新书签";
+        var title = _tabManager.ActiveTab?.Title ?? Localization.T("bookmarks.new_bookmark");
 
         if (string.IsNullOrEmpty(url) || url == "about:blank") return;
 
         if (_bookmarkService.FindByUrl(url) != null)
         {
-            MessageBox.Show("已收藏", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Localization.T("bookmarks.already"), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
@@ -932,11 +932,11 @@ public partial class MainForm
         if (_tabManager.ActiveTab == null) return;
         
         var url = _tabManager.ActiveTab.Url;
-        var title = _tabManager.ActiveTab.Title ?? "新书签";
+        var title = _tabManager.ActiveTab.Title ?? Localization.T("bookmarks.new_bookmark");
 
         if (string.IsNullOrEmpty(url) || url.StartsWith("about:")) 
         {
-            MessageBox.Show("无法收藏此页面", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Localization.T("bookmarks.unable_for_page"), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
@@ -962,14 +962,14 @@ public partial class MainForm
             UpdateBookmarkButton(result != DialogResult.Abort);
             
             if (result == DialogResult.Abort)
-                _statusLabel.Text = "已取消收藏";
+                _statusLabel.Text = Localization.T("bookmarks.cancelled");
             else if (result == DialogResult.Retry)
                 ShowBookmarkManager();
         }
         catch (Exception ex)
          {
              Debug.WriteLine($"显示添加书签对话框失败: {ex.Message}");
-             MessageBox.Show("操作失败，请重试", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+             MessageBox.Show(Localization.T("common.operation_failed_retry"), Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
          }
     }
 
@@ -984,13 +984,13 @@ public partial class MainForm
 
         if (tabs.Count == 0)
         {
-            MessageBox.Show("没有可收藏的标签页", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Localization.Raw(), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
         var result = MessageBox.Show(
-            $"将为 {tabs.Count} 个标签页创建收藏夹\n\n是否继续？",
-            "批量添加收藏",
+            Localization.T("bookmarks.batch_confirm", new Dictionary<string, string> { { "count", tabs.Count.ToString() } }),
+            Localization.T("bookmarks.batch_title"),
             MessageBoxButtons.YesNo,
             MessageBoxIcon.Question);
 
@@ -1010,9 +1010,9 @@ public partial class MainForm
             }
         }
 
-        _statusLabel.Text = $"已添加 {addedCount} 个收藏到文件夹 \"{folderName}\"";
-        MessageBox.Show($"已将 {addedCount} 个标签页添加到收藏夹 \"{folderName}\"", 
-            "完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        _statusLabel.Text = Localization.T("bookmarks.added_status", new Dictionary<string, string> { { "count", addedCount.ToString() }, { "folder", folderName } });
+        MessageBox.Show(Localization.T("bookmarks.added_message", new Dictionary<string, string> { { "count", addedCount.ToString() }, { "folder", folderName } }), 
+            Localization.T("common.done"), MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     /// <summary>
@@ -1031,8 +1031,8 @@ public partial class MainForm
     {
         using var dialog = new OpenFileDialog
         {
-            Title = "导入收藏",
-            Filter = "HTML 文件 (*.html;*.htm)|*.html;*.htm|所有文件 (*.*)|*.*",
+            Title = Localization.T("bookmarks.import_title"),
+            Filter = Localization.T("bookmarks.import_filter"),
             FilterIndex = 1
         };
 
@@ -1043,13 +1043,13 @@ public partial class MainForm
             var content = File.ReadAllText(dialog.FileName);
             var importedCount = ImportBookmarksFromHtml(content);
             
-            _statusLabel.Text = $"已导入 {importedCount} 个收藏";
-            MessageBox.Show($"成功导入 {importedCount} 个收藏", "导入完成", 
+            _statusLabel.Text = Localization.T("import.success", new Dictionary<string, string> { { "count", importedCount.ToString() } });
+            MessageBox.Show(Localization.T("import.success", new Dictionary<string, string> { { "count", importedCount.ToString() } }), Localization.T("import.done"), 
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"导入失败：{ex.Message}", "错误", 
+            MessageBox.Show(Localization.T("import.failed", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("common.error"), 
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
@@ -1103,14 +1103,14 @@ public partial class MainForm
         var activeTab = _tabManager.ActiveTab;
         if (activeTab?.WebView?.CoreWebView2 == null) return;
 
-        _statusLabel.Text = "正在提取图片资源...";
+        _statusLabel.Text = Localization.T("images.extracting_status");
         try
         {
             var imageUrls = await _mediaDownloadService.ExtractImageUrlsAsync(activeTab.WebView.CoreWebView2);
             if (imageUrls == null || imageUrls.Count == 0)
             {
-                _statusLabel.Text = "未发现图片资源";
-                MessageBox.Show("当前页面未发现可供提取的图片资源。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _statusLabel.Text = Localization.T("images.none_found_status");
+                MessageBox.Show(Localization.T("images.none_found_status"), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -1126,7 +1126,7 @@ public partial class MainForm
                 if (dialog.ShowDialog(this) == DialogResult.OK)
                 {
                     var urlsToDownload = dialog.SelectedUrls;
-                    _statusLabel.Text = $"已提交 {urlsToDownload.Count} 个图片下载任务";
+                    _statusLabel.Text = Localization.T("images.submitted_tasks", new Dictionary<string, string> { { "count", urlsToDownload.Count.ToString() } });
                     
                     var chosenPath = dialog.SelectedSavePath;
                     foreach (var imgUrl in urlsToDownload)
@@ -1140,14 +1140,14 @@ public partial class MainForm
                 }
                 else
                 {
-                    _statusLabel.Text = "已取消图片提取";
+                    _statusLabel.Text = Localization.T("images.cancelled_status");
                 }
             }
         }
         catch (Exception ex)
         {
-            _statusLabel.Text = "图片提取失败";
-            MessageBox.Show($"提取失败: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            _statusLabel.Text = Localization.T("images.failed_status");
+            MessageBox.Show(Localization.T("images.failed_message", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -1159,11 +1159,11 @@ public partial class MainForm
         var url = activeTab.Url;
         if (string.IsNullOrEmpty(url) || url.StartsWith("about:"))
         {
-            MessageBox.Show("当前页面不支持视频提取", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(Localization.T("videos.not_supported"), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
-        _statusLabel.Text = "正在解析视频信息...";
+        _statusLabel.Text = Localization.T("videos.parsing_status");
         try
         {
             string extractionResult = url;
@@ -1237,8 +1237,8 @@ public partial class MainForm
                 (effectiveUrl.EndsWith("/") || effectiveUrl.Contains("?recommend=") || effectiveUrl.Contains("/discover")) && 
                 directData == null)
             {
-                _statusLabel.Text = "提取失败";
-                MessageBox.Show("未能识别到当前播放的视频，请尝试：\n1. 确保视频正在播放\n2. 刷新页面后重试\n3. 点击视频进入详情页后再提取", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _statusLabel.Text = Localization.T("videos.extract_failed_status");
+                MessageBox.Show(Localization.T("videos.not_detected_desc"), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -1265,10 +1265,10 @@ public partial class MainForm
 
                 if (!hasFormats)
                 {
-                    _statusLabel.Text = "未识别到视频资源";
+                    _statusLabel.Text = Localization.T("videos.not_detected_status");
                     ShowModernMessage(
-                        "未识别到视频资源",
-                        "当前页面未检测到可供提取的视频资源。\n\n说明：该网页可能未内嵌视频，或使用了加密/DRM 播放器，因此暂无法直接提取。\n\n建议：请确认这是具体的视频播放页面，并在视频开始播放后再次尝试提取。",
+                        Localization.T("videos.not_detected_title"),
+                        Localization.T("videos.not_detected_desc"),
                         ModernDialogIcon.Warning);
                     return;
                 }
@@ -1310,7 +1310,7 @@ public partial class MainForm
                         catch { }
                         
                         // 统一走后端下载，避免直链在标签页导航导致不可访问
-                        _statusLabel.Text = "视频下载已开始...";
+                        _statusLabel.Text = Localization.Raw();
                         
                         var effectiveFormatId = !string.IsNullOrEmpty(directDownloadUrl) ? "direct" : formatId;
                         var downloadRequest = new
@@ -1332,7 +1332,7 @@ public partial class MainForm
                             var taskInfo = JsonDocument.Parse(respJson);
                             string taskId = taskInfo.RootElement.GetProperty("task_id").GetString() ?? "";
                             
-                            _statusLabel.Text = "视频下载已开始（外部任务）";
+                            _statusLabel.Text = Localization.Raw();
                             
                             var downloadItem = new MiniWorldBrowser.Models.DownloadItem
                             {
@@ -1366,7 +1366,7 @@ public partial class MainForm
                                             downloadItem.Status = MiniWorldBrowser.Models.DownloadStatus.Completed;
                                             downloadItem.EndTime = DateTime.Now;
                                             BeginInvoke(new Action(() => {
-                                                _statusLabel.Text = $"下载完成: {progress.Filename}";
+                                                _statusLabel.Text = Localization.T("downloads.status.completed");
                                                 _progressBar.Value = 100;
                                                 var t = new System.Windows.Forms.Timer { Interval = 1200 };
                                                 t.Tick += (s2, e2) => { t.Stop(); t.Dispose(); _progressBar.Visible = false; };
@@ -1376,14 +1376,14 @@ public partial class MainForm
                                         } else if (progress.Status == "failed") {
                                             downloadItem.Status = MiniWorldBrowser.Models.DownloadStatus.Failed;
                                             BeginInvoke(new Action(() => {
-                                                _statusLabel.Text = "下载失败";
+                                                _statusLabel.Text = Localization.Raw();
                                                 _progressBar.Visible = false;
                                             }));
                                             break;
                                         }
                                         
                                         BeginInvoke(new Action(() => {
-                                            _statusLabel.Text = $"正在下载: {progress.Filename}";
+                                            _statusLabel.Text = Localization.T("downloads.status.downloading", new Dictionary<string, string> { { "received", FormatSize(progress.DownloadedBytes) }, { "total", FormatSize(progress.TotalBytes) }, { "pct", progress.Progress.ToString("F1") } });
                                             var pct = Math.Max(0, Math.Min(100, (int)Math.Round(progress.Progress)));
                                             _progressBar.Value = pct;
                                         }));
@@ -1402,13 +1402,13 @@ public partial class MainForm
                                     }
                                 }
                             } catch { }
-                            _statusLabel.Text = "视频下载失败";
-                            MessageBox.Show($"下载失败: {displayError}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            _statusLabel.Text = Localization.Raw();
+                            MessageBox.Show(Localization.T("clear.failed", new Dictionary<string, string> { { "msg", displayError } }), Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                     else
                     {
-                        _statusLabel.Text = "已取消下载";
+                        _statusLabel.Text = Localization.Raw();
                     }
                 }
             }
@@ -1432,34 +1432,34 @@ public partial class MainForm
 
                 if (lowerError.Contains("不支持的 url") || lowerError.Contains("unsupported url"))
                 {
-                    _statusLabel.Text = "未识别到视频资源";
+                    _statusLabel.Text = Localization.T("videos.not_detected_status");
                     ShowModernMessage(
-                        "未识别到视频资源",
-                        "当前页面未能解析出可提取的视频资源，或不在支持的网站范围内。\n\n建议：\n• 确认已打开具体的视频播放页面，而非列表或个人主页；\n• 如为短视频站点，请进入单个视频详情页后再尝试提取。",
+                        Localization.T("videos.not_detected_title"),
+                        Localization.T("videos.not_detected_desc"),
                         ModernDialogIcon.Warning);
                 }
                 else if (lowerError.Contains("未能获取视频信息") || lowerError.Contains("yt-dlp"))
                 {
-                    _statusLabel.Text = "未识别到视频资源";
+                    _statusLabel.Text = Localization.T("videos.not_detected_status");
                     ShowModernMessage(
-                        "未识别到视频资源",
-                        "未能从当前页面解析出视频流。\n\n可能原因：页面尚未完全加载，或视频通过加密/DRM 播放器播放。\n\n建议：刷新页面，等待视频开始播放后再次尝试提取。",
+                        Localization.T("videos.not_detected_title"),
+                        Localization.T("videos.not_detected_desc"),
                         ModernDialogIcon.Warning);
                 }
                 else
                 {
-                    _statusLabel.Text = "解析视频失败";
+                    _statusLabel.Text = Localization.T("videos.extract_failed_status");
                     ShowModernMessage(
-                        "解析失败",
-                        $"解析失败：{displayError}\n\n请确保 Python 桥接服务已启动且已安装 yt-dlp。",
+                        Localization.T("videos.extract_failed_status"),
+                        Localization.T("clear.failed", new Dictionary<string, string> { { "msg", displayError } }),
                         ModernDialogIcon.Error);
                 }
             }
         }
         catch (Exception ex)
         {
-            _statusLabel.Text = "操作失败";
-            MessageBox.Show($"操作失败: {ex.Message}\n请确保 Python 桥接服务已启动且安装了 yt-dlp。\n\n提示：您需要先在命令行运行 python_bridge/main.py", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            _statusLabel.Text = Localization.T("common.error");
+            MessageBox.Show(Localization.T("clear.failed", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -1477,6 +1477,14 @@ public partial class MainForm
             core.NavigateWithWebResourceRequest(req);
         }
         catch { }
+    }
+
+    private string FormatSize(long bytes)
+    {
+        if (bytes < 1024) return $"{bytes} B";
+        if (bytes < 1024 * 1024) return $"{bytes / 1024.0:F1} KB";
+        if (bytes < 1024 * 1024 * 1024) return $"{bytes / (1024.0 * 1024):F1} MB";
+        return $"{bytes / (1024.0 * 1024 * 1024):F1} GB";
     }
 
     #endregion
@@ -1508,20 +1516,20 @@ public partial class MainForm
     {
         if (_tabManager.ActiveTab?.WebView?.CoreWebView2 == null)
         {
-            MessageBox.Show("没有可保存的网页", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Localization.Raw(), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
         var webView = _tabManager.ActiveTab.WebView.CoreWebView2;
-        var pageTitle = webView.DocumentTitle ?? "网页";
+        var pageTitle = webView.DocumentTitle ?? Localization.Raw();
         var safeTitle = string.Join("_", pageTitle.Split(Path.GetInvalidFileNameChars()));
         if (safeTitle.Length > 50) safeTitle = safeTitle[..50];
 
         using var saveDialog = new SaveFileDialog
         {
-            Title = "网页另存为",
+            Title = Localization.T("dialog.save_as.title"),
             FileName = safeTitle,
-            Filter = "网页，仅HTML (*.html)|*.html|网页，完整 (*.html)|*.html|MHTML文件 (*.mhtml)|*.mhtml|PDF文档 (*.pdf)|*.pdf",
+            Filter = Localization.T("dialog.save_as.filter"),
             FilterIndex = 1,
             DefaultExt = "html",
             AddExtension = true
@@ -1535,7 +1543,7 @@ public partial class MainForm
 
         try
         {
-            _statusLabel.Text = "正在保存网页...";
+            _statusLabel.Text = Localization.Raw();
             _progressBar.Visible = true;
 
             switch (filterIndex)
@@ -1546,13 +1554,13 @@ public partial class MainForm
                 case 4: await pageSaveService.SaveAsPdfAsync(webView, filePath); break;
             }
 
-            _statusLabel.Text = "保存完成";
-            MessageBox.Show($"网页已保存到:\n{filePath}", "保存成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            _statusLabel.Text = Localization.T("common.done");
+            MessageBox.Show(Localization.T("bookmarks.export_success_path", new Dictionary<string, string> { { "path", filePath } }), Localization.T("common.done"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
-            _statusLabel.Text = "保存失败";
-            MessageBox.Show($"保存网页时出错:\n{ex.Message}", "保存失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            _statusLabel.Text = Localization.T("clear.failed");
+            MessageBox.Show(Localization.T("clear.failed", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
         {
@@ -1580,21 +1588,21 @@ public partial class MainForm
     {
         if (_tabManager.ActiveTab?.WebView?.CoreWebView2 == null)
         {
-            MessageBox.Show("没有可打印的网页", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Localization.Raw(), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
         try
         {
-            _statusLabel.Text = "正在准备打印...";
+            _statusLabel.Text = Localization.Raw();
             await _tabManager.ActiveTab.WebView.CoreWebView2.ExecuteScriptAsync("window.print()");
-            _statusLabel.Text = "就绪";
+            _statusLabel.Text = Localization.T("status.ready");
         }
         catch (Exception ex)
         {
-            _statusLabel.Text = "打印失败";
+            _statusLabel.Text = Localization.T("print.failed");
             System.Diagnostics.Debug.WriteLine($"PrintPage failed: {ex.Message}");
-            MessageBox.Show($"打印时出错:\n{ex.Message}", "打印失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(Localization.T("print.failed_message", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("print.failed"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -1605,7 +1613,7 @@ public partial class MainForm
 
         _tabManager.OpenClearBrowsingData(tab);
         _tabManager.ActiveTab?.Refresh();
-        _statusLabel.Text = "浏览数据已清除";
+            _statusLabel.Text = Localization.T("clear.done");
     }
 
     private void ShowTaskManager()
@@ -1630,7 +1638,7 @@ public partial class MainForm
                 await _tabManager.ActiveTab.WebView.CoreWebView2.ExecuteScriptAsync(script);
                 _tabManager.ActiveTab.Refresh();
             }
-            _statusLabel.Text = $"编码已设置为: {encoding}";
+            _statusLabel.Text = Localization.Raw();
         }
         catch (Exception ex)
         {

@@ -140,7 +140,7 @@ public class SettingsForm : Form
     
     private void InitializeUI()
     {
-        Text = "设置";
+        Text = Localization.T("settings.header.title");
         Size = DpiHelper.Scale(new Size(1000, 700));
         MinimumSize = DpiHelper.Scale(new Size(800, 600));
         StartPosition = FormStartPosition.CenterParent;
@@ -179,7 +179,7 @@ public class SettingsForm : Form
         // 标题
         var titleLabel = new Label
         {
-            Text = "鲲穹AI浏览器",
+            Text = Localization.T("menu.about_app"),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(12F), FontStyle.Bold),
             ForeColor = Color.FromArgb(51, 51, 51),
             Dock = DockStyle.Top,
@@ -200,7 +200,7 @@ public class SettingsForm : Form
             DrawMode = DrawMode.OwnerDrawFixed
         };
         
-        _navList.Items.AddRange(new object[] { "历史记录", "设置", "隐私", "高级", "AI 设置" });
+        _navList.Items.AddRange(new object[] { Localization.T("settings.sidebar.history"), Localization.T("settings.sidebar.settings"), Localization.T("settings.sidebar.privacy", new Dictionary<string,string>()), Localization.T("settings.sidebar.advanced", new Dictionary<string,string>()), Localization.T("settings.sidebar.ai") });
         _navList.DrawItem += OnNavListDrawItem;
         _navList.SelectedIndexChanged += OnNavListSelectedIndexChanged;
         
@@ -266,7 +266,7 @@ public class SettingsForm : Form
         
         using var form = new Form
         {
-            Text = "设置启动页",
+            Text = Localization.T("settings.set_startup_pages"),
             Size = DpiHelper.Scale(new Size(400, 300)),
             StartPosition = FormStartPosition.CenterParent,
             FormBorderStyle = FormBorderStyle.FixedDialog,
@@ -274,7 +274,7 @@ public class SettingsForm : Form
             MinimizeBox = false
         };
         
-        var label = new Label { Text = "请输入网页地址（每行一个）：", Location = DpiHelper.Scale(new Point(10, 10)), AutoSize = true };
+        var label = new Label { Text = Localization.T("settings.enter_urls_each_line"), Location = DpiHelper.Scale(new Point(10, 10)), AutoSize = true };
         var textBox = new TextBox 
         { 
             Multiline = true, 
@@ -284,8 +284,8 @@ public class SettingsForm : Form
             Text = urls
         };
         
-        var okBtn = new Button { Text = "确定", Location = DpiHelper.Scale(new Point(210, 220)), DialogResult = DialogResult.OK };
-        var cancelBtn = new Button { Text = "取消", Location = DpiHelper.Scale(new Point(300, 220)), DialogResult = DialogResult.Cancel };
+        var okBtn = new Button { Text = Localization.T("confirm.ok"), Location = DpiHelper.Scale(new Point(210, 220)), DialogResult = DialogResult.OK };
+        var cancelBtn = new Button { Text = Localization.T("confirm.cancel"), Location = DpiHelper.Scale(new Point(300, 220)), DialogResult = DialogResult.Cancel };
         
         form.Controls.AddRange(new Control[] { label, textBox, okBtn, cancelBtn });
         form.AcceptButton = okBtn;
@@ -311,7 +311,7 @@ public class SettingsForm : Form
             
             var headerLabel = new Label
             {
-                Text = "历史记录",
+                Text = Localization.T("settings.history.title"),
                 Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(16F)),
                 Dock = DockStyle.Top,
                 Height = DpiHelper.Scale(50),
@@ -327,9 +327,9 @@ public class SettingsForm : Form
                 GridLines = true
             };
             
-            listView.Columns.Add("网址", DpiHelper.Scale(300));
-            listView.Columns.Add("标题", DpiHelper.Scale(200));
-            listView.Columns.Add("访问时间", DpiHelper.Scale(150));
+            listView.Columns.Add(Localization.T("settings.history.columns.url"), DpiHelper.Scale(300));
+            listView.Columns.Add(Localization.T("settings.history.columns.title"), DpiHelper.Scale(200));
+            listView.Columns.Add(Localization.T("settings.history.columns.time"), DpiHelper.Scale(150));
             
             // 添加示例历史记录（实际应从数据库读取）
             listView.Items.Add(new ListViewItem(new[] { "https://www.example.com", "Example", DateTime.Now.ToString() }));
@@ -378,8 +378,8 @@ public class SettingsForm : Form
     private void ShowAboutInfo()
     {
         MessageBox.Show(
-            "鲲穹AI浏览器\n版本 1.0.0\n\n基于 WebView2 内核",
-            "关于", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Localization.T("about.simple_message", new Dictionary<string, string> { { "app", AppConstants.AppName }, { "version", AppConstants.AppVersion } }),
+            Localization.T("about.simple_title"), MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
     
     #endregion
@@ -394,20 +394,20 @@ public class SettingsForm : Form
         var y = 0;
         
         // 标题和搜索框
-        var headerPanel = CreateHeaderPanel("设置", "在设置中搜索", _basicPanel);
+        var headerPanel = CreateHeaderPanel(Localization.T("settings.title"), Localization.T("settings.search_placeholder"), _basicPanel);
         headerPanel.Location = new Point(0, y);
         _basicPanel.Controls.Add(headerPanel);
         y += headerPanel.Height + DpiHelper.Scale(20);
         
         // 主页设置 分组
-        var homeGroup = CreateGroupBox("主页", DpiHelper.Scale(90));
+        var homeGroup = CreateGroupBox(Localization.T("settings.home.title"), DpiHelper.Scale(90));
         homeGroup.Location = new Point(0, y);
         
-        var homeLabel = new Label { Text = "主页地址:", Location = DpiHelper.Scale(new Point(15, 28)), AutoSize = true };
+        var homeLabel = new Label { Text = Localization.T("settings.home.url"), Location = DpiHelper.Scale(new Point(15, 28)), AutoSize = true };
         _homePageBox = new TextBox { Location = DpiHelper.Scale(new Point(80, 25)), Width = DpiHelper.Scale(300) };
         _setCurrentAsHomeBtn = new Button
         {
-            Text = "使用当前页",
+            Text = Localization.T("settings.home.use_current"),
             Location = DpiHelper.Scale(new Point(390, 23)),
             Size = DpiHelper.Scale(new Size(80, 25)),
             FlatStyle = FlatStyle.Flat
@@ -416,7 +416,7 @@ public class SettingsForm : Form
         
         var useNewTabBtn = new Button
         {
-            Text = "使用新标签页",
+            Text = Localization.T("settings.home.use_newtab"),
             Location = DpiHelper.Scale(new Point(80, 55)),
             Size = DpiHelper.Scale(new Size(100, 25)),
             FlatStyle = FlatStyle.Flat
@@ -429,14 +429,14 @@ public class SettingsForm : Form
         y += homeGroup.Height + DpiHelper.Scale(15);
         
         // 启动时 分组
-        var startupGroup = CreateGroupBox("启动时", DpiHelper.Scale(130));
+        var startupGroup = CreateGroupBox(Localization.T("settings.startup.title"), DpiHelper.Scale(130));
         startupGroup.Location = new Point(0, y);
         
-        _startupNewTab = new RadioButton { Text = "打开新标签页", Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
-        _startupLastSession = new RadioButton { Text = "继续浏览上次关闭时正在查看的网页", Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
-        _startupSpecificPages = new RadioButton { Text = "打开特定网页或一组网页", Location = DpiHelper.Scale(new Point(15, 75)), AutoSize = true };
+        _startupNewTab = new RadioButton { Text = Localization.T("settings.startup.newtab"), Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
+        _startupLastSession = new RadioButton { Text = Localization.T("settings.startup.continue_last"), Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
+        _startupSpecificPages = new RadioButton { Text = Localization.T("settings.startup.specific_pages"), Location = DpiHelper.Scale(new Point(15, 75)), AutoSize = true };
         
-        _manageStartupBtn = CreateLinkLabel("管理网页", DpiHelper.Scale(new Point(200, 75)));
+        _manageStartupBtn = CreateLinkLabel(Localization.T("settings.startup.manage_pages"), DpiHelper.Scale(new Point(200, 75)));
         _manageStartupBtn.Click += (s, e) => ManageStartupPages();
         
         startupGroup.Controls.AddRange(new Control[] { _startupNewTab, _startupLastSession, _startupSpecificPages, _manageStartupBtn });
@@ -444,16 +444,16 @@ public class SettingsForm : Form
         y += startupGroup.Height + DpiHelper.Scale(15);
         
         // 广告过滤 分组
-        var adBlockGroup = CreateGroupBox("广告过滤", DpiHelper.Scale(160));
+        var adBlockGroup = CreateGroupBox(Localization.T("settings.adblock.title"), DpiHelper.Scale(160));
         adBlockGroup.Location = new Point(0, y);
         
-        _adBlockNone = new RadioButton { Text = "不过滤任何广告", Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
-        _adBlockPopup = new RadioButton { Text = "仅过滤弹出窗口", Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
-        _adBlockAggressive = new RadioButton { Text = "激进过滤网页广告", Location = DpiHelper.Scale(new Point(15, 75)), AutoSize = true };
-        _adBlockCustom = new RadioButton { Text = "自定义广告过滤规则", Location = DpiHelper.Scale(new Point(15, 100)), AutoSize = true };
+        _adBlockNone = new RadioButton { Text = Localization.T("settings.adblock.none"), Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
+        _adBlockPopup = new RadioButton { Text = Localization.T("settings.adblock.popup"), Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
+        _adBlockAggressive = new RadioButton { Text = Localization.T("settings.adblock.aggressive"), Location = DpiHelper.Scale(new Point(15, 75)), AutoSize = true };
+        _adBlockCustom = new RadioButton { Text = Localization.T("settings.adblock.custom"), Location = DpiHelper.Scale(new Point(15, 100)), AutoSize = true };
         
-        var customRulesLink = CreateLinkLabel("自定义规则", DpiHelper.Scale(new Point(170, 100)));
-        _manageFiltersBtn = new Button { Text = "管理我的规则...", Location = DpiHelper.Scale(new Point(15, 125)), Size = DpiHelper.Scale(new Size(110, 25)), FlatStyle = FlatStyle.Flat };
+        var customRulesLink = CreateLinkLabel(Localization.T("settings.adblock.custom_link"), DpiHelper.Scale(new Point(170, 100)));
+        _manageFiltersBtn = new Button { Text = Localization.T("settings.adblock.manage_rules"), Location = DpiHelper.Scale(new Point(15, 125)), Size = DpiHelper.Scale(new Size(110, 25)), FlatStyle = FlatStyle.Flat };
         _manageFiltersBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         
         adBlockGroup.Controls.AddRange(new Control[] { _adBlockNone, _adBlockPopup, _adBlockAggressive, _adBlockCustom, customRulesLink, _manageFiltersBtn });
@@ -479,7 +479,7 @@ public class SettingsForm : Form
         y = CreateDefaultBrowserGroup(y);
         
         // 高级设置链接
-        var advancedLink = CreateLinkLabel("显示高级设置...", DpiHelper.Scale(new Point(0, y)));
+        var advancedLink = CreateLinkLabel(Localization.T("settings.show_advanced"), DpiHelper.Scale(new Point(0, y)));
         advancedLink.Click += (s, e) => 
         {
             _navList.SelectedIndex = 3; // 切换到高级设置
@@ -493,21 +493,21 @@ public class SettingsForm : Form
     
     private int CreateTabSettingsGroup(int y)
     {
-        var group = CreateGroupBox("标签", DpiHelper.Scale(140));
+        var group = CreateGroupBox(Localization.T("settings.tabs.title"), DpiHelper.Scale(140));
         group.Location = new Point(0, y);
         
-        _showFullUrlCheck = new CheckBox { Text = "在地址栏显示完整URL（按住Shift时可显示完整地址）", Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
-        _selectAllOnClickCheck = new CheckBox { Text = "单击地址栏时全选URL", Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
+        _showFullUrlCheck = new CheckBox { Text = Localization.T("settings.tabs.show_full_url"), Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
+        _selectAllOnClickCheck = new CheckBox { Text = Localization.T("settings.tabs.select_all_on_click"), Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
         
-        var inputModeLabel = new Label { Text = "地址栏输入方式:", Location = DpiHelper.Scale(new Point(15, 80)), AutoSize = true };
+        var inputModeLabel = new Label { Text = Localization.T("settings.tabs.input_mode"), Location = DpiHelper.Scale(new Point(15, 80)), AutoSize = true };
         _inputModeCombo = new ComboBox { Location = DpiHelper.Scale(new Point(120, 77)), Width = DpiHelper.Scale(150), DropDownStyle = ComboBoxStyle.DropDownList };
-        _inputModeCombo.Items.AddRange(new object[] { "输入即搜索（推荐）", "回车搜索" });
+        _inputModeCombo.Items.AddRange(new object[] { Localization.T("settings.tabs.input_mode.instant"), Localization.T("settings.tabs.input_mode.enter") });
         
-        var newTabLabel = new Label { Text = "新打开页面时:", Location = DpiHelper.Scale(new Point(15, 110)), AutoSize = true };
+        var newTabLabel = new Label { Text = Localization.T("settings.tabs.open_new"), Location = DpiHelper.Scale(new Point(15, 110)), AutoSize = true };
         _newTabPositionCombo = new ComboBox { Location = DpiHelper.Scale(new Point(120, 107)), Width = DpiHelper.Scale(150), DropDownStyle = ComboBoxStyle.DropDownList };
-        _newTabPositionCombo.Items.AddRange(new object[] { "当前标签右侧打开", "最后位置打开" });
+        _newTabPositionCombo.Items.AddRange(new object[] { Localization.T("settings.tabs.new_tab_position.right"), Localization.T("settings.tabs.new_tab_position.last") });
         
-        _doubleClickCloseCheck = new CheckBox { Text = "双击标签页关闭", Location = DpiHelper.Scale(new Point(300, 25)), AutoSize = true };
+        _doubleClickCloseCheck = new CheckBox { Text = Localization.T("settings.tabs.double_click_close"), Location = DpiHelper.Scale(new Point(300, 25)), AutoSize = true };
         
         group.Controls.AddRange(new Control[] { _showFullUrlCheck, _selectAllOnClickCheck, inputModeLabel, _inputModeCombo, newTabLabel, _newTabPositionCombo, _doubleClickCloseCheck });
         _basicPanel.Controls.Add(group);
@@ -517,13 +517,13 @@ public class SettingsForm : Form
     
     private int CreateSearchEngineGroup(int y)
     {
-        var group = CreateGroupBox("地址栏搜索引擎", DpiHelper.Scale(70));
+        var group = CreateGroupBox(Localization.T("settings.search.title"), DpiHelper.Scale(70));
         group.Location = new Point(0, y);
         
         _searchEngineCombo = new ComboBox { Location = DpiHelper.Scale(new Point(15, 28)), Width = DpiHelper.Scale(80), DropDownStyle = ComboBoxStyle.DropDownList };
         RefreshSearchEngineCombo();
         
-        _manageSearchEnginesBtn = new Button { Text = "管理搜索引擎...", Location = DpiHelper.Scale(new Point(105, 26)), Size = DpiHelper.Scale(new Size(110, 25)), FlatStyle = FlatStyle.Flat };
+        _manageSearchEnginesBtn = new Button { Text = Localization.T("search.manage_button"), Location = DpiHelper.Scale(new Point(105, 26)), Size = DpiHelper.Scale(new Size(110, 25)), FlatStyle = FlatStyle.Flat };
         _manageSearchEnginesBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         _manageSearchEnginesBtn.Click += OnManageSearchEngines;
         
@@ -536,7 +536,12 @@ public class SettingsForm : Form
     private void RefreshSearchEngineCombo()
     {
         _searchEngineCombo.Items.Clear();
-        _searchEngineCombo.Items.AddRange(new object[] { "360", "百度", "必应", "Google" });
+        _searchEngineCombo.Items.AddRange(new object[] { 
+            Localization.T("settings.search.options.360"), 
+            Localization.T("settings.search.options.baidu"), 
+            Localization.T("settings.search.options.bing"), 
+            Localization.T("settings.search.options.google") 
+        });
         
         // 添加自定义搜索引擎
         foreach (var engine in _settingsService.Settings.CustomSearchEngines)
@@ -559,10 +564,10 @@ public class SettingsForm : Form
     
     private int CreateUserDataGroup(int y)
     {
-        var group = CreateGroupBox("用户数据", DpiHelper.Scale(60));
+        var group = CreateGroupBox(Localization.T("settings.user_data.title"), DpiHelper.Scale(60));
         group.Location = new Point(0, y);
         
-        _importDataBtn = new Button { Text = "导入收藏和设置...", Location = DpiHelper.Scale(new Point(15, 25)), Size = DpiHelper.Scale(new Size(120, 25)), FlatStyle = FlatStyle.Flat };
+        _importDataBtn = new Button { Text = Localization.T("settings.user_data.import"), Location = DpiHelper.Scale(new Point(15, 25)), Size = DpiHelper.Scale(new Size(120, 25)), FlatStyle = FlatStyle.Flat };
         _importDataBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         
         group.Controls.Add(_importDataBtn);
@@ -573,11 +578,11 @@ public class SettingsForm : Form
     
     private int CreateAppearanceGroup(int y)
     {
-        var group = CreateGroupBox("外观", DpiHelper.Scale(110));
+        var group = CreateGroupBox(Localization.T("appearance.title"), DpiHelper.Scale(110));
         group.Location = new Point(0, y);
         
-        _showHomeButtonCheck = new CheckBox { Text = "显示\"主页\"按钮", Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
-        _showBookmarkBarCheck = new CheckBox { Text = "总是显示书签栏", Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
+        _showHomeButtonCheck = new CheckBox { Text = Localization.T("appearance.show_home_button"), Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
+        _showBookmarkBarCheck = new CheckBox { Text = Localization.T("appearance.show_bookmark_bar"), Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
         _showBookmarkBarCheck.CheckedChanged += (s, e) => 
         {
             if (_showBookmarkBarCheck.Focused) // 只有用户点击时才触发
@@ -592,7 +597,7 @@ public class SettingsForm : Form
                 if (!hasBookmarks && _showBookmarkBarCheck.Checked)
                 {
                     // 如果用户强行勾选但没内容，给出提示并自动取消勾选
-                    MessageBox.Show("收藏栏目前没有任何内容（包括“其他收藏”），已自动隐藏。请先添加收藏。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Localization.Raw(), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                     _showBookmarkBarCheck.Checked = false;
                     _settingsService.Settings.AlwaysShowBookmarkBar = false;
                     _settingsService.Save();
@@ -600,12 +605,12 @@ public class SettingsForm : Form
                 
                 if (!hasBookmarks)
                 {
-                    _showBookmarkBarCheck.Text = "总是显示书签栏 (当前无书签已收起)";
+                    _showBookmarkBarCheck.Text = Localization.T("appearance.show_bookmark_bar");
                     _showBookmarkBarCheck.ForeColor = Color.Gray;
                 }
                 else
                 {
-                    _showBookmarkBarCheck.Text = "总是显示书签栏";
+                    _showBookmarkBarCheck.Text = Localization.T("appearance.show_bookmark_bar");
                     _showBookmarkBarCheck.ForeColor = Color.Black;
                 }
             }
@@ -614,7 +619,7 @@ public class SettingsForm : Form
         // 隐藏收藏栏功能
         var hideBookmarkBarCheck = new CheckBox 
         { 
-            Text = "隐藏收藏栏", 
+            Text = Localization.T("appearance.hide_bookmark_bar"), 
             Location = DpiHelper.Scale(new Point(15, 75)), 
             AutoSize = true 
         };
@@ -631,20 +636,20 @@ public class SettingsForm : Form
     
     private int CreateDownloadGroup(int y)
     {
-        var group = CreateGroupBox("下载内容", DpiHelper.Scale(110));
+        var group = CreateGroupBox(Localization.T("downloads.title"), DpiHelper.Scale(110));
         group.Location = new Point(0, y);
         
-        var downloadModeLabel = new Label { Text = "选择默认下载工具:", Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
+        var downloadModeLabel = new Label { Text = Localization.T("downloads.default_tool_label"), Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
         _downloadModeCombo = new ComboBox { Location = DpiHelper.Scale(new Point(130, 22)), Width = DpiHelper.Scale(100), DropDownStyle = ComboBoxStyle.DropDownList };
         _downloadModeCombo.Items.AddRange(new object[] { "使用内置下载器", "使用外部工具" });
         
-        var downloadPathLabel = new Label { Text = "下载内容保存位置:", Location = DpiHelper.Scale(new Point(15, 55)), AutoSize = true };
+        var downloadPathLabel = new Label { Text = Localization.T("downloads.location_label"), Location = DpiHelper.Scale(new Point(15, 55)), AutoSize = true };
         _downloadPathBox = new TextBox { Location = DpiHelper.Scale(new Point(130, 52)), Width = DpiHelper.Scale(200) };
-        _browseDownloadPathBtn = new Button { Text = "浏览...", Location = DpiHelper.Scale(new Point(335, 50)), Size = DpiHelper.Scale(new Size(60, 25)), FlatStyle = FlatStyle.Flat };
+        _browseDownloadPathBtn = new Button { Text = Localization.T("downloads.browse"), Location = DpiHelper.Scale(new Point(335, 50)), Size = DpiHelper.Scale(new Size(60, 25)), FlatStyle = FlatStyle.Flat };
         _browseDownloadPathBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         _browseDownloadPathBtn.Click += OnBrowseDownloadPath;
         
-        _askDownloadLocationCheck = new CheckBox { Text = "下载前询问每个文件的保存位置", Location = DpiHelper.Scale(new Point(15, 82)), AutoSize = true };
+        _askDownloadLocationCheck = new CheckBox { Text = Localization.T("downloads.ask_location_label"), Location = DpiHelper.Scale(new Point(15, 82)), AutoSize = true };
         
         group.Controls.AddRange(new Control[] { downloadModeLabel, _downloadModeCombo, downloadPathLabel, _downloadPathBox, _browseDownloadPathBtn, _askDownloadLocationCheck });
         _basicPanel.Controls.Add(group);
@@ -654,17 +659,17 @@ public class SettingsForm : Form
     
     private int CreateDefaultBrowserGroup(int y)
     {
-        var group = CreateGroupBox("默认浏览器", DpiHelper.Scale(80));
+        var group = CreateGroupBox(Localization.T("settings.default_browser.title"), DpiHelper.Scale(80));
         group.Location = new Point(0, y);
         
-        _setDefaultBtn = new Button { Text = "设为默认浏览器", Location = DpiHelper.Scale(new Point(15, 25)), Size = DpiHelper.Scale(new Size(140, 28)), FlatStyle = FlatStyle.Flat };
+        _setDefaultBtn = new Button { Text = Localization.T("settings.default_browser.set_default"), Location = DpiHelper.Scale(new Point(15, 25)), Size = DpiHelper.Scale(new Size(140, 28)), FlatStyle = FlatStyle.Flat };
         _setDefaultBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         _setDefaultBtn.Click += (s, e) => 
         {
             DefaultBrowserHelper.SetAsDefaultBrowser();
         };
         
-        _defaultStatusLabel = new Label { Text = "正在检查默认浏览器状态...", Location = DpiHelper.Scale(new Point(15, 55)), AutoSize = true, ForeColor = Color.Gray };
+        _defaultStatusLabel = new Label { Text = Localization.T("settings.default_browser.checking"), Location = DpiHelper.Scale(new Point(15, 55)), AutoSize = true, ForeColor = Color.Gray };
         
         group.Controls.AddRange(new Control[] { _setDefaultBtn, _defaultStatusLabel });
         _basicPanel.Controls.Add(group);
@@ -681,13 +686,13 @@ public class SettingsForm : Form
         bool isDefault = DefaultBrowserHelper.IsDefaultBrowser();
         if (isDefault)
         {
-            _defaultStatusLabel.Text = $"{AppConstants.AppName} 目前是您的默认浏览器。";
+            _defaultStatusLabel.Text = Localization.T("settings.default_browser.is_default", new Dictionary<string, string> { { "app", AppConstants.AppName } });
             _defaultStatusLabel.ForeColor = Color.Green;
             _setDefaultBtn.Enabled = false;
         }
         else
         {
-            _defaultStatusLabel.Text = $"{AppConstants.AppName} 目前不是默认浏览器。";
+            _defaultStatusLabel.Text = Localization.T("settings.default_browser.not_default", new Dictionary<string, string> { { "app", AppConstants.AppName } });
             _defaultStatusLabel.ForeColor = Color.Gray;
             _setDefaultBtn.Enabled = true;
         }
@@ -703,45 +708,45 @@ public class SettingsForm : Form
         _contentPanel.Controls.Add(_aiPanel);
         
         var y = 0;
-        var headerPanel = CreateHeaderPanel("AI 设置", "配置您的 AI 助手", _aiPanel);
+        var headerPanel = CreateHeaderPanel(Localization.T("ai.settings.title"), Localization.T("ai.settings.subtitle"), _aiPanel);
         headerPanel.Location = new Point(0, y);
         _aiPanel.Controls.Add(headerPanel);
         y += headerPanel.Height + DpiHelper.Scale(20);
 
         // 服务模式
-        var modeGroup = CreateGroupBox("服务模式", DpiHelper.Scale(80));
+        var modeGroup = CreateGroupBox(Localization.T("ai.mode.title"), DpiHelper.Scale(80));
         modeGroup.Location = new Point(0, y);
-        _aiModeWeb = new RadioButton { Text = "内置网页模式 (DeepSeek)", Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
-        _aiModeApi = new RadioButton { Text = "自定义 API 模式 (支持 OpenAI 兼容接口)", Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
+        _aiModeWeb = new RadioButton { Text = Localization.T("ai.mode.web"), Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
+        _aiModeApi = new RadioButton { Text = Localization.T("ai.mode.api"), Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
         modeGroup.Controls.AddRange(new Control[] { _aiModeWeb, _aiModeApi });
         _aiPanel.Controls.Add(modeGroup);
         y += modeGroup.Height + DpiHelper.Scale(15);
 
         // API 配置
-        var apiGroup = CreateGroupBox("API 配置", DpiHelper.Scale(230));
+        var apiGroup = CreateGroupBox(Localization.T("ai.api.title"), DpiHelper.Scale(230));
         apiGroup.Location = new Point(0, y);
         
-        var providerLabel = new Label { Text = "服务商预设:", Location = DpiHelper.Scale(new Point(15, 30)), AutoSize = true };
+        var providerLabel = new Label { Text = Localization.T("ai.api.provider"), Location = DpiHelper.Scale(new Point(15, 30)), AutoSize = true };
         _aiProviderCombo = new ComboBox { Location = DpiHelper.Scale(new Point(120, 27)), Width = DpiHelper.Scale(300), DropDownStyle = ComboBoxStyle.DropDownList };
         _aiProviderCombo.Items.AddRange(new object[] { "自定义", "DeepSeek", "火山引擎 (Volcengine Ark)", "OpenAI", "Anthropic (Claude)", "Groq", "MiniMax", "阿里百炼 (DashScope)", "Ollama (本地)" });
         _aiProviderCombo.SelectedIndexChanged += OnAiProviderChanged;
 
-        var apiKeyLabel = new Label { Text = "API Key:", Location = DpiHelper.Scale(new Point(15, 65)), AutoSize = true };
+        var apiKeyLabel = new Label { Text = Localization.T("ai.api.key"), Location = DpiHelper.Scale(new Point(15, 65)), AutoSize = true };
         _aiApiKeyBox = new TextBox { Location = DpiHelper.Scale(new Point(120, 62)), Width = DpiHelper.Scale(300), PasswordChar = '*' };
         
-        var apiBaseLabel = new Label { Text = "API Proxy URL:", Location = DpiHelper.Scale(new Point(15, 100)), AutoSize = true };
+        var apiBaseLabel = new Label { Text = Localization.T("ai.api.base"), Location = DpiHelper.Scale(new Point(15, 100)), AutoSize = true };
         _aiApiBaseUrlBox = new TextBox { Location = DpiHelper.Scale(new Point(120, 97)), Width = DpiHelper.Scale(300) };
         
-        var modelPresetLabel = new Label { Text = "模型预设:", Location = DpiHelper.Scale(new Point(15, 135)), AutoSize = true };
+        var modelPresetLabel = new Label { Text = Localization.T("ai.api.model_preset"), Location = DpiHelper.Scale(new Point(15, 135)), AutoSize = true };
         _aiModelPresetCombo = new ComboBox { Location = DpiHelper.Scale(new Point(120, 132)), Width = DpiHelper.Scale(300), DropDownStyle = ComboBoxStyle.DropDownList };
         _aiModelPresetCombo.SelectedIndexChanged += OnAiModelPresetChanged;
 
-        var modelLabel = new Label { Text = "Model Name:", Location = DpiHelper.Scale(new Point(15, 170)), AutoSize = true };
+        var modelLabel = new Label { Text = Localization.T("ai.api.model_name"), Location = DpiHelper.Scale(new Point(15, 170)), AutoSize = true };
         _aiModelNameBox = new TextBox { Location = DpiHelper.Scale(new Point(120, 167)), Width = DpiHelper.Scale(300) };
 
         _aiApiTipLabel = new Label
         {
-            Text = "提示：适用于 DeepSeek, OpenAI, Ollama 等兼容接口",
+            Text = Localization.T("ai.tip.compatible"),
             Location = DpiHelper.Scale(new Point(120, 200)),
             AutoSize = true,
             ForeColor = Color.Gray,
@@ -760,9 +765,9 @@ public class SettingsForm : Form
         y += apiGroup.Height + DpiHelper.Scale(15);
 
         // 网页配置
-        var webGroup = CreateGroupBox("网页模式配置", DpiHelper.Scale(70));
+        var webGroup = CreateGroupBox(Localization.T("ai.web.title"), DpiHelper.Scale(70));
         webGroup.Location = new Point(0, y);
-        var webUrlLabel = new Label { Text = "AI 网页地址:", Location = DpiHelper.Scale(new Point(15, 30)), AutoSize = true };
+        var webUrlLabel = new Label { Text = Localization.T("ai.web.url"), Location = DpiHelper.Scale(new Point(15, 30)), AutoSize = true };
         _aiCustomWebUrlBox = new TextBox { Location = DpiHelper.Scale(new Point(120, 27)), Width = DpiHelper.Scale(300) };
         webGroup.Controls.AddRange(new Control[] { webUrlLabel, _aiCustomWebUrlBox });
         _aiPanel.Controls.Add(webGroup);
@@ -800,15 +805,15 @@ public class SettingsForm : Form
         {
             if (provider == "阿里百炼 (DashScope)")
             {
-                _aiApiTipLabel.Text = "提示：百炼 OpenAI 兼容接口 BaseUrl 默认 https://dashscope.aliyuncs.com/compatible-mode/v1";
+                _aiApiTipLabel.Text = Localization.T("ai.tip.dashscope");
             }
             else if (provider == "火山引擎 (Volcengine Ark)")
             {
-                _aiApiTipLabel.Text = "提示：火山方舟 V3 必须使用【推理接入点 ID (Endpoint ID)】，格式如 ep-2024xxxxxxxx-xxxxx";
+                _aiApiTipLabel.Text = Localization.T("ai.tip.volcengine");
             }
             else
             {
-                _aiApiTipLabel.Text = "提示：适用于 DeepSeek, OpenAI, Ollama 等兼容接口";
+                _aiApiTipLabel.Text = Localization.T("ai.tip.compatible");
             }
         }
 
@@ -964,43 +969,43 @@ public class SettingsForm : Form
         
         var y = 0;
         
-        var headerPanel = CreateHeaderPanel("隐私设置", "");
+        var headerPanel = CreateHeaderPanel(Localization.T("settings.sidebar.privacy"), "");
         headerPanel.Location = new Point(0, y);
         _privacyPanel.Controls.Add(headerPanel);
         y += headerPanel.Height + DpiHelper.Scale(20);
         
         // 清除浏览数据
-        var clearGroup = CreateGroupBox("清除浏览数据", DpiHelper.Scale(100));
+        var clearGroup = CreateGroupBox(Localization.T("privacy.clear_title"), DpiHelper.Scale(100));
         clearGroup.Location = new Point(0, y);
         
-        _clearBrowsingDataBtn = new Button { Text = "清除浏览数据...", Location = DpiHelper.Scale(new Point(15, 25)), Size = DpiHelper.Scale(new Size(120, 28)), FlatStyle = FlatStyle.Flat };
+        _clearBrowsingDataBtn = new Button { Text = Localization.T("privacy.clear_button"), Location = DpiHelper.Scale(new Point(15, 25)), Size = DpiHelper.Scale(new Size(120, 28)), FlatStyle = FlatStyle.Flat };
         _clearBrowsingDataBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         _clearBrowsingDataBtn.Click += OnClearBrowsingData;
         
-        var clearLabel = new Label { Text = "清除浏览历史记录、Cookie、缓存等数据", Location = DpiHelper.Scale(new Point(15, 60)), AutoSize = true, ForeColor = Color.Gray };
+        var clearLabel = new Label { Text = Localization.T("privacy.clear_desc"), Location = DpiHelper.Scale(new Point(15, 60)), AutoSize = true, ForeColor = Color.Gray };
         
         clearGroup.Controls.AddRange(new Control[] { _clearBrowsingDataBtn, clearLabel });
         _privacyPanel.Controls.Add(clearGroup);
         y += clearGroup.Height + DpiHelper.Scale(15);
         
         // 退出时清除
-        var exitClearGroup = CreateGroupBox("退出时自动清除", DpiHelper.Scale(150));
+        var exitClearGroup = CreateGroupBox(Localization.T("privacy.exit_clear.title"), DpiHelper.Scale(150));
         exitClearGroup.Location = new Point(0, y);
         
-        _clearHistoryOnExitCheck = new CheckBox { Text = "浏览历史记录", Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
-        _clearDownloadsOnExitCheck = new CheckBox { Text = "下载记录", Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
-        _clearCacheOnExitCheck = new CheckBox { Text = "缓存的图片和文件", Location = DpiHelper.Scale(new Point(15, 75)), AutoSize = true };
-        _clearCookiesOnExitCheck = new CheckBox { Text = "Cookie及其他网站数据", Location = DpiHelper.Scale(new Point(15, 100)), AutoSize = true };
+        _clearHistoryOnExitCheck = new CheckBox { Text = Localization.T("privacy.exit_clear.history"), Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
+        _clearDownloadsOnExitCheck = new CheckBox { Text = Localization.T("privacy.exit_clear.downloads"), Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
+        _clearCacheOnExitCheck = new CheckBox { Text = Localization.T("privacy.exit_clear.cache"), Location = DpiHelper.Scale(new Point(15, 75)), AutoSize = true };
+        _clearCookiesOnExitCheck = new CheckBox { Text = Localization.T("privacy.exit_clear.cookies"), Location = DpiHelper.Scale(new Point(15, 100)), AutoSize = true };
         
         exitClearGroup.Controls.AddRange(new Control[] { _clearHistoryOnExitCheck, _clearDownloadsOnExitCheck, _clearCacheOnExitCheck, _clearCookiesOnExitCheck });
         _privacyPanel.Controls.Add(exitClearGroup);
         y += exitClearGroup.Height + DpiHelper.Scale(15);
         
         // 隐私选项
-        var privacyGroup = CreateGroupBox("隐私选项", DpiHelper.Scale(60));
+        var privacyGroup = CreateGroupBox(Localization.T("privacy.options.title"), DpiHelper.Scale(60));
         privacyGroup.Location = new Point(0, y);
         
-        _sendDoNotTrackCheck = new CheckBox { Text = "随浏览流量一起发送\"请勿跟踪\"请求", Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
+        _sendDoNotTrackCheck = new CheckBox { Text = Localization.T("privacy.options.dnt"), Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
         
         privacyGroup.Controls.Add(_sendDoNotTrackCheck);
         _privacyPanel.Controls.Add(privacyGroup);
@@ -1019,50 +1024,50 @@ public class SettingsForm : Form
         
         var y = 0;
         
-        var headerPanel = CreateHeaderPanel("高级设置", "");
+        var headerPanel = CreateHeaderPanel(Localization.T("settings.advanced.title"), "");
         headerPanel.Location = new Point(0, y);
         _advancedPanel.Controls.Add(headerPanel);
         y += headerPanel.Height + DpiHelper.Scale(20);
         
         // 鼠标手势
-        var gestureGroup = CreateGroupBox("鼠标手势", DpiHelper.Scale(80));
+        var gestureGroup = CreateGroupBox(Localization.T("settings.advanced.gesture.title"), DpiHelper.Scale(80));
         gestureGroup.Location = new Point(0, y);
         
-        _mouseGestureCheck = new CheckBox { Text = "启用鼠标手势", Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
-        _superDragCheck = new CheckBox { Text = "启用超级拖拽", Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
+        _mouseGestureCheck = new CheckBox { Text = Localization.T("settings.advanced.gesture.enable"), Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
+        _superDragCheck = new CheckBox { Text = Localization.T("settings.advanced.super_drag.enable"), Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
         
         gestureGroup.Controls.AddRange(new Control[] { _mouseGestureCheck, _superDragCheck });
         _advancedPanel.Controls.Add(gestureGroup);
         y += gestureGroup.Height + DpiHelper.Scale(15);
         
         // 性能
-        var perfGroup = CreateGroupBox("性能", DpiHelper.Scale(70));
+        var perfGroup = CreateGroupBox(Localization.T("settings.advanced.performance.title"), DpiHelper.Scale(70));
         perfGroup.Location = new Point(0, y);
         
-        var memLabel = new Label { Text = "后台标签内存释放时间:", Location = DpiHelper.Scale(new Point(15, 28)), AutoSize = true };
+        var memLabel = new Label { Text = Localization.T("settings.advanced.performance.mem_release_time"), Location = DpiHelper.Scale(new Point(15, 28)), AutoSize = true };
         _memoryReleaseNum = new NumericUpDown { Location = DpiHelper.Scale(new Point(160, 25)), Width = DpiHelper.Scale(60), Minimum = 1, Maximum = 60 };
-        var minLabel = new Label { Text = "分钟", Location = DpiHelper.Scale(new Point(225, 28)), AutoSize = true };
+        var minLabel = new Label { Text = Localization.T("time.minute"), Location = DpiHelper.Scale(new Point(225, 28)), AutoSize = true };
         
         perfGroup.Controls.AddRange(new Control[] { memLabel, _memoryReleaseNum, minLabel });
         _advancedPanel.Controls.Add(perfGroup);
         y += perfGroup.Height + DpiHelper.Scale(15);
         
         // 重置设置
-        var resetGroup = CreateGroupBox("重置设置", DpiHelper.Scale(80));
+        var resetGroup = CreateGroupBox(Localization.T("settings.reset.title"), DpiHelper.Scale(80));
         resetGroup.Location = new Point(0, y);
         
-        _resetSettingsBtn = new Button { Text = "将设置还原为原始默认设置", Location = DpiHelper.Scale(new Point(15, 25)), Size = DpiHelper.Scale(new Size(180, 28)), FlatStyle = FlatStyle.Flat };
+        _resetSettingsBtn = new Button { Text = Localization.T("settings.reset.button"), Location = DpiHelper.Scale(new Point(15, 25)), Size = DpiHelper.Scale(new Size(180, 28)), FlatStyle = FlatStyle.Flat };
         _resetSettingsBtn.FlatAppearance.BorderColor = Color.FromArgb(200, 200, 200);
         _resetSettingsBtn.Click += OnResetSettings;
         
-        var resetLabel = new Label { Text = "这不会影响您的书签、历史记录和保存的密码。", Location = DpiHelper.Scale(new Point(15, 55)), AutoSize = true, ForeColor = Color.Gray };
+        var resetLabel = new Label { Text = Localization.T("settings.reset.desc"), Location = DpiHelper.Scale(new Point(15, 55)), AutoSize = true, ForeColor = Color.Gray };
         
         resetGroup.Controls.AddRange(new Control[] { _resetSettingsBtn, resetLabel });
         _advancedPanel.Controls.Add(resetGroup);
         y += resetGroup.Height + DpiHelper.Scale(15);
         
         // 返回基本设置
-        var backLink = CreateLinkLabel("← 返回基本设置", DpiHelper.Scale(new Point(0, y)));
+        var backLink = CreateLinkLabel(Localization.T("settings.advanced.back_basic"), DpiHelper.Scale(new Point(0, y)));
         backLink.Click += (s, e) => _navList.SelectedIndex = 1; // 切换回基本设置
         _advancedPanel.Controls.Add(backLink);
         
@@ -1195,7 +1200,7 @@ public class SettingsForm : Form
     {
         using var dialog = new FolderBrowserDialog
         {
-            Description = "选择下载保存位置",
+            Description = Localization.T("downloads.browse_desc"),
             SelectedPath = _downloadPathBox.Text
         };
         
@@ -1213,15 +1218,15 @@ public class SettingsForm : Form
         }
         else
         {
-            MessageBox.Show("请在浏览器主窗口中使用“删除浏览数据”功能。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Localization.Raw(), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
     
     private void OnResetSettings(object? sender, EventArgs e)
     {
         var result = MessageBox.Show(
-            "确定要将所有设置还原为默认值吗？\n\n这不会影响您的书签、历史记录和保存的密码。",
-            "重置设置",
+            Localization.Raw(),
+            Localization.Raw(),
             MessageBoxButtons.YesNo,
             MessageBoxIcon.Question);
         
@@ -1229,7 +1234,7 @@ public class SettingsForm : Form
         {
             _settingsService.Reset();
             LoadSettings();
-            MessageBox.Show("设置已重置为默认值。", "重置完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Localization.Raw(), Localization.Raw(), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
     
@@ -1283,12 +1288,12 @@ public class SettingsForm : Form
         _showBookmarkBarCheck.Checked = settings.AlwaysShowBookmarkBar;
         if (!hasBookmarks && settings.AlwaysShowBookmarkBar)
         {
-            _showBookmarkBarCheck.Text = "总是显示书签栏 (当前无书签已收起)";
+            _showBookmarkBarCheck.Text = Localization.Raw();
             _showBookmarkBarCheck.ForeColor = Color.Gray;
         }
         else
         {
-            _showBookmarkBarCheck.Text = "总是显示书签栏";
+            _showBookmarkBarCheck.Text = Localization.Raw();
             _showBookmarkBarCheck.ForeColor = Color.Black;
         }
         

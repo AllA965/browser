@@ -174,7 +174,7 @@ public class UserInfoPopup : Form
             // 账号管理按钮
             var manageBtn = new Button
             {
-                Text = "⚙  个人资料设置",
+                Text = Localization.T("user.manage_profile"),
                 Size = DpiHelper.Scale(new Size(224, 34)),
                 Location = DpiHelper.Scale(new Point(18, 100)),
                 FlatStyle = FlatStyle.Flat,
@@ -194,7 +194,7 @@ public class UserInfoPopup : Form
                 manageBtn.Enabled = false;
                 BeginInvoke(new Action(() => {
                     if (!IsDisposed) Close();
-                    MessageBox.Show("个人资料设置功能正在开发中...", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Localization.T("common.in_dev"), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }));
             };
             ApplyRoundedRegion(manageBtn, DpiHelper.Scale(6));
@@ -202,7 +202,7 @@ public class UserInfoPopup : Form
             // 退出按钮 (自定义样式)
             var logoutBtn = new Button
             {
-                Text = "⏻  退出登录",
+                Text = Localization.T("user.logout"),
                 Size = DpiHelper.Scale(new Size(224, 34)),
                 Location = DpiHelper.Scale(new Point(18, 140)),
                 FlatStyle = FlatStyle.Flat,

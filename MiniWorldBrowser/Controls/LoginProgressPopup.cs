@@ -47,7 +47,7 @@ public class LoginProgressPopup : Form
             }
             else
             {
-                _timerLabel.Text = $"正在等待网页登录... ({_remainingSeconds}s)";
+                _timerLabel.Text = Localization.Raw();
             }
         };
         _timeoutTimer.Start();
@@ -77,7 +77,7 @@ public class LoginProgressPopup : Form
 
         var titleLabel = new Label
         {
-            Text = "正在登录",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(62, 20)),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(12F), FontStyle.Bold),
@@ -86,7 +86,7 @@ public class LoginProgressPopup : Form
 
         _timerLabel = new Label
         {
-            Text = $"正在等待网页登录... ({_remainingSeconds}s)",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(62, 48)),
             Size = DpiHelper.Scale(new Size(280, 20)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -102,7 +102,7 @@ public class LoginProgressPopup : Form
 
         var cancelBtn = new Button
         {
-            Text = "取消登录",
+            Text = Localization.Raw(),
             Size = DpiHelper.Scale(new Size(324, 38)),
             Location = DpiHelper.Scale(new Point(18, 112)),
             FlatStyle = FlatStyle.Flat,

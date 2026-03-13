@@ -26,7 +26,7 @@ public class AddCreditCardDialog : Form
     private void InitializeUI()
     {
         AppIconHelper.SetIcon(this);
-        Text = "添加信用卡";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(350, 290));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -40,7 +40,7 @@ public class AddCreditCardDialog : Form
         // 持卡人姓名
         var nameLabel = new Label
         {
-            Text = "持卡人姓名",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true
         };
@@ -58,7 +58,7 @@ public class AddCreditCardDialog : Form
         // 信用卡号
         var cardNumberLabel = new Label
         {
-            Text = "信用卡号",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true
         };
@@ -76,7 +76,7 @@ public class AddCreditCardDialog : Form
         // 截止日期
         var expiryLabel = new Label
         {
-            Text = "截止日期",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true
         };
@@ -114,7 +114,7 @@ public class AddCreditCardDialog : Form
         // 按钮
         _okBtn = new Button
         {
-            Text = "确定",
+            Text = Localization.T("confirm.ok"),
             Location = new Point(DpiHelper.Scale(160), y),
             Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.Flat,
@@ -125,7 +125,7 @@ public class AddCreditCardDialog : Form
 
         _cancelBtn = new Button
         {
-            Text = "取消",
+            Text = Localization.T("confirm.cancel"),
             Location = new Point(DpiHelper.Scale(245), y),
             Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.Flat,

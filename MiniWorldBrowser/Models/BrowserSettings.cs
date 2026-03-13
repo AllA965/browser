@@ -214,6 +214,11 @@ public class BrowserSettings
     /// </summary>
     public bool DarkMode { get; set; } = false;
     
+    /// <summary>
+    /// 语言代码: auto=跟随系统, zh-CN, en
+    /// </summary>
+    public string LanguageCode { get; set; } = "auto";
+    
     #endregion
     
     #region 下载内容

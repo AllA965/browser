@@ -21,7 +21,7 @@ public class AutofillSettingsDialog : Form
     private void InitializeUI()
     {
         AppIconHelper.SetIcon(this);
-        Text = "自动填充设置";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(550, 550));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -35,7 +35,7 @@ public class AutofillSettingsDialog : Form
         // 地址标题
         var addressLabel = new Label
         {
-            Text = "地址",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold)
@@ -53,16 +53,16 @@ public class AutofillSettingsDialog : Form
             GridLines = false,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _addressList.Columns.Add("名称", DpiHelper.Scale(150));
-        _addressList.Columns.Add("地址", DpiHelper.Scale(200));
-        _addressList.Columns.Add("电话", DpiHelper.Scale(120));
+        _addressList.Columns.Add(Localization.Raw(), DpiHelper.Scale(150));
+        _addressList.Columns.Add(Localization.Raw(), DpiHelper.Scale(200));
+        _addressList.Columns.Add(Localization.Raw(), DpiHelper.Scale(120));
         Controls.Add(_addressList);
         y += DpiHelper.Scale(160);
 
         // 添加新地址按钮
         _addAddressBtn = new Button
         {
-            Text = "添加新地址...",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(20), y),
             Size = DpiHelper.Scale(new Size(100, 28)),
             FlatStyle = FlatStyle.Flat
@@ -75,7 +75,7 @@ public class AutofillSettingsDialog : Form
         // 信用卡标题
         var creditCardLabel = new Label
         {
-            Text = "信用卡",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold)
@@ -93,16 +93,16 @@ public class AutofillSettingsDialog : Form
             GridLines = false,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _creditCardList.Columns.Add("持卡人", DpiHelper.Scale(150));
-        _creditCardList.Columns.Add("卡号", DpiHelper.Scale(200));
-        _creditCardList.Columns.Add("有效期", DpiHelper.Scale(120));
+        _creditCardList.Columns.Add(Localization.Raw(), DpiHelper.Scale(150));
+        _creditCardList.Columns.Add(Localization.Raw(), DpiHelper.Scale(200));
+        _creditCardList.Columns.Add(Localization.Raw(), DpiHelper.Scale(120));
         Controls.Add(_creditCardList);
         y += DpiHelper.Scale(160);
 
         // 添加新信用卡按钮
         _addCreditCardBtn = new Button
         {
-            Text = "添加新信用卡...",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(20), y),
             Size = DpiHelper.Scale(new Size(110, 28)),
             FlatStyle = FlatStyle.Flat
@@ -114,7 +114,7 @@ public class AutofillSettingsDialog : Form
         // 完成按钮
         _doneBtn = new Button
         {
-            Text = "完成",
+            Text = Localization.T("common.done"),
             Location = DpiHelper.Scale(new Point(440, 475)),
             Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.Flat,

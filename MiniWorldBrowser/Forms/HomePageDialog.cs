@@ -24,7 +24,7 @@ public class HomePageDialog : Form
     private void InitializeUI()
     {
         AppIconHelper.SetIcon(this);
-        Text = "启动页";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(450, 180));
         FormBorderStyle = FormBorderStyle.FixedDialog;
         StartPosition = FormStartPosition.CenterParent;
@@ -37,7 +37,7 @@ public class HomePageDialog : Form
         // 添加新网页标签
         var label = new Label
         {
-            Text = "添加新网页",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(25, 40)),
             AutoSize = true,
             ForeColor = Color.FromArgb(51, 51, 51)
@@ -53,7 +53,7 @@ public class HomePageDialog : Form
         };
         _urlTextBox.GotFocus += (s, e) =>
         {
-            if (_urlTextBox.Text == "输入网址...")
+            if (_urlTextBox.Text == Localization.Raw())
             {
                 _urlTextBox.Text = "";
                 _urlTextBox.ForeColor = Color.Black;
@@ -63,7 +63,7 @@ public class HomePageDialog : Form
         {
             if (string.IsNullOrWhiteSpace(_urlTextBox.Text))
             {
-                _urlTextBox.Text = "输入网址...";
+                _urlTextBox.Text = Localization.Raw();
                 _urlTextBox.ForeColor = Color.Gray;
             }
         };
@@ -72,7 +72,7 @@ public class HomePageDialog : Form
         // 确定按钮
         _okBtn = new Button
         {
-            Text = "确定",
+            Text = Localization.T("confirm.ok"),
             Size = DpiHelper.Scale(new Size(75, 28)),
             Location = DpiHelper.Scale(new Point(255, 100)),
             FlatStyle = FlatStyle.Flat,
@@ -86,7 +86,7 @@ public class HomePageDialog : Form
         // 取消按钮
         _cancelBtn = new Button
         {
-            Text = "取消",
+            Text = Localization.T("confirm.cancel"),
             Size = DpiHelper.Scale(new Size(75, 28)),
             Location = DpiHelper.Scale(new Point(340, 100)),
             FlatStyle = FlatStyle.Flat,
@@ -108,7 +108,7 @@ public class HomePageDialog : Form
             homePage == "about:newtab" || 
             homePage == "about:blank")
         {
-            _urlTextBox.Text = "输入网址...";
+            _urlTextBox.Text = Localization.Raw();
             _urlTextBox.ForeColor = Color.Gray;
         }
         else
@@ -123,7 +123,7 @@ public class HomePageDialog : Form
         var url = _urlTextBox.Text.Trim();
         
         // 如果是占位符文本或空，设置为新标签页
-        if (string.IsNullOrEmpty(url) || url == "输入网址...")
+        if (string.IsNullOrEmpty(url) || url == Localization.Raw())
         {
             _settingsService.Settings.HomePage = "about:newtab";
             _settingsService.Save();
@@ -149,7 +149,7 @@ public class HomePageDialog : Form
             homePage == "about:newtab" || 
             homePage == "about:blank")
         {
-            return "打开新的标签页";
+            return Localization.Raw();
         }
         return homePage;
     }

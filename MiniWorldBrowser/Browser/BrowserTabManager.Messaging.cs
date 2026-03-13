@@ -375,6 +375,10 @@ public partial class BrowserTabManager
                     _settingsService.Settings.AiCustomWebUrl = value.GetString() ?? "";
                     _settingsService.Save();
                     break;
+                case "language":
+                    _settingsService.Settings.LanguageCode = value.GetString() ?? "auto";
+                    _settingsService.Save();
+                    break;
             }
         }
         catch { }

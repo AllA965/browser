@@ -8,29 +8,41 @@ static class Program
     [STAThread]
     static void Main(string[] args)
     {
+        string logPath = Path.Combine(Path.GetTempPath(), "KunQiongBrowser_startup.log");
+        try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] start\n"); } catch { }
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
         Application.ThreadException += (s, e) =>
         {
             System.Diagnostics.Debug.WriteLine($"ThreadException: {e.Exception}");
-            MessageBox.Show($"发生错误: {e.Exception.Message}\n\n{e.Exception.StackTrace}", 
-                "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] thread-ex: {e.Exception}\n"); } catch { }
+            MessageBox.Show(Localization.Raw(),
+                Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         };
         AppDomain.CurrentDomain.UnhandledException += (s, e) =>
         {
             var ex = e.ExceptionObject as Exception;
             System.Diagnostics.Debug.WriteLine($"UnhandledException: {ex}");
-            MessageBox.Show($"发生严重错误: {ex?.Message}\n\n{ex?.StackTrace}", 
-                "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] unhandled-ex: {ex}\n"); } catch { }
+            MessageBox.Show(Localization.Raw(),
+                Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         };
         
         Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
         ApplicationConfiguration.Initialize();
+        Localization.Initialize();
         
         // 设置全局默认字体为微软雅黑，使界面更现代化，接近 Edge 风格
         Application.SetDefaultFont(new Font("Microsoft YaHei UI", 9F));
         
-        // 启动 Python Bridge 服务
-        PythonBridgeManager.StartBridge();
+        try
+        {
+            PythonBridgeManager.StartBridge();
+            try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] bridge-started\n"); } catch { }
+        }
+        catch (Exception ex)
+        {
+            try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] bridge-failed: {ex}\n"); } catch { }
+        }
         
         // 解析启动参数
         string? initialUrl = null;
@@ -41,7 +53,17 @@ static class Program
         
         // 使用 ApplicationContext 来管理多窗口生命周期
         var context = new MultiWindowApplicationContext();
-        context.ShowMainForm(initialUrl);
+        try
+        {
+            context.ShowMainForm(initialUrl);
+            try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] mainform-shown\n"); } catch { }
+        }
+        catch (Exception ex)
+        {
+            try { File.AppendAllText(logPath, $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] show-failed: {ex}\n"); } catch { }
+            MessageBox.Show(Localization.Raw(), Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
         Application.Run(context);
     }
 }

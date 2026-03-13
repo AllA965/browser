@@ -101,8 +101,8 @@ public class SecurityInfoPopup : Form
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
         
-        _permissionsTab = new TabPage("权限");
-        _connectionTab = new TabPage("连接");
+        _permissionsTab = new TabPage(Localization.Raw());
+        _connectionTab = new TabPage(Localization.Raw());
         
         CreatePermissionsContent();
         CreateConnectionContent();
@@ -113,7 +113,7 @@ public class SecurityInfoPopup : Form
         // 底部链接
         var bottomLink = new LinkLabel
         {
-            Text = "这分别意味着什么?",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(10, 345)), // 使用 DpiHelper.Scale 缩放 Point
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -168,8 +168,8 @@ public class SecurityInfoPopup : Form
         var statusLabel = new Label
         {
             Text = _isSecure 
-                ? "此网站提供了安全连接。" 
-                : "此网站未提供安全连接。",
+                ? Localization.Raw()
+                : Localization.Raw(),
             Location = DpiHelper.Scale(new Point(0, 28)),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -199,13 +199,13 @@ public class SecurityInfoPopup : Form
         // 权限项列表
         var permissions = new[]
         {
-            ("位置", "询问（默认）"),
-            ("摄像头", "询问（默认）"),
-            ("麦克风", "询问（默认）"),
-            ("通知", "询问（默认）"),
-            ("JavaScript", "允许（默认）"),
-            ("弹出窗口", "阻止（默认）"),
-            ("Cookie", "允许（默认）")
+            (Localization.Raw(), Localization.Raw()),
+            (Localization.Raw(), Localization.Raw()),
+            (Localization.Raw(), Localization.Raw()),
+            (Localization.Raw(), Localization.Raw()),
+            (Localization.Raw(), Localization.Raw()),
+            (Localization.Raw(), Localization.Raw()),
+            (Localization.Raw(), Localization.Raw())
         };
         
         foreach (var (name, status) in permissions)
@@ -219,7 +219,7 @@ public class SecurityInfoPopup : Form
         y += DpiHelper.Scale(10);
         var settingsBtn = new Button
         {
-            Text = "设置权限...",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(5, y)),
             Size = DpiHelper.Scale(new Size(100, 28)),
             FlatStyle = FlatStyle.Flat,
@@ -333,7 +333,7 @@ public class SecurityInfoPopup : Form
         // 证书描述
         var descLabel = new Label
         {
-            Text = $"鲲穹AI浏览器已证实此网站的证书是有效的。\n服务器提供了安全的 HTTPS 连接。",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(35, 5)),
             Size = new Size(panel.Width - DpiHelper.Scale(45), DpiHelper.Scale(40)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -343,7 +343,7 @@ public class SecurityInfoPopup : Form
         // 证书信息链接
         var certLink = new LinkLabel
         {
-            Text = "证书信息",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(35, 50)),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -382,7 +382,7 @@ public class SecurityInfoPopup : Form
         // 加密描述
         var descLabel = new Label
         {
-            Text = $"您与 {_host} 之间的连接采用新型加密套件进行了加密。",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(35, 5)),
             Size = new Size(panel.Width - DpiHelper.Scale(45), DpiHelper.Scale(35)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -392,7 +392,7 @@ public class SecurityInfoPopup : Form
         // TLS 版本
         var tlsLabel = new Label
         {
-            Text = "该连接使用 TLS 1.2 或更高版本。",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(35, 45)),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -402,7 +402,7 @@ public class SecurityInfoPopup : Form
         // 加密算法
         var cipherLabel = new Label
         {
-            Text = "该连接使用 AES_128_GCM 进行加密和身份验证，\n并使用 ECDHE_RSA 作为密钥交换机制。",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(35, 70)),
             Size = new Size(panel.Width - DpiHelper.Scale(45), DpiHelper.Scale(40)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -441,9 +441,7 @@ public class SecurityInfoPopup : Form
         // 警告描述
         var descLabel = new Label
         {
-            Text = "您与此网站之间建立的连接不安全。\n\n" +
-                   "请勿在此网站上输入任何敏感信息（例如密码或信用卡信息），" +
-                   "因为攻击者可能会窃取这些信息。",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(35, 5)),
             Size = new Size(panel.Width - DpiHelper.Scale(45), DpiHelper.Scale(100)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -453,7 +451,7 @@ public class SecurityInfoPopup : Form
         // 建议
         var suggestionLabel = new Label
         {
-            Text = "建议：\n• 不要在此页面输入个人信息\n• 检查网址是否正确\n• 联系网站管理员",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(35, 105)),
             Size = new Size(panel.Width - DpiHelper.Scale(45), DpiHelper.Scale(70)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -471,13 +469,8 @@ public class SecurityInfoPopup : Form
     private void ShowCertificateDetails()
     {
         MessageBox.Show(
-            $"网站: {_host}\n\n" +
-            "证书信息:\n" +
-            "• 颁发给: " + _host + "\n" +
-            "• 颁发者: 受信任的证书颁发机构\n" +
-            "• 有效期: 有效\n\n" +
-            "此证书用于验证网站身份并加密您与网站之间的通信。",
-            "证书信息",
+            Localization.Raw(),
+            Localization.Raw(),
             MessageBoxButtons.OK,
             MessageBoxIcon.Information);
     }

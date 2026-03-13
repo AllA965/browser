@@ -44,7 +44,7 @@ namespace MiniWorldBrowser.Forms
 
         private void InitializeUI()
         {
-            this.Text = "选择下载格式";
+            this.Text = Localization.T("video_dialog.title");
             this.Size = DpiHelper.Scale(new Size(620, 620)); // 略微调整尺寸
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -74,10 +74,10 @@ namespace MiniWorldBrowser.Forms
                 BackColor = Color.White
             };
 
-            _listView.Columns.Add("分辨率", DpiHelper.Scale(120));
-            _listView.Columns.Add("扩展名", DpiHelper.Scale(80));
-            _listView.Columns.Add("大小", DpiHelper.Scale(100));
-            _listView.Columns.Add("备注", DpiHelper.Scale(250));
+            _listView.Columns.Add(Localization.T("video_dialog.columns.resolution"), DpiHelper.Scale(120));
+            _listView.Columns.Add(Localization.T("video_dialog.columns.ext"), DpiHelper.Scale(80));
+            _listView.Columns.Add(Localization.T("video_dialog.columns.size"), DpiHelper.Scale(100));
+            _listView.Columns.Add(Localization.T("video_dialog.columns.note"), DpiHelper.Scale(250));
 
             // 列表容器
             var listContainer = new Panel
@@ -100,7 +100,7 @@ namespace MiniWorldBrowser.Forms
 
             _lblSaveTo = new Label
             {
-                Text = "下载保存至",
+                Text = Localization.T("video_dialog.save_to"),
                 Location = DpiHelper.Scale(new Point(15, 12)),
                 AutoSize = true,
                 Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F), FontStyle.Bold),
@@ -119,7 +119,7 @@ namespace MiniWorldBrowser.Forms
 
             _btnBrowse = new Button
             {
-                Text = "更改目录",
+                Text = Localization.T("video_dialog.browse"),
                 Location = DpiHelper.Scale(new Point(465, 38)),
                 Size = DpiHelper.Scale(new Size(100, 32)),
                 FlatStyle = FlatStyle.Flat,
@@ -134,7 +134,7 @@ namespace MiniWorldBrowser.Forms
             {
                 using var dlg = new FolderBrowserDialog
                 {
-                    Description = "选择下载保存目录",
+                    Description = Localization.T("video_dialog.browse_desc"),
                     SelectedPath = !string.IsNullOrWhiteSpace(_txtSavePath.Text) ? _txtSavePath.Text : SelectedSavePath
                 };
                 if (dlg.ShowDialog(this) == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.SelectedPath))
@@ -148,7 +148,7 @@ namespace MiniWorldBrowser.Forms
 
             _btnDownload = new Button
             {
-                Text = "开始下载",
+                Text = Localization.T("video_dialog.start_download"),
                 Location = DpiHelper.Scale(new Point(340, 520)),
                 Size = DpiHelper.Scale(new Size(120, 40)),
                 BackColor = Color.FromArgb(37, 99, 235), // Primary 2563EB
@@ -168,13 +168,13 @@ namespace MiniWorldBrowser.Forms
                 }
                 else
                 {
-                    MessageBox.Show("请先选择一个格式", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Localization.T("video_dialog.select_format_first"), Localization.T("confirm.title"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             };
 
             _btnCancel = new Button
             {
-                Text = "取消",
+                Text = Localization.T("confirm.cancel"),
                 Location = DpiHelper.Scale(new Point(470, 520)),
                 Size = DpiHelper.Scale(new Size(120, 40)),
                 BackColor = Color.White,
@@ -195,13 +195,13 @@ namespace MiniWorldBrowser.Forms
         {
             try
             {
-                _lblTitle.Text = _videoInfo.TryGetProperty("title", out var titleProp) ? titleProp.GetString() : "未知标题";
+                _lblTitle.Text = _videoInfo.TryGetProperty("title", out var titleProp) ? titleProp.GetString() : Localization.T("video_dialog.unknown_title");
                 
                 if (_videoInfo.TryGetProperty("formats", out var formats) && formats.ValueKind == JsonValueKind.Array)
                 {
                     foreach (var f in formats.EnumerateArray())
                     {
-                        string res = f.TryGetProperty("resolution", out var resProp) ? resProp.GetString() ?? "未知" : "未知";
+                        string res = f.TryGetProperty("resolution", out var resProp) ? resProp.GetString() ?? Localization.T("video_dialog.unknown") : Localization.T("video_dialog.unknown");
                         string ext = f.TryGetProperty("ext", out var extProp) ? extProp.GetString() ?? "" : "";
                         string note = f.TryGetProperty("note", out var noteProp) ? noteProp.GetString() ?? "" : "";
                         string formatId = f.TryGetProperty("format_id", out var idProp) ? idProp.GetString() ?? "" : "";
@@ -209,7 +209,7 @@ namespace MiniWorldBrowser.Forms
                         if (string.IsNullOrEmpty(formatId)) continue;
                         
                         long sizeBytes = f.TryGetProperty("filesize", out var sizeProp) && sizeProp.ValueKind == JsonValueKind.Number ? sizeProp.GetInt64() : 0;
-                        string sizeStr = sizeBytes > 0 ? $"{(double)sizeBytes / 1024 / 1024:F2} MB" : "未知";
+                        string sizeStr = sizeBytes > 0 ? $"{(double)sizeBytes / 1024 / 1024:F2} MB" : Localization.T("video_dialog.unknown");
 
                         var item = new ListViewItem(new[] { res, ext, sizeStr, note });
                         item.Tag = formatId;
@@ -224,7 +224,7 @@ namespace MiniWorldBrowser.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"解析视频信息失败: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Localization.T("video_dialog.parse_failed", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("confirm.title"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

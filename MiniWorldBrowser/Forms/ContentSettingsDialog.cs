@@ -22,7 +22,7 @@ public class ContentSettingsDialog : Form
     private void InitializeComponent()
     {
         AppIconHelper.SetIcon(this);
-        Text = "内容设置";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(600, 650));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -62,7 +62,7 @@ public class ContentSettingsDialog : Form
         // 完成按钮
         var btnDone = new Button
         {
-            Text = "完成",
+            Text = Localization.T("common.done"),
             Size = DpiHelper.Scale(new Size(85, 32)),
             Anchor = AnchorStyles.Right | AnchorStyles.Top,
             FlatStyle = FlatStyle.System,
@@ -122,110 +122,110 @@ public class ContentSettingsDialog : Form
         var settings = _settingsService.Settings;
 
         // Cookie
-        AddSection(flowLayout, "Cookie", new Control[] {
-            CreateRadioButton("允许设置本地数据（推荐）", "CookieSetting", 0, settings.CookieSetting == 0),
-            CreateRadioButton("仅将本地数据保留到您退出浏览器为止", "CookieSetting", 1, settings.CookieSetting == 1),
-            CreateRadioButton("阻止网站设置任何数据", "CookieSetting", 2, settings.CookieSetting == 2),
-            CreateCheckBox("阻止第三方 Cookie 和网站数据", "BlockThirdPartyCookies", settings.BlockThirdPartyCookies)
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "CookieSetting", 0, settings.CookieSetting == 0),
+            CreateRadioButton(Localization.Raw(), "CookieSetting", 1, settings.CookieSetting == 1),
+            CreateRadioButton(Localization.Raw(), "CookieSetting", 2, settings.CookieSetting == 2),
+            CreateCheckBox(Localization.Raw(), "BlockThirdPartyCookies", settings.BlockThirdPartyCookies)
         }, new[] {
-            ("管理例外情况...", "cookie_exception"),
-            ("所有 Cookie 和网站数据...", "cookie_data")
+            (Localization.Raw(), "cookie_exception"),
+            (Localization.Raw(), "cookie_data")
         });
 
         // 图片
-        AddSection(flowLayout, "图片", new Control[] {
-            CreateRadioButton("显示所有图片（推荐）", "ImageSetting", 0, settings.ImageSetting == 0),
-            CreateRadioButton("不显示任何图片", "ImageSetting", 1, settings.ImageSetting == 1)
-        }, new[] { ("管理例外情况...", "image_exception") });
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "ImageSetting", 0, settings.ImageSetting == 0),
+            CreateRadioButton(Localization.Raw(), "ImageSetting", 1, settings.ImageSetting == 1)
+        }, new[] { (Localization.Raw(), "image_exception") });
 
         // JavaScript
-        AddSection(flowLayout, "JavaScript", new Control[] {
-            CreateRadioButton("允许所有网站运行 JavaScript（推荐）", "JavaScriptSetting", 0, settings.JavaScriptSetting == 0),
-            CreateRadioButton("不允许任何网站运行 JavaScript", "JavaScriptSetting", 1, settings.JavaScriptSetting == 1)
-        }, new[] { ("管理例外情况...", "js_exception") });
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "JavaScriptSetting", 0, settings.JavaScriptSetting == 0),
+            CreateRadioButton(Localization.Raw(), "JavaScriptSetting", 1, settings.JavaScriptSetting == 1)
+        }, new[] { (Localization.Raw(), "js_exception") });
 
         // 处理程序
-        AddSection(flowLayout, "处理程序", new Control[] {
-            CreateRadioButton("允许网站要求成为协议的默认处理程序（推荐）", "HandlerSetting", 0, settings.HandlerSetting == 0),
-            CreateRadioButton("不允许任何网站处理协议", "HandlerSetting", 1, settings.HandlerSetting == 1)
-        }, new[] { ("管理处理程序...", "handler_manage") });
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "HandlerSetting", 0, settings.HandlerSetting == 0),
+            CreateRadioButton(Localization.Raw(), "HandlerSetting", 1, settings.HandlerSetting == 1)
+        }, new[] { (Localization.Raw(), "handler_manage") });
 
         // 插件
-        AddSection(flowLayout, "插件", new Control[] {
-            CreateRadioButton("检测并运行重要插件内容（推荐）", "PluginSetting", 0, settings.PluginSetting == 0),
-            CreateRadioButton("运行所有插件内容", "PluginSetting", 1, settings.PluginSetting == 1),
-            CreateRadioButton("让我自行选择何时运行插件内容", "PluginSetting", 2, settings.PluginSetting == 2)
-        }, new[] { ("管理例外情况...", "plugin_exception") });
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "PluginSetting", 0, settings.PluginSetting == 0),
+            CreateRadioButton(Localization.Raw(), "PluginSetting", 1, settings.PluginSetting == 1),
+            CreateRadioButton(Localization.Raw(), "PluginSetting", 2, settings.PluginSetting == 2)
+        }, new[] { (Localization.Raw(), "plugin_exception") });
 
         // 广告过滤
-        AddSection(flowLayout, "广告过滤", null, new[] { ("管理例外情况...", "adblock_exception") });
+        AddSection(flowLayout, Localization.Raw(), null, new[] { (Localization.Raw(), "adblock_exception") });
 
         // 位置
-        AddSection(flowLayout, "位置", new Control[] {
-            CreateRadioButton("允许所有网站跟踪您所在的位置", "LocationSetting", 0, settings.LocationSetting == 0),
-            CreateRadioButton("当网站要跟踪您所在的位置时询问您（推荐）", "LocationSetting", 1, settings.LocationSetting == 1),
-            CreateRadioButton("不允许任何网站跟踪您所在的位置", "LocationSetting", 2, settings.LocationSetting == 2)
-        }, new[] { ("管理例外情况...", "location_exception") });
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "LocationSetting", 0, settings.LocationSetting == 0),
+            CreateRadioButton(Localization.Raw(), "LocationSetting", 1, settings.LocationSetting == 1),
+            CreateRadioButton(Localization.Raw(), "LocationSetting", 2, settings.LocationSetting == 2)
+        }, new[] { (Localization.Raw(), "location_exception") });
 
         // 通知
-        AddSection(flowLayout, "通知", new Control[] {
-            CreateRadioButton("允许所有网站显示通知", "NotificationSetting", 0, settings.NotificationSetting == 0),
-            CreateRadioButton("当网站要显示通知时询问您（推荐）", "NotificationSetting", 1, settings.NotificationSetting == 1),
-            CreateRadioButton("不允许任何网站显示通知", "NotificationSetting", 2, settings.NotificationSetting == 2)
-        }, new[] { ("管理例外情况...", "notification_exception") });
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "NotificationSetting", 0, settings.NotificationSetting == 0),
+            CreateRadioButton(Localization.Raw(), "NotificationSetting", 1, settings.NotificationSetting == 1),
+            CreateRadioButton(Localization.Raw(), "NotificationSetting", 2, settings.NotificationSetting == 2)
+        }, new[] { (Localization.Raw(), "notification_exception") });
 
         // 全屏
-        AddSection(flowLayout, "全屏", null, new[] { ("管理例外情况...", "fullscreen_exception") });
+        AddSection(flowLayout, Localization.Raw(), null, new[] { (Localization.Raw(), "fullscreen_exception") });
 
         // 鼠标指针
-        AddSection(flowLayout, "鼠标指针", new Control[] {
-            CreateRadioButton("允许所有网站隐藏鼠标指针", "MouseLockSetting", 0, settings.MouseLockSetting == 0),
-            CreateRadioButton("当网站要隐藏鼠标指针时询问您（推荐）", "MouseLockSetting", 1, settings.MouseLockSetting == 1),
-            CreateRadioButton("不允许任何网站隐藏鼠标指针", "MouseLockSetting", 2, settings.MouseLockSetting == 2)
-        }, new[] { ("管理例外情况...", "mouselock_exception") });
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "MouseLockSetting", 0, settings.MouseLockSetting == 0),
+            CreateRadioButton(Localization.Raw(), "MouseLockSetting", 1, settings.MouseLockSetting == 1),
+            CreateRadioButton(Localization.Raw(), "MouseLockSetting", 2, settings.MouseLockSetting == 2)
+        }, new[] { (Localization.Raw(), "mouselock_exception") });
 
         // 受保护的内容
-        AddSection(flowLayout, "受保护的内容", new Control[] {
-            CreateDescription("有些内容服务会使用机器标识符来标识您的个人身份，以便授予您访问受保护内容的权限。"),
-            CreateCheckBox("允许将标识符用于受保护内容（可能需要重新启动计算机）", "ProtectedContentSetting", settings.ProtectedContentSetting)
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateDescription(Localization.Raw()),
+            CreateCheckBox(Localization.Raw(), "ProtectedContentSetting", settings.ProtectedContentSetting)
         }, null);
 
         // 麦克风
-        AddSection(flowLayout, "麦克风", new Control[] {
-            CreateRadioButton("当网站要求使用您的麦克风时询问您（推荐）", "MicSetting", 0, settings.MicSetting == 0),
-            CreateRadioButton("不允许网站使用您的麦克风", "MicSetting", 1, settings.MicSetting == 1)
-        }, new[] { ("管理例外情况...", "mic_exception") });
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "MicSetting", 0, settings.MicSetting == 0),
+            CreateRadioButton(Localization.Raw(), "MicSetting", 1, settings.MicSetting == 1)
+        }, new[] { (Localization.Raw(), "mic_exception") });
 
         // 摄像头
-        AddSection(flowLayout, "摄像头", new Control[] {
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
             CreateComboBox("screen-recorder-dev"),
-            CreateRadioButton("当网站要求使用您的摄像头时询问您（推荐）", "CameraSetting", 0, settings.CameraSetting == 0),
-            CreateRadioButton("不允许网站使用您的摄像头", "CameraSetting", 1, settings.CameraSetting == 1)
-        }, new[] { ("管理例外情况...", "camera_exception") });
+            CreateRadioButton(Localization.Raw(), "CameraSetting", 0, settings.CameraSetting == 0),
+            CreateRadioButton(Localization.Raw(), "CameraSetting", 1, settings.CameraSetting == 1)
+        }, new[] { (Localization.Raw(), "camera_exception") });
 
         // 未经过沙盒屏蔽的插件访问
-        AddSection(flowLayout, "未经过沙盒屏蔽的插件访问", new Control[] {
-            CreateRadioButton("允许所有网站使用插件访问您的计算机", "UnsandboxedPluginSetting", 0, settings.UnsandboxedPluginSetting == 0),
-            CreateRadioButton("当网站要使用插件访问您的计算机时询问您（推荐）", "UnsandboxedPluginSetting", 1, settings.UnsandboxedPluginSetting == 1),
-            CreateRadioButton("不允许任何网站使用插件访问您的计算机", "UnsandboxedPluginSetting", 2, settings.UnsandboxedPluginSetting == 2)
-        }, new[] { ("管理例外情况...", "sandbox_exception") });
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "UnsandboxedPluginSetting", 0, settings.UnsandboxedPluginSetting == 0),
+            CreateRadioButton(Localization.Raw(), "UnsandboxedPluginSetting", 1, settings.UnsandboxedPluginSetting == 1),
+            CreateRadioButton(Localization.Raw(), "UnsandboxedPluginSetting", 2, settings.UnsandboxedPluginSetting == 2)
+        }, new[] { (Localization.Raw(), "sandbox_exception") });
 
         // 自动下载
-        AddSection(flowLayout, "自动下载", new Control[] {
-            CreateRadioButton("允许所有网站自动下载多个文件", "AutomaticDownloadSetting", 0, settings.AutomaticDownloadSetting == 0),
-            CreateRadioButton("当网站下载第一个文件后要自动下载更多文件时询问您（推荐）", "AutomaticDownloadSetting", 1, settings.AutomaticDownloadSetting == 1),
-            CreateRadioButton("禁止任何网站自动下载多个文件", "AutomaticDownloadSetting", 2, settings.AutomaticDownloadSetting == 2)
-        }, new[] { ("管理例外情况...", "download_exception") });
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "AutomaticDownloadSetting", 0, settings.AutomaticDownloadSetting == 0),
+            CreateRadioButton(Localization.Raw(), "AutomaticDownloadSetting", 1, settings.AutomaticDownloadSetting == 1),
+            CreateRadioButton(Localization.Raw(), "AutomaticDownloadSetting", 2, settings.AutomaticDownloadSetting == 2)
+        }, new[] { (Localization.Raw(), "download_exception") });
 
         // 完全控制 MIDI 设备
-        AddSection(flowLayout, "完全控制 MIDI 设备", new Control[] {
-            CreateRadioButton("允许所有网站使用系统专有消息来访问 MIDI 设备", "MidiSetting", 0, settings.MidiSetting == 0),
-            CreateRadioButton("在网站想要使用系统专有消息访问 MIDI 设备时询问我（推荐）", "MidiSetting", 1, settings.MidiSetting == 1),
-            CreateRadioButton("禁止任何网站使用系统专有消息访问 MIDI 设备", "MidiSetting", 2, settings.MidiSetting == 2)
-        }, new[] { ("管理例外情况...", "midi_exception") });
+        AddSection(flowLayout, Localization.Raw(), new Control[] {
+            CreateRadioButton(Localization.Raw(), "MidiSetting", 0, settings.MidiSetting == 0),
+            CreateRadioButton(Localization.Raw(), "MidiSetting", 1, settings.MidiSetting == 1),
+            CreateRadioButton(Localization.Raw(), "MidiSetting", 2, settings.MidiSetting == 2)
+        }, new[] { (Localization.Raw(), "midi_exception") });
 
         // 缩放级别
-        AddSection(flowLayout, "缩放级别", null, new[] { ("管理...", "zoom_manage") });
+        AddSection(flowLayout, Localization.Raw(), null, new[] { (Localization.Raw(), "zoom_manage") });
     }
 
     private void AddSection(Control parent, string title, Control[]? contentControls, (string text, string action)[]? buttons)
@@ -420,7 +420,7 @@ public class ContentSettingsDialog : Form
                 break;
 
             case "handler_manage":
-                MessageBox.Show("此功能暂未实现", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Localization.Raw(), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 break;
 
             case "zoom_manage":

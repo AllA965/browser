@@ -19,7 +19,7 @@ public class TaskManagerForm : Form
         _tabManager = tabManager;
         AppIconHelper.SetIcon(this);
         
-        Text = "任务管理器 - 鲲穹AI浏览器";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(600, 400));
         MinimumSize = DpiHelper.Scale(new Size(500, 300));
         StartPosition = FormStartPosition.CenterParent;
@@ -36,11 +36,11 @@ public class TaskManagerForm : Form
             BorderStyle = BorderStyle.None
         };
         
-        _listView.Columns.Add("任务", DpiHelper.Scale(250));
-        _listView.Columns.Add("内存", DpiHelper.Scale(80), HorizontalAlignment.Right);
-        _listView.Columns.Add("CPU", DpiHelper.Scale(60), HorizontalAlignment.Right);
-        _listView.Columns.Add("网络", DpiHelper.Scale(60), HorizontalAlignment.Right);
-        _listView.Columns.Add("进程 ID", DpiHelper.Scale(80), HorizontalAlignment.Right);
+        _listView.Columns.Add(Localization.Raw(), DpiHelper.Scale(250));
+        _listView.Columns.Add(Localization.Raw(), DpiHelper.Scale(80), HorizontalAlignment.Right);
+        _listView.Columns.Add(Localization.Raw(), DpiHelper.Scale(60), HorizontalAlignment.Right);
+        _listView.Columns.Add(Localization.Raw(), DpiHelper.Scale(60), HorizontalAlignment.Right);
+        _listView.Columns.Add(Localization.Raw(), DpiHelper.Scale(80), HorizontalAlignment.Right);
         
         // 底部面板
         var bottomPanel = new Panel
@@ -52,7 +52,7 @@ public class TaskManagerForm : Form
         
         _endProcessBtn = new Button
         {
-            Text = "结束进程",
+            Text = Localization.Raw(),
             Size = DpiHelper.Scale(new Size(90, 30)),
             Dock = DockStyle.Right,
             FlatStyle = FlatStyle.Flat,
@@ -90,10 +90,10 @@ public class TaskManagerForm : Form
             // 浏览器主进程
             var browserItem = new ListViewItem(new[]
             {
-                "● 浏览器",
+                Localization.Raw(),
                 FormatMemory(currentProcess.WorkingSet64),
                 "0",
-                "无",
+                Localization.Raw(),
                 currentProcess.Id.ToString()
             });
             browserItem.ImageIndex = 0;
@@ -102,10 +102,10 @@ public class TaskManagerForm : Form
             // GPU 进程（模拟）
             var gpuItem = new ListViewItem(new[]
             {
-                "● GPU 进程",
-                "无",
+                Localization.Raw(),
+                Localization.Raw(),
                 "0",
-                "无",
+                Localization.Raw(),
                 GetGpuProcessId()
             });
             _listView.Items.Add(gpuItem);
@@ -118,10 +118,10 @@ public class TaskManagerForm : Form
                 
                 var tabItem = new ListViewItem(new[]
                 {
-                    $"● 标签页: {title}",
-                    "无",
+                    Localization.T("task_manager.tab_title", new Dictionary<string, string> { { "title", title } }),
+                    Localization.Raw(),
                     "0",
-                    "无",
+                    Localization.Raw(),
                     GetTabProcessId(tab)
                 });
                 tabItem.Tag = tab;
@@ -190,8 +190,8 @@ public class TaskManagerForm : Form
         if (tab != null)
         {
             var result = MessageBox.Show(
-                $"确定要结束标签页 \"{tab.Title}\" 吗？",
-                "结束进程",
+                Localization.Raw(),
+                Localization.Raw(),
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
             
@@ -203,7 +203,7 @@ public class TaskManagerForm : Form
         }
         else
         {
-            MessageBox.Show("无法结束此进程。只能结束标签页进程。", "提示", 
+            MessageBox.Show(Localization.Raw(), Localization.T("common.info"), 
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }

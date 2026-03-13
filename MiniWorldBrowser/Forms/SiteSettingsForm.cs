@@ -36,7 +36,7 @@ public class SiteSettingsForm : Form
     private void InitializeUI()
     {
         AppIconHelper.SetIcon(this);
-        Text = "内容设置";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(480, 680));
         MinimumSize = DpiHelper.Scale(new Size(400, 500));
         StartPosition = FormStartPosition.CenterParent;
@@ -77,7 +77,7 @@ public class SiteSettingsForm : Form
         // 确定按钮
         var okBtn = new Button
         {
-            Text = "确定",
+            Text = Localization.T("confirm.ok"),
             Size = DpiHelper.Scale(new Size(85, 32)),
             Anchor = AnchorStyles.Right | AnchorStyles.Top,
             FlatStyle = FlatStyle.Flat,
@@ -93,7 +93,7 @@ public class SiteSettingsForm : Form
         // 取消按钮
         var cancelBtn = new Button
         {
-            Text = "取消",
+            Text = Localization.T("confirm.cancel"),
             Size = DpiHelper.Scale(new Size(85, 32)),
             Anchor = AnchorStyles.Right | AnchorStyles.Top,
             FlatStyle = FlatStyle.Flat,
@@ -152,111 +152,111 @@ public class SiteSettingsForm : Form
         _contentPanel.Controls.Add(flowLayout);
 
         // 绑定数据到 UI
-        AddSection(flowLayout, "Cookie", "cookie", new[]
+        AddSection(flowLayout, Localization.Raw(), "cookie", new[]
         {
-            ("允许设置本地数据（推荐）", 0),
-            ("仅将本地数据保留到退出浏览器为止", 1),
-            ("阻止网站设置任何数据", 2)
+            (Localization.Raw(), 0),
+            (Localization.Raw(), 1),
+            (Localization.Raw(), 2)
         }, new[]
         {
-            ("管理例外情况...", (Action)(() => ShowExceptions("Cookie"))),
-            ("所有 Cookie 和网站数据...", (Action)(() => ShowAllCookies()))
+            (Localization.Raw(), (Action)(() => ShowExceptions("Cookie"))),
+            (Localization.Raw(), (Action)(() => ShowAllCookies()))
         });
 
-        AddSection(flowLayout, "图片", "image", new[]
+        AddSection(flowLayout, Localization.Raw(), "image", new[]
         {
-            ("显示所有图片（推荐）", 0),
-            ("不显示任何图片", 1)
+            (Localization.Raw(), 0),
+            (Localization.Raw(), 1)
         }, new[]
         {
-            ("管理例外情况...", (Action)(() => ShowExceptions("图片")))
+            (Localization.Raw(), (Action)(() => ShowExceptions("图片")))
         });
 
-        AddSection(flowLayout, "JavaScript", "javascript", new[]
+        AddSection(flowLayout, Localization.Raw(), "javascript", new[]
         {
-            ("允许所有网站运行 JavaScript（推荐）", 0),
-            ("不允许任何网站运行 JavaScript", 1)
+            (Localization.Raw(), 0),
+            (Localization.Raw(), 1)
         }, new[]
         {
-            ("管理例外情况...", (Action)(() => ShowExceptions("JavaScript")))
+            (Localization.Raw(), (Action)(() => ShowExceptions("JavaScript")))
         });
 
-        AddSection(flowLayout, "处理程序", "handler", new[]
+        AddSection(flowLayout, Localization.Raw(), "handler", new[]
         {
-            ("允许网站要求成为协议默认处理程序（推荐）", 0),
-            ("不允许任何网站处理协议", 1)
+            (Localization.Raw(), 0),
+            (Localization.Raw(), 1)
         }, new[]
         {
-            ("管理处理程序...", (Action)(() => ShowHandlers()))
+            (Localization.Raw(), (Action)(() => ShowHandlers()))
         });
 
-        AddSection(flowLayout, "弹出式窗口", "popup", new[]
+        AddSection(flowLayout, Localization.Raw(), "popup", new[]
         {
-            ("允许所有网站显示弹出式窗口", 0),
-            ("不允许任何网站显示弹出式窗口（推荐）", 1)
+            (Localization.Raw(), 0),
+            (Localization.Raw(), 1)
         }, new[]
         {
-            ("管理例外情况...", (Action)(() => ShowExceptions("弹出式窗口")))
+            (Localization.Raw(), (Action)(() => ShowExceptions("弹出式窗口")))
         });
 
-        AddSection(flowLayout, "位置", "location", new[]
+        AddSection(flowLayout, Localization.Raw(), "location", new[]
         {
-            ("允许所有网站跟踪我的地理位置", 0),
-            ("当网站要求跟踪我的地理位置时询问（推荐）", 1),
-            ("不允许任何网站跟踪我的地理位置", 2)
+            (Localization.Raw(), 0),
+            (Localization.Raw(), 1),
+            (Localization.Raw(), 2)
         }, new[]
         {
-            ("管理例外情况...", (Action)(() => ShowExceptions("位置")))
+            (Localization.Raw(), (Action)(() => ShowExceptions("位置")))
         });
 
-        AddSection(flowLayout, "通知", "notification", new[]
+        AddSection(flowLayout, Localization.Raw(), "notification", new[]
         {
-            ("允许所有网站显示桌面通知", 0),
-            ("当网站要求显示桌面通知时询问（推荐）", 1),
-            ("不允许任何网站显示桌面通知", 2)
+            (Localization.Raw(), 0),
+            (Localization.Raw(), 1),
+            (Localization.Raw(), 2)
         }, new[]
         {
-            ("管理例外情况...", (Action)(() => ShowExceptions("通知")))
+            (Localization.Raw(), (Action)(() => ShowExceptions("通知")))
         });
 
-        AddSection(flowLayout, "自动下载", "download", new[]
+        AddSection(flowLayout, Localization.Raw(), "download", new[]
         {
-            ("允许所有网站自动下载多个文件", 0),
-            ("当网站在自动下载第一个文件后尝试自动下载文件时询问（推荐）", 1),
-            ("不允许任何网站自动下载多个文件", 2)
+            (Localization.Raw(), 0),
+            (Localization.Raw(), 1),
+            (Localization.Raw(), 2)
         }, new[]
         {
-            ("管理例外情况...", (Action)(() => ShowExceptions("自动下载")))
+            (Localization.Raw(), (Action)(() => ShowExceptions("自动下载")))
         });
 
-        AddSection(flowLayout, "常见的 MIDI 设备", "midi", new[]
+        AddSection(flowLayout, Localization.Raw(), "midi", new[]
         {
-            ("允许所有网站使用系统专有消息访问常见的 MIDI 设备", 0),
-            ("当网站要求使用系统专有消息访问常见的 MIDI 设备时询问", 1),
-            ("禁止任何网站使用系统专有消息访问常见的 MIDI 设备", 2)
+            (Localization.Raw(), 0),
+            (Localization.Raw(), 1),
+            (Localization.Raw(), 2)
         }, new[]
         {
-            ("管理例外情况...", (Action)(() => ShowExceptions("MIDI 设备")))
+            (Localization.Raw(), (Action)(() => ShowExceptions("MIDI 设备")))
         });
 
-        AddSection(flowLayout, "摄像头", "camera", new[]
+        AddSection(flowLayout, Localization.Raw(), "camera", new[]
         {
-            ("允许所有网站使用摄像头", 0),
-            ("当网站要求使用摄像头时询问（推荐）", 1),
-            ("不允许任何网站使用摄像头", 2)
+            (Localization.Raw(), 0),
+            (Localization.Raw(), 1),
+            (Localization.Raw(), 2)
         }, new[]
         {
-            ("管理例外情况...", (Action)(() => ShowExceptions("摄像头")))
+            (Localization.Raw(), (Action)(() => ShowExceptions("摄像头")))
         });
 
-        AddSection(flowLayout, "麦克风", "microphone", new[]
+        AddSection(flowLayout, Localization.Raw(), "microphone", new[]
         {
-            ("允许所有网站使用麦克风", 0),
-            ("当网站要求使用麦克风时询问（推荐）", 1),
-            ("不允许任何网站使用麦克风", 2)
+            (Localization.Raw(), 0),
+            (Localization.Raw(), 1),
+            (Localization.Raw(), 2)
         }, new[]
         {
-            ("管理例外情况...", (Action)(() => ShowExceptions("麦克风")))
+            (Localization.Raw(), (Action)(() => ShowExceptions("麦克风")))
         });
     }
 
@@ -369,10 +369,10 @@ public class SiteSettingsForm : Form
     private void ShowAllCookies()
     {
         MessageBox.Show(
-            "Cookie 和网站数据管理功能\n\n" +
-            "此功能允许您查看和删除网站存储的 Cookie 和其他数据。\n\n" +
-            "提示：清除 Cookie 可能会导致您从某些网站注销。",
-            "Cookie 和网站数据",
+            Localization.Raw() + "\n\n" +
+            Localization.Raw() + "\n\n" +
+            Localization.Raw(),
+            Localization.Raw(),
             MessageBoxButtons.OK,
             MessageBoxIcon.Information);
     }
@@ -380,9 +380,9 @@ public class SiteSettingsForm : Form
     private void ShowHandlers()
     {
         MessageBox.Show(
-            "协议处理程序管理\n\n" +
-            "此功能允许您管理哪些网站可以处理特定的协议（如 mailto:、tel: 等）。",
-            "协议处理程序",
+            Localization.Raw() + "\n\n" +
+            Localization.Raw(),
+            Localization.Raw(),
             MessageBoxButtons.OK,
             MessageBoxIcon.Information);
     }
@@ -422,7 +422,7 @@ public class ExceptionsDialog : Form
         // 说明标签
         var descLabel = new Label
         {
-            Text = $"您可以为特定网站设置 {_category} 权限。",
+            Text = Localization.T("site_settings.desc", new Dictionary<string, string> { { "category", _category } }),
             Location = DpiHelper.Scale(new Point(15, 15)),
             AutoSize = true
         };
@@ -437,7 +437,7 @@ public class ExceptionsDialog : Form
         
         var patternLabel = new Label
         {
-            Text = "主机名模式:",
+            Text = Localization.T("site_settings.host_pattern"),
             Location = new Point(0, DpiHelper.Scale(5)),
             AutoSize = true
         };
@@ -455,12 +455,12 @@ public class ExceptionsDialog : Form
             Size = DpiHelper.Scale(new Size(80, 24)),
             DropDownStyle = ComboBoxStyle.DropDownList
         };
-        behaviorCombo.Items.AddRange(new[] { "允许", "阻止", "询问" });
+        behaviorCombo.Items.AddRange(new[] { Localization.T("permissions.allow"), Localization.T("permissions.block"), Localization.T("permissions.ask") });
         behaviorCombo.SelectedIndex = 0;
         
         var addBtn = new Button
         {
-            Text = "添加",
+            Text = Localization.T("actions.add"),
             Location = new Point(DpiHelper.Scale(380), DpiHelper.Scale(1)),
             Size = DpiHelper.Scale(new Size(60, 26)),
             FlatStyle = FlatStyle.Flat,
@@ -488,13 +488,13 @@ public class ExceptionsDialog : Form
             FullRowSelect = true,
             GridLines = true
         };
-        _listView.Columns.Add("主机名模式", DpiHelper.Scale(280));
-        _listView.Columns.Add("行为", DpiHelper.Scale(150));
+        _listView.Columns.Add(Localization.T("site_settings.columns.host_pattern"), DpiHelper.Scale(280));
+        _listView.Columns.Add(Localization.T("site_settings.columns.behavior"), DpiHelper.Scale(150));
         
         // 删除按钮
         var removeBtn = new Button
         {
-            Text = "删除",
+            Text = Localization.T("actions.delete"),
             Location = new Point(DpiHelper.Scale(15), Height - DpiHelper.Scale(85)),
             Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.Flat
@@ -508,7 +508,7 @@ public class ExceptionsDialog : Form
         
         var removeAllBtn = new Button
         {
-            Text = "全部删除",
+            Text = Localization.T("actions.delete_all"),
             Location = new Point(DpiHelper.Scale(105), Height - DpiHelper.Scale(85)),
             Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.Flat
@@ -519,7 +519,7 @@ public class ExceptionsDialog : Form
         // 底部按钮
         var doneBtn = new Button
         {
-            Text = "完成",
+            Text = Localization.T("actions.done"),
             Location = new Point(Width - DpiHelper.Scale(100), Height - DpiHelper.Scale(85)),
             Size = DpiHelper.Scale(new Size(70, 28)),
             FlatStyle = FlatStyle.Flat,

@@ -29,7 +29,7 @@ public class CookieDataDialog : Form
     private void InitializeComponent()
     {
         AppIconHelper.SetIcon(this);
-        Text = "Cookie 和网站数据";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(850, 600));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -40,7 +40,7 @@ public class CookieDataDialog : Form
         // 标题行
         var lblSite = new Label
         {
-            Text = "网站",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(20, 20)),
             Size = DpiHelper.Scale(new Size(200, 20)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F), FontStyle.Bold)
@@ -48,7 +48,7 @@ public class CookieDataDialog : Form
 
         var lblData = new Label
         {
-            Text = "本地存储的数据",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(230, 20)),
             Size = DpiHelper.Scale(new Size(300, 20)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F), FontStyle.Bold)
@@ -57,7 +57,7 @@ public class CookieDataDialog : Form
         // 全部删除按钮
         _btnDeleteAll = new Button
         {
-            Text = "全部删除",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(620, 15)),
             Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.Flat,
@@ -73,11 +73,11 @@ public class CookieDataDialog : Form
             Size = DpiHelper.Scale(new Size(110, 25)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
-        _searchBox.Text = "搜索 Cookie";
+        _searchBox.Text = Localization.Raw();
         _searchBox.ForeColor = Color.Gray;
         _searchBox.GotFocus += (s, e) =>
         {
-            if (_searchBox.Text == "搜索 Cookie")
+            if (_searchBox.Text == Localization.Raw())
             {
                 _searchBox.Text = "";
                 _searchBox.ForeColor = Color.Black;
@@ -87,7 +87,7 @@ public class CookieDataDialog : Form
         {
             if (string.IsNullOrWhiteSpace(_searchBox.Text))
             {
-                _searchBox.Text = "搜索 Cookie";
+                _searchBox.Text = Localization.Raw();
                 _searchBox.ForeColor = Color.Gray;
             }
         };
@@ -104,9 +104,9 @@ public class CookieDataDialog : Form
             HeaderStyle = ColumnHeaderStyle.None,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
-        _siteList.Columns.Add("网站", DpiHelper.Scale(200));
-        _siteList.Columns.Add("数据", DpiHelper.Scale(400));
-        _siteList.Columns.Add("大小", DpiHelper.Scale(80));
+        _siteList.Columns.Add(Localization.Raw(), DpiHelper.Scale(200));
+        _siteList.Columns.Add(Localization.Raw(), DpiHelper.Scale(400));
+        _siteList.Columns.Add(Localization.Raw(), DpiHelper.Scale(80));
         _siteList.SelectedIndexChanged += SiteList_SelectedIndexChanged;
         _siteList.DoubleClick += SiteList_DoubleClick;
 
@@ -144,7 +144,7 @@ public class CookieDataDialog : Form
         // 完成按钮
         var btnDone = new Button
         {
-            Text = "完成",
+            Text = Localization.T("common.done"),
             Location = DpiHelper.Scale(new Point(740, 520)),
             Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.System,
@@ -294,19 +294,19 @@ public class CookieDataDialog : Form
         var y = 15;
 
         // 模拟Cookie详情
-        AddDetailRow("名字:", cookieName, ref y);
-        AddDetailRow("内容:", GenerateFakeCookieValue(), ref y);
-        AddDetailRow("域:", "." + domain, ref y);
-        AddDetailRow("路径:", "/", ref y);
-        AddDetailRow("发送用途:", "各种连接", ref y);
-        AddDetailRow("脚本可访问:", "是", ref y);
-        AddDetailRow("创建时间:", DateTime.Now.AddDays(-7).ToString("yyyy年M月d日dddd 下午h:mm:ss"), ref y);
-        AddDetailRow("过期时间:", DateTime.Now.AddYears(1).ToString("yyyy年M月d日dddd 下午h:mm:ss"), ref y);
+        AddDetailRow(Localization.Raw(), cookieName, ref y);
+        AddDetailRow(Localization.Raw(), GenerateFakeCookieValue(), ref y);
+        AddDetailRow(Localization.Raw(), "." + domain, ref y);
+        AddDetailRow(Localization.Raw(), "/", ref y);
+        AddDetailRow(Localization.Raw(), Localization.Raw(), ref y);
+        AddDetailRow(Localization.Raw(), Localization.Raw(), ref y);
+        AddDetailRow(Localization.Raw(), DateTime.Now.AddDays(-7).ToString("yyyy年M月d日dddd 下午h:mm:ss"), ref y);
+        AddDetailRow(Localization.Raw(), DateTime.Now.AddYears(1).ToString("yyyy年M月d日dddd 下午h:mm:ss"), ref y);
 
         // 删除按钮
         var btnDelete = new Button
         {
-            Text = "删除",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(15, y + 10)),
             Size = DpiHelper.Scale(new Size(60, 26)),
             FlatStyle = FlatStyle.Flat,
@@ -370,7 +370,7 @@ public class CookieDataDialog : Form
 
     private void BtnDeleteAll_Click(object? sender, EventArgs e)
     {
-        if (MessageBox.Show("确定要删除所有 Cookie 和网站数据吗？", "确认删除",
+        if (MessageBox.Show(Localization.Raw(), Localization.T("confirm.title"),
             MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
         {
             _siteDataList.Clear();
@@ -382,7 +382,7 @@ public class CookieDataDialog : Form
     private void SearchBox_TextChanged(object? sender, EventArgs e)
     {
         var filter = _searchBox.Text;
-        if (filter == "搜索 Cookie") filter = null;
+        if (filter == Localization.Raw()) filter = null;
         RefreshSiteList(filter);
     }
 

@@ -46,7 +46,7 @@ public class TabOverflowPanel : Control
         
         _headerLabel = new Label
         {
-            Text = "打开的标签页",
+            Text = Localization.Raw(),
             Dock = DockStyle.Top,
             Height = DpiHelper.Scale(32),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F), FontStyle.Bold),
@@ -303,12 +303,12 @@ internal class TabOverflowItem : Control
 
     private void UpdateContent()
     {
-        string title = "新标签页";
+        string title = Localization.T("newtab.title");
         string url = "";
         
         if (_tab is BrowserTab bt)
         {
-            title = !string.IsNullOrEmpty(bt.Title) ? bt.Title : "新标签页";
+            title = !string.IsNullOrEmpty(bt.Title) ? bt.Title : Localization.T("newtab.title");
             url = bt.Url ?? "";
         }
         

@@ -178,7 +178,7 @@ public static class HtmlGenerator
 <head>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <title>新标签页</title>
+    <title>{Localization.T("newtab.title")}</title>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
@@ -262,10 +262,10 @@ public static class HtmlGenerator
      <div class='watermark-container'></div>
      <div class='container'>
         {logoHtml}
-        <h1>鲲穹AI浏览器</h1>
+        <h1>{AppConstants.AppName}</h1>
         <div class='search-box'>
             <input type='text' class='search-input' id='searchInput' 
-                   placeholder='搜索或输入网址'>
+                   placeholder='{Localization.T("newtab.search_placeholder")}'>
             <button class='search-btn' onclick='doSearch()'>
                 <svg viewBox='0 0 24 24'><circle cx='11' cy='11' r='8'></circle><line x1='21' y1='21' x2='16.65' y2='16.65'></line></svg>
             </button>
@@ -274,7 +274,7 @@ public static class HtmlGenerator
             {shortcutsHtml}
         </div>
     </div>
-    <div class='footer'>轻量 · 快速 · 简洁</div>
+    <div class='footer'>{Localization.T("newtab.footer")}</div>
     <script>
         const searchInput = document.getElementById('searchInput');
         const searchEngine = '{settings.SearchEngine}';
@@ -490,10 +490,10 @@ public static class HtmlGenerator
     
     private static string GetSearchEngineName(string searchEngine)
     {
-        if (searchEngine.Contains("baidu")) return "百度";
-        if (searchEngine.Contains("bing")) return "必应";
-        if (searchEngine.Contains("google")) return "Google";
-        return "搜索引擎";
+        if (searchEngine.Contains("baidu")) return Localization.T("settings.search.options.baidu");
+        if (searchEngine.Contains("bing")) return Localization.T("settings.search.options.bing");
+        if (searchEngine.Contains("google")) return Localization.T("settings.search.options.google");
+        return Localization.T("settings.search.title");
     }
     
     #endregion
@@ -509,7 +509,7 @@ public static class HtmlGenerator
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>设置</title>
+    <title>{Localization.T("settings.header.title")}</title>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{ font-family: 'Microsoft YaHei UI', 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; }}
@@ -583,19 +583,19 @@ public static class HtmlGenerator
     <div class='container'>
         <div class='sidebar'>
             <h2>{AppConstants.AppName}</h2>
-            <div class='nav-item' onclick='showSection(""history"")'>历史记录</div>
-            <div class='nav-item active' onclick='showSection(""settings"")'>设置</div>
-            <div class='nav-item' onclick='showSection(""ai"")'>AI 设置</div>
+            <div class='nav-item' onclick='showSection(""history"")'>{Localization.T("settings.sidebar.history")}</div>
+            <div class='nav-item active' onclick='showSection(""settings"")'>{Localization.T("settings.sidebar.settings")}</div>
+            <div class='nav-item' onclick='showSection(""ai"")'>{Localization.T("settings.sidebar.ai")}</div>
         </div>
         <div class='content'>
             <div class='header-row'>
-                <h1>设置</h1>
+                <h1>{Localization.T("settings.header.title")}</h1>
                 <div class='search-box'>
-                    <input type='text' id='settingsSearch' placeholder='在设置中搜索' oninput='searchSettings(this.value)'>
+                    <input type='text' id='settingsSearch' placeholder='{Localization.T("settings.header.search_placeholder")}' oninput='searchSettings(this.value)'>
                     <button class='clear-btn' id='clearSearchBtn' onclick='clearSearch()'>✕</button>
                 </div>
             </div>
-            <div id='noResults' class='no-results' style='display:none;'>没有找到匹配的设置项</div>
+            <div id='noResults' class='no-results' style='display:none;'>{Localization.T("settings.no_results")}</div>
             
             <div class='section' id='ai-section'>
                 <h3>AI 设置</h3>
@@ -745,39 +745,49 @@ public static class HtmlGenerator
             </div>
             
             <div class='section'>
-                <h3>搜索引擎</h3>
+                <h3>{Localization.T("settings.search.title")}</h3>
                 <div class='setting-item'>
                     <div>
-                        <div class='setting-label'>默认搜索引擎</div>
-                        <div class='setting-desc'>地址栏搜索使用的搜索引擎</div>
+                        <div class='setting-label'>{Localization.T("settings.search.default_label")}</div>
+                        <div class='setting-desc'>{Localization.T("settings.search.desc")}</div>
                     </div>
                     <div style='display:flex;align-items:center;gap:10px;'>
                         <select id='searchEngine' onchange='updateSetting(""search"", this.value)'>
-                            <option value='0' {(settings.AddressBarSearchEngine == 0 ? "selected" : "")}>360</option>
-                            <option value='1' {(settings.AddressBarSearchEngine == 1 ? "selected" : "")}>百度</option>
-                            <option value='2' {(settings.AddressBarSearchEngine == 2 ? "selected" : "")}>必应</option>
-                            <option value='3' {(settings.AddressBarSearchEngine == 3 ? "selected" : "")}>Google</option>
+                            <option value='0' {(settings.AddressBarSearchEngine == 0 ? "selected" : "")}>{Localization.T("settings.search.options.360")}</option>
+                            <option value='1' {(settings.AddressBarSearchEngine == 1 ? "selected" : "")}>{Localization.T("settings.search.options.baidu")}</option>
+                            <option value='2' {(settings.AddressBarSearchEngine == 2 ? "selected" : "")}>{Localization.T("settings.search.options.bing")}</option>
+                            <option value='3' {(settings.AddressBarSearchEngine == 3 ? "selected" : "")}>{Localization.T("settings.search.options.google")}</option>
                         </select>
-                        <button onclick='openSearchEngineManager()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>管理搜索引擎</button>
+                        <button onclick='openSearchEngineManager()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.search.manage_button")}</button>
                     </div>
                 </div>
             </div>
             
             <div class='section'>
-                <h3>外观</h3>
+                <h3>{Localization.T("settings.appearance.title")}</h3>
                 <div style='padding:8px 0;'>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='checkbox' id='showHomeButton' {(settings.ShowHomeButton ? "checked" : "")} onchange='updateSetting(""homebutton"", this.checked)' style='margin-right:8px;'>
-                        <span>显示&quot;主页&quot;按钮</span>
+                        <span>{Localization.T("settings.appearance.show_home_button")}</span>
                     </label>
                     <div id='homePageSetting' style='display:{(settings.ShowHomeButton ? "flex" : "none")};align-items:center;padding:6px 0 6px 24px;'>
                         <span style='color:#666;font-size:13px;margin-right:8px;'>{Escape(Forms.HomePageDialog.GetHomePageDisplayText(settings.HomePage))}</span>
-                        <a href='#' onclick='openHomePageDialog();return false;' style='color:#1a73e8;text-decoration:none;font-size:13px;'>更改</a>
+                        <a href='#' onclick='openHomePageDialog();return false;' style='color:#1a73e8;text-decoration:none;font-size:13px;'>{Localization.T("settings.appearance.change")}</a>
                     </div>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='checkbox' id='showBookmarkBar' {(settings.AlwaysShowBookmarkBar ? "checked" : "")} onchange='updateSetting(""bookmarkbar"", this.checked)' style='margin-right:8px;'>
-                        <span>总是显示收藏栏</span>
+                        <span>{Localization.T("settings.appearance.show_bookmark_bar")}</span>
                     </label>
+                    <div class='setting-item' style='margin-top:8px;'>
+                        <div class='setting-label'>{Localization.T("settings.appearance.language")}</div>
+                        <div>
+                            <select onchange='updateSetting(""language"", this.value)'>
+                                <option value='auto' {(settings.LanguageCode == "auto" ? "selected" : "")}>{Localization.T("settings.appearance.language_auto")}</option>
+                                <option value='zh-CN' {(settings.LanguageCode == "zh-CN" ? "selected" : "")}>{Localization.T("settings.appearance.language_zhCN")}</option>
+                                <option value='en' {(settings.LanguageCode == "en" ? "selected" : "")}>{Localization.T("settings.appearance.language_en")}</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -806,21 +816,21 @@ public static class HtmlGenerator
             </div>
             
             <div class='section'>
-                <h3>下载</h3>
+                <h3>{Localization.T("settings.downloads.title")}</h3>
                 <div class='setting-item'>
                     <div>
-                        <div class='setting-label'>下载位置</div>
-                        <div class='setting-desc'>文件下载的默认保存位置</div>
+                        <div class='setting-label'>{Localization.T("settings.downloads.location_label")}</div>
+                        <div class='setting-desc'>{Localization.T("settings.downloads.location_desc")}</div>
                     </div>
                     <div style='display:flex;gap:8px;align-items:center'>
                         <input type='text' id='downloadPath' value='{Escape(settings.DownloadPath)}' onchange='updateSetting(""downloadpath"", this.value)' style='flex:1'>
-                        <button class='btn btn-secondary' onclick='browseDownloadPath()'>浏览...</button>
+                        <button class='btn btn-secondary' onclick='browseDownloadPath()'>{Localization.T("settings.downloads.browse")}</button>
                     </div>
                 </div>
                 <div class='setting-item'>
                     <div>
-                        <div class='setting-label'>下载前询问保存位置</div>
-                        <div class='setting-desc'>每次下载前询问文件保存位置</div>
+                        <div class='setting-label'>{Localization.T("settings.downloads.ask_location_label")}</div>
+                        <div class='setting-desc'>{Localization.T("settings.downloads.ask_location_label")}</div>
                     </div>
                     <label class='toggle'>
                         <input type='checkbox' id='askDownload' {(settings.AskDownloadLocation ? "checked" : "")} onchange='updateSetting(""askdownload"", this.checked)'>
@@ -938,19 +948,19 @@ public static class HtmlGenerator
                 <h3>网络</h3>
                 <div style='padding:8px 0;'>
                     <div style='font-size:13px;color:#666;margin-bottom:10px;'>鲲穹AI浏览器会使用您计算机的系统代理设置连接到网络。</div>
-                    <button onclick='openProxySettings()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>更改代理服务器设置...</button>
+                    <button onclick='openProxySettings()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.network.proxy_change")}</button>
                 </div>
             </div>
             
             <div class='section'>
                 <h3>HTTPS/SSL</h3>
                 <div style='padding:8px 0;'>
-                    <button onclick='openCertificateManager()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>管理证书...</button>
+                    <button onclick='openCertificateManager()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.https.manage_certificates")}</button>
                 </div>
             </div>
             
             <div style='margin-top: 20px;'>
-                <button class='btn btn-secondary' onclick='resetSettings()'>恢复默认设置</button>
+                <button class='btn btn-secondary' onclick='resetSettings()'>{Localization.T("settings.reset_button")}</button>
             </div>
         </div>
     </div>

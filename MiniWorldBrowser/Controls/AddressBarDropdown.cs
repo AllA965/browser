@@ -298,7 +298,7 @@ public class AddressBarDropdown : Form
                 _suggestions.Add(new SuggestionItem
                 {
                     Text = text,
-                    DisplayText = $"搜索 \"{text}\"",
+                    DisplayText = Localization.T("address_dropdown.search", new Dictionary<string, string> { { "text", text } }),
                     Type = SuggestionType.Search,
                     Icon = "🔍"
                 });
@@ -329,7 +329,7 @@ public class AddressBarDropdown : Form
                     _suggestions.Insert(0, new SuggestionItem
                     {
                         Text = url,
-                        DisplayText = $"访问 \"{text}\"",
+                        DisplayText = Localization.T("address_dropdown.visit", new Dictionary<string, string> { { "text", text } }),
                         Type = SuggestionType.Url,
                         Icon = "🌐"
                     });
@@ -430,16 +430,16 @@ public class AddressBarDropdown : Form
         // 筛选搜索标签
         var filterLabel = new Label
         {
-            Text = "筛选搜索:",
+            Text = Localization.Raw(),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(8.5F)),
             ForeColor = _secondaryTextColor,
             Padding = DpiHelper.Scale(new Padding(0, 6, 8, 0))
         };
         
-        _historyBtn = CreateFilterButton("历史记录", "🕐", FilterMode.History);
-        _bookmarkBtn = CreateFilterButton("收藏夹", "☆", FilterMode.Bookmark);
-        _tabsBtn = CreateFilterButton("标签页", "▢", FilterMode.Tabs);
+        _historyBtn = CreateFilterButton(Localization.Raw(), "🕐", FilterMode.History);
+        _bookmarkBtn = CreateFilterButton(Localization.Raw(), "☆", FilterMode.Bookmark);
+        _tabsBtn = CreateFilterButton(Localization.Raw(), "▢", FilterMode.Tabs);
         
         _actionPanel.Controls.Add(filterLabel);
         _actionPanel.Controls.Add(_historyBtn);
@@ -524,10 +524,10 @@ public class AddressBarDropdown : Form
     {
         return _currentFilter switch
         {
-            FilterMode.History => "没有找到匹配的历史记录",
-            FilterMode.Bookmark => "没有找到匹配的收藏",
-            FilterMode.Tabs => "没有找到匹配的标签页",
-            _ => "没有找到匹配项"
+            FilterMode.History => Localization.T("address_dropdown.empty_history"),
+            FilterMode.Bookmark => Localization.T("address_dropdown.empty_bookmark"),
+            FilterMode.Tabs => Localization.T("address_dropdown.empty_tabs"),
+            _ => Localization.T("address_dropdown.empty_all")
         };
     }
     

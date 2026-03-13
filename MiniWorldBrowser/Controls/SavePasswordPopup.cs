@@ -24,6 +24,7 @@ public class SavePasswordPopup : Form
     private readonly string _password;
     private readonly PasswordPopupMode _mode;
     private System.Windows.Forms.Timer? _autoCloseTimer;
+    private System.Windows.Forms.Timer? _animTimer;
     private bool _isManagePasswordsClicked;
 
     public bool ShouldSave { get; private set; }
@@ -42,20 +43,38 @@ public class SavePasswordPopup : Form
         StartAutoCloseTimer();
 
         Opacity = 0;
-        var animTimer = new System.Windows.Forms.Timer { Interval = 10 };
-        animTimer.Tick += (s, e) => {
-            if (Opacity < 1)
+        _animTimer = new System.Windows.Forms.Timer { Interval = 10 };
+        _animTimer.Tick += (s, e) =>
+        {
+            try
             {
-                Opacity += 0.1;
+                if (IsDisposed || !IsHandleCreated)
+                {
+                    _animTimer?.Stop();
+                    _animTimer?.Dispose();
+                    _animTimer = null;
+                    return;
+                }
+                if (Opacity < 1)
+                {
+                    Opacity = Math.Min(1, Opacity + 0.1);
+                }
+                else
+                {
+                    Opacity = 1;
+                    _animTimer?.Stop();
+                    _animTimer?.Dispose();
+                    _animTimer = null;
+                }
             }
-            else
+            catch
             {
-                Opacity = 1;
-                animTimer.Stop();
-                animTimer.Dispose();
+                _animTimer?.Stop();
+                _animTimer?.Dispose();
+                _animTimer = null;
             }
         };
-        Load += (s, e) => animTimer.Start();
+        Load += (s, e) => _animTimer?.Start();
     }
 
     private void InitializeUI()
@@ -124,7 +143,7 @@ public class SavePasswordPopup : Form
         // 标题
         var titleLabel = new Label
         {
-            Text = "希望鲲穹AI浏览器保存您在此网站上使用的密码吗？",
+            Text = Localization.T("password_popup.ask.title"),
             Location = DpiHelper.Scale(new Point(15, 15)),
             Size = DpiHelper.Scale(new Size(320, 20)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
@@ -170,7 +189,7 @@ public class SavePasswordPopup : Form
         // 保存密码按钮
         var saveBtn = new Button
         {
-            Text = "保存密码",
+            Text = Localization.T("password_popup.ask.save"),
             Location = DpiHelper.Scale(new Point(175, 85)),
             Size = DpiHelper.Scale(new Size(85, 30)),
             FlatStyle = FlatStyle.Flat,
@@ -189,7 +208,7 @@ public class SavePasswordPopup : Form
         // 一律不按钮
         var neverBtn = new Button
         {
-            Text = "一律不",
+            Text = Localization.T("password_popup.ask.never"),
             Location = DpiHelper.Scale(new Point(270, 85)),
             Size = DpiHelper.Scale(new Size(85, 30)),
             FlatStyle = FlatStyle.Flat,
@@ -214,7 +233,7 @@ public class SavePasswordPopup : Form
         // 标题
         var titleLabel = new Label
         {
-            Text = "已保存此网站的密码：",
+            Text = Localization.T("password_popup.saved.title"),
             Location = DpiHelper.Scale(new Point(15, 15)),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F)),
@@ -263,7 +282,7 @@ public class SavePasswordPopup : Form
         // 管理已保存的密码链接
         var manageLink = new LinkLabel
         {
-            Text = "管理已保存的密码",
+            Text = Localization.T("password_popup.saved.manage"),
             Location = DpiHelper.Scale(new Point(15, 110)),
             AutoSize = true,
             LinkColor = Color.FromArgb(0, 102, 204),
@@ -283,7 +302,7 @@ public class SavePasswordPopup : Form
         // 完成按钮
         var doneBtn = new Button
         {
-            Text = "完成",
+            Text = Localization.T("password_popup.saved.done"),
             Location = DpiHelper.Scale(new Point(265, 105)),
             Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.Flat,
@@ -319,6 +338,9 @@ public class SavePasswordPopup : Form
     {
         _autoCloseTimer?.Stop();
         _autoCloseTimer?.Dispose();
+        _animTimer?.Stop();
+        _animTimer?.Dispose();
+        _animTimer = null;
         base.OnFormClosed(e);
     }
 }

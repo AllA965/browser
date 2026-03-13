@@ -22,7 +22,7 @@ public class ZoomLevelDialog : Form
     private void InitializeComponent()
     {
         AppIconHelper.SetIcon(this);
-        Text = "缩放级别";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(550, 400));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -33,7 +33,7 @@ public class ZoomLevelDialog : Form
         // 标题行
         var lblHost = new Label
         {
-            Text = "主机名（可包含通配符）",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(20, 20)),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
@@ -41,7 +41,7 @@ public class ZoomLevelDialog : Form
 
         var lblZoom = new Label
         {
-            Text = "缩放",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(380, 20)),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
@@ -57,20 +57,20 @@ public class ZoomLevelDialog : Form
             GridLines = true,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _zoomList.Columns.Add("主机名", DpiHelper.Scale(350));
-        _zoomList.Columns.Add("缩放", DpiHelper.Scale(100));
+        _zoomList.Columns.Add(Localization.Raw(), DpiHelper.Scale(350));
+        _zoomList.Columns.Add(Localization.Raw(), DpiHelper.Scale(100));
         _zoomList.KeyDown += ZoomList_KeyDown;
 
         // 右键菜单
         var contextMenu = new ContextMenuStrip();
-        contextMenu.Items.Add("删除", null, (s, e) => DeleteSelected());
-        contextMenu.Items.Add("全部删除", null, (s, e) => DeleteAll());
+        contextMenu.Items.Add(Localization.Raw(), null, (s, e) => DeleteSelected());
+        contextMenu.Items.Add(Localization.Raw(), null, (s, e) => DeleteAll());
         _zoomList.ContextMenuStrip = contextMenu;
 
         // 完成按钮
         var btnDone = new Button
         {
-            Text = "完成",
+            Text = Localization.T("common.done"),
             Location = DpiHelper.Scale(new Point(435, 325)),
             Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.System,
@@ -131,7 +131,7 @@ public class ZoomLevelDialog : Form
     {
         if (_zoomList.Items.Count == 0) return;
         
-        if (MessageBox.Show("确定要删除所有缩放级别设置吗？", "确认删除",
+        if (MessageBox.Show(Localization.Raw(), Localization.T("confirm.title"),
             MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
         {
             _zoomList.Items.Clear();

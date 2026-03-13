@@ -19,7 +19,7 @@ public partial class AboutForm : Form
     private void InitializeComponent()
         {
             this.SuspendLayout();
-            this.Text = "关于 " + AppConstants.AppName;
+            this.Text = Localization.T("about.title_prefix") + AppConstants.AppName;
             this.Size = DpiHelper.Scale(new Size(420, 360));
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -56,7 +56,7 @@ public partial class AboutForm : Form
 
             // Version
             var lblVersion = new Label();
-            lblVersion.Text = "版本 " + AppConstants.AppVersion;
+            lblVersion.Text = Localization.T("about.version_prefix") + AppConstants.AppVersion;
             lblVersion.Font = new Font("Segoe UI", DpiHelper.ScaleFont(11));
             lblVersion.ForeColor = Color.Gray;
             lblVersion.AutoSize = false;
@@ -67,7 +67,7 @@ public partial class AboutForm : Form
 
             // Check Update Button
             _btnCheckUpdate = new Button();
-            _btnCheckUpdate.Text = "检查更新";
+            _btnCheckUpdate.Text = Localization.T("about.check_update");
             _btnCheckUpdate.Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10));
             _btnCheckUpdate.Size = DpiHelper.Scale(new Size(120, 38));
             _btnCheckUpdate.Location = DpiHelper.Scale(new Point((420 - 120) / 2, 220));
@@ -93,7 +93,7 @@ public partial class AboutForm : Form
 
             // Copyright
             var lblCopyright = new Label();
-            lblCopyright.Text = "© 2026 鲲穹AI. All rights reserved.";
+            lblCopyright.Text = Localization.T("about.copyright", new Dictionary<string, string> { { "year", DateTime.Now.Year.ToString() }, { "app", AppConstants.AppName } });
             lblCopyright.Font = new Font("Segoe UI", DpiHelper.ScaleFont(8.5f));
             lblCopyright.ForeColor = Color.DarkGray;
             lblCopyright.AutoSize = false;
@@ -108,8 +108,8 @@ public partial class AboutForm : Form
     private async void BtnCheckUpdate_Click(object? sender, EventArgs e)
     {
         _btnCheckUpdate.Enabled = false;
-        _btnCheckUpdate.Text = "检查中...";
-        _lblStatus.Text = "正在连接更新服务器...";
+        _btnCheckUpdate.Text = Localization.T("about.checking");
+        _lblStatus.Text = Localization.T("about.connecting");
         _lblStatus.ForeColor = Color.Blue;
 
         try
@@ -117,21 +117,21 @@ public partial class AboutForm : Form
             var info = await _updateService.CheckForUpdatesAsync();
             if (info == null)
             {
-                _lblStatus.Text = "检查更新失败，请稍后重试。";
+                _lblStatus.Text = Localization.T("about.update_failed");
                 _lblStatus.ForeColor = Color.Red;
-                _btnCheckUpdate.Text = "检查更新";
+                _btnCheckUpdate.Text = Localization.T("about.check_update");
                 _btnCheckUpdate.Enabled = true;
                 return;
             }
 
             if (info.HasUpdate)
             {
-                _lblStatus.Text = $"发现新版本: {info.Version}";
+                _lblStatus.Text = Localization.T("about.update_found_status", new Dictionary<string, string> { { "version", info.Version } });
                 _lblStatus.ForeColor = Color.Green;
                 
                 var result = MessageBox.Show(
-                    $"发现新版本 {info.Version}\n\n更新内容:\n{info.UpdateLog}\n\n是否立即更新？", 
-                    "发现更新", 
+                    Localization.T("about.update_found_message", new Dictionary<string, string> { { "version", info.Version }, { "log", info.UpdateLog } }),
+                    Localization.T("about.update_found_title"), 
                     MessageBoxButtons.YesNo, 
                     MessageBoxIcon.Information);
 
@@ -152,18 +152,18 @@ public partial class AboutForm : Form
             }
             else
             {
-                _lblStatus.Text = "当前已是最新版本。";
+                _lblStatus.Text = Localization.T("about.latest");
                 _lblStatus.ForeColor = Color.Green;
             }
         }
         catch (Exception ex)
         {
-            _lblStatus.Text = "发生错误: " + ex.Message;
+            _lblStatus.Text = Localization.T("about.error_prefix") + ex.Message;
             _lblStatus.ForeColor = Color.Red;
         }
         finally
         {
-            _btnCheckUpdate.Text = "检查更新";
+            _btnCheckUpdate.Text = Localization.T("about.check_update");
             _btnCheckUpdate.Enabled = true;
         }
     }

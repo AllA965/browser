@@ -29,14 +29,14 @@ public class CookieExceptionDialog : Form
         AppIconHelper.SetIcon(this);
         var title = _category switch
         {
-            "cookies" => "Cookie 和网站数据例外情况",
-            "images" => "图片例外情况",
-            "javascript" => "JavaScript 例外情况",
-            "popups" => "弹出式窗口例外情况",
-            "location" => "位置例外情况",
-            "notifications" => "通知例外情况",
-            "media" => "媒体例外情况",
-            _ => "例外情况"
+            "cookies" => Localization.Raw(),
+            "images" => Localization.Raw(),
+            "javascript" => Localization.Raw(),
+            "popups" => Localization.Raw(),
+            "location" => Localization.Raw(),
+            "notifications" => Localization.Raw(),
+            "media" => Localization.Raw(),
+            _ => Localization.Raw()
         };
 
         Text = title;
@@ -50,7 +50,7 @@ public class CookieExceptionDialog : Form
         // 主机名标签
         var lblHost = new Label
         {
-            Text = "主机名（可包含通配符）",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(20, 20)),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
@@ -59,7 +59,7 @@ public class CookieExceptionDialog : Form
         // 行为标签
         var lblAction = new Label
         {
-            Text = "行为",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(450, 20)),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
@@ -99,7 +99,7 @@ public class CookieExceptionDialog : Form
             DropDownStyle = ComboBoxStyle.DropDownList,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
-        _cboAction.Items.AddRange(new[] { "允许", "阻止", "仅会话" });
+        _cboAction.Items.AddRange(new[] { Localization.Raw(), Localization.Raw(), Localization.Raw() });
         _cboAction.SelectedIndex = 0;
 
         // 添加按钮
@@ -125,19 +125,19 @@ public class CookieExceptionDialog : Form
             BorderStyle = BorderStyle.FixedSingle,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
-        _exceptionList.Columns.Add("主机名", DpiHelper.Scale(400));
-        _exceptionList.Columns.Add("行为", DpiHelper.Scale(150));
+        _exceptionList.Columns.Add(Localization.Raw(), DpiHelper.Scale(400));
+        _exceptionList.Columns.Add(Localization.Raw(), DpiHelper.Scale(150));
         _exceptionList.KeyDown += ExceptionList_KeyDown;
 
         // 右键菜单
         var contextMenu = new ContextMenuStrip { Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)) };
-        contextMenu.Items.Add("删除", null, (s, e) => DeleteSelected());
+        contextMenu.Items.Add(Localization.Raw(), null, (s, e) => DeleteSelected());
         _exceptionList.ContextMenuStrip = contextMenu;
 
         // 完成按钮
         var btnDone = new Button
         {
-            Text = "完成",
+            Text = Localization.T("common.done"),
             Location = DpiHelper.Scale(new Point(535, 375)),
             Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.System,
@@ -189,18 +189,18 @@ public class CookieExceptionDialog : Form
         var host = _txtHost.Text.Trim();
         if (string.IsNullOrEmpty(host) || host == "[*.]example.com")
         {
-            MessageBox.Show("请输入主机名", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(Localization.Raw(), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
 
-        var actionText = _cboAction.SelectedItem?.ToString() ?? "允许";
+        var actionText = _cboAction.SelectedItem?.ToString() ?? Localization.T("adblock.allow");
 
         // 检查是否已存在
         foreach (ListViewItem item in _exceptionList.Items)
         {
             if (item.Text.Equals(host, StringComparison.OrdinalIgnoreCase))
             {
-                MessageBox.Show("该主机名已存在", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(Localization.Raw(), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
         }

@@ -29,7 +29,7 @@ public class PasswordManagerDialog : Form
     private void InitializeUI()
     {
         AppIconHelper.SetIcon(this);
-        Text = "清除已保存的密码";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(600, 520));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -43,7 +43,7 @@ public class PasswordManagerDialog : Form
         // 已保存的密码标题和搜索框
         var savedLabel = new Label
         {
-            Text = "已保存的密码",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold)
@@ -54,11 +54,11 @@ public class PasswordManagerDialog : Form
         {
             Location = new Point(DpiHelper.Scale(400), y - DpiHelper.Scale(3)),
             Width = DpiHelper.Scale(170),
-            Text = "搜索密码"
+            Text = Localization.Raw()
         };
         _searchBox.GotFocus += (s, e) =>
         {
-            if (_searchBox.Text == "搜索密码")
+            if (_searchBox.Text == Localization.Raw())
             {
                 _searchBox.Text = "";
                 _searchBox.ForeColor = Color.Black;
@@ -68,7 +68,7 @@ public class PasswordManagerDialog : Form
         {
             if (string.IsNullOrEmpty(_searchBox.Text))
             {
-                _searchBox.Text = "搜索密码";
+                _searchBox.Text = Localization.Raw();
                 _searchBox.ForeColor = Color.Gray;
             }
         };
@@ -87,9 +87,9 @@ public class PasswordManagerDialog : Form
             BorderStyle = BorderStyle.FixedSingle,
             OwnerDraw = true
         };
-        _savedPasswordsList.Columns.Add("网站", DpiHelper.Scale(180));
-        _savedPasswordsList.Columns.Add("用户名", DpiHelper.Scale(130));
-        _savedPasswordsList.Columns.Add("密码", DpiHelper.Scale(120));
+        _savedPasswordsList.Columns.Add(Localization.Raw(), DpiHelper.Scale(180));
+        _savedPasswordsList.Columns.Add(Localization.Raw(), DpiHelper.Scale(130));
+        _savedPasswordsList.Columns.Add(Localization.Raw(), DpiHelper.Scale(120));
         _savedPasswordsList.Columns.Add("", DpiHelper.Scale(70));  // 显示/隐藏按钮
         _savedPasswordsList.Columns.Add("", DpiHelper.Scale(30));  // 删除按钮
 
@@ -104,7 +104,7 @@ public class PasswordManagerDialog : Form
         // 一律不保存标题
         var neverSaveLabel = new Label
         {
-            Text = "一律不保存",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true,
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold)
@@ -122,14 +122,14 @@ public class PasswordManagerDialog : Form
             GridLines = false,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _neverSaveList.Columns.Add("网站", DpiHelper.Scale(500));
+        _neverSaveList.Columns.Add(Localization.Raw(), DpiHelper.Scale(500));
 
         Controls.Add(_neverSaveList);
 
         // 完成按钮
         _doneBtn = new Button
         {
-            Text = "完成",
+            Text = Localization.T("common.done"),
             Location = DpiHelper.Scale(new Point(490, 450)),
             Size = DpiHelper.Scale(new Size(80, 28)),
             FlatStyle = FlatStyle.Flat,
@@ -143,7 +143,7 @@ public class PasswordManagerDialog : Form
         // 搜索功能
         _searchBox.TextChanged += (s, e) =>
         {
-            if (_searchBox.Text != "搜索密码")
+            if (_searchBox.Text != Localization.Raw())
                 LoadData(_searchBox.Text);
         };
     }
@@ -174,7 +174,7 @@ public class PasswordManagerDialog : Form
         if (e.ColumnIndex == 3 && id != null)
         {
             var btnRect = new Rectangle(e.Bounds.X + DpiHelper.Scale(5), e.Bounds.Y + DpiHelper.Scale(2), DpiHelper.Scale(55), e.Bounds.Height - DpiHelper.Scale(4));
-            var btnText = isRevealed ? "隐藏" : "显示";
+            var btnText = isRevealed ? Localization.T("password_manager.hide") : Localization.T("password_manager.show");
 
             // 绘制按钮背景
             using var btnBrush = new SolidBrush(Color.FromArgb(0, 102, 204));
@@ -264,14 +264,14 @@ public class PasswordManagerDialog : Form
 
     private void DeletePassword(string id)
     {
-        var result = MessageBox.Show("确定要删除此密码吗？", "确认删除",
+        var result = MessageBox.Show(Localization.Raw(), Localization.T("confirm.title"),
             MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
         if (result == DialogResult.Yes)
         {
             _passwordService.DeletePassword(id);
             _revealedPasswords.Remove(id);
-            LoadData(_searchBox.Text == "搜索密码" ? null : _searchBox.Text);
+            LoadData(_searchBox.Text == Localization.Raw() ? null : _searchBox.Text);
         }
     }
 
@@ -287,7 +287,7 @@ public class PasswordManagerDialog : Form
 
         if (passwords.Count == 0)
         {
-            var emptyItem = new ListViewItem("您保存过的密码将会显示在此处。");
+            var emptyItem = new ListViewItem(Localization.Raw());
             emptyItem.ForeColor = Color.Gray;
             _savedPasswordsList.Items.Add(emptyItem);
         }
@@ -307,7 +307,7 @@ public class PasswordManagerDialog : Form
         var neverSave = _passwordService.NeverSaveList;
         if (neverSave.Count == 0)
         {
-            var emptyItem = new ListViewItem("一律不保存密码的网站会显示在此处。");
+            var emptyItem = new ListViewItem(Localization.Raw());
             emptyItem.ForeColor = Color.Gray;
             _neverSaveList.Items.Add(emptyItem);
         }

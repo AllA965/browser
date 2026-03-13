@@ -57,7 +57,7 @@ public class ClearBrowsingDataDialog : Form
     private void InitializeUI()
     {
         AppIconHelper.SetIcon(this);
-        Text = "清除浏览数据";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(450, 480));
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
@@ -69,7 +69,7 @@ public class ClearBrowsingDataDialog : Form
         var y = DpiHelper.Scale(20);
         
         // 时间范围
-        var timeLabel = new Label { Text = "清除指定时间段内的数据:", Location = new Point(DpiHelper.Scale(20), y), AutoSize = true };
+        var timeLabel = new Label { Text = Localization.Raw(), Location = new Point(DpiHelper.Scale(20), y), AutoSize = true };
         Controls.Add(timeLabel);
         
         _timeRangeCombo = new ComboBox
@@ -80,11 +80,11 @@ public class ClearBrowsingDataDialog : Form
         };
         _timeRangeCombo.Items.AddRange(new object[]
         {
-            "过去一小时",
-            "过去24小时",
-            "过去7天",
-            "过去4周",
-            "全部时间"
+            Localization.Raw(),
+            Localization.Raw(),
+            Localization.Raw(),
+            Localization.Raw(),
+            Localization.Raw()
         });
         _timeRangeCombo.SelectedIndex = 0;
         Controls.Add(_timeRangeCombo);
@@ -96,29 +96,29 @@ public class ClearBrowsingDataDialog : Form
         y += DpiHelper.Scale(15);
         
         // 选项
-        _historyCheck = CreateCheckBox("清除浏览记录", "", y, true);
+        _historyCheck = CreateCheckBox(Localization.Raw(), "", y, true);
         y += DpiHelper.Scale(30);
         
-        _downloadsCheck = CreateCheckBox("清除下载记录", "", y, true);
+        _downloadsCheck = CreateCheckBox(Localization.Raw(), "", y, true);
         y += DpiHelper.Scale(30);
         
-        _cookiesCheck = CreateCheckBox("Cookie 及其他网站数据和插件数据", "", y, true);
+        _cookiesCheck = CreateCheckBox(Localization.Raw(), "", y, true);
         y += DpiHelper.Scale(30);
         
         var cacheSizeText = _cacheSize > 0 ? $"- 不到 {FormatSize(_cacheSize)}" : "";
-        _cacheCheck = CreateCheckBox("清空缓存", cacheSizeText, y, true);
+        _cacheCheck = CreateCheckBox(Localization.Raw(), cacheSizeText, y, true);
         y += DpiHelper.Scale(30);
         
-        _passwordsCheck = CreateCheckBox("清除已保存的密码", "", y, false);
+        _passwordsCheck = CreateCheckBox(Localization.Raw(), "", y, false);
         y += DpiHelper.Scale(30);
         
-        _formDataCheck = CreateCheckBox("清除已保存的自动填充表单数据", "", y, false);
+        _formDataCheck = CreateCheckBox(Localization.Raw(), "", y, false);
         y += DpiHelper.Scale(30);
         
-        _hostedAppDataCheck = CreateCheckBox("清除托管应用中数据", "", y, false);
+        _hostedAppDataCheck = CreateCheckBox(Localization.Raw(), "", y, false);
         y += DpiHelper.Scale(30);
         
-        _contentLicensesCheck = CreateCheckBox("内容许可", "", y, false);
+        _contentLicensesCheck = CreateCheckBox(Localization.Raw(), "", y, false);
         y += DpiHelper.Scale(45);
         
         // 分隔线
@@ -129,7 +129,7 @@ public class ClearBrowsingDataDialog : Form
         // 退出时自动清除选项
         _clearOnExitCheck = new CheckBox
         {
-            Text = "退出浏览器时自动清除勾选数据",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(20), y),
             AutoSize = true
         };
@@ -138,7 +138,7 @@ public class ClearBrowsingDataDialog : Form
         // 按钮
         _cancelBtn = new Button
         {
-            Text = "取消",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(330), DpiHelper.Scale(400)),
             Size = DpiHelper.Scale(new Size(85, 30)),
             FlatStyle = FlatStyle.Flat
@@ -149,7 +149,7 @@ public class ClearBrowsingDataDialog : Form
         
         _clearBtn = new Button
         {
-            Text = "清除浏览数据",
+            Text = Localization.Raw(),
             Location = new Point(DpiHelper.Scale(220), DpiHelper.Scale(400)),
             Size = DpiHelper.Scale(new Size(100, 30)),
             FlatStyle = FlatStyle.Flat
@@ -186,23 +186,23 @@ public class ClearBrowsingDataDialog : Form
     private async void OnClearData(object? sender, EventArgs e)
     {
         var items = new List<string>();
-        if (_historyCheck.Checked) items.Add("浏览历史记录");
-        if (_downloadsCheck.Checked) items.Add("下载记录");
-        if (_cookiesCheck.Checked) items.Add("Cookie 及其他网站数据");
-        if (_cacheCheck.Checked) items.Add("缓存");
-        if (_passwordsCheck.Checked) items.Add("密码");
-        if (_formDataCheck.Checked) items.Add("表单数据");
-        if (_hostedAppDataCheck.Checked) items.Add("托管应用数据");
-        if (_contentLicensesCheck.Checked) items.Add("内容许可");
+        if (_historyCheck.Checked) items.Add(Localization.Raw());
+        if (_downloadsCheck.Checked) items.Add(Localization.Raw());
+        if (_cookiesCheck.Checked) items.Add(Localization.Raw());
+        if (_cacheCheck.Checked) items.Add(Localization.Raw());
+        if (_passwordsCheck.Checked) items.Add(Localization.Raw());
+        if (_formDataCheck.Checked) items.Add(Localization.Raw());
+        if (_hostedAppDataCheck.Checked) items.Add(Localization.Raw());
+        if (_contentLicensesCheck.Checked) items.Add(Localization.Raw());
         
         if (items.Count == 0)
         {
-            MessageBox.Show("请至少选择一项要清除的数据。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Localization.Raw(), Localization.Raw(), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
         
         _clearBtn.Enabled = false;
-        _clearBtn.Text = "清除中...";
+        _clearBtn.Text = Localization.T("clear.in_progress");
         
         try
         {
@@ -272,19 +272,19 @@ public class ClearBrowsingDataDialog : Form
                 await _tabManager.ClearWebView2Data(webViewDataKinds, startTime);
             }
             
-            MessageBox.Show($"已成功清除以下数据：\n• {string.Join("\n• ", items)}", 
-                "清除完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Localization.T("clear.success", new Dictionary<string, string> { { "items", string.Join("\\n• ", items) } }), 
+                Localization.T("clear.done"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             DialogResult = DialogResult.OK;
             Close();
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"清除数据时出错：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(Localization.T("clear.failed", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("confirm.title"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
         {
             _clearBtn.Enabled = true;
-            _clearBtn.Text = "清除浏览数据";
+            _clearBtn.Text = Localization.T("common.done");
         }
     }
 }

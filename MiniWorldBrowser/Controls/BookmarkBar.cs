@@ -87,7 +87,7 @@ public class BookmarkBar : Panel
         // 其他收藏按钮（右侧）
         _otherBookmarksBtn = new BookmarkButton
         {
-            Text = "其他收藏",
+            Text = Localization.T("bookmarks.other"),
             IsFolder = true,
             Icon = CreateFolderIcon(),
             Dock = DockStyle.Right,
@@ -152,10 +152,10 @@ public class BookmarkBar : Panel
         _folderMenu.Closing += OnFolderMenuClosing;
         
         var otherItems = _bookmarkService.GetOtherBookmarks();
-        if (otherItems.Count == 0)
-        {
-            _folderMenu.Items.Add("(空)").Enabled = false;
-        }
+            if (otherItems.Count == 0)
+            {
+                _folderMenu.Items.Add(Localization.T("common.empty")).Enabled = false;
+            }
         else
         {
             foreach (var child in otherItems)
@@ -235,13 +235,13 @@ public class BookmarkBar : Panel
         _isShowingContextMenu = true;
         
         _activeContextMenu = new ContextMenuStrip { AutoClose = true, Renderer = new ModernMenuRenderer(_isIncognito) };
-        _activeContextMenu.Items.Add("打开", null, (cs, ce) => { CloseAllMenus(); BookmarkClicked?.Invoke(bookmark.Url); });
-        _activeContextMenu.Items.Add("在新标签页打开", null, (cs, ce) => { CloseAllMenus(); BookmarkMiddleClicked?.Invoke(bookmark.Url, true); });
+        _activeContextMenu.Items.Add(Localization.T("bookmark_menu.open"), null, (cs, ce) => { CloseAllMenus(); BookmarkClicked?.Invoke(bookmark.Url); });
+        _activeContextMenu.Items.Add(Localization.T("bookmark_menu.open_in_new_tab"), null, (cs, ce) => { CloseAllMenus(); BookmarkMiddleClicked?.Invoke(bookmark.Url, true); });
         _activeContextMenu.Items.Add(new ToolStripSeparator());
-        _activeContextMenu.Items.Add("编辑", null, (cs, ce) => { CloseAllMenus(); EditBookmark(bookmark); });
-        _activeContextMenu.Items.Add("删除", null, (cs, ce) => { CloseAllMenus(); _bookmarkService.Delete(bookmark.Id); });
+        _activeContextMenu.Items.Add(Localization.T("actions.edit"), null, (cs, ce) => { CloseAllMenus(); EditBookmark(bookmark); });
+        _activeContextMenu.Items.Add(Localization.T("actions.delete"), null, (cs, ce) => { CloseAllMenus(); _bookmarkService.Delete(bookmark.Id); });
         _activeContextMenu.Items.Add(new ToolStripSeparator());
-        _activeContextMenu.Items.Add("复制链接", null, (cs, ce) => { Clipboard.SetText(bookmark.Url); });
+        _activeContextMenu.Items.Add(Localization.T("actions.copy_link"), null, (cs, ce) => { Clipboard.SetText(bookmark.Url); });
         _activeContextMenu.Closed += OnContextMenuClosed;
         
         // 直接在鼠标位置显示
@@ -265,10 +265,10 @@ public class BookmarkBar : Panel
         _isShowingContextMenu = true;
         
         _activeContextMenu = new ContextMenuStrip { AutoClose = true, Renderer = new ModernMenuRenderer(_isIncognito) };
-        _activeContextMenu.Items.Add("打开所有书签", null, (cs, ce) => { CloseAllMenus(); OpenAllInFolder(folder.Id); });
+        _activeContextMenu.Items.Add(Localization.T("bookmark_menu.open_all_bookmarks"), null, (cs, ce) => { CloseAllMenus(); OpenAllInFolder(folder.Id); });
         _activeContextMenu.Items.Add(new ToolStripSeparator());
-        _activeContextMenu.Items.Add("重命名", null, (cs, ce) => { CloseAllMenus(); EditBookmark(folder); });
-        _activeContextMenu.Items.Add("删除", null, (cs, ce) => { CloseAllMenus(); DeleteWithConfirm(folder); });
+        _activeContextMenu.Items.Add(Localization.T("actions.rename"), null, (cs, ce) => { CloseAllMenus(); EditBookmark(folder); });
+        _activeContextMenu.Items.Add(Localization.T("actions.delete"), null, (cs, ce) => { CloseAllMenus(); DeleteWithConfirm(folder); });
         _activeContextMenu.Closed += OnContextMenuClosed;
         
         // 直接在鼠标位置显示
@@ -409,7 +409,7 @@ public class BookmarkBar : Panel
         var children = _bookmarkService.GetChildren(folder.Id);
         if (children.Count == 0)
         {
-            _folderMenu.Items.Add("(空)").Enabled = false;
+            _folderMenu.Items.Add(Localization.T("common.empty")).Enabled = false;
         }
         else
         {
@@ -452,7 +452,7 @@ public class BookmarkBar : Panel
         var children = _bookmarkService.GetChildren(folderId);
         if (children.Count == 0)
         {
-            menu.DropDownItems.Add("(空)").Enabled = false;
+            menu.DropDownItems.Add(Localization.T("common.empty")).Enabled = false;
             return;
         }
         
@@ -482,7 +482,7 @@ public class BookmarkBar : Panel
         var children = _bookmarkService.GetChildren(folderId);
         if (children.Count == 0)
         {
-            menu.DropDownItems.Add("(空)").Enabled = false;
+            menu.DropDownItems.Add(Localization.T("common.empty")).Enabled = false;
             return;
         }
         
@@ -527,20 +527,20 @@ public class BookmarkBar : Panel
         
         if (bookmark.IsFolder)
         {
-            menu.Items.Add("打开所有书签", null, (s, e) => OpenAllInFolder(bookmark.Id));
+            menu.Items.Add(Localization.T("bookmark_menu.open_all_bookmarks"), null, (s, e) => OpenAllInFolder(bookmark.Id));
             menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add("重命名", null, (s, e) => EditBookmark(bookmark));
-            menu.Items.Add("删除", null, (s, e) => DeleteWithConfirm(bookmark));
+            menu.Items.Add(Localization.T("actions.rename"), null, (s, e) => EditBookmark(bookmark));
+            menu.Items.Add(Localization.T("actions.delete"), null, (s, e) => DeleteWithConfirm(bookmark));
         }
         else
         {
-            menu.Items.Add("打开", null, (s, e) => BookmarkClicked?.Invoke(bookmark.Url));
-            menu.Items.Add("在新标签页打开", null, (s, e) => BookmarkMiddleClicked?.Invoke(bookmark.Url, true));
+            menu.Items.Add(Localization.T("bookmark_menu.open"), null, (s, e) => BookmarkClicked?.Invoke(bookmark.Url));
+            menu.Items.Add(Localization.T("bookmark_menu.open_in_new_tab"), null, (s, e) => BookmarkMiddleClicked?.Invoke(bookmark.Url, true));
             menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add("编辑", null, (s, e) => EditBookmark(bookmark));
-            menu.Items.Add("删除", null, (s, e) => _bookmarkService.Delete(bookmark.Id));
+            menu.Items.Add(Localization.T("actions.edit"), null, (s, e) => EditBookmark(bookmark));
+            menu.Items.Add(Localization.T("actions.delete"), null, (s, e) => _bookmarkService.Delete(bookmark.Id));
             menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add("复制链接", null, (s, e) => Clipboard.SetText(bookmark.Url));
+            menu.Items.Add(Localization.T("actions.copy_link"), null, (s, e) => Clipboard.SetText(bookmark.Url));
         }
         
         menu.Show(anchor, location);
@@ -558,8 +558,8 @@ public class BookmarkBar : Panel
     private void DeleteWithConfirm(Bookmark folder)
     {
         var result = MessageBox.Show(
-            $"确定要删除文件夹 \"{folder.Title}\" 及其所有内容吗？",
-            "确认删除", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            Localization.T("bookmark_manager.confirm_delete_folder", new Dictionary<string, string> { { "name", folder.Title } }),
+            Localization.T("confirm.title"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         
         if (result == DialogResult.Yes)
             _bookmarkService.Delete(folder.Id);
@@ -797,7 +797,7 @@ public class BookmarkEditDialog : Form
     
     public BookmarkEditDialog(Bookmark? bookmark, bool isFolder = false)
     {
-        Text = bookmark == null ? (isFolder ? "添加文件夹" : "添加书签") : "编辑";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(400, isFolder ? 120 : 160));
         FormBorderStyle = FormBorderStyle.FixedDialog;
         StartPosition = FormStartPosition.CenterParent;
@@ -815,13 +815,13 @@ public class BookmarkEditDialog : Form
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, DpiHelper.Scale(60)));
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
         
-        panel.Controls.Add(new Label { Text = "名称:", TextAlign = ContentAlignment.MiddleLeft }, 0, 0);
+        panel.Controls.Add(new Label { Text = Localization.Raw(), TextAlign = ContentAlignment.MiddleLeft }, 0, 0);
         _titleBox = new TextBox { Dock = DockStyle.Fill, Text = bookmark?.Title ?? "" };
         panel.Controls.Add(_titleBox, 1, 0);
         
         if (!isFolder)
         {
-            panel.Controls.Add(new Label { Text = "网址:", TextAlign = ContentAlignment.MiddleLeft }, 0, 1);
+            panel.Controls.Add(new Label { Text = Localization.Raw(), TextAlign = ContentAlignment.MiddleLeft }, 0, 1);
             _urlBox = new TextBox { Dock = DockStyle.Fill, Text = bookmark?.Url ?? "" };
             panel.Controls.Add(_urlBox, 1, 1);
         }
@@ -831,8 +831,8 @@ public class BookmarkEditDialog : Form
             Dock = DockStyle.Fill,
             FlowDirection = FlowDirection.RightToLeft
         };
-        var cancelBtn = new Button { Text = "取消", DialogResult = DialogResult.Cancel };
-        var okBtn = new Button { Text = "确定", DialogResult = DialogResult.OK };
+        var cancelBtn = new Button { Text = Localization.T("confirm.cancel"), DialogResult = DialogResult.Cancel };
+        var okBtn = new Button { Text = Localization.T("confirm.ok"), DialogResult = DialogResult.OK };
         btnPanel.Controls.Add(cancelBtn);
         btnPanel.Controls.Add(okBtn);
         panel.Controls.Add(btnPanel, 1, isFolder ? 1 : 2);

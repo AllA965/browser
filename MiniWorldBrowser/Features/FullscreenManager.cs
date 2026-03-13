@@ -266,7 +266,7 @@ public class FullscreenManager
         
         var lblText = new Label
         {
-            Text = "您已进入全屏模式。",
+            Text = Localization.Raw(),
             AutoSize = true,
             Location = DpiHelper.Scale(new Point(24, 14)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
@@ -276,7 +276,7 @@ public class FullscreenManager
         
         var lblExit = new LinkLabel
         {
-            Text = "退出全屏模式 (F11)",
+            Text = Localization.Raw(),
             AutoSize = true,
             Location = DpiHelper.Scale(new Point(156, 14)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),

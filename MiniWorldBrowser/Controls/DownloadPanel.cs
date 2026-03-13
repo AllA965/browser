@@ -27,7 +27,7 @@ public class DownloadPanel : UserControl
         var header = new Panel { Dock = DockStyle.Top, Height = DpiHelper.Scale(45), BackColor = Color.FromArgb(250, 250, 250) };
         _titleLabel = new Label 
         { 
-            Text = "下载", 
+            Text = Localization.T("downloads.title"), 
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(11F), FontStyle.Bold),
             ForeColor = Color.FromArgb(30, 30, 30),
             Location = DpiHelper.Scale(new Point(15, 12)),
@@ -201,15 +201,15 @@ internal class DownloadItemControl : UserControl
         {
             case DownloadStatus.Downloading:
                 string sizeStr = _item.TotalBytes > 0 ? $" / {FormatSize(_item.TotalBytes)}" : "";
-                return $"正在下载: {FormatSize(_item.ReceivedBytes)}{sizeStr} ({_item.Progress:F1}%)";
+                return Localization.T("downloads.status.downloading", new Dictionary<string, string> { { "received", FormatSize(_item.ReceivedBytes) }, { "total", _item.TotalBytes > 0 ? FormatSize(_item.TotalBytes) : "" }, { "pct", _item.Progress.ToString("F1") } });
             case DownloadStatus.Completed:
-                return "已完成";
+                return Localization.T("downloads.status.completed");
             case DownloadStatus.Cancelled:
-                return "已取消";
+                return Localization.T("downloads.status.cancelled");
             case DownloadStatus.Failed:
-                return "下载失败";
+                return Localization.T("downloads.status.failed");
             default:
-                return "等待中...";
+                return Localization.T("downloads.status.pending");
         }
     }
 

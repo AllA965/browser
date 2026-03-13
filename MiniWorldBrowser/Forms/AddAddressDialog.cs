@@ -32,7 +32,7 @@ public class AddAddressDialog : Form
     private void InitializeUI()
     {
         AppIconHelper.SetIcon(this);
-        Text = "添加地址";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(450, 480));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -44,15 +44,15 @@ public class AddAddressDialog : Form
         var y = DpiHelper.Scale(20);
 
         // 邮编
-        AddLabel("邮编", DpiHelper.Scale(20), y);
+        AddLabel(Localization.Raw(), DpiHelper.Scale(20), y);
         y += DpiHelper.Scale(20);
         _postalCodeBox = AddTextBox(DpiHelper.Scale(20), y, DpiHelper.Scale(200));
         y += DpiHelper.Scale(35);
 
         // 省、城市、区
-        AddLabel("省", DpiHelper.Scale(20), y);
-        AddLabel("城市", DpiHelper.Scale(160), y);
-        AddLabel("区", DpiHelper.Scale(300), y);
+        AddLabel(Localization.Raw(), DpiHelper.Scale(20), y);
+        AddLabel(Localization.Raw(), DpiHelper.Scale(160), y);
+        AddLabel(Localization.Raw(), DpiHelper.Scale(300), y);
         y += DpiHelper.Scale(20);
         _provinceBox = AddTextBox(DpiHelper.Scale(20), y, DpiHelper.Scale(130));
         _cityBox = AddTextBox(DpiHelper.Scale(160), y, DpiHelper.Scale(130));
@@ -60,7 +60,7 @@ public class AddAddressDialog : Form
         y += DpiHelper.Scale(35);
 
         // 街道地址
-        AddLabel("街道地址", DpiHelper.Scale(20), y);
+        AddLabel(Localization.Raw(), DpiHelper.Scale(20), y);
         y += DpiHelper.Scale(20);
         _streetAddressBox = new TextBox
         {
@@ -72,19 +72,19 @@ public class AddAddressDialog : Form
         y += DpiHelper.Scale(60);
 
         // 组织
-        AddLabel("组织", DpiHelper.Scale(20), y);
+        AddLabel(Localization.Raw(), DpiHelper.Scale(20), y);
         y += DpiHelper.Scale(20);
         _organizationBox = AddTextBox(DpiHelper.Scale(20), y, DpiHelper.Scale(200));
         y += DpiHelper.Scale(35);
 
         // 名称
-        AddLabel("名称", DpiHelper.Scale(20), y);
+        AddLabel(Localization.Raw(), DpiHelper.Scale(20), y);
         y += DpiHelper.Scale(20);
         _nameBox = AddTextBox(DpiHelper.Scale(20), y, DpiHelper.Scale(200));
         y += DpiHelper.Scale(35);
 
         // 国家/地区
-        AddLabel("国家/地区", DpiHelper.Scale(20), y);
+        AddLabel(Localization.Raw(), DpiHelper.Scale(20), y);
         y += DpiHelper.Scale(20);
         _countryCombo = new ComboBox
         {
@@ -92,14 +92,14 @@ public class AddAddressDialog : Form
             Width = DpiHelper.Scale(200),
             DropDownStyle = ComboBoxStyle.DropDownList
         };
-        _countryCombo.Items.AddRange(new object[] { "中国", "美国", "日本", "韩国", "英国", "法国", "德国", "其他" });
+        _countryCombo.Items.AddRange(new object[] { Localization.Raw(), Localization.Raw(), Localization.Raw(), Localization.Raw(), Localization.Raw(), Localization.Raw(), Localization.Raw(), Localization.Raw() });
         _countryCombo.SelectedIndex = 0;
         Controls.Add(_countryCombo);
         y += DpiHelper.Scale(35);
 
         // 电话和电子邮件
-        AddLabel("电话", DpiHelper.Scale(20), y);
-        AddLabel("电子邮件", DpiHelper.Scale(230), y);
+        AddLabel(Localization.Raw(), DpiHelper.Scale(20), y);
+        AddLabel(Localization.Raw(), DpiHelper.Scale(230), y);
         y += DpiHelper.Scale(20);
         _phoneBox = AddTextBox(DpiHelper.Scale(20), y, DpiHelper.Scale(200));
         _emailBox = AddTextBox(DpiHelper.Scale(230), y, DpiHelper.Scale(180));
@@ -108,7 +108,7 @@ public class AddAddressDialog : Form
         // 按钮
         _okBtn = new Button
         {
-            Text = "确定",
+            Text = Localization.T("confirm.ok"),
             Location = new Point(DpiHelper.Scale(260), y),
             Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.Flat,
@@ -119,7 +119,7 @@ public class AddAddressDialog : Form
 
         _cancelBtn = new Button
         {
-            Text = "取消",
+            Text = Localization.T("confirm.cancel"),
             Location = new Point(DpiHelper.Scale(345), y),
             Size = DpiHelper.Scale(new Size(75, 28)),
             FlatStyle = FlatStyle.Flat,

@@ -1,0 +1,362 @@
+{
+  "tab": {
+    "new": "New Tab"
+  },
+  "menu": {
+    "new_tab": "New Tab (T)",
+    "new_window": "New Window (N)",
+    "new_incognito": "New InPrivate Window (I)",
+    "bookmarks": "Bookmarks (B)",
+    "show_bookmark_bar": "Show bookmarks bar (S)",
+    "bookmark_manager": "Bookmark Manager (B)",
+    "import_bookmarks": "Import bookmarks and settings...",
+    "add_bookmark": "Add bookmark for this page...",
+    "add_all_bookmarks": "Add bookmarks for all open pages...",
+    "more_bookmarks": "More bookmarks",
+    "no_bookmarks": "No bookmarks",
+    "history": "History (H)",
+    "show_all_history": "Show all history",
+    "no_history": "No history",
+    "clear_history": "Clear browsing history",
+    "downloads": "Downloads (D)",
+    "media_extract": "Media extraction",
+    "extract_images": "Extract images on this page",
+    "extract_videos": "Extract videos on this page",
+    "clear_data": "Clear browsing data",
+    "exit_incognito": "Close InPrivate Window",
+    "exit_normal": "Close KunQiong AI Browser",
+    "print": "Print (P)",
+    "save_page_as": "Save page as (A)...",
+    "find_in_page": "Find on page",
+    "more_tools": "More tools",
+    "task_manager": "Task Manager (T)",
+    "encoding": "Encoding (E)",
+    "devtools": "Developer Tools (D)",
+    "view_resource_log": "View resource load log (L)",
+    "adblock": "Ad Block (G)",
+    "settings": "Settings (S)",
+    "feedback": "Feedback",
+    "about_app": "About Kunqiong AI Browser",
+    "about_incognito": "About InPrivate",
+    "exit_incognito": "Close InPrivate window",
+    "exit_app": "Close Kunqiong AI Browser"
+  },
+  "context": {
+    "new_tab": "Open new tab",
+    "reload": "Reload",
+    "duplicate": "Duplicate",
+    "pin": "Pin tab",
+    "unpin": "Unpin tab",
+    "close": "Close tab",
+    "close_others": "Close other tabs",
+    "close_left": "Close tabs to the left",
+    "close_right": "Close tabs to the right",
+    "reopen_closed": "Reopen closed tab (E)",
+    "bookmark_all": "Add bookmarks for all tabs..."
+  },
+  "tooltips": {
+    "new_tab": "New Tab (Ctrl+T)",
+    "search_tabs": "Search tabs",
+    "download": "Downloads (Ctrl+J)",
+    "user_login": "User/Login",
+    "translate_page": "Translate this page",
+    "zoom": "Zoom",
+    "manage_passwords": "Manage passwords"
+  },
+  "nav": {
+    "back": "Back (Alt+Left)",
+    "forward": "Forward (Alt+Right)",
+    "refresh": "Refresh (F5)",
+    "stop": "Stop (Esc)",
+    "home": "Home (Alt+Home)"
+  },
+  "status": {
+    "ready": "Ready",
+    "incognito": "InPrivate - Your browsing activity won't be saved on this device",
+    "downloading": "Downloading: {{file}}",
+    "history_cleared": "History cleared"
+  },
+  "ai": {
+    "assistant": "Assistant",
+    "summarize": "📝 Summarize this page",
+    "mode": "AI Mode",
+    "init_failed": "Assistant initialization failed",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI chat UI file not found</h3><p>Please check these paths exist:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "Please translate the main content of this page into Chinese:\\n\\n{{text}}",
+    "translate_failed": "AI translation failed: {{msg}}"
+  },
+  "incognito": {
+    "info": {
+      "title": "InPrivate",
+      "message": "You are using InPrivate browsing\\n\\n✓ InPrivate can:\\n  • Not save browsing history\\n  • Not save cookies and site data\\n  • Not save form data\\n  • Use isolated session\\n\\n✗ InPrivate will not:\\n  • Hide activity from network administrators\\n  • Hide activity from your ISP\\n  • Prevent websites from getting your IP address\\n\\nNote: Downloaded files and created bookmarks remain."
+    }
+  },
+  "confirm": {
+    "title": "Confirm",
+    "ok": "OK",
+    "clear_history_all": "Are you sure you want to clear all history?"
+  },
+  "search_engine": {
+    "confirm_delete": "Are you sure to delete search engine \"{{name}}\"?"
+  },
+  "menu_zoom": {
+    "label": "Zoom",
+    "reset": "Reset"
+  },
+  "settings": {
+    "header": {
+      "title": "Settings",
+      "search_placeholder": "Search settings"
+    },
+    "sidebar": {
+      "history": "History",
+      "settings": "Settings",
+      "ai": "AI Settings",
+      "privacy": "Privacy",
+      "advanced": "Advanced"
+    },
+    "set_startup_pages": "Set startup pages",
+    "enter_urls_each_line": "Please enter website URLs (one per line):",
+    "no_results": "No matching settings found",
+    "appearance": {
+      "title": "Appearance",
+      "show_home_button": "Show \"Home\" button",
+      "change": "Change",
+      "show_bookmark_bar": "Always show bookmarks bar",
+      "language": "Language",
+      "language_auto": "Follow system",
+      "language_zhCN": "中文（简体）",
+      "language_en": "English"
+    },
+    "downloads": {
+      "title": "Downloads",
+      "location_label": "Download location",
+      "location_desc": "Default save location for downloads",
+      "browse": "Browse...",
+      "ask_location_label": "Ask where to save each file before downloading"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "search_placeholder": "Search settings",
+    "home": {
+      "title": "Home",
+      "url": "Home URL:",
+      "use_current": "Use current page",
+      "use_newtab": "Use New Tab"
+    },
+    "startup": {
+      "title": "On startup",
+      "newtab": "Open New Tab",
+      "continue_last": "Continue where you left off",
+      "specific_pages": "Open a specific page or set of pages",
+      "manage_pages": "Manage pages"
+    },
+    "adblock": {
+      "title": "Ad blocking",
+      "none": "Do not block any ads",
+      "popup": "Block pop-ups only",
+      "aggressive": "Aggressively block webpage ads",
+      "custom": "Custom ad blocking rules",
+      "custom_link": "Custom rules",
+      "manage_rules": "Manage my rules..."
+    },
+    "search": {
+      "title": "Address bar search engine",
+      "default_label": "Default search engine",
+      "desc": "Search engine used by the address bar",
+      "options": {
+        "360": "360",
+        "baidu": "Baidu",
+        "bing": "Bing",
+        "google": "Google"
+      }
+    },
+    "show_advanced": "Show advanced settings..."
+  }
+  "downloads": {
+    "title": "Downloads",
+    "default_tool_label": "Choose default download tool:",
+    "browse_desc": "Choose download save folder",
+    "status": {
+      "downloading": "Downloading: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "failed": "Download failed",
+      "pending": "Pending..."
+    }
+  },
+  "password_manager": {
+    "hide": "Hide",
+    "show": "Show"
+  }
+  "import": {
+    "success": "Successfully imported {{count}} bookmarks.",
+    "done": "Import complete",
+    "failed": "Import failed: {{msg}}"
+  },
+  "adblock": {
+    "allow": "Allow",
+    "block": "Block"
+  }
+  "task_manager": {
+    "tab_title": "● Tab: {{title}}"
+  }
+  "clear": {
+    "success": "Successfully cleared the following data:\n• {{items}}",
+    "done": "Clear complete",
+    "failed": "Error while clearing data: {{msg}}",
+    "in_progress": "Clearing..."
+  }
+  "print": {
+    "failed": "Print failed",
+    "failed_message": "Error while printing:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "Save Page As",
+      "filter": "Webpage, HTML only (*.html)|*.html|Webpage, complete (*.html)|*.html|MHTML file (*.mhtml)|*.mhtml|PDF document (*.pdf)|*.pdf"
+    }
+  },
+  "status": {
+    "ready": "Ready"
+  },
+  "bookmarks": {
+    "export_title": "Export Bookmarks",
+    "export_filter": "HTML Files (*.html)|*.html",
+    "export_success_path": "Bookmarks exported to:\n{{path}}",
+    "other": "Other bookmarks"
+  },
+  "bookmark_menu": {
+    "open": "Open",
+    "open_in_new_tab": "Open in new tab",
+    "open_all_bookmarks": "Open all bookmarks"
+  },
+  "actions": {
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "delete_all": "Delete all",
+    "done": "Done",
+    "copy_link": "Copy link",
+    "rename": "Rename",
+    "add_bookmark": "Add bookmark",
+    "add_folder": "Add folder"
+  },
+  "permissions": {
+    "allow": "Allow",
+    "block": "Block",
+    "ask": "Ask"
+  },
+  "site_settings": {
+    "desc": "You can set {{category}} permissions for specific sites.",
+    "host_pattern": "Hostname pattern:",
+    "columns": { "host_pattern": "Hostname pattern", "behavior": "Behavior" }
+  },
+  "time": {
+    "minute": "minute"
+  },
+  "newtab": {
+    "title": "New Tab",
+    "search_placeholder": "Search or enter address",
+    "footer": "Light · Fast · Simple"
+  },
+  "privacy": {
+    "clear_title": "Clear browsing data",
+    "clear_button": "Clear browsing data...",
+    "clear_desc": "Clear browsing history, cookies, cache and more",
+    "exit_clear": {
+      "title": "Auto-clear on exit",
+      "history": "Browsing history",
+      "downloads": "Download history",
+      "cache": "Cached images and files",
+      "cookies": "Cookies and other site data"
+    },
+    "options": {
+      "title": "Privacy options",
+      "dnt": "Send \"Do Not Track\" request with browsing traffic"
+    }
+  },
+  "update": {
+    "updater_missing": "Updater executable 'updater.exe' not found"
+  },
+  "address_dropdown": {
+  "address_dropdown": {
+    "search": "Search \"{{text}}\"",
+    "visit": "Visit \"{{text}}\"",
+    "empty_history": "No matching history found",
+    "empty_bookmark": "No matching bookmarks found",
+    "empty_tabs": "No matching tabs found",
+    "empty_all": "No matches found"
+  }
+  "image_dialog": {
+  "image_dialog": {
+    "title": "Extract image resources",
+    "found_count": "Found {{count}} images",
+    "columns": { "url": "Image URL", "type": "Type" },
+    "preview": { "select": "Select an image to preview" },
+    "save_to": "Save downloads to",
+    "browse": "Change folder",
+    "browse_desc": "Choose download save folder",
+    "download_now": "Download now",
+    "select_one_image": "Please select at least one image to download",
+    "select_all_toggle": "Select All / Toggle",
+    "loading_preview": "Loading preview...",
+    "modern_preview": "Modern image format (WebView2 preview)",
+    "modern": "Modern image format",
+    "preview_loading_webview": "Loading preview (WebView2 mode)...",
+    "preview_unavailable": "Preview unavailable",
+    "preview_size": "{{width}} x {{height}} | {{kb}} KB"
+  },
+  "video_dialog": {
+    "title": "Select download format",
+    "columns": { "resolution": "Resolution", "ext": "Extension", "size": "Size", "note": "Note" },
+    "save_to": "Save downloads to",
+    "browse": "Change folder",
+    "browse_desc": "Choose download save folder",
+    "start_download": "Start download",
+    "select_format_first": "Please select a format first",
+    "unknown_title": "Unknown title",
+    "unknown": "Unknown",
+    "parse_failed": "Failed to parse video info: {{msg}}"
+  },
+  "confirm": {
+    "cancel": "Cancel"
+  },
+  "common": {
+    "info": "Info",
+    "done": "Done",
+    "error": "Error",
+    "operation_failed_retry": "Operation failed, please retry",
+    "empty": "(empty)",
+    "in_dev": "This feature is under development..."
+  },
+  "about": {
+    "title_prefix": "About ",
+    "version_prefix": "Version ",
+    "check_update": "Check for updates",
+    "checking": "Checking...",
+    "connecting": "Connecting to update server...",
+    "update_failed": "Failed to check for updates. Please try again later.",
+    "update_found_status": "New version found: {{version}}",
+    "update_found_title": "Update found",
+    "update_found_message": "New version {{version}} found\\n\\nRelease notes:\\n{{log}}\\n\\nUpdate now?",
+    "latest": "You are already on the latest version.",
+    "error_prefix": "Error: ",
+    "simple_title": "About",
+    "simple_message": "{{app}}\\nVersion {{version}}\\n\\nBased on WebView2 engine",
+    "copyright": "© {{year}} {{app}}. All rights reserved."
+  }
+  "font": {
+    "preview_standard": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "min": "Min",
+    "max": "Max",
+    "serif": "Serif font",
+    "sans_serif": "Sans-serif font",
+    "fixed_width": "Fixed-width font",
+    "minimum_size": "Minimum font size",
+    "preview_generic": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "preview_fixed": "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "preview_min": "{{size}}: Lorem ipsum dolor sit amet, consectetur"
+  }
+}

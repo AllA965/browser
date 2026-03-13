@@ -147,7 +147,7 @@ public class WindowsPasswordDialog : Form
 
     private void InitializeUI()
     {
-        Text = "鲲穹AI浏览器";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(420, 280));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -175,7 +175,7 @@ public class WindowsPasswordDialog : Form
         // 提示文字
         var tipLabel = new Label
         {
-            Text = "鲲穹AI浏览器正在尝试显示密码，请输入您的 Windows 密码以\n允许此操作。",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(20, 80)),
             Size = DpiHelper.Scale(new Size(380, 40)),
             ForeColor = Color.FromArgb(0, 102, 204),
@@ -186,7 +186,7 @@ public class WindowsPasswordDialog : Form
         // 用户名标签
         var userLabel = new Label
         {
-            Text = "用户名(U):",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(20, 135)),
             AutoSize = true
         };
@@ -205,7 +205,7 @@ public class WindowsPasswordDialog : Form
         // 密码标签
         var pwdLabel = new Label
         {
-            Text = "密码(P):",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(20, 170)),
             AutoSize = true
         };
@@ -223,7 +223,7 @@ public class WindowsPasswordDialog : Form
         // 确定按钮
         var okBtn = new Button
         {
-            Text = "确定",
+            Text = Localization.T("confirm.ok"),
             Location = DpiHelper.Scale(new Point(210, 210)),
             Size = DpiHelper.Scale(new Size(85, 28)),
             FlatStyle = FlatStyle.Flat,
@@ -242,7 +242,7 @@ public class WindowsPasswordDialog : Form
                 }
                 else
                 {
-                    MessageBox.Show("密码错误，请重试。", "验证失败", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(Localization.Raw(), Localization.Raw(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     _passwordBox.SelectAll();
                     _passwordBox.Focus();
                 }
@@ -250,7 +250,7 @@ public class WindowsPasswordDialog : Form
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Password validation error: {ex.Message}");
-                MessageBox.Show("验证过程中发生错误，请重试。", "验证失败", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(Localization.Raw(), Localization.Raw(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 _passwordBox.SelectAll();
                 _passwordBox.Focus();
             }
@@ -260,7 +260,7 @@ public class WindowsPasswordDialog : Form
         // 取消按钮
         var cancelBtn = new Button
         {
-            Text = "取消",
+            Text = Localization.T("confirm.cancel"),
             Location = DpiHelper.Scale(new Point(305, 210)),
             Size = DpiHelper.Scale(new Size(85, 28)),
             FlatStyle = FlatStyle.Flat,

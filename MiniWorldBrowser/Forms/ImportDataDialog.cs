@@ -24,7 +24,7 @@ public class ImportDataDialog : Form
     private void InitializeUI()
     {
         AppIconHelper.SetIcon(this);
-        Text = "导入收藏和设置";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(400, 220));
         FormBorderStyle = FormBorderStyle.FixedDialog;
         StartPosition = FormStartPosition.CenterParent;
@@ -36,7 +36,7 @@ public class ImportDataDialog : Form
         // 来源标签
         var sourceLabel = new Label
         {
-            Text = "来源：",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(20, 25)),
             AutoSize = true
         };
@@ -51,11 +51,11 @@ public class ImportDataDialog : Form
         };
         _sourceCombo.Items.AddRange(new object[]
         {
-            "Microsoft Internet Explorer",
-            "Microsoft Edge",
-            "Google Chrome",
-            "Mozilla Firefox",
-            "以前导出的收藏夹（HTML文件）"
+            Localization.Raw(),
+            Localization.Raw(),
+            Localization.Raw(),
+            Localization.Raw(),
+            Localization.Raw()
         });
         _sourceCombo.SelectedIndex = 0;
         Controls.Add(_sourceCombo);
@@ -63,7 +63,7 @@ public class ImportDataDialog : Form
         // 选择要导入的内容标签
         var selectLabel = new Label
         {
-            Text = "选择要导入的内容：",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(20, 65)),
             AutoSize = true
         };
@@ -72,7 +72,7 @@ public class ImportDataDialog : Form
         // 收藏夹/书签复选框
         _bookmarksCheck = new CheckBox
         {
-            Text = "收藏夹/书签",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(40, 90)),
             AutoSize = true,
             Checked = true
@@ -82,7 +82,7 @@ public class ImportDataDialog : Form
         // 导入按钮
         _importBtn = new Button
         {
-            Text = "导入",
+            Text = Localization.Raw(),
             Size = DpiHelper.Scale(new Size(75, 28)),
             Location = DpiHelper.Scale(new Point(210, 140)),
             DialogResult = DialogResult.OK
@@ -93,7 +93,7 @@ public class ImportDataDialog : Form
         // 取消按钮
         _cancelBtn = new Button
         {
-            Text = "取消",
+            Text = Localization.Raw(),
             Size = DpiHelper.Scale(new Size(75, 28)),
             Location = DpiHelper.Scale(new Point(295, 140)),
             DialogResult = DialogResult.Cancel
@@ -108,7 +108,7 @@ public class ImportDataDialog : Form
     {
         if (!_bookmarksCheck.Checked)
         {
-            MessageBox.Show("请至少选择一项要导入的内容。", "提示", 
+            MessageBox.Show(Localization.Raw(), Localization.Raw(), 
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             DialogResult = DialogResult.None;
             return;
@@ -139,19 +139,19 @@ public class ImportDataDialog : Form
             
             if (importedCount > 0)
             {
-                MessageBox.Show($"成功导入 {importedCount} 个收藏。", "导入完成",
+                MessageBox.Show(Localization.T("import.success", new Dictionary<string, string> { { "count", importedCount.ToString() } }), Localization.T("import.done"),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else if (importedCount == 0)
             {
-                MessageBox.Show("没有找到可导入的收藏。", "提示",
+                MessageBox.Show(Localization.Raw(), Localization.Raw(),
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.None;
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"导入失败：{ex.Message}", "错误",
+            MessageBox.Show(Localization.T("import.failed", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("confirm.title"),
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             DialogResult = DialogResult.None;
         }
@@ -162,7 +162,7 @@ public class ImportDataDialog : Form
         var favoritesPath = Environment.GetFolderPath(Environment.SpecialFolder.Favorites);
         if (!Directory.Exists(favoritesPath))
         {
-            MessageBox.Show("未找到 Internet Explorer 收藏夹。", "提示",
+            MessageBox.Show(Localization.Raw(), Localization.Raw(),
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             return 0;
         }
@@ -179,7 +179,7 @@ public class ImportDataDialog : Form
         
         if (!File.Exists(edgePath))
         {
-            MessageBox.Show("未找到 Microsoft Edge 书签文件。", "提示",
+            MessageBox.Show(Localization.Raw(), Localization.Raw(),
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             return 0;
         }
@@ -195,7 +195,7 @@ public class ImportDataDialog : Form
         
         if (!File.Exists(chromePath))
         {
-            MessageBox.Show("未找到 Google Chrome 书签文件。", "提示",
+            MessageBox.Show(Localization.Raw(), Localization.Raw(),
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             return 0;
         }
@@ -212,13 +212,11 @@ public class ImportDataDialog : Form
         
         if (!Directory.Exists(firefoxPath))
         {
-            MessageBox.Show("未找到 Firefox 配置文件夹。\n\n建议：请先从 Firefox 导出书签为 HTML 文件，然后选择\"以前导出的收藏夹（HTML文件）\"进行导入。", 
-                "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(Localization.Raw(), Localization.Raw(), MessageBoxButtons.OK, MessageBoxIcon.Information);
             return 0;
         }
         
-        MessageBox.Show("Firefox 书签导入需要先从 Firefox 导出为 HTML 文件。\n\n请在 Firefox 中：\n1. 按 Ctrl+Shift+O 打开书签管理器\n2. 点击\"导入和备份\" > \"导出书签到 HTML\"\n3. 然后选择\"以前导出的收藏夹（HTML文件）\"进行导入", 
-            "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show(Localization.Raw(), Localization.Raw(), MessageBoxButtons.OK, MessageBoxIcon.Information);
         return 0;
     }
     
@@ -226,8 +224,8 @@ public class ImportDataDialog : Form
     {
         using var dialog = new OpenFileDialog
         {
-            Title = "选择书签 HTML 文件",
-            Filter = "HTML 文件 (*.html;*.htm)|*.html;*.htm|所有文件 (*.*)|*.*",
+            Title = Localization.Raw(),
+            Filter = Localization.Raw(),
             FilterIndex = 1
         };
         

@@ -121,7 +121,7 @@ public class TabButton : Panel
                 Location = new Point(DpiHelper.Scale(34), titleTop),
                 Size = new Size(DpiHelper.Scale(130), labelHeight),
                 Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
-                Text = "新标签页",
+                Text = Localization.T("tab.new"),
                 TextAlign = ContentAlignment.MiddleLeft,
                 ForeColor = TextColor,
                 BackColor = Color.Transparent,
@@ -454,58 +454,58 @@ public class TabButton : Panel
         };
 
         // 打开新的标签页
-        var newTab = new ToolStripMenuItem("打开新的标签页") { ShortcutKeyDisplayString = "Ctrl+T" };
+        var newTab = new ToolStripMenuItem(Localization.T("context.new_tab")) { ShortcutKeyDisplayString = "Ctrl+T" };
         newTab.Click += (s, e) => NewTabRequested?.Invoke(this);
         menu.Items.Add(newTab);
 
         menu.Items.Add(new ToolStripSeparator());
 
         // 重新加载
-        var reload = new ToolStripMenuItem("重新加载") { ShortcutKeyDisplayString = "Ctrl+R" };
+        var reload = new ToolStripMenuItem(Localization.T("context.reload")) { ShortcutKeyDisplayString = "Ctrl+R" };
         reload.Click += (s, e) => RefreshRequested?.Invoke(this);
         menu.Items.Add(reload);
 
         // 复制
-        var duplicate = new ToolStripMenuItem("复制");
+        var duplicate = new ToolStripMenuItem(Localization.T("context.duplicate"));
         duplicate.Click += (s, e) => DuplicateRequested?.Invoke(this);
         menu.Items.Add(duplicate);
 
         // 固定标签页
-        var pin = new ToolStripMenuItem(_isPinned ? "取消固定标签页" : "固定标签页");
+        var pin = new ToolStripMenuItem(_isPinned ? Localization.T("context.unpin") : Localization.T("context.pin"));
         pin.Click += (s, e) => PinRequested?.Invoke(this);
         menu.Items.Add(pin);
 
         menu.Items.Add(new ToolStripSeparator());
 
         // 关闭标签页
-        var close = new ToolStripMenuItem("关闭标签页") { ShortcutKeyDisplayString = "Ctrl+W" };
+        var close = new ToolStripMenuItem(Localization.T("context.close")) { ShortcutKeyDisplayString = "Ctrl+W" };
         close.Click += (s, e) => CloseClicked?.Invoke(this);
         menu.Items.Add(close);
 
         // 关闭其他标签页
-        var closeOthers = new ToolStripMenuItem("关闭其他标签页");
+        var closeOthers = new ToolStripMenuItem(Localization.T("context.close_others"));
         closeOthers.Click += (s, e) => CloseOthersRequested?.Invoke(this);
         menu.Items.Add(closeOthers);
 
         // 关闭左侧标签页
-        var closeLeft = new ToolStripMenuItem("关闭左侧标签页");
+        var closeLeft = new ToolStripMenuItem(Localization.T("context.close_left"));
         closeLeft.Click += (s, e) => CloseLeftRequested?.Invoke(this);
         menu.Items.Add(closeLeft);
 
         // 关闭右侧标签页
-        var closeRight = new ToolStripMenuItem("关闭右侧标签页");
+        var closeRight = new ToolStripMenuItem(Localization.T("context.close_right"));
         closeRight.Click += (s, e) => CloseRightRequested?.Invoke(this);
         menu.Items.Add(closeRight);
 
         menu.Items.Add(new ToolStripSeparator());
 
         // 重新打开关闭的标签页
-        var reopen = new ToolStripMenuItem("重新打开关闭的标签页(E)") { ShortcutKeyDisplayString = "Ctrl+E" };
+        var reopen = new ToolStripMenuItem(Localization.T("context.reopen_closed")) { ShortcutKeyDisplayString = "Ctrl+E" };
         reopen.Click += (s, e) => ReopenClosedRequested?.Invoke(this);
         menu.Items.Add(reopen);
 
         // 为所有标签页添加收藏
-        var bookmarkAll = new ToolStripMenuItem("为所有标签页添加收藏...") { ShortcutKeyDisplayString = "Ctrl+Shift+D" };
+        var bookmarkAll = new ToolStripMenuItem(Localization.T("context.bookmark_all")) { ShortcutKeyDisplayString = "Ctrl+Shift+D" };
         bookmarkAll.Click += (s, e) => BookmarkAllRequested?.Invoke(this);
         menu.Items.Add(bookmarkAll);
 

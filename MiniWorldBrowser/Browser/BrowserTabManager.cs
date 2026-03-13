@@ -1007,7 +1007,7 @@ public partial class BrowserTabManager
                 
                 using var dialog = new FolderBrowserDialog
                 {
-                    Description = "选择缓存目录位置",
+                    Description = Localization.Raw(),
                     UseDescriptionForTitle = true,
                     ShowNewFolderButton = true
                 };
@@ -1024,8 +1024,8 @@ public partial class BrowserTabManager
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     var result = MessageBox.Show(
-                        "更改缓存目录将清空现有缓存，需要重启浏览器后生效。\n\n确定要更改吗？",
-                        "更改缓存目录",
+                        Localization.Raw(),
+                        Localization.Raw(),
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question);
                     
@@ -1043,7 +1043,7 @@ public partial class BrowserTabManager
                         });
                         tab.WebView?.CoreWebView2?.PostWebMessageAsJson(json);
                         
-                        MessageBox.Show("缓存目录已更改，请重启浏览器使设置生效。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(Localization.Raw(), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
@@ -1067,7 +1067,7 @@ public partial class BrowserTabManager
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"无法打开缓存目录: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(Localization.Raw(), Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
     
@@ -1091,7 +1091,7 @@ public partial class BrowserTabManager
                 });
                 tab.WebView?.CoreWebView2?.PostWebMessageAsJson(json);
                 
-                MessageBox.Show("缓存目录已设回默认，请重启浏览器使设置生效。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Localization.Raw(), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch { }
         });
@@ -1546,7 +1546,7 @@ public partial class BrowserTabManager
             {
                 using var dialog = new FolderBrowserDialog
                 {
-                    Description = "选择下载文件夹",
+                    Description = Localization.Raw(),
                     UseDescriptionForTitle = true,
                     ShowNewFolderButton = true
                 };
@@ -1775,8 +1775,8 @@ public partial class BrowserTabManager
             {
                 using var dialog = new SaveFileDialog
                 {
-                    Title = "导出收藏",
-                    Filter = "HTML 文件 (*.html)|*.html",
+                    Title = Localization.T("bookmarks.export_title"),
+                    Filter = Localization.T("bookmarks.export_filter"),
                     FileName = $"bookmarks_{DateTime.Now:yyyyMMdd}.html",
                     DefaultExt = "html"
                 };
@@ -1786,12 +1786,12 @@ public partial class BrowserTabManager
                 var html = GenerateBookmarksExportHtml();
                 File.WriteAllText(dialog.FileName, html, System.Text.Encoding.UTF8);
                 
-                MessageBox.Show($"收藏已导出到:\n{dialog.FileName}", "导出成功", 
+                MessageBox.Show(Localization.T("bookmarks.export_success_path", new Dictionary<string, string> { { "path", dialog.FileName } }), Localization.T("common.done"), 
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"导出失败：{ex.Message}", "错误", 
+                MessageBox.Show(Localization.T("clear.failed", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("common.error"), 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         });

@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using MiniWorldBrowser.Constants;
+using MiniWorldBrowser.Helpers;
 
 namespace MiniWorldBrowser.Services;
 
@@ -63,13 +64,13 @@ public class UpdateService
                 // 确保在 UI 线程执行
                 owner.Invoke(new Action(() =>
                 {
-                    var msg = $"发现新版本 {info.Version}\n\n更新内容:\n{info.UpdateLog}\n\n是否立即更新？";
-                    var title = "发现更新";
+                    var msg = Localization.T("about.update_found_message", new Dictionary<string, string> { { "version", info.Version ?? "" }, { "log", info.UpdateLog ?? "" } });
+                    var title = Localization.T("about.update_found_title");
                     
                     if (info.IsMandatory)
                     {
-                        msg = $"发现关键版本 {info.Version}\n\n更新内容:\n{info.UpdateLog}\n\n此版本为强制更新，必须升级后才能继续使用。";
-                        title = "强制更新";
+                        msg = Localization.T("about.update_found_message", new Dictionary<string, string> { { "version", info.Version ?? "" }, { "log", info.UpdateLog ?? "" } });
+                        title = Localization.T("about.update_found_title");
                         MessageBox.Show(owner, msg, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         StartUpdate(info);
                         Application.Exit(); // 强制更新启动后退出
@@ -98,7 +99,7 @@ public class UpdateService
         string updaterPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "updater.exe");
         if (!File.Exists(updaterPath))
         {
-            MessageBox.Show("未找到更新程序 updater.exe", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(Localization.T("update.updater_missing"), Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
         }
 
@@ -134,7 +135,7 @@ public class UpdateService
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"启动更新失败: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(Localization.T("clear.failed", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

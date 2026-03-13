@@ -22,10 +22,10 @@ public class SearchEngineManagerDialog : Form
     // 默认搜索引擎
     private readonly (string Name, string Domain, string Url)[] _defaultEngines = new[]
     {
-        ("Google", "google.com", "https://www.google.com/search?q=%s"),
-        ("百度", "baidu.com", "https://www.baidu.com/s?wd=%s"),
-        ("360", "so.com", "https://www.so.com/s?q=%s&ie=utf-8"),
-        ("必应", "bing.com", "https://www.bing.com/search?q=%s")
+        (Localization.T("settings.search.options.google"), "google.com", "https://www.google.com/search?q=%s"),
+        (Localization.T("settings.search.options.baidu"), "baidu.com", "https://www.baidu.com/s?wd=%s"),
+        (Localization.T("settings.search.options.360"), "so.com", "https://www.so.com/s?q=%s&ie=utf-8"),
+        (Localization.T("settings.search.options.bing"), "bing.com", "https://www.bing.com/search?q=%s")
     };
     
     public SearchEngineManagerDialog(ISettingsService settingsService)
@@ -37,7 +37,7 @@ public class SearchEngineManagerDialog : Form
     private void InitializeComponent()
     {
         AppIconHelper.SetIcon(this);
-        Text = "默认搜索引擎";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(700, 550));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -48,7 +48,7 @@ public class SearchEngineManagerDialog : Form
         // 默认搜索设置标题
         var lblDefault = new Label
         {
-            Text = "默认搜索设置",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(11F), FontStyle.Bold),
             Location = DpiHelper.Scale(new Point(20, 15)),
             AutoSize = true
@@ -66,9 +66,9 @@ public class SearchEngineManagerDialog : Form
             CheckBoxes = true,
             HeaderStyle = ColumnHeaderStyle.Nonclickable
         };
-        _defaultEnginesList.Columns.Add("名称", DpiHelper.Scale(180));
-        _defaultEnginesList.Columns.Add("域名", DpiHelper.Scale(150));
-        _defaultEnginesList.Columns.Add("网址", DpiHelper.Scale(280));
+        _defaultEnginesList.Columns.Add(Localization.Raw(), DpiHelper.Scale(180));
+        _defaultEnginesList.Columns.Add(Localization.Raw(), DpiHelper.Scale(150));
+        _defaultEnginesList.Columns.Add(Localization.Raw(), DpiHelper.Scale(280));
         _defaultEnginesList.ItemCheck += DefaultEnginesList_ItemCheck;
         
         // 加载默认搜索引擎数据
@@ -77,7 +77,7 @@ public class SearchEngineManagerDialog : Form
         // 其他搜索引擎标题
         var lblOther = new Label
         {
-            Text = "其他搜索引擎",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(11F), FontStyle.Bold),
             Location = DpiHelper.Scale(new Point(20, 190)),
             AutoSize = true
@@ -90,7 +90,7 @@ public class SearchEngineManagerDialog : Form
             Width = DpiHelper.Scale(150),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
-        SetPlaceholder(_txtName, "添加新的搜索引擎");
+        SetPlaceholder(_txtName, Localization.Raw());
         
         _txtKeyword = new TextBox
         {
@@ -98,7 +98,7 @@ public class SearchEngineManagerDialog : Form
             Width = DpiHelper.Scale(120),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
-        SetPlaceholder(_txtKeyword, "关键字");
+        SetPlaceholder(_txtKeyword, Localization.Raw());
         
         _txtUrl = new TextBox
         {
@@ -106,7 +106,7 @@ public class SearchEngineManagerDialog : Form
             Width = DpiHelper.Scale(280),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F))
         };
-        SetPlaceholder(_txtUrl, "网址（用\"%s\"代替搜索字词）");
+        SetPlaceholder(_txtUrl, Localization.Raw());
         
         _btnAdd = new Button
         {
@@ -129,21 +129,21 @@ public class SearchEngineManagerDialog : Form
             GridLines = false,
             BorderStyle = BorderStyle.FixedSingle
         };
-        _customEnginesList.Columns.Add("名称", DpiHelper.Scale(150));
-        _customEnginesList.Columns.Add("关键字", DpiHelper.Scale(120));
-        _customEnginesList.Columns.Add("网址", DpiHelper.Scale(340));
+        _customEnginesList.Columns.Add(Localization.Raw(), DpiHelper.Scale(150));
+        _customEnginesList.Columns.Add(Localization.Raw(), DpiHelper.Scale(120));
+        _customEnginesList.Columns.Add(Localization.Raw(), DpiHelper.Scale(340));
         _customEnginesList.KeyDown += CustomEnginesList_KeyDown;
         
         // 右键菜单
         var contextMenu = new ContextMenuStrip();
-        contextMenu.Items.Add("设为默认", null, (s, e) => SetAsDefault());
-        contextMenu.Items.Add("删除", null, (s, e) => DeleteSelected());
+        contextMenu.Items.Add(Localization.Raw(), null, (s, e) => SetAsDefault());
+        contextMenu.Items.Add(Localization.Raw(), null, (s, e) => DeleteSelected());
         _customEnginesList.ContextMenuStrip = contextMenu;
         
         // 完成按钮
         var btnDone = new Button
         {
-            Text = "完成",
+            Text = Localization.Raw(),
             Location = DpiHelper.Scale(new Point(585, 470)),
             Size = DpiHelper.Scale(new Size(75, 30)),
             FlatStyle = FlatStyle.System,
@@ -176,7 +176,7 @@ public class SearchEngineManagerDialog : Form
                 var engine = _defaultEngines[i];
                 var displayName = engine.Name;
                 if (i == currentDefault)
-                    displayName += " (默认)";
+                    displayName += Localization.Raw();
                 
                 var item = new ListViewItem(displayName);
                 item.SubItems.Add(engine.Domain);
@@ -262,21 +262,21 @@ public class SearchEngineManagerDialog : Form
         var url = _txtUrl.Text;
         
         // 验证输入
-        if (string.IsNullOrWhiteSpace(name) || name == "添加新的搜索引擎")
+        if (string.IsNullOrWhiteSpace(name) || name == Localization.Raw())
         {
-            MessageBox.Show("请输入搜索引擎名称", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(Localization.Raw(), Localization.Raw(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
         
-        if (string.IsNullOrWhiteSpace(url) || url == "网址（用\"%s\"代替搜索字词）")
+        if (string.IsNullOrWhiteSpace(url) || url == Localization.Raw())
         {
-            MessageBox.Show("请输入搜索引擎网址", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(Localization.Raw(), Localization.Raw(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
         
         if (!url.Contains("%s"))
         {
-            MessageBox.Show("网址必须包含 %s 作为搜索字词占位符", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(Localization.Raw(), Localization.Raw(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
         }
         
@@ -284,7 +284,7 @@ public class SearchEngineManagerDialog : Form
         var engine = new CustomSearchEngine
         {
             Name = name,
-            Keyword = keyword == "关键字" ? "" : keyword,
+            Keyword = keyword == Localization.Raw() ? "" : keyword,
             Url = url
         };
         
@@ -295,11 +295,11 @@ public class SearchEngineManagerDialog : Form
         LoadCustomEngines();
         
         // 清空输入框
-        _txtName.Text = "添加新的搜索引擎";
+        _txtName.Text = Localization.Raw();
         _txtName.ForeColor = Color.Gray;
-        _txtKeyword.Text = "关键字";
+        _txtKeyword.Text = Localization.Raw();
         _txtKeyword.ForeColor = Color.Gray;
-        _txtUrl.Text = "网址（用\"%s\"代替搜索字词）";
+        _txtUrl.Text = Localization.Raw();
         _txtUrl.ForeColor = Color.Gray;
     }
     
@@ -334,7 +334,7 @@ public class SearchEngineManagerDialog : Form
         var engine = _customEnginesList.SelectedItems[0].Tag as CustomSearchEngine;
         if (engine == null) return;
         
-        if (MessageBox.Show($"确定要删除搜索引擎 \"{engine.Name}\" 吗？", "确认删除",
+        if (MessageBox.Show(Localization.T("search_engine.confirm_delete", new Dictionary<string, string> { { "name", engine.Name } }), Localization.T("confirm.title"),
             MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
         {
             _settingsService.Settings.CustomSearchEngines.Remove(engine);

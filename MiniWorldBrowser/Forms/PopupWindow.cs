@@ -22,7 +22,7 @@ public class PopupWindow : Form
         WebView = new WebView2 { Dock = DockStyle.Fill };
         
         // 设置窗体基本属性
-        this.Text = "正在加载...";
+        this.Text = Localization.Raw();
         this.ShowInTaskbar = true;
         this.Icon = AppIconHelper.AppIcon;
         this.StartPosition = FormStartPosition.Manual;

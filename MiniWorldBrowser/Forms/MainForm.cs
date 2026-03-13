@@ -168,6 +168,8 @@ public partial class MainForm : Form
         InitializeEvents();
         
         _loginService.LoginStateChanged += () => Invoke(RefreshLoginStatus);
+        try { Localization.Initialize(string.Equals(_settingsService.Settings.LanguageCode, "auto", StringComparison.OrdinalIgnoreCase) ? null : _settingsService.Settings.LanguageCode); } catch { }
+        RefreshLocalizedTexts();
         RefreshLoginStatus();
         
         Shown += async (s, e) =>
@@ -367,7 +369,7 @@ public partial class MainForm : Form
             Size = DpiHelper.Scale(new Size(28, 28)),
             Margin = DpiHelper.Scale(new Padding(0, 4, 0, 0)) // 调整边距使其对齐
         };
-        new ToolTip().SetToolTip(_newTabButton, "新建标签页 (Ctrl+T)");
+        new ToolTip().SetToolTip(_newTabButton, Localization.T("tooltips.new_tab"));
 
         // 标签容器
         _tabContainer = new FlowLayoutPanel
@@ -399,7 +401,7 @@ public partial class MainForm : Form
         };
         _tabOverflowBtn.FlatAppearance.BorderSize = 0;
         _tabOverflowBtn.FlatAppearance.MouseOverBackColor = _isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(220, 220, 220);
-        new ToolTip().SetToolTip(_tabOverflowBtn, "搜索标签页"); // Edge 提示文案
+        new ToolTip().SetToolTip(_tabOverflowBtn, Localization.T("tooltips.search_tabs"));
 
         var tabStripHostPanel = new Panel
         {
@@ -452,18 +454,8 @@ public partial class MainForm : Form
     private void ShowIncognitoInfo()
     {
         MessageBox.Show(
-            "您正在使用 InPrivate 浏览模式\n\n" +
-            "✓ InPrivate 浏览的功能：\n" +
-            "  • 不保存浏览历史记录\n" +
-            "  • 不保存 Cookie 和网站数据\n" +
-            "  • 不保存表单数据\n" +
-            "  • 独立的会话环境\n\n" +
-            "✗ InPrivate 浏览不会：\n" +
-            "  • 对网络管理员隐藏浏览活动\n" +
-            "  • 对 Internet 服务提供商隐藏活动\n" +
-            "  • 阻止网站获取您的 IP 地址\n\n" +
-            "注意：下载的文件和创建的书签会保留。",
-            "InPrivate 浏览",
+            Localization.T("incognito.info.message"),
+            Localization.T("incognito.info.title"),
             MessageBoxButtons.OK,
             MessageBoxIcon.Information);
     }
@@ -489,11 +481,11 @@ public partial class MainForm : Form
             Padding = DpiHelper.Scale(new Padding(4, 4, 4, 4))
         };
         
-        _backBtn = CreateNavigationButton(NavigationButtonType.Back, "后退 (Alt+Left)");
-        _forwardBtn = CreateNavigationButton(NavigationButtonType.Forward, "前进 (Alt+Right)");
-        _refreshBtn = CreateNavigationButton(NavigationButtonType.Refresh, "刷新 (F5)");
-        _stopBtn = CreateNavigationButton(NavigationButtonType.Stop, "停止 (Esc)");
-        _homeBtn = CreateNavigationButton(NavigationButtonType.Home, "主页 (Alt+Home)");
+        _backBtn = CreateNavigationButton(NavigationButtonType.Back, Localization.T("nav.back"));
+        _forwardBtn = CreateNavigationButton(NavigationButtonType.Forward, Localization.T("nav.forward"));
+        _refreshBtn = CreateNavigationButton(NavigationButtonType.Refresh, Localization.T("nav.refresh"));
+        _stopBtn = CreateNavigationButton(NavigationButtonType.Stop, Localization.T("nav.stop"));
+        _homeBtn = CreateNavigationButton(NavigationButtonType.Home, Localization.T("nav.home"));
         
         _stopBtn.Visible = false;
         
@@ -503,12 +495,12 @@ public partial class MainForm : Form
             Margin = DpiHelper.Scale(new Padding(2)),
             IconColor = _isIncognito ? Color.FromArgb(200, 200, 200) : Color.FromArgb(80, 80, 80)
         };
-        new ToolTip().SetToolTip(_downloadBtn, "下载 (Ctrl+J)");
+        new ToolTip().SetToolTip(_downloadBtn, Localization.T("tooltips.download"));
 
         _userBtn = new UserButton { Margin = DpiHelper.Scale(new Padding(2)), Visible = !_isIncognito };
         if (!_isIncognito)
         {
-            new ToolTip().SetToolTip(_userBtn, "用户/登录");
+            new ToolTip().SetToolTip(_userBtn, Localization.T("tooltips.user_login"));
             _userBtn.Click += OnUserButtonClick;
             
             _userBtn.MouseEnter += (s, e) => _userBtn.Invalidate();
@@ -517,7 +509,7 @@ public partial class MainForm : Form
 
         _settingsBtn = CreateToolButton("☰", "菜单");
         
-        _aiBtn = CreateToolButton(string.Empty, "智能助手");
+        _aiBtn = CreateToolButton(string.Empty, Localization.T("ai.assistant"));
         _aiBtn.UseGrayscale = true;
         try
         {
@@ -593,7 +585,7 @@ public partial class MainForm : Form
         _translateBtn.FlatAppearance.BorderSize = 0;
         _translateBtn.FlatAppearance.MouseOverBackColor = _isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(220, 220, 220);
         _translateBtn.Click += OnTranslateButtonClick;
-        new ToolTip().SetToolTip(_translateBtn, "翻译此页面");
+        new ToolTip().SetToolTip(_translateBtn, Localization.T("tooltips.translate_page"));
         
         _bookmarkBtn = new AnimatedBookmarkButton { Size = DpiHelper.Scale(new Size(28, 24)), BackColor = Color.Transparent, Margin = DpiHelper.Scale(new Padding(2,0,2,0)) };
         
@@ -615,7 +607,7 @@ public partial class MainForm : Form
         _zoomBtn.FlatAppearance.MouseDownBackColor = _isIncognito ? Color.FromArgb(90, 90, 90) : Color.FromArgb(200, 200, 200);
         _zoomBtn.FlatAppearance.MouseOverBackColor = _isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(220, 220, 220);
         _zoomBtn.Click += (s, e) => ShowZoomPopup();
-        new ToolTip().SetToolTip(_zoomBtn, "缩放");
+        new ToolTip().SetToolTip(_zoomBtn, Localization.T("tooltips.zoom"));
 
         _passwordKeyBtn = new Button
         {
@@ -632,7 +624,7 @@ public partial class MainForm : Form
         _passwordKeyBtn.FlatAppearance.BorderSize = 0;
         _passwordKeyBtn.FlatAppearance.MouseOverBackColor = _isIncognito ? Color.FromArgb(70, 70, 70) : Color.FromArgb(220, 220, 220);
         _passwordKeyBtn.Click += OnPasswordKeyButtonClick;
-        new ToolTip().SetToolTip(_passwordKeyBtn, "管理密码");
+        new ToolTip().SetToolTip(_passwordKeyBtn, Localization.T("tooltips.manage_passwords"));
 
         // Add icons to the custom address bar's internal container mechanism
         var rightIconPanel = new FlowLayoutPanel
@@ -841,7 +833,7 @@ public partial class MainForm : Form
             Padding = DpiHelper.Scale(new Padding(4, 3, 0, 0)),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(8F)),
             ForeColor = _isIncognito ? Color.FromArgb(150, 150, 150) : Color.Black,
-            Text = _isIncognito ? "InPrivate - 您的浏览活动不会保存到此设备" : "就绪"
+            Text = _isIncognito ? Localization.T("status.incognito") : Localization.T("status.ready")
         };
 
         _progressBar = new ModernProgressBar
@@ -975,7 +967,7 @@ public partial class MainForm : Form
 
         var titleLabel = new Label
         {
-            Text = "智能助手",
+            Text = Localization.T("ai.assistant"),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(10F), FontStyle.Bold),
             ForeColor = Color.FromArgb(45, 55, 72),
             Dock = DockStyle.Left,
@@ -1198,13 +1190,13 @@ public partial class MainForm : Form
 
         if (isApiMode)
         {
-            _aiSummarizeBtn.Text = "📝 总结此页";
+            _aiSummarizeBtn.Text = Localization.T("ai.summarize");
             _aiSummarizeBtn.Enabled = true;
             _aiSummarizeBtn.Click += OnAiSummarizeClickSummarize;
         }
         else
         {
-            _aiSummarizeBtn.Text = "AI模式";
+            _aiSummarizeBtn.Text = Localization.T("ai.mode");
             _aiSummarizeBtn.Enabled = true;
             _aiSummarizeBtn.Click += OnAiSummarizeClickOpenSettings;
         }
@@ -1226,7 +1218,7 @@ public partial class MainForm : Form
                 }
                 catch
                 {
-                    MessageBox.Show("未检测到 WebView2 运行时。AI 聊天功能需要 Microsoft Edge WebView2 才能运行。\n\n请安装 WebView2 运行时后重试。", "组件缺失", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(Localization.Raw(), Localization.Raw(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
             }
@@ -1276,12 +1268,16 @@ public partial class MainForm : Form
                     {
                         UpdateBookmarkBarVisibility();
                         UpdateAiSummarizeButtonUi();
+                        try { Localization.Initialize(string.Equals(_settingsService.Settings.LanguageCode, "auto", StringComparison.OrdinalIgnoreCase) ? null : _settingsService.Settings.LanguageCode); } catch { }
+                        RefreshLocalizedTexts();
                     }));
                 }
                 else
                 {
                     UpdateBookmarkBarVisibility();
                     UpdateAiSummarizeButtonUi();
+                    try { Localization.Initialize(string.Equals(_settingsService.Settings.LanguageCode, "auto", StringComparison.OrdinalIgnoreCase) ? null : _settingsService.Settings.LanguageCode); } catch { }
+                    RefreshLocalizedTexts();
                 }
             };
 
@@ -1364,7 +1360,7 @@ public partial class MainForm : Form
                     else
                     {
                         // 如果文件不存在，直接加载 HTML 字符串或显示错误
-                        _aiWebView.NavigateToString("<html><body style='font-family: sans-serif; padding: 20px;'><h3>未找到 AI 聊天界面文件</h3><p>请检查以下路径是否存在:</p><ul><li>" + htmlPath + "</li><li>" + altPath + "</li></ul></body></html>");
+                        _aiWebView.NavigateToString(Localization.T("ai.missing_html", new Dictionary<string, string> { { "path1", htmlPath }, { "path2", altPath } }));
                     }
                 }
             }
@@ -1377,15 +1373,15 @@ public partial class MainForm : Form
             // 如果是常见的 HRESULT 错误，提供更详细的建议
             if (ex.Message.Contains("0x8007139F"))
             {
-                errorMsg += "\n\n提示: 浏览器环境初始化冲突，请尝试重启浏览器。";
+                errorMsg += Localization.Raw();
             }
             else if (ex.Message.Contains("WebView2Loader.dll"))
             {
-                errorMsg += "\n\n提示: 找不到 WebView2Loader.dll，请确保该文件存在于程序目录下。";
+                errorMsg += Localization.Raw();
             }
 
             // 只在 AI 面板显示时提示用户，或者记录到状态栏
-            _statusLabel.Text = "AI 助手初始化失败";
+            _statusLabel.Text = Localization.T("ai.init_failed");
             _statusLabel.ForeColor = Color.Red;
         }
     }
@@ -1592,7 +1588,7 @@ public partial class MainForm : Form
             {
                 if (string.IsNullOrEmpty(text))
                 {
-                    _statusLabel.Text = _isIncognito ? "InPrivate - 您的浏览活动不会保存到此设备" : "就绪";
+                    _statusLabel.Text = _isIncognito ? Localization.T("status.incognito") : Localization.T("status.ready");
                 }
                 else
                 {
@@ -1640,7 +1636,7 @@ public partial class MainForm : Form
         // 更新状态栏提示
         if (_statusLabel != null)
         {
-            _statusLabel.Text = $"正在下载: {item.FileName}";
+            _statusLabel.Text = Localization.T("status.downloading", new Dictionary<string, string> { { "file", item.FileName } });
         }
     }
 
@@ -1902,6 +1898,30 @@ public partial class MainForm : Form
     }
     
     #endregion
+    
+    private void RefreshLocalizedTexts()
+    {
+        try
+        {
+            _backBtn.Text = Localization.T("nav.back");
+            _forwardBtn.Text = Localization.T("nav.forward");
+            _refreshBtn.Text = Localization.T("nav.refresh");
+            _stopBtn.Text = Localization.T("nav.stop");
+            _homeBtn.Text = Localization.T("nav.home");
+            
+            new ToolTip().SetToolTip(_newTabButton, Localization.T("tooltips.new_tab"));
+            new ToolTip().SetToolTip(_tabOverflowBtn, Localization.T("tooltips.search_tabs"));
+            new ToolTip().SetToolTip(_downloadBtn, Localization.T("tooltips.download"));
+            new ToolTip().SetToolTip(_userBtn, Localization.T("tooltips.user_login"));
+            new ToolTip().SetToolTip(_translateBtn, Localization.T("tooltips.translate_page"));
+            new ToolTip().SetToolTip(_zoomBtn, Localization.T("tooltips.zoom"));
+            new ToolTip().SetToolTip(_passwordKeyBtn, Localization.T("tooltips.manage_passwords"));
+            
+            _statusLabel.Text = _isIncognito ? Localization.T("status.incognito") : Localization.T("status.ready");
+            _aiSummarizeBtn.Text = _settingsService.Settings.AiServiceMode == 1 ? Localization.T("ai.summarize") : Localization.T("ai.mode");
+        }
+        catch { }
+    }
     
     #region 登录功能
 
@@ -2751,12 +2771,12 @@ public partial class MainForm : Form
             }
             else
             {
-                MessageBox.Show("尚未生成日志文件，请先浏览网页。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Localization.Raw(), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"无法打开日志文件: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(Localization.T("clear.failed", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
     
@@ -2814,24 +2834,24 @@ public partial class MainForm : Form
         var currentUrl = _tabManager.ActiveTab.Url;
         if (string.IsNullOrEmpty(currentUrl) || currentUrl.StartsWith("about:") || currentUrl.StartsWith("data:"))
         {
-            ShowModernMessage("提示", "当前页面不支持翻译。", ModernDialogIcon.Info);
+            ShowModernMessage(Localization.T("common.info"), Localization.Raw(), ModernDialogIcon.Info);
             return;
         }
 
         // 创建翻译选项菜单
         var menu = new ContextMenuStrip();
         
-        var aiItem = new ToolStripMenuItem("AI 智能翻译 (推荐)", null, (s, ev) => TranslateCurrentPageWithAI());
+        var aiItem = new ToolStripMenuItem(Localization.Raw(), null, (s, ev) => TranslateCurrentPageWithAI());
         aiItem.Font = new Font(aiItem.Font, FontStyle.Bold);
         
-        var baiduItem = new ToolStripMenuItem("百度网页翻译", null, (s, ev) => {
+        var baiduItem = new ToolStripMenuItem(Localization.Raw(), null, (s, ev) => {
              string translateUrl = $"https://fanyi.baidu.com/transpage?query={Uri.EscapeDataString(currentUrl)}&from=auto&to=zh&source=url&render=1";
              _tabManager.ActiveTab.IsTranslated = true;
              _translateBtn.Visible = true;
              _tabManager.ActiveTab.Navigate(translateUrl);
          });
  
-         var bingItem = new ToolStripMenuItem("微软必应翻译", null, (s, ev) => {
+         var bingItem = new ToolStripMenuItem(Localization.Raw(), null, (s, ev) => {
              string translateUrl = $"https://www.bing.com/translator/?to=zh-Hans&url={Uri.EscapeDataString(currentUrl)}";
              _tabManager.ActiveTab.IsTranslated = true;
              _translateBtn.Visible = true;
@@ -2880,7 +2900,7 @@ public partial class MainForm : Form
             if (text.Length > 3000) text = text.Substring(0, 3000) + "...";
 
             // 构造 AI 提示词
-            string prompt = $"请帮我翻译一下这个网页的主要内容为中文：\\n\\n{text.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "")}";
+            string prompt = Localization.T("ai.translate_prompt", new Dictionary<string, string> { { "text", text.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "") } });
             
             // 确保 AI 侧边栏显示
              if (!_aiSidePanel.Visible) ToggleAISidePanel();
@@ -2927,7 +2947,7 @@ public partial class MainForm : Form
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"AI 翻译失败: {ex.Message}");
+            Debug.WriteLine(Localization.T("ai.translate_failed", new Dictionary<string, string> { { "msg", ex.Message } }));
         }
     }
     

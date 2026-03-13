@@ -58,7 +58,7 @@ namespace MiniWorldBrowser.Forms
 
         private void InitializeUI()
         {
-            this.Text = "提取图片资源";
+            this.Text = Localization.T("image_dialog.title");
             this.Size = DpiHelper.Scale(new Size(1000, 700)); // 略微增加尺寸
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -69,7 +69,7 @@ namespace MiniWorldBrowser.Forms
 
             _lblTitle = new Label
             {
-                Text = $"发现 {_imageUrls.Count} 张图片资源",
+                Text = Localization.T("image_dialog.found_count", new Dictionary<string, string> { { "count", _imageUrls.Count.ToString() } }),
                 Location = DpiHelper.Scale(new Point(20, 20)),
                 Size = DpiHelper.Scale(new Size(550, 40)),
                 Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(12F), FontStyle.Bold),
@@ -89,8 +89,8 @@ namespace MiniWorldBrowser.Forms
                 BackColor = Color.White
             };
 
-            _listView.Columns.Add("图片链接", DpiHelper.Scale(450));
-            _listView.Columns.Add("类型", DpiHelper.Scale(100));
+            _listView.Columns.Add(Localization.T("image_dialog.columns.url"), DpiHelper.Scale(450));
+            _listView.Columns.Add(Localization.T("image_dialog.columns.type"), DpiHelper.Scale(100));
             _listView.SelectedIndexChanged += OnListViewSelectedIndexChanged;
 
             // 列表容器
@@ -128,7 +128,7 @@ namespace MiniWorldBrowser.Forms
 
             _lblPreviewInfo = new Label
             {
-                Text = "选择图片以预览",
+                Text = Localization.T("image_dialog.preview.select"),
                 Dock = DockStyle.Bottom,
                 Height = DpiHelper.Scale(35),
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -152,7 +152,7 @@ namespace MiniWorldBrowser.Forms
 
             _lblSaveTo = new Label
             {
-                Text = "下载保存至",
+                Text = Localization.T("image_dialog.save_to"),
                 Location = DpiHelper.Scale(new Point(15, 12)),
                 AutoSize = true,
                 Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F), FontStyle.Bold),
@@ -171,7 +171,7 @@ namespace MiniWorldBrowser.Forms
 
             _btnBrowse = new Button
             {
-                Text = "更改目录",
+                Text = Localization.T("image_dialog.browse"),
                 Location = DpiHelper.Scale(new Point(835, 38)),
                 Size = DpiHelper.Scale(new Size(100, 32)),
                 FlatStyle = FlatStyle.Flat,
@@ -186,7 +186,7 @@ namespace MiniWorldBrowser.Forms
             {
                 using var dlg = new FolderBrowserDialog
                 {
-                    Description = "选择下载保存目录",
+                    Description = Localization.T("image_dialog.browse_desc"),
                     SelectedPath = !string.IsNullOrWhiteSpace(_txtSavePath.Text) ? _txtSavePath.Text : SelectedSavePath
                 };
                 if (dlg.ShowDialog(this) == DialogResult.OK && !string.IsNullOrWhiteSpace(dlg.SelectedPath))
@@ -201,7 +201,7 @@ namespace MiniWorldBrowser.Forms
             // 底部按钮区域
             _btnDownload = new Button
             {
-                Text = "立即下载",
+                Text = Localization.T("image_dialog.download_now"),
                 Location = DpiHelper.Scale(new Point(740, 600)),
                 Size = DpiHelper.Scale(new Size(110, 40)),
                 BackColor = Color.FromArgb(37, 99, 235), // Primary 2563EB
@@ -221,13 +221,13 @@ namespace MiniWorldBrowser.Forms
                 }
                 else
                 {
-                    MessageBox.Show("请至少选择一张图片进行下载", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Localization.T("image_dialog.select_one_image"), Localization.T("confirm.title"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             };
 
             _btnCancel = new Button
             {
-                Text = "取消",
+                Text = Localization.T("confirm.cancel"),
                 Location = DpiHelper.Scale(new Point(860, 600)),
                 Size = DpiHelper.Scale(new Size(110, 40)),
                 BackColor = Color.White,
@@ -243,7 +243,7 @@ namespace MiniWorldBrowser.Forms
 
             var btnSelectAll = new Button
             {
-                Text = "全选 / 取消",
+                Text = Localization.T("image_dialog.select_all_toggle"),
                 Location = DpiHelper.Scale(new Point(20, 600)),
                 Size = DpiHelper.Scale(new Size(120, 40)),
                 FlatStyle = FlatStyle.Flat,
@@ -307,7 +307,7 @@ namespace MiniWorldBrowser.Forms
             _currentImageStream?.Dispose();
             _currentImageStream = null;
 
-            _lblPreviewInfo.Text = "正在加载预览...";
+            _lblPreviewInfo.Text = Localization.T("image_dialog.loading_preview");
 
             // 2. 决定预览方式
             bool isModernFormat = url.EndsWith(".avif", StringComparison.OrdinalIgnoreCase) || 
@@ -326,7 +326,7 @@ namespace MiniWorldBrowser.Forms
                                     <img src='{url}' style='max-width:100%;max-height:100%;object-fit:contain;' />
                                     </body></html>";
                     _webViewPreview.CoreWebView2.NavigateToString(html);
-                    _lblPreviewInfo.Text = isModernFormat ? "现代图片格式 (WebView2 预览)" : "现代图片格式";
+                    _lblPreviewInfo.Text = isModernFormat ? Localization.T("image_dialog.modern_preview") : Localization.T("image_dialog.modern");
                 }
             }
             else
@@ -343,7 +343,7 @@ namespace MiniWorldBrowser.Forms
                     _currentImageStream = new MemoryStream(data);
                     var img = Image.FromStream(_currentImageStream);
                     _picPreview.Image = img;
-                    _lblPreviewInfo.Text = $"{img.Width} x {img.Height} | {data.Length / 1024} KB";
+                    _lblPreviewInfo.Text = Localization.T("image_dialog.preview_size", new Dictionary<string, string> { { "width", img.Width.ToString() }, { "height", img.Height.ToString() }, { "kb", (data.Length / 1024).ToString() } });
                 }
                 catch
                 {
@@ -355,11 +355,11 @@ namespace MiniWorldBrowser.Forms
                         if (_webViewPreview.CoreWebView2 != null)
                         {
                             _webViewPreview.CoreWebView2.Navigate(url);
-                            _lblPreviewInfo.Text = "加载预览中 (WebView2 模式)...";
+                            _lblPreviewInfo.Text = Localization.T("image_dialog.preview_loading_webview");
                         }
                         else
                         {
-                            _lblPreviewInfo.Text = "无法加载预览";
+                            _lblPreviewInfo.Text = Localization.T("image_dialog.preview_unavailable");
                         }
                     }
                 }

@@ -112,7 +112,7 @@ public class AddBookmarkDialog : Form
         // 标题
         _lblTitle = new Label
         {
-            Text = "已添加收藏！",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(12), FontStyle.Regular),
             ForeColor = Color.FromArgb(51, 51, 51),
             Location = DpiHelper.Scale(new Point(19, 14)),
@@ -122,7 +122,7 @@ public class AddBookmarkDialog : Form
         // 名字标签
         var lblName = new Label
         {
-            Text = "名字:",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
             ForeColor = Color.FromArgb(51, 51, 51),
             Location = DpiHelper.Scale(new Point(19, 54)),
@@ -141,7 +141,7 @@ public class AddBookmarkDialog : Form
         // 文件夹标签
         var lblFolder = new Label
         {
-            Text = "文件夹:",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
             ForeColor = Color.FromArgb(51, 51, 51),
             Location = DpiHelper.Scale(new Point(19, 89)),
@@ -158,17 +158,17 @@ public class AddBookmarkDialog : Form
         };
         
         // 删除按钮
-        _btnDelete = CreateButton("删除", 80);
+        _btnDelete = CreateButton(Localization.Raw(), 80);
         _btnDelete.Location = DpiHelper.Scale(new Point(114, 129));
         _btnDelete.Click += BtnDelete_Click;
         
         // 修改按钮
-        _btnEdit = CreateButton("修改...", 80);
+        _btnEdit = CreateButton(Localization.Raw(), 80);
         _btnEdit.Location = DpiHelper.Scale(new Point(204, 129));
         _btnEdit.Click += BtnEdit_Click;
         
         // 完成按钮
-        _btnDone = CreateButton("完成", 80);
+        _btnDone = CreateButton(Localization.Raw(), 80);
         _btnDone.Location = DpiHelper.Scale(new Point(294, 129));
         _btnDone.Click += BtnDone_Click;
         
@@ -224,11 +224,11 @@ public class AddBookmarkDialog : Form
     private void LoadFolders()
     {
         _folders.Clear();
-        _folders.Add(new FolderItem { Id = null, Name = "收藏栏", Level = 0 });
+        _folders.Add(new FolderItem { Id = null, Name = Localization.Raw(), Level = 0 });
         LoadFoldersRecursive(null, 1);
         
         // 添加"其他收藏"
-        _folders.Add(new FolderItem { Id = "other", Name = "其他收藏", Level = 0 });
+        _folders.Add(new FolderItem { Id = "other", Name = Localization.Raw(), Level = 0 });
         LoadFoldersRecursive("other", 1);
         
         _cmbFolder.Items.Clear();

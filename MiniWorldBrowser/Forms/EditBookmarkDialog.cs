@@ -37,7 +37,7 @@ public class EditBookmarkDialog : Form
     private void InitializeComponent()
     {
         AppIconHelper.SetIcon(this);
-        Text = "修改收藏夹";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(400, 350));
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -49,7 +49,7 @@ public class EditBookmarkDialog : Form
         // 名字标签
         var lblName = new Label
         {
-            Text = "名字:",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
             Location = DpiHelper.Scale(new Point(15, 20)),
             AutoSize = true
@@ -67,7 +67,7 @@ public class EditBookmarkDialog : Form
         // 网址标签
         var lblUrl = new Label
         {
-            Text = "网址:",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
             Location = DpiHelper.Scale(new Point(15, 50)),
             AutoSize = true
@@ -99,7 +99,7 @@ public class EditBookmarkDialog : Form
         // 新建文件夹按钮
         _btnNewFolder = new Button
         {
-            Text = "新建文件夹",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
             Location = DpiHelper.Scale(new Point(15, 270)),
             Size = DpiHelper.Scale(new Size(90, 28)),
@@ -110,7 +110,7 @@ public class EditBookmarkDialog : Form
         // 保存按钮
         _btnSave = new Button
         {
-            Text = "保存",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
             Location = DpiHelper.Scale(new Point(210, 270)),
             Size = DpiHelper.Scale(new Size(75, 28)),
@@ -121,7 +121,7 @@ public class EditBookmarkDialog : Form
         // 取消按钮
         _btnCancel = new Button
         {
-            Text = "取消",
+            Text = Localization.T("confirm.cancel"),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9)),
             Location = DpiHelper.Scale(new Point(295, 270)),
             Size = DpiHelper.Scale(new Size(75, 28)),
@@ -164,7 +164,7 @@ public class EditBookmarkDialog : Form
         _treeView.Nodes.Clear();
         
         // 添加收藏栏根节点
-        var rootNode = new TreeNode("收藏栏")
+        var rootNode = new TreeNode(Localization.Raw())
         {
             Tag = (string?)null,
             ImageKey = "folder",
@@ -175,7 +175,7 @@ public class EditBookmarkDialog : Form
         rootNode.Expand();
         
         // 添加其他收藏节点
-        var otherNode = new TreeNode("其他收藏")
+        var otherNode = new TreeNode(Localization.Raw())
         {
             Tag = "other",
             ImageKey = "folder",
@@ -242,7 +242,7 @@ public class EditBookmarkDialog : Form
     {
         using var inputDialog = new Form
         {
-            Text = "新建文件夹",
+            Text = Localization.Raw(),
             Size = DpiHelper.Scale(new Size(300, 130)),
             StartPosition = FormStartPosition.CenterParent,
             FormBorderStyle = FormBorderStyle.FixedDialog,
@@ -251,12 +251,12 @@ public class EditBookmarkDialog : Form
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9))
         };
         
-        var lblName = new Label { Text = "名称:", Location = DpiHelper.Scale(new Point(15, 20)), AutoSize = true };
-        var txtName = new TextBox { Text = "新建文件夹", Location = DpiHelper.Scale(new Point(60, 17)), Width = DpiHelper.Scale(210) };
+        var lblName = new Label { Text = Localization.Raw(), Location = DpiHelper.Scale(new Point(15, 20)), AutoSize = true };
+        var txtName = new TextBox { Text = Localization.Raw(), Location = DpiHelper.Scale(new Point(60, 17)), Width = DpiHelper.Scale(210) };
         txtName.SelectAll();
         
-        var btnOk = new Button { Text = "确定", DialogResult = DialogResult.OK, Location = DpiHelper.Scale(new Point(110, 55)), Width = DpiHelper.Scale(75) };
-        var btnCancel = new Button { Text = "取消", DialogResult = DialogResult.Cancel, Location = DpiHelper.Scale(new Point(195, 55)), Width = DpiHelper.Scale(75) };
+        var btnOk = new Button { Text = Localization.T("confirm.ok"), DialogResult = DialogResult.OK, Location = DpiHelper.Scale(new Point(110, 55)), Width = DpiHelper.Scale(75) };
+        var btnCancel = new Button { Text = Localization.T("confirm.cancel"), DialogResult = DialogResult.Cancel, Location = DpiHelper.Scale(new Point(195, 55)), Width = DpiHelper.Scale(75) };
         
         inputDialog.Controls.AddRange(new Control[] { lblName, txtName, btnOk, btnCancel });
         inputDialog.AcceptButton = btnOk;
@@ -275,7 +275,7 @@ public class EditBookmarkDialog : Form
     
     private void BtnSave_Click(object? sender, EventArgs e)
     {
-        var title = string.IsNullOrWhiteSpace(_txtName.Text) ? "新书签" : _txtName.Text.Trim();
+        var title = string.IsNullOrWhiteSpace(_txtName.Text) ? Localization.T("bookmarks.new_bookmark") : _txtName.Text.Trim();
         var url = _txtUrl.Text.Trim();
         var parentId = _treeView.SelectedNode?.Tag as string;
         

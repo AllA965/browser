@@ -57,7 +57,7 @@ public class BookmarkManagerForm : Form
     
     private void InitializeComponent()
     {
-        Text = "收藏管理器";
+        Text = Localization.Raw();
         Size = DpiHelper.Scale(new Size(900, 550));
         StartPosition = FormStartPosition.CenterParent;
         MinimumSize = DpiHelper.Scale(new Size(700, 400));
@@ -71,7 +71,7 @@ public class BookmarkManagerForm : Form
         // 名字标签和输入框
         var lblName = new Label
         {
-            Text = "名字:",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = DpiHelper.Scale(new Point(15, 18)),
             AutoSize = true
@@ -91,7 +91,7 @@ public class BookmarkManagerForm : Form
         // 网址标签和输入框
         var lblUrl = new Label
         {
-            Text = "网址:",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = DpiHelper.Scale(new Point(15, 48)),
             AutoSize = true
@@ -145,18 +145,18 @@ public class BookmarkManagerForm : Form
             GridLines = false,
             SmallImageList = _listImageList
         };
-        _listView.Columns.Add("名称", DpiHelper.Scale(300));
-        _listView.Columns.Add("网址", DpiHelper.Scale(350));
+        _listView.Columns.Add(Localization.Raw(), DpiHelper.Scale(300));
+        _listView.Columns.Add(Localization.Raw(), DpiHelper.Scale(350));
         _listView.SelectedIndexChanged += ListView_SelectedIndexChanged;
         _listView.DoubleClick += ListView_DoubleClick;
         _listView.KeyDown += ListView_KeyDown;
         
         // 右键菜单
         var contextMenu = new ContextMenuStrip();
-        contextMenu.Items.Add("打开", null, (s, e) => OpenSelectedBookmark());
+        contextMenu.Items.Add(Localization.Raw(), null, (s, e) => OpenSelectedBookmark());
         contextMenu.Items.Add(new ToolStripSeparator());
-        contextMenu.Items.Add("编辑", null, (s, e) => EditSelectedBookmark());
-        contextMenu.Items.Add("删除", null, (s, e) => DeleteSelectedBookmark());
+        contextMenu.Items.Add(Localization.Raw(), null, (s, e) => EditSelectedBookmark());
+        contextMenu.Items.Add(Localization.Raw(), null, (s, e) => DeleteSelectedBookmark());
         _listView.ContextMenuStrip = contextMenu;
         
         _splitContainer.Panel2.Controls.Add(_listView);
@@ -164,7 +164,7 @@ public class BookmarkManagerForm : Form
         // 底部按钮
         var btnNewFolder = new Button
         {
-            Text = "新建文件夹",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = new Point(DpiHelper.Scale(15), ClientSize.Height - DpiHelper.Scale(45)),
             Size = DpiHelper.Scale(new Size(100, 30)),
@@ -175,7 +175,7 @@ public class BookmarkManagerForm : Form
         
         var btnExport = new Button
         {
-            Text = "导出收藏到HTML文件",
+            Text = Localization.Raw(),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = new Point(DpiHelper.Scale(125), ClientSize.Height - DpiHelper.Scale(45)),
             Size = DpiHelper.Scale(new Size(140, 30)),
@@ -186,7 +186,7 @@ public class BookmarkManagerForm : Form
         
         var btnClose = new Button
         {
-            Text = "关闭",
+            Text = Localization.T("confirm.cancel"),
             Font = new Font("Microsoft YaHei UI", DpiHelper.ScaleFont(9F)),
             Location = new Point(ClientSize.Width - DpiHelper.Scale(90), ClientSize.Height - DpiHelper.Scale(45)),
             Size = DpiHelper.Scale(new Size(75, 30)),
@@ -228,7 +228,7 @@ public class BookmarkManagerForm : Form
     {
         _treeView.Nodes.Clear();
         
-        var rootNode = new TreeNode("收藏栏")
+        var rootNode = new TreeNode(Localization.Raw())
         {
             Tag = (string?)null,
             ImageKey = "folder",
@@ -237,7 +237,7 @@ public class BookmarkManagerForm : Form
         _treeView.Nodes.Add(rootNode);
         LoadFolderChildren(rootNode, null);
         
-        var otherNode = new TreeNode("其它收藏")
+        var otherNode = new TreeNode(Localization.Raw())
         {
             Tag = "other",
             ImageKey = "folder",
@@ -490,10 +490,10 @@ public class BookmarkManagerForm : Form
         if (_selectedBookmark != null)
         {
             var msg = _selectedBookmark.IsFolder 
-                ? $"确定要删除文件夹 \"{_selectedBookmark.Title}\" 及其所有内容吗？" 
-                : $"确定要删除 \"{_selectedBookmark.Title}\" 吗？";
+                ? Localization.T("bookmark_manager.confirm_delete_folder", new Dictionary<string, string> { { "name", _selectedBookmark.Title } }) 
+                : Localization.T("bookmark_manager.confirm_delete_item", new Dictionary<string, string> { { "name", _selectedBookmark.Title } });
             
-            if (MessageBox.Show(msg, "确认删除", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show(msg, Localization.T("confirm.title"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 _bookmarkService.Delete(_selectedBookmark.Id);
                 _selectedBookmark = null;
@@ -506,7 +506,7 @@ public class BookmarkManagerForm : Form
     {
         using var inputDialog = new Form
         {
-            Text = "新建文件夹",
+            Text = Localization.Raw(),
             Size = DpiHelper.Scale(new Size(300, 130)),
             StartPosition = FormStartPosition.CenterParent,
             FormBorderStyle = FormBorderStyle.FixedDialog,
@@ -514,12 +514,12 @@ public class BookmarkManagerForm : Form
             MinimizeBox = false
         };
         
-        var lblName = new Label { Text = "名称:", Location = DpiHelper.Scale(new Point(15, 20)), AutoSize = true };
-        var txtName = new TextBox { Text = "新建文件夹", Location = DpiHelper.Scale(new Point(60, 17)), Width = DpiHelper.Scale(210) };
+        var lblName = new Label { Text = Localization.Raw(), Location = DpiHelper.Scale(new Point(15, 20)), AutoSize = true };
+        var txtName = new TextBox { Text = Localization.Raw(), Location = DpiHelper.Scale(new Point(60, 17)), Width = DpiHelper.Scale(210) };
         txtName.SelectAll();
         
-        var btnOk = new Button { Text = "确定", DialogResult = DialogResult.OK, Location = DpiHelper.Scale(new Point(110, 55)), Width = DpiHelper.Scale(75) };
-        var btnCancel = new Button { Text = "取消", DialogResult = DialogResult.Cancel, Location = DpiHelper.Scale(new Point(195, 55)), Width = DpiHelper.Scale(75) };
+        var btnOk = new Button { Text = Localization.T("confirm.ok"), DialogResult = DialogResult.OK, Location = DpiHelper.Scale(new Point(110, 55)), Width = DpiHelper.Scale(75) };
+        var btnCancel = new Button { Text = Localization.T("confirm.cancel"), DialogResult = DialogResult.Cancel, Location = DpiHelper.Scale(new Point(195, 55)), Width = DpiHelper.Scale(75) };
         
         inputDialog.Controls.AddRange(new Control[] { lblName, txtName, btnOk, btnCancel });
         inputDialog.AcceptButton = btnOk;
@@ -538,9 +538,9 @@ public class BookmarkManagerForm : Form
     {
         using var dialog = new SaveFileDialog
         {
-            Title = "导出收藏",
-            Filter = "HTML 文件 (*.html)|*.html",
-            FileName = "bookmarks.html",
+            Title = Localization.Raw(),
+            Filter = Localization.Raw(),
+            FileName = Localization.Raw(),
             DefaultExt = "html"
         };
         
@@ -549,11 +549,11 @@ public class BookmarkManagerForm : Form
             try
             {
                 ExportToHtml(dialog.FileName);
-                MessageBox.Show("导出成功！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Localization.T("bookmark_manager.export_success"), Localization.T("common.info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"导出失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(Localization.T("bookmark_manager.export_failed", new Dictionary<string, string> { { "msg", ex.Message } }), Localization.T("common.error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
