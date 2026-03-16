@@ -70,6 +70,14 @@ public partial class BrowserTabManager
     private static int NewTabButtonWidth => MiniWorldBrowser.Constants.UIConstants.NewTabButtonWidth;
     private static int TabBarPadding => MiniWorldBrowser.Constants.UIConstants.TabBarPadding;
     
+    public void RefreshTabTitles()
+    {
+        foreach (var tab in _tabs)
+        {
+            tab.RefreshTitle();
+        }
+    }
+    
     public BrowserTabManager(
         Panel browserContainer,
         FlowLayoutPanel tabContainer,

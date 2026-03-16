@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Net;
@@ -10,11 +10,11 @@ using MiniWorldBrowser.Constants;
 namespace MiniWorldBrowser.Helpers;
 
 /// <summary>
-/// HTML 椤甸潰鐢熸垚鍣?- 鐢熸垚鏂版爣绛鹃〉鍜岄敊璇〉闈?
-/// </summary>
-public static class HtmlGenerator
-{
-    #region 鏂版爣绛鹃〉
+    /// HTML 页面生成器 - 生成新标签页和错误页面
+    /// </summary>
+    public static class HtmlGenerator
+    {
+        #region 新标签页
     
     private static string? _cachedIconBase64;
 
@@ -192,7 +192,7 @@ public static class HtmlGenerator
     }
     
     /// <summary>
-    /// 鐢熸垚鏂版爣绛鹃〉 HTML
+    /// 生成新标签页 HTML
     /// </summary>
     public static string GenerateNewTabPage(BrowserSettings settings, List<FrequentSite>? frequentSites = null, bool isIncognito = false)
     {
@@ -202,8 +202,8 @@ public static class HtmlGenerator
         }
 
         var shortcutsHtml = GenerateShortcutsHtml(frequentSites);
-        var watermarkPngBase64 = GetIconPngBase64(1024, "椴茬┕_.png"); // 浣跨敤鐢ㄦ埛鎸囧畾鐨?PNG 姘村嵃
-        var logoPngBase64 = GetIconPngBase64(144, "椴茬┕AI娴忚鍣?ico"); // Logo 淇濇寔鍘熸牱
+        var watermarkPngBase64 = GetIconPngBase64(1024, "鲲穹_.png"); // 使用用户指定的 PNG 水印
+        var logoPngBase64 = GetIconPngBase64(144, "鲲穹AI浏览器.ico"); // Logo 保持原样
         
         var backgroundColor = "#ffffff";
         var textColor = "#1e293b";
@@ -232,7 +232,7 @@ public static class HtmlGenerator
         }}";
 
         var logoHtml = string.IsNullOrEmpty(logoPngBase64)
-            ? "<div class='logo'>馃寪</div>"
+            ? "<div class='logo'>🌐</div>"
             : $"<div class='logo'><img class='logo-img' src='data:image/png;base64,{logoPngBase64}' alt='logo'></div>";
         
         return $@"<!DOCTYPE html>
@@ -240,7 +240,7 @@ public static class HtmlGenerator
 <head>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <title>{Localization.T("newtab.title")}</title>
+    <title>新标签页</title>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
@@ -324,10 +324,10 @@ public static class HtmlGenerator
      <div class='watermark-container'></div>
      <div class='container'>
         {logoHtml}
-        <h1>{AppConstants.AppName}</h1>
+        <h1>鲲穹AI浏览器</h1>
         <div class='search-box'>
             <input type='text' class='search-input' id='searchInput' 
-                   placeholder='{Localization.T("newtab.search_placeholder")}'>
+                   placeholder='搜索或输入网址'>
             <button class='search-btn' onclick='doSearch()'>
                 <svg viewBox='0 0 24 24'><circle cx='11' cy='11' r='8'></circle><line x1='21' y1='21' x2='16.65' y2='16.65'></line></svg>
             </button>
@@ -336,7 +336,7 @@ public static class HtmlGenerator
             {shortcutsHtml}
         </div>
     </div>
-    <div class='footer'>{Localization.T("newtab.footer")}</div>
+    <div class='footer'>轻量 · 快速 · 简洁</div>
     <script>
         const searchInput = document.getElementById('searchInput');
         const searchEngine = '{settings.SearchEngine}';
@@ -361,7 +361,7 @@ public static class HtmlGenerator
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>{Localization.T("incognito.page.title")}</title>
+    <title>InPrivate 浏览</title>
     <style>
         body {{
             background-color: #202124;
@@ -444,34 +444,34 @@ public static class HtmlGenerator
 <body>
     <div class='container'>
         <div class='header'>
-            <div class='icon'>&#128374;</div>
+            <div class='icon'>🕶️</div>
             <div>
-                <h1>{Localization.T("incognito.page.heading")}</h1>
+                <h1>您已进入 InPrivate 浏览模式</h1>
             </div>
         </div>
-        <p>{Localization.T("incognito.page.intro")}</p>
+        <p>现在，您可以私密地浏览网页，其他人使用此设备时将不会看到您的活动。不过，您下载的内容和添加的书签仍会保存在此设备上。</p>
         
         <div class='cards'>
             <div class='card'>
-                <h3>{Localization.T("incognito.page.will_not_save")}</h3>
+                <h3>鲲穹AI浏览器 不会保存以下信息：</h3>
                 <ul>
-                    <li>{Localization.T("incognito.page.item.history")}</li>
-                    <li>{Localization.T("incognito.page.item.cookies")}</li>
-                    <li>{Localization.T("incognito.page.item.forms")}</li>
+                    <li>您的浏览历史记录</li>
+                    <li>Cookie 和网站数据</li>
+                    <li>表单中输入的信息</li>
                 </ul>
             </div>
             <div class='card'>
-                <h3>{Localization.T("incognito.page.may_still_see")}</h3>
+                <h3>以下主体可能仍会看到您的活动：</h3>
                 <ul>
-                    <li>{Localization.T("incognito.page.visible.sites")}</li>
-                    <li>{Localization.T("incognito.page.visible.employer")}</li>
-                    <li>{Localization.T("incognito.page.visible.isp")}</li>
+                    <li>您访问的网站</li>
+                    <li>您的雇主或您所在的学校</li>
+                    <li>您的互联网服务提供商</li>
                 </ul>
             </div>
         </div>
 
         <div class='search-box'>
-            <input type='text' class='search-input' id='searchInput' placeholder='{Localization.T("newtab.search_placeholder")}'>
+            <input type='text' class='search-input' id='searchInput' placeholder='搜索或输入网址'>
         </div>
     </div>
     <script>
@@ -493,20 +493,20 @@ public static class HtmlGenerator
     }
     
     /// <summary>
-    /// 鐢熸垚蹇嵎鏂瑰紡 HTML
+    /// 生成快捷方式 HTML
     /// </summary>
     private static string GenerateShortcutsHtml(List<FrequentSite>? frequentSites)
     {
-        // 濡傛灉娌℃湁缁忓父璁块棶鐨勭綉绔欙紝鏄剧ず榛樿蹇嵎鏂瑰紡
+        // 如果没有经常访问的网站，显示默认快捷方式
         if (frequentSites == null || frequentSites.Count == 0)
         {
-            return $@"
-            <a href='https://www.baidu.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.baidu.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.baidu")}</div></a>
-            <a href='https://www.bing.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.bing.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.bing")}</div></a>
-            <a href='https://www.google.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.google.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>G</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.google")}</div></a>
-            <a href='https://www.bilibili.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.bilibili.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.bilibili")}</div></a>
-            <a href='https://www.zhihu.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.zhihu.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>Z</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.zhihu")}</div></a>
-            <a href='https://github.com' class='shortcut'><div class='shortcut-icon'><img src='https://github.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>G</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.github")}</div></a>";
+            return @"
+            <a href='https://www.baidu.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.baidu.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>百度</div></a>
+            <a href='https://www.bing.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.bing.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>必应</div></a>
+            <a href='https://www.google.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.google.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>G</span></div><div class='shortcut-name'>Google</div></a>
+            <a href='https://www.bilibili.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.bilibili.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>哔哩哔哩</div></a>
+            <a href='https://www.zhihu.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.zhihu.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>知</span></div><div class='shortcut-name'>知乎</div></a>
+            <a href='https://github.com' class='shortcut'><div class='shortcut-icon'><img src='https://github.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>G</span></div><div class='shortcut-name'>GitHub</div></a>";
         }
         
         var sb = new System.Text.StringBuilder();
@@ -532,7 +532,7 @@ public static class HtmlGenerator
     }
     
     /// <summary>
-    /// 鑾峰彇缃戠珯棣栧瓧姣嶇敤浜庢樉绀?
+    /// 获取网站首字母用于显示
     /// </summary>
     private static string GetFirstChar(string title, string domain)
     {
@@ -552,10 +552,10 @@ public static class HtmlGenerator
     
     private static string GetSearchEngineName(string searchEngine)
     {
-        if (searchEngine.Contains("baidu")) return Localization.T("settings.search.options.baidu");
-        if (searchEngine.Contains("bing")) return Localization.T("settings.search.options.bing");
-        if (searchEngine.Contains("google")) return Localization.T("settings.search.options.google");
-        return Localization.T("settings.search.title");
+        if (searchEngine.Contains("baidu")) return "百度";
+        if (searchEngine.Contains("bing")) return "必应";
+        if (searchEngine.Contains("google")) return "Google";
+        return "搜索引擎";
     }
     
     #endregion

@@ -17,7 +17,7 @@ public class BrowserTab : IDisposable
     public WebView2 WebView { get; private set; }
     public TabButton? TabButton { get; set; }
     
-    public string Title { get; private set; } = "新标签页";
+    public string Title { get; private set; } = Localization.T("tab.new");
     public string Url { get; private set; } = "about:blank";
     public bool IsLoading { get; private set; }
     public bool IsSecure { get; private set; }
@@ -597,8 +597,8 @@ public class BrowserTab : IDisposable
     {
         try
         {
-            Title = WebView.CoreWebView2?.DocumentTitle ?? "新标签页";
-            if (string.IsNullOrEmpty(Title)) Title = "新标签页";
+            Title = WebView.CoreWebView2?.DocumentTitle ?? Localization.T("tab.new");
+            if (string.IsNullOrEmpty(Title)) Title = Localization.T("tab.new");
             TitleChanged?.Invoke(this);
         }
         catch { }
@@ -1658,7 +1658,7 @@ public class BrowserTab : IDisposable
                 var isIncognito = !string.IsNullOrEmpty(_incognitoUserDataFolder);
                 var newTabHtml = HtmlGenerator.GenerateNewTabPage(settings, frequentSites, isIncognito);
                 Url = "about:newtab";
-                Title = isIncognito ? "InPrivate - 新标签页" : "新标签页";
+                Title = isIncognito ? "InPrivate - " + Localization.T("tab.new") : Localization.T("tab.new");
                 IsSecure = true;
                 WebView.CoreWebView2.NavigateToString(newTabHtml);
                 TitleChanged?.Invoke(this);
@@ -1720,6 +1720,25 @@ public class BrowserTab : IDisposable
         
         try { WebView.CoreWebView2.Navigate(url); }
         catch { }
+    }
+    
+    public void RefreshTitle()
+    {
+        if (UrlHelper.IsNewTabPage(Url))
+        {
+            Title = !string.IsNullOrEmpty(_incognitoUserDataFolder) ? "InPrivate - " + Localization.T("tab.new") : Localization.T("tab.new");
+            TitleChanged?.Invoke(this);
+        }
+        else if (Url == "about:settings")
+        {
+            Title = Localization.T("settings.header.title");
+            TitleChanged?.Invoke(this);
+        }
+        else if (Url == "about:bookmarks")
+        {
+            Title = Localization.T("bookmarks.manager.title");
+            TitleChanged?.Invoke(this);
+        }
     }
     
     public void GoBack() { if (CanGoBack) WebView.CoreWebView2?.GoBack(); }

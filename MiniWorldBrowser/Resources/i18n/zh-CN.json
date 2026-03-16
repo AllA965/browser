@@ -630,7 +630,7 @@
   },
   "newtab": {
     "title": "新标签页",
-    "search_placeholder": "搜索或输入地址",
+    "search_placeholder": "搜索或输入网址",
     "footer": "轻量 · 快速 · 简洁",
     "shortcuts": {
       "baidu": "Baidu",

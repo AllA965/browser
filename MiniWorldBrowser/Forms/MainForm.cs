@@ -1919,6 +1919,8 @@ public partial class MainForm : Form
             
             _statusLabel.Text = _isIncognito ? Localization.T("status.incognito") : Localization.T("status.ready");
             _aiSummarizeBtn.Text = _settingsService.Settings.AiServiceMode == 1 ? Localization.T("ai.summarize") : Localization.T("ai.mode");
+            
+            _tabManager?.RefreshTabTitles();
         }
         catch { }
     }
