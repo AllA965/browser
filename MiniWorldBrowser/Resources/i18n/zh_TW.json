@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "新分頁"
+  },
+  "menu": {
+    "new_tab": "新分頁 (T)",
+    "new_window": "新視窗 (N)",
+    "new_incognito": "新隱私視窗 (I)",
+    "bookmarks": "書籤 (B)",
+    "show_bookmark_bar": "顯示書籤列 (S)",
+    "bookmark_manager": "書籤管理員 (B)",
+    "import_bookmarks": "匯入書籤與設定...",
+    "add_bookmark": "為本頁新增書籤...",
+    "add_all_bookmarks": "為所有開啟頁面新增書籤...",
+    "more_bookmarks": "更多書籤",
+    "no_bookmarks": "無書籤",
+    "history": "歷史紀錄 (H)",
+    "show_all_history": "顯示所有歷史紀錄",
+    "no_history": "無歷史紀錄",
+    "clear_history": "清除瀏覽歷史",
+    "downloads": "下載 (D)",
+    "media_extract": "媒體提取",
+    "extract_images": "提取本頁圖片",
+    "extract_videos": "提取本頁影片",
+    "clear_data": "清除瀏覽資料",
+    "exit_incognito": "關閉隱私視窗",
+    "exit_normal": "關閉KunQiong AI瀏覽器",
+    "print": "列印 (P)",
+    "save_page_as": "另存頁面 (A)...",
+    "find_in_page": "在頁面中搜尋",
+    "more_tools": "更多工具",
+    "task_manager": "工作管理員 (T)",
+    "encoding": "編碼 (E)",
+    "devtools": "開發者工具 (D)",
+    "view_resource_log": "檢視資源載入記錄 (L)",
+    "adblock": "廣告攔截 (G)",
+    "settings": "設定 (S)",
+    "feedback": "意見回饋",
+    "about_app": "關於Kunqiong AI瀏覽器",
+    "about_incognito": "關於隱私",
+    "exit_app": "關閉Kunqiong AI瀏覽器"
+  },
+  "context": {
+    "new_tab": "開啟新分頁",
+    "reload": "重新載入",
+    "duplicate": "複製",
+    "pin": "固定分頁",
+    "unpin": "取消固定分頁",
+    "close": "關閉分頁",
+    "close_others": "關閉其他分頁",
+    "close_left": "關閉左側分頁",
+    "close_right": "關閉右側分頁",
+    "reopen_closed": "重新開啟已關閉分頁 (E)",
+    "bookmark_all": "為所有分頁新增書籤..."
+  },
+  "tooltips": {
+    "new_tab": "新分頁 (Ctrl+T)",
+    "search_tabs": "搜尋分頁",
+    "download": "下載 (Ctrl+J)",
+    "user_login": "使用者/登入",
+    "translate_page": "翻譯本頁",
+    "zoom": "縮放",
+    "manage_passwords": "管理密碼"
+  },
+  "nav": {
+    "back": "上一頁 (Alt+左)",
+    "forward": "下一頁 (Alt+右)",
+    "refresh": "重新整理 (F5)",
+    "stop": "停止 (Esc)",
+    "home": "首頁 (Alt+首頁)"
+  },
+  "status": {
+    "ready": "準備就緒",
+    "incognito": "隱私 - 您的瀏覽活動不會在此裝置上儲存",
+    "downloading": "下載中: {{file}}",
+    "history_cleared": "歷史紀錄已清除"
+  },
+  "ai": {
+    "assistant": "助手",
+    "summarize": "📝 總結本頁",
+    "mode": "AI模式",
+    "init_failed": "助手初始化失敗",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI聊天介面檔案未找到</h3><p>請確認以下路徑存在：</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "請將本頁主要內容翻譯成中文：\n\n{{text}}",
+    "translate_failed": "AI翻譯失敗：{{msg}}",
+    "api": {
+      "base": "API代理網址:",
+      "key": "API金鑰:",
+      "model_name": "模型名稱:",
+      "model_preset": "模型預設:",
+      "provider": "提供者預設:",
+      "title": "API設定",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "自定義API模式（與OpenAI相容）",
+    "mode.title": "服務模式",
+    "mode.web": "內建網頁模式（DeepSeek）",
+    "settings": {
+      "subtitle": "設定您的AI助手",
+      "title": "AI設定"
+    },
+    "tip": {
+      "compatible": "提示：支援DeepSeek、OpenAI、Ollama及其他相容API",
+      "dashscope": "提示：DashScope與OpenAI相容的BaseUrl預設為https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "volcengine": "提示：Volcengine Ark V3需要格式為ep-2024xxxxxxxx-xxxxx的Endpoint ID"
+    },
+    "web": {
+      "title": "網頁模式設定",
+      "url": "AI網頁網址:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "隱私",
+      "message": "您正在使用隱私瀏覽\n\n✓ 隱私可以：\n  • 不儲存瀏覽歷史\n  • 不儲存Cookie和網站資料\n  • 不儲存表單資料\n  • 使用隔離會話\n\n✗ 隱私不會：\n  • 隱藏活動不讓網路管理員知道\n  • 隱藏活動不讓您的ISP知道\n  • 防止網站獲取您的IP位址\n\n注意：下載的檔案和建立的書籤仍然會保留。"
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "確認",
+    "ok": "確定",
+    "clear_history_all": "確定要清除所有歷史記錄嗎？",
+    "cancel": "取消"
+  },
+  "search_engine": {
+    "confirm_delete": "確定要刪除搜尋引擎「{{name}}」嗎？"
+  },
+  "menu_zoom": {
+    "label": "縮放",
+    "reset": "重設"
+  },
+  "settings": {
+    "header": {
+      "title": "設定",
+      "search_placeholder": "搜尋設定"
+    },
+    "sidebar": {
+      "history": "歷史記錄",
+      "settings": "設定",
+      "ai": "AI 設定",
+      "privacy": "隱私",
+      "advanced": "進階"
+    },
+    "set_startup_pages": "設定啟動頁面",
+    "enter_urls_each_line": "請輸入網站網址（每行一個）：",
+    "no_results": "未找到相符的設定",
+    "appearance": {
+      "title": "外觀",
+      "show_home_button": "顯示「首頁」按鈕",
+      "change": "變更",
+      "show_bookmark_bar": "始終顯示書籤列",
+      "language": "語言",
+      "language_auto": "跟隨系統",
+      "language_zhCN": "中文（簡體）",
+      "language_en": "English",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "下載",
+      "location_label": "下載位置",
+      "location_desc": "下載的預設儲存位置",
+      "browse": "瀏覽...",
+      "ask_location_label": "下載前詢問每個檔案的儲存位置",
+      "ask_location_desc": "下載前詢問每個檔案的儲存位置"
+    },
+    "title": "設定",
+    "search_placeholder": "搜尋設定",
+    "home": {
+      "title": "首頁",
+      "url": "首頁網址：",
+      "use_current": "使用目前頁面",
+      "use_newtab": "使用新分頁"
+    },
+    "startup": {
+      "title": "啟動時",
+      "newtab": "開啟新分頁",
+      "continue_last": "繼續上次離開的位置",
+      "specific_pages": "開啟特定頁面或一組頁面",
+      "manage_pages": "管理頁面",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "廣告攔截",
+      "none": "不攔截任何廣告",
+      "popup": "僅封鎖彈出視窗",
+      "aggressive": "積極封鎖網頁廣告",
+      "custom": "自定義廣告攔截規則",
+      "custom_link": "自定義規則",
+      "manage_rules": "管理我的規則..."
+    },
+    "search": {
+      "title": "位址列搜尋引擎",
+      "default_label": "預設搜尋引擎",
+      "desc": "位址列使用的搜尋引擎",
+      "options": {
+        "360": "360",
+        "baidu": "百度",
+        "bing": "必應",
+        "google": "谷歌"
+      },
+      "manage_button": "管理搜尋引擎"
+    },
+    "show_advanced": "顯示進階設定...",
+    "advanced": {
+      "back_basic": "？返回基本設定",
+      "gesture": {
+        "enable": "啟用滑鼠手勢",
+        "title": "滑鼠手勢"
+      },
+      "performance": {
+        "mem_release_time": "背景分頁記憶體釋放間隔：",
+        "title": "效能"
+      },
+      "super_drag": {
+        "enable": "啟用超級拖曳"
+      },
+      "title": "進階設定"
+    },
+    "default_browser": {
+      "checking": "正在檢查預設瀏覽器狀態...",
+      "is_default": "{{app}} 目前是您的預設瀏覽器。",
+      "not_default": "{{app}} 目前並非您的預設瀏覽器。",
+      "set_default": "設為預設瀏覽器",
+      "title": "預設瀏覽器"
+    },
+    "history": {
+      "columns": {
+        "time": "訪問時間",
+        "title": "標題",
+        "url": "網址"
+      },
+      "title": "歷史",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "管理憑證...",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "變更代理設定...",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "將設定還原為原始預設值",
+      "desc": "這不會影響您的書籤、歷史記錄或儲存的密碼。",
+      "title": "重設設定",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "還原預設設定",
+    "tabs": {
+      "double_click_close": "雙擊關閉分頁",
+      "input_mode": {
+        "new_tab": "在新分頁中開啟"
+      },
+      "input_mode.enter": "按 Enter 鍵進行搜尋",
+      "input_mode.instant": "輸入即搜（推薦）",
+      "new_tab_position": {
+        "last": "在最後位置開啟",
+        "right": "在目前分頁右側開啟"
+      },
+      "open_new": "開啟新頁面時：",
+      "select_all_on_click": "點擊位址列時全選網址文字",
+      "show_full_url": "在位址列顯示完整網址（按住 Shift 時也會顯示）",
+      "title": "分頁",
+      "right_click_close_desc": "右鍵關閉目前分頁（按住 Shift 顯示右鍵選單）",
+      "open_links_background": "點擊連結後在背景分頁開啟",
+      "input_mode_label": "網址列輸入模式"
+    },
+    "user_data": {
+      "import": "匯入書籤和設定...",
+      "title": "使用者資料"
+    },
+    "features": {
+      "title": "??",
+      "mouse_gesture_label": "鼠标手势",
+      "mouse_gesture_desc": "使用鼠标手势快速执行操作",
+      "super_drag_label": "超级拖拽",
+      "super_drag_desc": "拖拽文本或链接可快速搜索或打开"
+    },
+    "web": {
+      "title": "网页设置",
+      "smooth_scrolling": "启用网页平滑滚动（重启后生效）"
+    },
+    "cache": {
+      "title": "自訂快取",
+      "directory_label": "自訂快取目錄：",
+      "change_button": "變動",
+      "notice": "變更此設定將清除目前的快取，並在重新啟動後生效。",
+      "open_dir": "緩存目錄",
+      "reset_default": "重置為預設",
+      "reset_confirm": "您確定要將快取目錄重設為預設值嗎？\\ n\\ n這將清除現有的快取，並在重新啟動後生效。"
+    },
+    "privacy": {
+      "title": "Privacy settings",
+      "content_settings": "Content settings...",
+      "clear_browsing_data": "Clear browsing data...",
+      "crash_upload": "Enable crash report upload",
+      "crash_upload_desc": "Automatically upload error reports on crashes to help improve the browser."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "儲存並套用",
+      "auto_hint": "設定會自動儲存",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "下載",
+    "location_label": "下載位置",
+    "location_desc": "下載的預設儲存位置",
+    "browse": "瀏覽...",
+    "ask_location_label": "下載前詢問每個檔案的儲存位置",
+    "default_tool_label": "選擇預設下載工具:",
+    "browse_desc": "選擇下載儲存資料夾",
+    "status": {
+      "downloading": "下載中: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "已完成",
+      "cancelled": "已取消",
+      "failed": "下載失敗",
+      "pending": "待處理..."
+    }
+  },
+  "password_manager": {
+    "hide": "隱藏",
+    "show": "顯示"
+  },
+  "import": {
+    "success": "成功匯入 {{count}} 個書籤。",
+    "done": "匯入完成",
+    "failed": "匯入失敗: {{msg}}"
+  },
+  "adblock": {
+    "allow": "允許",
+    "block": "封鎖"
+  },
+  "task_manager": {
+    "tab_title": "● 分頁: {{title}}"
+  },
+  "clear": {
+    "success": "成功清除以下資料:\n• {{items}}",
+    "done": "清除完成",
+    "failed": "清除資料時發生錯誤: {{msg}}",
+    "in_progress": "清除中..."
+  },
+  "print": {
+    "failed": "列印失敗",
+    "failed_message": "列印時發生錯誤:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "另存新檔",
+      "filter": "僅 HTML 網頁 (*.html)|*.html|完整網頁 (*.html)|*.html|MHTML 檔案 (*.mhtml)|*.mhtml|PDF 文檔 (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "匯出書籤",
+    "export_filter": "HTML 檔案 (*.html)|*.html",
+    "export_success_path": "書籤已匯出至:\n{{path}}",
+    "other": "其他書籤",
+    "added_message": "已新增 {{count}} 個分頁至資料夾「{{folder}}」",
+    "added_status": "已新增 {{count}} 個書籤至資料夾「{{folder}}」",
+    "already": "已加入書籤",
+    "batch_confirm": "將會為 {{count}} 個分頁建立一個資料夾。\n\n要繼續嗎？",
+    "batch_title": "批次新增書籤",
+    "cancelled": "書籤已取消",
+    "import_filter": "HTML 檔案 (*.html;*.htm)|*.html;*.htm|所有檔案 (*.*)|*.*",
+    "import_title": "匯入書籤",
+    "new_bookmark": "新增書籤",
+    "unable_for_page": "無法為此頁面加入書籤",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "開啟",
+    "open_in_new_tab": "在新分頁開啟",
+    "open_all_bookmarks": "開啟所有書籤"
+  },
+  "actions": {
+    "add": "新增",
+    "edit": "編輯",
+    "delete": "刪除",
+    "delete_all": "全部刪除",
+    "done": "完成",
+    "copy_link": "複製連結",
+    "rename": "重新命名",
+    "add_bookmark": "新增書籤",
+    "add_folder": "新增資料夾"
+  },
+  "permissions": {
+    "allow": "允許",
+    "block": "封鎖",
+    "ask": "詢問"
+  },
+  "site_settings": {
+    "desc": "您可以為特定網站設定 {{category}} 權限。",
+    "host_pattern": "主機名稱模式:",
+    "columns": {
+      "host_pattern": "主機名稱模式",
+      "behavior": "行為"
+    }
+  },
+  "time": {
+    "minute": "分鐘"
+  },
+  "newtab": {
+    "title": "新分頁",
+    "search_placeholder": "搜尋或輸入網址",
+    "footer": "輕量 · 快速 · 簡單",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "清除瀏覽資料",
+    "clear_button": "清除瀏覽資料...",
+    "clear_desc": "清除瀏覽記錄、Cookie、快取及其他資料",
+    "exit_clear": {
+      "title": "離開時自動清除",
+      "history": "瀏覽記錄",
+      "downloads": "下載記錄",
+      "cache": "快取圖片和檔案",
+      "cookies": "Cookie 和其他網站資料"
+    },
+    "options": {
+      "title": "隱私選項",
+      "dnt": "傳送「不追蹤」請求與瀏覽流量"
+    }
+  },
+  "update": {
+    "updater_missing": "更新程式 'updater.exe' 未找到"
+  },
+  "address_dropdown": {
+    "search": "搜尋 '{{text}}'",
+    "visit": "造訪 '{{text}}'",
+    "empty_history": "未找到相符的瀏覽記錄",
+    "empty_bookmark": "未找到相符的書籤",
+    "empty_tabs": "未找到相符的分頁",
+    "empty_all": "未找到相符結果"
+  },
+  "image_dialog": {
+    "title": "擷取圖片資源",
+    "found_count": "找到 {{count}} 張圖片",
+    "columns": {
+      "url": "圖片網址",
+      "type": "類型"
+    },
+    "preview": {
+      "select": "選擇圖片以預覽"
+    },
+    "save_to": "將下載儲存至",
+    "browse": "變更資料夾",
+    "browse_desc": "選擇下載儲存資料夾",
+    "download_now": "立即下載",
+    "select_one_image": "請至少選擇一張圖片進行下載",
+    "select_all_toggle": "全部選取 / 切換",
+    "loading_preview": "載入預覽中...",
+    "modern_preview": "現代圖片格式 (WebView2 預覽)",
+    "modern": "現代圖片格式",
+    "preview_loading_webview": "載入預覽 (WebView2 模式)...",
+    "preview_unavailable": "預覽不可用",
+    "preview_size": "{{width}} x {{height}} | {{kb}} KB"
+  },
+  "video_dialog": {
+    "title": "選擇下載格式",
+    "columns": {
+      "resolution": "解析度",
+      "ext": "副檔名",
+      "size": "大小",
+      "note": "備註"
+    },
+    "save_to": "將下載儲存至",
+    "browse": "變更資料夾",
+    "browse_desc": "選擇下載儲存資料夾",
+    "start_download": "開始下載",
+    "select_format_first": "請先選擇一個格式",
+    "unknown_title": "未知標題",
+    "unknown": "未知",
+    "parse_failed": "解析影片資訊失敗: {{msg}}"
+  },
+  "common": {
+    "info": "資訊",
+    "done": "完成",
+    "error": "錯誤",
+    "operation_failed_retry": "操作失敗，請重新嘗試",
+    "empty": "(空白)",
+    "in_dev": "此功能正在開發中...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "關於 ",
+    "version_prefix": "版本 ",
+    "check_update": "檢查更新",
+    "checking": "檢查中...",
+    "connecting": "連接更新伺服器中...",
+    "update_failed": "檢查更新失敗。請稍後再試。",
+    "update_found_status": "發現新版本: {{version}}",
+    "update_found_title": "找到更新",
+    "update_found_message": "發現新版本 {{version}}\\n\\n發行說明:\\n{{log}}\\n\\n現在更新?",
+    "latest": "您已使用最新版本。",
+    "error_prefix": "錯誤: ",
+    "simple_title": "關於",
+    "simple_message": "{{app}}\\n版本 {{version}}\\n\\n基於 WebView2 引擎",
+    "copyright": "© {{year}} {{app}}。保留所有權利。"
+  },
+  "font": {
+    "preview_standard": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "min": "最小",
+    "max": "最大",
+    "serif": "衬線字體",
+    "sans_serif": "無衬線字體",
+    "fixed_width": "等寬字體",
+    "minimum_size": "最小字體大小",
+    "preview_generic": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "preview_fixed": "外觀",
+    "preview_min": "顯示「首頁」按鈕"
+  },
+  "appearance": {
+    "title": "變更",
+    "show_home_button": "始終顯示書籤列",
+    "change": "語言",
+    "show_bookmark_bar": "遵循系統",
+    "language": "語言",
+    "language_auto": "跟隨系統",
+    "language_zhCN": "中文（簡體）",
+    "language_en": "English",
+    "hide_bookmark_bar": "您確定要刪除「{{name}}」嗎？"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "匯出失敗: {{msg}}",
+    "confirm_delete_item": "匯出成功！",
+    "export_failed": "圖片擷取已取消",
+    "export_success": "正在擷取圖片資源..."
+  },
+  "images": {
+    "cancelled_status": "擷取失敗: {{msg}}",
+    "extracting_status": "圖片擷取失敗",
+    "failed_message": "未找到圖片資源",
+    "failed_status": "已提交 {{count}} 個圖片下載任務",
+    "none_found_status": "永不",
+    "submitted_tasks": "儲存密碼"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "您希望 KunQiong AI 瀏覽器儲存此網站的密碼嗎？",
+      "save": "完成",
+      "title": "管理已儲存的密碼"
+    },
+    "saved": {
+      "done": "此網站的已儲存密碼:",
+      "manage": "管理搜尋引擎",
+      "title": "登出"
+    }
+  },
+  "search": {
+    "manage_button": "個人檔案設定"
+  },
+  "user": {
+    "logout": "擷取失敗",
+    "manage_profile": "在此頁面上未偵測到可擷取的影片資源。\n\n備註：該頁面可能未嵌入影片，或使用加密/DRM 播放，因此無法直接擷取。\n\n建議：開啟實際的影片播放頁面，並在播放開始後再次嘗試擷取。"
+  },
+  "videos": {
+    "extract_failed_status": "未偵測到影片資源",
+    "not_detected_desc": "未偵測到影片資源",
+    "not_detected_status": "此頁面不支援影片擷取",
+    "not_detected_title": "解析影片資訊中...",
+    "not_supported": "Video extraction is not supported on this page",
+    "parsing_status": "Parsing video information..."
+  }
+}

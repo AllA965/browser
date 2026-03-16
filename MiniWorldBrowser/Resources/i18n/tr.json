@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "Yeni Sekme"
+  },
+  "menu": {
+    "new_tab": "Yeni Sekme (T)",
+    "new_window": "Yeni Pencere (N)",
+    "new_incognito": "Gizli Tarama Pencere (I)",
+    "bookmarks": "Favoriler (B)",
+    "show_bookmark_bar": "Favori Çubuğunu Göster (S)",
+    "bookmark_manager": "Favori Yöneticisi (B)",
+    "import_bookmarks": "Favori ve Ayarları İçe Aktar...",
+    "add_bookmark": "Bu sayfaya Favori Ekle...",
+    "add_all_bookmarks": "Tüm açık sayfalara Favori Ekle...",
+    "more_bookmarks": "Daha Fazla Favori",
+    "no_bookmarks": "Favori Yok",
+    "history": "Geçmiş (H)",
+    "show_all_history": "Tüm Geçmişi Göster",
+    "no_history": "Geçmiş Yok",
+    "clear_history": "Tarama Geçmişini Temizle",
+    "downloads": "İndirmeler (D)",
+    "media_extract": "Medya Çıkarımı",
+    "extract_images": "Bu sayfadaki resimleri Çıkar",
+    "extract_videos": "Bu sayfadaki videoları Çıkar",
+    "clear_data": "Tarama Verisini Temizle",
+    "exit_incognito": "Gizli Tarama Penceresini Kapat",
+    "exit_normal": "KunQiong AI Tarayıcısını Kapat",
+    "print": "Baskı (P)",
+    "save_page_as": "Sayfayı Kaydet (A)...",
+    "find_in_page": "Sayfada Bul",
+    "more_tools": "Daha Fazla Araç",
+    "task_manager": "Görev Yöneticisi (T)",
+    "encoding": "Kodlama (E)",
+    "devtools": "Geliştirici Araçları (D)",
+    "view_resource_log": "Kaynak Yükleme Günlüğünü Görüntüle (L)",
+    "adblock": "Reklam Blok (G)",
+    "settings": "Ayarlar (S)",
+    "feedback": "Geri Bildirim",
+    "about_app": "KunQiong AI Tarayıcısı Hakkında",
+    "about_incognito": "Gizli Tarama Hakkında",
+    "exit_app": "KunQiong AI Tarayıcısını Kapat"
+  },
+  "context": {
+    "new_tab": "Yeni Sekme Aç",
+    "reload": "Yeniden Yükle",
+    "duplicate": "Kopyala",
+    "pin": "Sekmeyi Sabitle",
+    "unpin": "Sekmeyi Kaldır",
+    "close": "Sekmeyi Kapat",
+    "close_others": "Diğer Sekmeleri Kapat",
+    "close_left": "Sol taraftaki Sekmeleri Kapat",
+    "close_right": "Sağ taraftaki Sekmeleri Kapat",
+    "reopen_closed": "Kapanmış Sekmeyi Yeniden Aç (E)",
+    "bookmark_all": "Tüm sekmelere Favori Ekle..."
+  },
+  "tooltips": {
+    "new_tab": "Yeni Sekme (Ctrl+T)",
+    "search_tabs": "Sekmeleri Ara",
+    "download": "İndirmeler (Ctrl+J)",
+    "user_login": "Kullanıcı/Giriş",
+    "translate_page": "Bu sayfayı Çevir",
+    "zoom": "Büyüt/Küçült",
+    "manage_passwords": "Parolaları Yönet"
+  },
+  "nav": {
+    "back": "Geri (Alt+Sol)",
+    "forward": "İleri (Alt+Sağ)",
+    "refresh": "Yenile (F5)",
+    "stop": "Durdur (Esc)",
+    "home": "Ana Sayfa (Alt+Ana Sayfa)"
+  },
+  "status": {
+    "ready": "Hazır",
+    "incognito": "Gizli Tarama - Tarama faaliyeti bu cihazda kaydedilmeyecek",
+    "downloading": "İndiriliyor: {{file}}",
+    "history_cleared": "Geçmiş Temizlendi"
+  },
+  "ai": {
+    "assistant": "Asistan",
+    "summarize": "📝 Bu sayfayı Özetle",
+    "mode": "AI Modu",
+    "init_failed": "Asistan Başlatılması Başarısız",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI sohbet arayüzü dosyası bulunamadı</h3><p>Lütfen bu yolların mevcut olduğundan emin olun:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "Lütfen bu sayfanın ana içeriğini Çinceye çevirin:\n\n{{text}}",
+    "translate_failed": "AI Çeviri Başarısız: {{msg}}",
+    "api": {
+      "base": "API Proxy URL'si:",
+      "key": "API Anahtarı:",
+      "model_name": "Model Adı:",
+      "model_preset": "Model Öntanımlı:",
+      "provider": "Sağlayıcı Öntanımlı:",
+      "title": "API Yapılandırması",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "Özel API Modu (OpenAI uyumlu)",
+    "mode.title": "Servis Modu",
+    "mode.web": "Dahili Web Modu (DeepSeek)",
+    "settings": {
+      "subtitle": "AI Asistanınızı Yapılandır",
+      "title": "AI Ayarları"
+    },
+    "tip": {
+      "compatible": "İpucu: DeepSeek, OpenAI, Ollama ve diğer uyumlu API'lerle çalışır",
+      "dashscope": "İpucu: DashScope OpenAI uyumlu BaseUrl, varsayılan olarak https://dashscope.aliyuncs.com/compatible-mode/v1 olarak ayarlanır",
+      "volcengine": "İpucu: Volcengine Ark V3, ep-2024xxxxxxxx-xxxxx formatında bir Endpoint ID'si gerektirir"
+    },
+    "web": {
+      "title": "Web Modu Ayarları",
+      "url": "AI Web URL'si:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "Gizli Tarama",
+      "message": "Gizli Tarama Kullanıyorsunuz\n\n✓ Gizli Tarama yapabilir:\n  • Tarama geçmişini kaydetmez\n  • Cookie'leri ve site verilerini kaydetmez\n  • Form verilerini kaydetmez\n  • İzole bir oturum kullanır\n\n✗ Gizli Tarama yapmaz:\n  • Ağ yöneticilerinden faaliyeti gizlemez\n  • ISP'nizden faaliyeti gizlemez\n  • Sitelerin IP adresinizi almasını engeller\n\nNot: İndirilen dosyalar ve oluşturulan favoriler korunur."
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "Onayla",
+    "ok": "Tamam",
+    "clear_history_all": "Tüm geçmişi temizlemek istediğinize emin misiniz?",
+    "cancel": "İptal"
+  },
+  "search_engine": {
+    "confirm_delete": "Arama motorunu \"{{name}}\" silmek istediğinize emin misiniz?"
+  },
+  "menu_zoom": {
+    "label": "Büyüt/Küçült",
+    "reset": "Sıfırla"
+  },
+  "settings": {
+    "header": {
+      "title": "Ayarlar",
+      "search_placeholder": "Ayarlarda ara"
+    },
+    "sidebar": {
+      "history": "Geçmiş",
+      "settings": "Ayarlar",
+      "ai": "Yapay Zeka Ayarları",
+      "privacy": "Gizlilik",
+      "advanced": "Gelişmiş"
+    },
+    "set_startup_pages": "Görünüm",
+    "enter_urls_each_line": "'Ana Sayfa' Düğmesini Göster",
+    "no_results": "Değiştir",
+    "appearance": {
+      "title": "Favori Çubuğunu Her Zaman Göster",
+      "show_home_button": "Dil",
+      "change": "Sisteme Göre",
+      "show_bookmark_bar": "Çince (Basit)",
+      "language": "Dil",
+      "language_auto": "Sistemi takip et",
+      "language_zhCN": "Çince (Basitleştirilmiş)",
+      "language_en": "İngilizce",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "Gözat...",
+      "location_label": "Her dosyayı indirmeden önce kaydedileceği yeri sor",
+      "location_desc": "Ayarlar",
+      "browse": "Arama Ayarları",
+      "ask_location_label": "Ana Sayfa",
+      "ask_location_desc": "Ana Sayfa"
+    },
+    "title": "Ayarlar",
+    "search_placeholder": "Ayarlarda ara",
+    "home": {
+      "title": "Yeni Sekme Kullan",
+      "url": "Başlatılışta",
+      "use_current": "Yeni Sekme Aç",
+      "use_newtab": "Son durduğunuz yerden Devam Et"
+    },
+    "startup": {
+      "title": "Belirli bir sayfa veya sayfa kümesi aç",
+      "newtab": "Sayfaları Yönet",
+      "continue_last": "Reklam Bloklama",
+      "specific_pages": "Hiçbir reklamı engelleme",
+      "manage_pages": "Sadece Pops-up'u Engelle",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "Sertçe Web sayfası reklamlarını Engelle",
+      "none": "Özel Reklam Bloklama Kuralları",
+      "popup": "Özel Kurallar",
+      "aggressive": "Kuralları Yönet...",
+      "custom": "Adres Çubuğu Arama Motoru",
+      "custom_link": "Varsayılan Arama Motoru",
+      "manage_rules": "Adres Çubuğu tarafından kullanılan Arama Motoru"
+    },
+    "search": {
+      "title": "360",
+      "default_label": "Baidu",
+      "desc": "Bing",
+      "options": {
+        "360": "Google",
+        "baidu": "Arama Motorlarını Yönet",
+        "bing": "Gelişmiş Ayarları Göster...",
+        "google": "Google"
+      },
+      "manage_button": "Mouse İşaretçilerini Etkinleştir"
+    },
+    "show_advanced": "Mouse İşaretçileri",
+    "advanced": {
+      "back_basic": "Arka Plan Sekmesinin Belleği Serbest Bırakma Aralığı:",
+      "gesture": {
+        "enable": "Performans",
+        "title": "Super sürüklemeyi Etkinleştir"
+      },
+      "performance": {
+        "mem_release_time": "Gelişmiş Ayarlar",
+        "title": "Varsayılan tarayıcı durumu kontrol ediliyor..."
+      },
+      "super_drag": {
+        "enable": "{{app}} şu an varsayılan tarayıcınız olarak kullanılıyor."
+      },
+      "title": "{{app}} şu an varsayılan tarayıcınız değildir."
+    },
+    "default_browser": {
+      "checking": "Varsayılan Tarayıcı Olarak Ayarla",
+      "is_default": "Varsayılan Tarayıcı",
+      "not_default": "Ziyaret Edildi Zamanı",
+      "set_default": "Başlık",
+      "title": "URL"
+    },
+    "history": {
+      "columns": {
+        "time": "Sertifikaları Yönet...",
+        "title": "Proxy Ayarlarını Değiştir...",
+        "url": "Ayarları Orijinal Varsayılanlara Dönüştür"
+      },
+      "title": "Bu, favorilerinize, geçmişinize veya kaydedilmiş parolanıza hiçbir etkisi olmaz.",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "Ayarları Sıfırla",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "Varsayılan Ayarları Geri Yükle",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "Sekmeleri kapatmak için Çift Tıklayın",
+      "desc": "Adres Çubuğu Giriş Modu:",
+      "title": "Aramak için Enter Tuşuna Basın",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "Girdiğiniz gibi arama yap (Önerilir)",
+    "tabs": {
+      "double_click_close": "Son konuma aç",
+      "input_mode": {
+        "new_tab": "Yeni sekmede aç"
+      },
+      "input_mode.enter": "Yeni sayfa açılırken:",
+      "input_mode.instant": "Adres çubuğuna tıklayarak tüm URL metnini seç",
+      "new_tab_position": {
+        "last": "Adres çubuğunda tam URL'yi göster (Shift tuşunu basarken de gösterilir)",
+        "right": "Sekmeler"
+      },
+      "open_new": "Kullanıcı Verisi",
+      "select_all_on_click": "Select all URL text when clicking the address bar",
+      "show_full_url": "Show full URL in address bar (also shown while holding Shift)",
+      "title": "Sekmeler",
+      "right_click_close_desc": "Sağ tık mevcut sekmeyi kapatır (bağlam menüsünü göstermek için Shift'e basılı tutun)",
+      "open_links_background": "Tıklanan bağlantıları arka plan sekmesinde aç",
+      "input_mode_label": "Kullanıcı Verisi"
+    },
+    "user_data": {
+      "import": "Import bookmarks and settings...",
+      "title": "User data"
+    },
+    "features": {
+      "title": "?zellikler",
+      "mouse_gesture_label": "Fare hareketleri",
+      "mouse_gesture_desc": "Eylemleri h?zl?ca ger?ekle?tirmek i?in fare hareketlerini kullan?n",
+      "super_drag_label": "S?per s?r?kleme",
+      "super_drag_desc": "Metni veya ba?lant?lar? s?r?kleyerek h?zl?ca aray?n ya da a??n"
+    },
+    "web": {
+      "title": "Web ayarlar?",
+      "smooth_scrolling": "Web sayfalar?nda yumu?ak kayd?rmay? etkinle?tir (yeniden ba?latmadan sonra ge?erli olur)"
+    },
+    "cache": {
+      "title": "Özel önbellek",
+      "directory_label": "Özel önbellek dizini:",
+      "change_button": "Değiştir",
+      "notice": "Bunu değiştirmek mevcut önbelleği temizleyecek ve yeniden başlattıktan sonra etkili olacaktır.",
+      "open_dir": "Önbellek Dizini",
+      "reset_default": "Varsayılana sıfırla",
+      "reset_confirm": "Önbellek dizinini varsayılana sıfırlamak istediğinizden emin misiniz?\\ n\\nBu, mevcut önbelleği temizleyecek ve yeniden başlattıktan sonra etkinleşecektir."
+    },
+    "privacy": {
+      "title": "Privacy settings",
+      "content_settings": "Content settings...",
+      "clear_browsing_data": "Clear browsing data...",
+      "crash_upload": "Enable crash report upload",
+      "crash_upload_desc": "Automatically upload error reports on crashes to help improve the browser."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "Kaydet ve uygula",
+      "auto_hint": "Ayarlar otomatik olarak kaydedilir",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "İndirmeler",
+    "location_label": "İndirme konumu",
+    "location_desc": "İndirmelerin varsayılan kaydetme konumu",
+    "browse": "Gözat...",
+    "ask_location_label": "Her dosyayı indirmeden önce kaydetmek için nerede kaydetmek istediğini sor",
+    "default_tool_label": "Varsayılan indirme aracını seç:",
+    "browse_desc": "İndirme kaydetme klasörünü seç",
+    "status": {
+      "downloading": "İndiriliyor: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal Edildi",
+      "failed": "İndirme başarısız",
+      "pending": "Bekleniyor..."
+    }
+  },
+  "password_manager": {
+    "hide": "Gizle",
+    "show": "Göster"
+  },
+  "import": {
+    "success": "Başarıyla {{count}} favori içe aktarıldı.",
+    "done": "İçe aktarma tamamlandı",
+    "failed": "İçe aktarma başarısız: {{msg}}"
+  },
+  "adblock": {
+    "allow": "İzin Ver",
+    "block": "Engelle"
+  },
+  "task_manager": {
+    "tab_title": "● Sekme: {{title}}"
+  },
+  "clear": {
+    "success": "Aşağıdaki veriler başarıyla temizlendi:\n• {{items}}",
+    "done": "Temizleme tamamlandı",
+    "failed": "Veri temizlerken hata: {{msg}}",
+    "in_progress": "Temizleniyor..."
+  },
+  "print": {
+    "failed": "Baskı başarısız",
+    "failed_message": "Baskıda hata:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "Sayfayı Kaydet",
+      "filter": "Sadece HTML Sayfası (*.html)|*.html|Tam Sayfa (*.html)|*.html|MHTML Dosyası (*.mhtml)|*.mhtml|PDF Belgesi (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "Favorileri Aktar",
+    "export_filter": "HTML Dosyaları (*.html)|*.html",
+    "export_success_path": "Favoriler {{path}} adresine dışarı aktarıldı:\n{{path}}",
+    "other": "Diğer favoriler",
+    "added_message": "{{count}} sekme {{folder}} klasörüne eklendi",
+    "added_status": "{{count}} favori {{folder}} klasörüne eklendi",
+    "already": "Zaten favoriye alınmış",
+    "batch_confirm": "{{count}} sekme için bir klasör oluşturulacak.\\n\\nDevam etmek istiyor musunuz?",
+    "batch_title": "Grup favori ekleme",
+    "cancelled": "Favori iptal edildi",
+    "import_filter": "HTML Dosyaları (*.html;*.htm)|*.html;*.htm|Tüm Dosyalar (*.*)|*.*",
+    "import_title": "Favorileri içe aktar",
+    "new_bookmark": "Yeni favori",
+    "unable_for_page": "Bu sayfayı favoriye alamazsınız",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "Aç",
+    "open_in_new_tab": "Yeni sekmede aç",
+    "open_all_bookmarks": "Tüm favorileri aç"
+  },
+  "actions": {
+    "add": "Ekle",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "delete_all": "Tümünü sil",
+    "done": "Tamam",
+    "copy_link": "Bağlantıyı kopyala",
+    "rename": "Yeniden adlandır",
+    "add_bookmark": "Favori ekle",
+    "add_folder": "Klasör ekle"
+  },
+  "permissions": {
+    "allow": "İzin Ver",
+    "block": "Engelle",
+    "ask": "Sor"
+  },
+  "site_settings": {
+    "desc": "Belirli siteler için {{category}} izinlerini ayarlayabilirsiniz.",
+    "host_pattern": "Host adı şeması:",
+    "columns": {
+      "host_pattern": "Host adı şeması",
+      "behavior": "Davranış"
+    }
+  },
+  "time": {
+    "minute": "dakika"
+  },
+  "newtab": {
+    "title": "Yeni Sekme",
+    "search_placeholder": "Ara veya adres gir",
+    "footer": "Aydınlık · Hızlı · Basit",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "Görüntülenmiş tarama verisini temizle",
+    "clear_button": "Görüntülenmiş tarama verisini temizle...",
+    "clear_desc": "Tarama geçmişini, tarayıcı tanımlayıcılarını, önbelleği ve daha fazlasını temizle",
+    "exit_clear": {
+      "title": "Çıkışta otomatik temizleme",
+      "history": "Tarama geçmişi",
+      "downloads": "İndirme geçmişi",
+      "cache": "Önbelleğe alınmış resimler ve dosyalar",
+      "cookies": "Tarayıcı tanımlayıcıları ve diğer site verileri"
+    },
+    "options": {
+      "title": "Gizlilik seçenekleri",
+      "dnt": "'Takip Etmeyin' isteğini tarama trafiğiyle gönder"
+    }
+  },
+  "update": {
+    "updater_missing": "Güncelleştirici yürütülebilir dosyası 'updater.exe' bulunamadı"
+  },
+  "address_dropdown": {
+    "search": "Ara '{{text}}'",
+    "visit": "Ziyaret '{{text}}'",
+    "empty_history": "Uyuşan geçmiş bulunamadı",
+    "empty_bookmark": "Uyuşan favori bulunamadı",
+    "empty_tabs": "Uyuşan sekme bulunamadı",
+    "empty_all": "Uyuşan sonuç bulunamadı"
+  },
+  "image_dialog": {
+    "title": "Resim kaynaklarını çıkar",
+    "found_count": "{{count}} resim bulundu",
+    "columns": {
+      "url": "Resim URL'si",
+      "type": "Tip"
+    },
+    "preview": {
+      "select": "Önizlemek için bir resim seçin"
+    },
+    "save_to": "İndirmeleri buraya kaydet",
+    "browse": "Klasörü değiştir",
+    "browse_desc": "İndirme kaydetme klasörünü seç",
+    "download_now": "Şimdi indirin",
+    "select_one_image": "Lütfen en az bir resim seçerek indirin",
+    "select_all_toggle": "Tümünü Seç / Geçiş",
+    "loading_preview": "Önizleme yükleniyor...",
+    "modern_preview": "Modern resim formatı (WebView2 önizleme)",
+    "modern": "Modern resim formatı",
+    "preview_loading_webview": "Önizleme yükleniyor (WebView2 modunda)...",
+    "preview_unavailable": "Önizleme yok",
+    "preview_size": "{{width}} x {{height}} | {{kb}} KB"
+  },
+  "video_dialog": {
+    "title": "İndirme formatını seç",
+    "columns": {
+      "resolution": "Çözünürlük",
+      "ext": "Uzantı",
+      "size": "Büyüklük",
+      "note": "Not"
+    },
+    "save_to": "İndirmeleri buraya kaydet",
+    "browse": "Klasörü değiştir",
+    "browse_desc": "İndirme kaydetme klasörünü seç",
+    "start_download": "İndirmeyi Başlat",
+    "select_format_first": "Lütfen önce bir format seçin",
+    "unknown_title": "Bilinmeyen başlık",
+    "unknown": "Bilinmeyen",
+    "parse_failed": "Video bilgilerini ayrıştırma başarısız: {{msg}}"
+  },
+  "common": {
+    "info": "Bilgi",
+    "done": "Tamam",
+    "error": "Hata",
+    "operation_failed_retry": "İşlem başarısız, lütfen tekrar deneyin",
+    "empty": "(boş)",
+    "in_dev": "Bu özellik geliştirilmektedir...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "Hakkında ",
+    "version_prefix": "Sürüm ",
+    "check_update": "Güncellemeleri denetle",
+    "checking": "Denetleniyor...",
+    "connecting": "Güncelleme sunucusuna bağlanılıyor...",
+    "update_failed": "Güncellemeleri denetleme başarısız. Lütfen daha sonra tekrar deneyin.",
+    "update_found_status": "Yeni sürüm bulundu: {{version}}",
+    "update_found_title": "Güncelleme bulundu",
+    "update_found_message": "Yeni sürüm {{version}} bulundu\\n\\nSürüm notları:\\n{{log}}\\n\\nŞimdi güncelle?",
+    "latest": "Zaten en son sürüme sahipsiniz.",
+    "error_prefix": "Hata: ",
+    "simple_title": "Hakkında",
+    "simple_message": "{{app}}\\nSürüm {{version}}\\n\\nWebView2 motoruna dayanıyor",
+    "copyright": "© {{year}} {{app}}. Tüm hakları saklıdır."
+  },
+  "font": {
+    "preview_standard": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "min": "Min",
+    "max": "Max",
+    "serif": "Serif yazı tipi",
+    "sans_serif": "Sans-serif yazı tipi",
+    "fixed_width": "Sabit genişlikli yazı tipi",
+    "minimum_size": "Minimum yazı boyutu",
+    "preview_generic": "Görünüm",
+    "preview_fixed": "'Ana Sayfa' düğmesini göster",
+    "preview_min": "Değiştir"
+  },
+  "appearance": {
+    "title": "Her zaman favori çubuğunu göster",
+    "show_home_button": "Dil",
+    "change": "Sistem'i takip et",
+    "show_bookmark_bar": "Çince (Basit)",
+    "language": "Dil",
+    "language_auto": "Sistemi takip et",
+    "language_zhCN": "Çince (Basitleştirilmiş)",
+    "language_en": "İngilizce",
+    "hide_bookmark_bar": "Export başarısız: {{msg}}"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "Export başarılı!",
+    "confirm_delete_item": "Resim çıkarımı iptal edildi",
+    "export_failed": "Resim kaynakları çıkarılıyor...",
+    "export_success": "Çıkarma başarısız: {{msg}}"
+  },
+  "images": {
+    "cancelled_status": "Resim çıkarımı başarısız",
+    "extracting_status": "Resim kaynakları bulunamadı",
+    "failed_message": "{{count}} resim indirme görevleri gönderildi",
+    "failed_status": "Asla",
+    "none_found_status": "Şifreyi kaydet",
+    "submitted_tasks": "Submitted {{count}} image download tasks"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "Tamam",
+      "save": "Kaydedilmiş şifreleri yönet",
+      "title": "Bu site için kaydedilmiş şifre:"
+    },
+    "saved": {
+      "done": "Arama motorlarını yönet",
+      "manage": "Çıkış yap",
+      "title": "Profil ayarları"
+    }
+  },
+  "search": {
+    "manage_button": "Çıkarma başarısız"
+  },
+  "user": {
+    "logout": "Bu sayfada çıkarılabilir video kaynakları tespit edilemedi.\\n\\nNot: Sayfa bir video içerebilir veya şifrelenmiş/DRM oynatımını kullanabilir, bu nedenle doğrudan çıkarma mümkün değildir.\\n\\nÖneri: Gerçek video oynatma sayfasını aç ve oynatma başlamadan sonra tekrar çıkarma deneyin.",
+    "manage_profile": "Video kaynakları tespit edilemedi"
+  },
+  "videos": {
+    "extract_failed_status": "Video kaynakları tespit edilemedi",
+    "not_detected_desc": "Bu sayfada video çıkarımı desteklenmiyor",
+    "not_detected_status": "Video bilgileri ayrıştırılıyor...",
+    "not_detected_title": "No video resources detected",
+    "not_supported": "Video extraction is not supported on this page",
+    "parsing_status": "Parsing video information..."
+  }
+}

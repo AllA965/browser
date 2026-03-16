@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "新しいタブ"
+  },
+  "menu": {
+    "new_tab": "新しいタブ (T)",
+    "new_window": "新しいウィンドウ (N)",
+    "new_incognito": "新しいインプライベートウィンドウ (I)",
+    "bookmarks": "ブックマーク (B)",
+    "show_bookmark_bar": "ブックマークバーを表示 (S)",
+    "bookmark_manager": "ブックマークマネージャー (B)",
+    "import_bookmarks": "ブックマークと設定をインポート...",
+    "add_bookmark": "このページのブックマークを追加...",
+    "add_all_bookmarks": "すべての開いているページのブックマークを追加...",
+    "more_bookmarks": "もっとブックマーク",
+    "no_bookmarks": "ブックマークがありません",
+    "history": "履歴 (H)",
+    "show_all_history": "すべての履歴を表示",
+    "no_history": "履歴がありません",
+    "clear_history": "閲覧履歴をクリア",
+    "downloads": "ダウンロード (D)",
+    "media_extract": "メディア抽出",
+    "extract_images": "このページの画像を抽出",
+    "extract_videos": "このページの動画を抽出",
+    "clear_data": "閲覧データをクリア",
+    "exit_incognito": "インプライベートウィンドウを閉じる",
+    "exit_normal": "KunQiong AI Browserを閉じる",
+    "print": "印刷 (P)",
+    "save_page_as": "ページを保存 (A)...",
+    "find_in_page": "ページ内を検索",
+    "more_tools": "もっとツール",
+    "task_manager": "タスクマネージャー (T)",
+    "encoding": "エンコーディング (E)",
+    "devtools": "開発ツール (D)",
+    "view_resource_log": "リソース読み込みログを表示 (L)",
+    "adblock": "広告ブロック (G)",
+    "settings": "設定 (S)",
+    "feedback": "フィードバック",
+    "about_app": "Kunqiong AI Browserについて",
+    "about_incognito": "インプライベートについて",
+    "exit_app": "Kunqiong AI Browserを閉じる"
+  },
+  "context": {
+    "new_tab": "新しいタブを開く",
+    "reload": "リロード",
+    "duplicate": "複製",
+    "pin": "タブを固定",
+    "unpin": "タブの固定を解除",
+    "close": "タブを閉じる",
+    "close_others": "他のタブを閉じる",
+    "close_left": "左側のタブを閉じる",
+    "close_right": "右側のタブを閉じる",
+    "reopen_closed": "閉じたタブを再開 (E)",
+    "bookmark_all": "すべてのタブのブックマークを追加..."
+  },
+  "tooltips": {
+    "new_tab": "新しいタブ (Ctrl+T)",
+    "search_tabs": "タブを検索",
+    "download": "ダウンロード (Ctrl+J)",
+    "user_login": "ユーザー/ログイン",
+    "translate_page": "このページを翻訳",
+    "zoom": "ズーム",
+    "manage_passwords": "パスワードの管理"
+  },
+  "nav": {
+    "back": "戻る (Alt+左)",
+    "forward": "進む (Alt+右)",
+    "refresh": "更新 (F5)",
+    "stop": "停止 (Esc)",
+    "home": "ホーム (Alt+ホーム)"
+  },
+  "status": {
+    "ready": "準備完了",
+    "incognito": "インプライベート - このデバイスでの閲覧アクティビティは保存されません",
+    "downloading": "ダウンロード中: {{file}}",
+    "history_cleared": "履歴がクリアされました"
+  },
+  "ai": {
+    "assistant": "アシスタント",
+    "summarize": "📝 このページを要約",
+    "mode": "AIモード",
+    "init_failed": "アシスタントの初期化に失敗しました",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AIチャットUIファイルが見つかりません</h3><p>これらのパスが存在することを確認してください：</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "このページのメインコンテンツを中国語に翻訳してください:\\n\\n{{text}}",
+    "translate_failed": "AI翻訳に失敗しました: {{msg}}",
+    "api": {
+      "base": "API プロキシ URL:",
+      "key": "APIキー:",
+      "model_name": "モデル名:",
+      "model_preset": "モデルプリセット:",
+      "provider": "プロバイダープリセット:",
+      "title": "API設定",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "カスタムAPIモード (OpenAI互換)",
+    "mode.title": "サービスモード",
+    "mode.web": "組み込みウェブモード (DeepSeek)",
+    "settings": {
+      "subtitle": "AIアシスタントを設定",
+      "title": "AI設定"
+    },
+    "tip": {
+      "compatible": "ヒント: DeepSeek、OpenAI、Ollamaなどの互換APIと動作します",
+      "dashscope": "ヒント: DashScope OpenAI互換 BaseUrl はデフォルトで https://dashscope.aliyuncs.com/compatible-mode/v1 です",
+      "volcengine": "ヒント: Volcengine Ark V3 は、ep-2024xxxxxxxx-xxxxx 形式の Endpoint ID を必要とします"
+    },
+    "web": {
+      "title": "ウェブモード設定",
+      "url": "AIウェブURL:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "インプライベート",
+      "message": "インプライベートブラウジングを使用しています\\n\\n✓ インプライベートは次のことができます：\\n  • ブラウジング履歴を保存しません\\n  • クッキーとサイトデータを保存しません\\n  • フォームデータを保存しません\\n  • 分離されたセッションを使用します\\n\\n✗ インプライベートは次のことを行いません：\\n  • ネットワーク管理者からアクティビティを非表示にしません\\n  • ISPからアクティビティを非表示にしません\\n  • ウェブサイトがあなたのIPアドレスを取得することを防ぎません\\n\\n注釈: ダウンロードしたファイルと作成したブックマークは残ります。"
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "確認",
+    "ok": "OK",
+    "clear_history_all": "本当にすべての履歴をクリアしますか？",
+    "cancel": "キャンセル"
+  },
+  "search_engine": {
+    "confirm_delete": "検索エンジン「{{name}}」を削除してもよろしいですか？"
+  },
+  "menu_zoom": {
+    "label": "ズーム",
+    "reset": "リセット"
+  },
+  "settings": {
+    "header": {
+      "title": "設定",
+      "search_placeholder": "設定を検索"
+    },
+    "sidebar": {
+      "history": "履歴",
+      "settings": "設定",
+      "ai": "AI 設定",
+      "privacy": "プライバシー",
+      "advanced": "詳細設定"
+    },
+    "set_startup_pages": "起動ページを設定",
+    "enter_urls_each_line": "ウェブサイトのURLを入力してください（1行に1つ）：",
+    "no_results": "該当する設定が見つかりません",
+    "appearance": {
+      "title": "外観",
+      "show_home_button": "「ホーム」ボタンを表示",
+      "change": "変更",
+      "show_bookmark_bar": "常にブックマークバーを表示",
+      "language": "言語",
+      "language_auto": "システムに従う",
+      "language_zhCN": "中国語（簡体字）",
+      "language_en": "英語",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "ダウンロード",
+      "location_label": "ダウンロード場所",
+      "location_desc": "ダウンロードのデフォルト保存場所",
+      "browse": "参照...",
+      "ask_location_label": "ダウンロード前に各ファイルの保存場所を尋ねる",
+      "ask_location_desc": "ダウンロード前に各ファイルの保存場所を尋ねる"
+    },
+    "title": "設定",
+    "search_placeholder": "設定を検索",
+    "home": {
+      "title": "ホーム",
+      "url": "ホームURL：",
+      "use_current": "現在のページを使用",
+      "use_newtab": "新しいタブを使用"
+    },
+    "startup": {
+      "title": "起動時",
+      "newtab": "新しいタブを開く",
+      "continue_last": "前回の場所から続行",
+      "specific_pages": "特定のページまたはページセットを開く",
+      "manage_pages": "ページを管理",
+      "current_setting": "現在の設定:"
+    },
+    "adblock": {
+      "title": "広告ブロック",
+      "none": "広告を一切ブロックしない",
+      "popup": "ポップアップのみをブロック",
+      "aggressive": "積極的にウェブページの広告をブロック",
+      "custom": "カスタム広告ブロックルール",
+      "custom_link": "カスタムルール",
+      "manage_rules": "ルールを管理..."
+    },
+    "search": {
+      "title": "アドレスバーの検索エンジン",
+      "default_label": "デフォルト検索エンジン",
+      "desc": "アドレスバーで使用される検索エンジン",
+      "options": {
+        "360": "360",
+        "baidu": "バイドゥ",
+        "bing": "ビング",
+        "google": "グーグル"
+      },
+      "manage_button": "検索エンジンを管理"
+    },
+    "show_advanced": "詳細設定を表示...",
+    "advanced": {
+      "back_basic": "？基本設定に戻る",
+      "gesture": {
+        "enable": "マウスジェスチャを有効に",
+        "title": "マウスジェスチャ"
+      },
+      "performance": {
+        "mem_release_time": "バックグラウンドタブのメモリ解放間隔：",
+        "title": "パフォーマンス"
+      },
+      "super_drag": {
+        "enable": "スーパードラッグを有効に"
+      },
+      "title": "詳細設定"
+    },
+    "default_browser": {
+      "checking": "デフォルトブラウザのステータスを確認中...",
+      "is_default": "{{app}} が現在デフォルトブラウザです。",
+      "not_default": "{{app}} は現在デフォルトブラウザではありません。",
+      "set_default": "デフォルトブラウザとして設定",
+      "title": "デフォルトブラウザ"
+    },
+    "history": {
+      "columns": {
+        "time": "訪問時間",
+        "title": "タイトル",
+        "url": "URL"
+      },
+      "title": "履歴",
+      "search_placeholder": "検索...",
+      "empty": "閲覧履歴はありません"
+    },
+    "https": {
+      "manage_certificates": "証明書を管理...",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "プロキシ設定を変更...",
+      "title": "ネットワーク",
+      "system_proxy_desc": "KunQiong AI Browser はネットワーク接続にシステムのプロキシ設定を使用します。"
+    },
+    "reset": {
+      "button": "設定を元のデフォルトに復元",
+      "desc": "これによりブックマーク、履歴、または保存済みパスワードに影響を与えません。",
+      "title": "設定をリセット",
+      "confirm": "すべての設定を既定値に戻してもよろしいですか？"
+    },
+    "reset_button": "デフォルト設定に戻す",
+    "tabs": {
+      "double_click_close": "ダブルクリックでタブを閉じる",
+      "input_mode": {
+        "new_tab": "新しいタブで開く"
+      },
+      "input_mode.enter": "Enterキーで検索",
+      "input_mode.instant": "入力するたびに検索（推奨）",
+      "new_tab_position": {
+        "last": "最後の位置に開く",
+        "right": "現在のタブの右に開く"
+      },
+      "open_new": "新しいページを開くとき：",
+      "select_all_on_click": "アドレスバーをクリックするときにURLテキストを全選択",
+      "show_full_url": "アドレスバーに完全なURLを表示（Shiftを押している間も表示）",
+      "title": "タブ",
+      "right_click_close_desc": "右クリックで現在のタブを閉じる（Shift を押すとコンテキストメニューを表示）",
+      "open_links_background": "クリックしたリンクをバックグラウンドタブで開く",
+      "input_mode_label": "アドレスバー入力モード"
+    },
+    "user_data": {
+      "import": "ブックマークと設定をインポート...",
+      "title": "ユーザーデータ"
+    },
+    "features": {
+      "title": "機能",
+      "mouse_gesture_label": "マウスジェスチャー",
+      "mouse_gesture_desc": "マウスジェスチャーで操作を素早く実行",
+      "super_drag_label": "スーパードラッグ",
+      "super_drag_desc": "テキストやリンクをドラッグして素早く検索・表示"
+    },
+    "web": {
+      "title": "ウェブ設定",
+      "smooth_scrolling": "ウェブページでスムーズスクロールを有効にする（再起動後に有効）"
+    },
+    "cache": {
+      "title": "カスタムキャッシュ",
+      "directory_label": "カスタムキャッシュディレクトリ:",
+      "change_button": "変更...",
+      "notice": "変更すると現在のキャッシュは削除され、再起動後に有効になります。",
+      "open_dir": "キャッシュディレクトリを開く",
+      "reset_default": "既定に戻す",
+      "reset_confirm": "キャッシュディレクトリを既定に戻しますか？\n\n既存のキャッシュが削除され、再起動後に有効になります。"
+    },
+    "privacy": {
+      "title": "プライバシー設定",
+      "content_settings": "コンテンツ設定...",
+      "clear_browsing_data": "閲覧データを消去...",
+      "crash_upload": "クラッシュレポートの送信を有効にする",
+      "crash_upload_desc": "ブラウザ改善のため、クラッシュ時にエラーレポートを自動送信します。"
+    },
+    "passwords": {
+      "title": "パスワードとフォーム",
+      "autofill_desc": "オートフィルが有効な場合、ワンクリックでフォーム入力できます。",
+      "manage_autofill": "オートフィル設定を管理",
+      "save_passwords_desc": "ウェブサイトで入力したパスワードの保存を確認する",
+      "manage_saved_passwords": "保存済みパスワードを管理"
+    },
+    "web_content": {
+      "title": "ウェブコンテンツ",
+      "font_size": "フォントサイズ:",
+      "font_size_very_small": "非常に小さい",
+      "font_size_small": "小",
+      "font_size_medium": "中",
+      "font_size_large": "大",
+      "font_size_very_large": "非常に大きい",
+      "customize_fonts": "フォントをカスタマイズ...",
+      "page_zoom": "ページズーム:"
+    },
+    "save": {
+      "apply_button": "保存して適用",
+      "auto_hint": "設定は自動的に保存されます",
+      "auto_saved": "自動保存されました",
+      "failed": "保存に失敗しました",
+      "failed_channel": "保存に失敗しました: メッセージチャネルが利用できません",
+      "manual_applied": "同期して適用しました",
+      "no_pending_changes": "未保存の変更はありません",
+      "nothing_to_save": "保存する設定がありません",
+      "partial_failed": "保存に失敗しました: 一部の設定が同期されませんでした",
+      "resetting_defaults": "既定の設定に復元しています..."
+    }
+  },
+  "downloads": {
+    "title": "ダウンロード",
+    "location_label": "ダウンロード場所",
+    "location_desc": "ダウンロードのデフォルト保存場所",
+    "browse": "参照...",
+    "ask_location_label": "ダウンロード前に各ファイルの保存場所を尋ねる",
+    "default_tool_label": "デフォルトのダウンロードツールを選択:",
+    "browse_desc": "ダウンロード保存フォルダを選択",
+    "status": {
+      "downloading": "ダウンロード中: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "完了",
+      "cancelled": "キャンセル",
+      "failed": "ダウンロードに失敗",
+      "pending": "保留中..."
+    }
+  },
+  "password_manager": {
+    "hide": "非表示",
+    "show": "表示"
+  },
+  "import": {
+    "success": "{{count}}個のブックマークを正常にインポートしました。",
+    "done": "インポート完了",
+    "failed": "インポートに失敗: {{msg}}"
+  },
+  "adblock": {
+    "allow": "許可",
+    "block": "ブロック"
+  },
+  "task_manager": {
+    "tab_title": "● タブ: {{title}}"
+  },
+  "clear": {
+    "success": "以下のデータを正常にクリアしました:\n• {{items}}",
+    "done": "クリア完了",
+    "failed": "データクリア中にエラーが発生: {{msg}}",
+    "in_progress": "クリア中..."
+  },
+  "print": {
+    "failed": "印刷に失敗",
+    "failed_message": "印刷中にエラー:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "ページを保存",
+      "filter": "Webページ、HTMLのみ (*.html)|*.html|Webページ、完全 (*.html)|*.html|MHTMLファイル (*.mhtml)|*.mhtml|PDF文書 (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "ブックマークをエクスポート",
+    "export_filter": "HTMLファイル (*.html)|*.html",
+    "export_success_path": "フォルダ「{{folder}}」に{{count}}個のタブを追加しました",
+    "other": "フォルダ「{{folder}}」に{{count}}個のブックマークを追加しました",
+    "added_message": "{{count}} 個のタブをフォルダー「{{folder}}」に追加しました",
+    "added_status": "{{count}}個のタブのためにフォルダが作成されます。\n\n続行しますか？",
+    "already": "バッチでブックマークを追加",
+    "batch_confirm": "ブックマークがキャンセルされました",
+    "batch_title": "HTMLファイル (*.html;*.htm)|*.html;*.htm|すべてのファイル (*.*)|*.*",
+    "cancelled": "ブックマークをインポート",
+    "import_filter": "新しいブックマーク",
+    "import_title": "このページをブックマークできません",
+    "new_bookmark": "開く",
+    "unable_for_page": "新しいタブで開く",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "すべてのブックマークを開く",
+    "open_in_new_tab": "追加",
+    "open_all_bookmarks": "編集"
+  },
+  "actions": {
+    "add": "削除",
+    "edit": "すべて削除",
+    "delete": "完了",
+    "delete_all": "リンクをコピー",
+    "done": "名前を変更",
+    "copy_link": "ブックマークを追加",
+    "rename": "フォルダを追加",
+    "add_bookmark": "許可",
+    "add_folder": "ブロック"
+  },
+  "permissions": {
+    "allow": "確認",
+    "block": "特定のサイトに対して{{category}}のパーミッションを設定できます。",
+    "ask": "ホスト名パターン:"
+  },
+  "site_settings": {
+    "desc": "特定のサイトに対して {{category}} の権限を設定できます。",
+    "host_pattern": "挙動",
+    "columns": {
+      "host_pattern": "分",
+      "behavior": "新しいタブ"
+    }
+  },
+  "time": {
+    "minute": "検索またはアドレスを入力"
+  },
+  "newtab": {
+    "title": "軽量・高速・シンプル",
+    "search_placeholder": "閲覧データをクリア",
+    "footer": "閲覧データをクリア...",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "閲覧履歴、クッキーその他をクリア",
+    "clear_button": "終了時に自動クリア",
+    "clear_desc": "閲覧履歴",
+    "exit_clear": {
+      "title": "ダウンロード履歴",
+      "history": "キャッシュされた画像とファイル",
+      "downloads": "クッキーおよびその他のサイトデータ",
+      "cache": "プライバシーオプション",
+      "cookies": "閲覧トラフィックに「追跡しない」リクエストを送信"
+    },
+    "options": {
+      "title": "アップデータ実行ファイル「updater.exe」が見つかりません",
+      "dnt": "「{{text}}」を検索"
+    }
+  },
+  "update": {
+    "updater_missing": "「{{text}}」を訪問"
+  },
+  "address_dropdown": {
+    "search": "「{{text}}」を検索",
+    "visit": "一致するブックマークが見つかりません",
+    "empty_history": "一致するタブが見つかりません",
+    "empty_bookmark": "一致するものが見つかりません",
+    "empty_tabs": "画像リソースを抽出",
+    "empty_all": "{{count}}個の画像を見つけました"
+  },
+  "image_dialog": {
+    "title": "画像URL",
+    "found_count": "タイプ",
+    "columns": {
+      "url": "プレビューする画像を選択",
+      "type": "ダウンロードを保存先に"
+    },
+    "preview": {
+      "select": "フォルダを変更"
+    },
+    "save_to": "ダウンロード保存フォルダを選択",
+    "browse": "今すぐダウンロード",
+    "browse_desc": "ダウンロードする画像を少なくとも1つ選択してください",
+    "download_now": "全選択 / トグル",
+    "select_one_image": "プレビューを読み込み中...",
+    "select_all_toggle": "現代的な画像フォーマット (WebView2プレビュー)",
+    "loading_preview": "現代的な画像フォーマット",
+    "modern_preview": "プレビューを読み込み中 (WebView2モード)...",
+    "modern": "プレビューが利用できません",
+    "preview_loading_webview": "{{width}} x {{height}} | {{kb}} KB",
+    "preview_unavailable": "ダウンロードフォーマットを選択",
+    "preview_size": "解像度"
+  },
+  "video_dialog": {
+    "title": "拡張子",
+    "columns": {
+      "resolution": "サイズ",
+      "ext": "メモ",
+      "size": "ダウンロードを保存先に",
+      "note": "フォルダを変更"
+    },
+    "save_to": "ダウンロード保存フォルダを選択",
+    "browse": "ダウンロードを開始",
+    "browse_desc": "まずフォーマットを選択してください",
+    "start_download": "不明なタイトル",
+    "select_format_first": "不明",
+    "unknown_title": "動画情報の解析に失敗: {{msg}}",
+    "unknown": "情報",
+    "parse_failed": "動画情報の解析に失敗しました: {{msg}}"
+  },
+  "common": {
+    "info": "エラー",
+    "done": "操作に失敗しました。もう一度試してください",
+    "error": "(空)",
+    "operation_failed_retry": "この機能は開発中です...",
+    "empty": "アバウト ",
+    "in_dev": "バージョン ",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "更新を確認",
+    "version_prefix": "確認中...",
+    "check_update": "更新サーバーに接続中...",
+    "checking": "更新の確認に失敗しました。後で再度試してください。",
+    "connecting": "新しいバージョンが見つかりました: {{version}}",
+    "update_failed": "更新が見つかりました",
+    "update_found_status": "新しいバージョン{{version}}が見つかりました\n\nリリースノート:\n{{log}}\n\n今すぐ更新しますか？",
+    "update_found_title": "あなたは最新バージョンです。",
+    "update_found_message": "エラー: ",
+    "latest": "アバウト",
+    "error_prefix": "{{app}}\nバージョン {{version}}\n\nWebView2 エンジンベース",
+    "simple_title": "© {{year}} {{app}}. 全著作権所有。",
+    "simple_message": "{{size}}: ローレム・イプサム・ドロール・シット・アメット,\nセクティュラ・アディピスシング・エリット.",
+    "copyright": "最小"
+  },
+  "font": {
+    "preview_standard": "最大",
+    "min": "セリフフォント",
+    "max": "サンセリフフォント",
+    "serif": "等幅フォント",
+    "sans_serif": "最小フォントサイズ",
+    "fixed_width": "{{size}}: ローレム・イプサム・ドロール・シット・アメット,\nセクティュラ・アディピスシング・エリット.",
+    "minimum_size": "ローレム・イプサム・ドロール・シット・アメット,\nセクティュラ・アディピスシング.",
+    "preview_generic": "{{size}}: ローレム・イプサム・ドロール・シット・アメット、セクティュラ",
+    "preview_fixed": "外観",
+    "preview_min": "「ホーム」ボタンを表示"
+  },
+  "appearance": {
+    "title": "変更",
+    "show_home_button": "常にブックマークバーを表示",
+    "change": "言語",
+    "show_bookmark_bar": "システムに従う",
+    "language": "言語",
+    "language_auto": "システムに従う",
+    "language_zhCN": "中国語（簡体字）",
+    "language_en": "英語",
+    "hide_bookmark_bar": "「{{name}}」を削除しますか？"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "エクスポートに失敗: {{msg}}",
+    "confirm_delete_item": "エクスポートが成功しました！",
+    "export_failed": "画像抽出がキャンセルされました",
+    "export_success": "画像リソースを抽出中..."
+  },
+  "images": {
+    "cancelled_status": "抽出に失敗: {{msg}}",
+    "extracting_status": "画像抽出に失敗しました",
+    "failed_message": "画像リソースが見つかりません",
+    "failed_status": "{{count}}個の画像ダウンロードタスクを送信しました",
+    "none_found_status": "決して",
+    "submitted_tasks": "パスワードを保存"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "KunQiong AI Browserがこのサイトのパスワードを保存しますか？",
+      "save": "完了",
+      "title": "保存済みパスワードを管理"
+    },
+    "saved": {
+      "done": "このサイトの保存済みパスワード:",
+      "manage": "検索エンジンを管理",
+      "title": "ログアウト"
+    }
+  },
+  "search": {
+    "manage_button": "プロフィール設定"
+  },
+  "user": {
+    "logout": "抽出に失敗",
+    "manage_profile": "このページに抽出可能な動画リソースは検出されませんでした。\n\n注釈: このページに動画が埋め込まれていないか、または暗号化/DRM再生を使用しているため、直接抽出することはできません。\n\n提案: 実際の動画再生ページを開き、再生が開始された後に再度抽出を試してください。"
+  },
+  "videos": {
+    "extract_failed_status": "動画リソースが検出されません",
+    "not_detected_desc": "このページでは動画抽出はサポートされていません",
+    "not_detected_status": "動画情報を解析中...",
+    "not_detected_title": "No video resources detected",
+    "not_supported": "Video extraction is not supported on this page",
+    "parsing_status": "Parsing video information..."
+  }
+}

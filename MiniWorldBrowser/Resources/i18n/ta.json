@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "புதிய தப்பு"
+  },
+  "menu": {
+    "new_tab": "புதிய தப்பு (T)",
+    "new_window": "புதிய சாளரம் (N)",
+    "new_incognito": "InPrivate சாளரம் (I)",
+    "bookmarks": "புக்கிரக்கள் (B)",
+    "show_bookmark_bar": "புக்கிரக் பார் காட்டு (S)",
+    "bookmark_manager": "புக்கிரக் மேக்கிர் (B)",
+    "import_bookmarks": "புக்கிரக்கள் மற்றும் அமைப்புகளை இறக்கு...",
+    "add_bookmark": "இந்த பக்கத்திற்கு புக்கிரக் சேர்க்க...",
+    "add_all_bookmarks": "அத்திருக்கும் அனைத்து பக்கங்களுக்கு புக்கிரக்கள் சேர்க்க...",
+    "more_bookmarks": "மேல் புக்கிரக்கள்",
+    "no_bookmarks": "புக்கிரக்கள் இல்லை",
+    "history": "வரலாறு (H)",
+    "show_all_history": "பல்லவரலாறு காட்டு",
+    "no_history": "வரலாறு இல்லை",
+    "clear_history": "வரலாறு புதிதாக்கு",
+    "downloads": "படிவக்கு (D)",
+    "media_extract": "மீடியா பிரித்தல்",
+    "extract_images": "இந்த பக்கத்தில் படங்களை பிரித்து",
+    "extract_videos": "இந்த பக்கத்தில் வீடியோக்களை பிரித்து",
+    "clear_data": "புக்கிரக் தரவை புதிதாக்கு",
+    "exit_incognito": "InPrivate சாளரத்தை மூடு",
+    "exit_normal": "குன்கியோங் AI பிரவாசரை மூடு",
+    "print": "பிரін்ட் (P)",
+    "save_page_as": "பக்கத்தை பொருத்து (A)...",
+    "find_in_page": "இந்த பக்கத்தில் தேடு",
+    "more_tools": "மேல் கருவிகள்",
+    "task_manager": "பொருள் மேக்கிர் (T)",
+    "encoding": "குறியீடு (E)",
+    "devtools": "பரிபரப்பாளர் கருவிகள் (D)",
+    "view_resource_log": "பொருள் சுமை புக்கிரக் மாற்றல் (L)",
+    "adblock": "அட்வர்ட் பிளாக் (G)",
+    "settings": "அமைப்புகள் (S)",
+    "feedback": "புரட்டல்",
+    "about_app": "குன்கியோங் AI பிரவாசர் பற்றி",
+    "about_incognito": "InPrivate பற்றி",
+    "exit_app": "குன்கியோங் AI பிரவாசரை மூடு"
+  },
+  "context": {
+    "new_tab": "புதிய தப்பு திறக்க",
+    "reload": "மீண்டு புதிதாக்கு",
+    "duplicate": "பகுதி செய்ய",
+    "pin": "தப்புக்கு முன்னம் செய்ய",
+    "unpin": "தப்புக்கு முன்னம் நீக்க",
+    "close": "தப்பை மூடு",
+    "close_others": "மற்ற தப்புகளை மூடு",
+    "close_left": "இடது பக்கத்தில் உள்ள தப்புகளை மூடு",
+    "close_right": "வலது பக்கத்தில் உள்ள தப்புகளை மூடு",
+    "reopen_closed": "படித்த தப்பை மீண்டு திறக்க (E)",
+    "bookmark_all": "அட்டவணைகளுக்கு புக்கிரக்கள் சேர்க்க..."
+  },
+  "tooltips": {
+    "new_tab": "புதிய தப்பு (Ctrl+T)",
+    "search_tabs": "தப்புகளைத் தேடு",
+    "download": "படிவக்கு (Ctrl+J)",
+    "user_login": "பயனர்/உள்நுழைவு",
+    "translate_page": "இந்த பக்கத்தை மொழிபெயர்",
+    "zoom": "படிவத்தை பெருக்க/குறைக்க",
+    "manage_passwords": "கடவுள்களை மேலாணிக்க"
+  },
+  "nav": {
+    "back": "முன்னோக்கி (Alt+Left)",
+    "forward": "முன்னோக்கி (Alt+Right)",
+    "refresh": "மீண்டு புதிதாக்கு (F5)",
+    "stop": "தடக்கு (Esc)",
+    "home": "முக்கிய பக்கம் (Alt+Home)"
+  },
+  "status": {
+    "ready": "தயார்",
+    "incognito": "InPrivate - உங்களின் புக்கிரக் செயல்பாடு இந்த சாதனத்தில் சேமிக்கப்படாது",
+    "downloading": "படிவத்துக்கு புக்கிரக் செய்யப்படுகிறது: {{file}}",
+    "history_cleared": "வரலாறு சுத்தமாக்கப்பட்டது"
+  },
+  "ai": {
+    "assistant": "உதவி",
+    "summarize": "📝 இந்த பக்கத்தை சுருக்க",
+    "mode": "AI மோடு",
+    "init_failed": "உதவி தொடக்கம் சாத்தியமற்றது",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI சபை UI கோப்பு இல்லை</h3><p>இந்த பாதைகள் உள்ளன என்பதை சரிபார்க்கவும்:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "இந்த பக்கத்தின் முக்கிய சामग्रியை சீனியாக மொழிபெயர்க்கவும்:\\n\\n{{text}}",
+    "translate_failed": "AI மொழிபெயர்ப்பு சாத்தியமற்றது: {{msg}}",
+    "api": {
+      "base": "API Proxy URL:",
+      "key": "API கீ:",
+      "model_name": "மாதிரி பெயர்:",
+      "model_preset": "மாதிரி முன்னுரை:",
+      "provider": "பொருத்தி முன்னுரை:",
+      "title": "API அமைப்பு",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "தனியாக API மோடு (OpenAI-உத்திரக்கு)",
+    "mode.title": "பயன் மோடு",
+    "mode.web": "உள்ளடக்க மலை மோடு (DeepSeek)",
+    "settings": {
+      "subtitle": "உங்கள் AI உதவியை மேலாணிக்க",
+      "title": "AI அமைப்புகள்"
+    },
+    "tip": {
+      "compatible": "தகவல்: DeepSeek, OpenAI, Ollama மற்றும் பிற பொருத்தமான APIக்கு பொருந்தும்",
+      "dashscope": "தகவல்: DashScope OpenAI-உத்திரக்கு BaseUrl முன்பதிவு https://dashscope.aliyuncs.com/compatible-mode/v1 ஆகும்",
+      "volcengine": "தகவல்: Volcengine Ark V3 ஒரு Endpoint ID பொருத்தம் ep-2024xxxxxxxx-xxxxx தேவைப்படுகிறது"
+    },
+    "web": {
+      "title": "மலை மோடு அமைப்புகள்",
+      "url": "AI மலை URL:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "InPrivate",
+      "message": "InPrivate - உங்களின் புக்கிரக் செயல்பாடு இந்த சாதனத்தில் சேமிக்கப்படாது\\n\\n✓ InPrivate முடியும்:\\n  • புக்கிரக் செயல்பாடுகளை சேமிக்காது\\n  • கூக்கIES மற்றும் அம்சக் கட்டுரைகளை சேமிக்காது\\n  • சுருக்கு தரவுகளை சேமிக்காது\\n  • தனித்துவமான சத்தை பயன்படுத்த\\n\\n✗ InPrivate முடியாது:\\n  • புக்கிரக் செயல்பாடுகளை நெட்வொர்க் மேலாணிக்கிகளுக்கு மறக்க\\n  • உங்களின் ISP-லிருந்து புக்கிரக் செயல்பாடுகளை மறக்க\\n  • வலையங்களுக்கு உங்களின் IP முகவரியை பெறுவதை தடுக்க\\n\\nகுறிப்பு: பதிவு செய்யப்பட்ட கோப்புகள் மற்றும் புக்கிரக்கள் மீதம் இருக்கும்."
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "உтвер்பிக்க",
+    "ok": "ஒகே",
+    "clear_history_all": "நீங்கள் அனைத்து வரலாற்றை நீக்க விரும்புகிறீர்களா?",
+    "cancel": "ரத்து"
+  },
+  "search_engine": {
+    "confirm_delete": "தேடல் இயந்திரம் \"{{name}}\" ஐ நீக்க விரும்புகிறீர்களா?"
+  },
+  "menu_zoom": {
+    "label": "பெரிதாக்க",
+    "reset": "மீட்டு செய்ய"
+  },
+  "settings": {
+    "header": {
+      "title": "அமைப்புகள்",
+      "search_placeholder": "அமைப்புகளை தேடுக"
+    },
+    "sidebar": {
+      "history": "வரலாறு",
+      "settings": "அமைப்புகள்",
+      "ai": "AI அமைப்புகள்",
+      "privacy": "தனியுரிமை",
+      "advanced": "மேம்பட்ட"
+    },
+    "set_startup_pages": "தொடக்க பக்கங்களை அமைக்க",
+    "enter_urls_each_line": "தயவு செய்து வலையின் URLகளை உள்ளிடவும் (ஒரு ஒரு வரியில்):",
+    "no_results": "ஒத்த அமைப்புகள் காணப்படவில்லை",
+    "appearance": {
+      "title": "தோற்றம்",
+      "show_home_button": "காட்ட 'முகம்' பொத்தான்",
+      "change": "மாற்ற",
+      "show_bookmark_bar": "புக்கிரக்கு பட்டியல் பொத்தான் எப்போதும் காட்ட",
+      "language": "மொழி",
+      "language_auto": "கணினி அமைப்பைப் பின்பற்று",
+      "language_zhCN": "சீனம் (எளிமைப்படுத்தப்பட்டது)",
+      "language_en": "ஆங்கிலம்",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "படிவத்துகள்",
+      "location_label": "படிவத்து இடம்",
+      "location_desc": "படிவத்துகளுக்கு முன்னணி சேமிப்பு இடம்",
+      "browse": "தேட...",
+      "ask_location_label": "படிவத்து செய்யும் முன்பத்தில் ஒவ்வொரு கோப்பையும் எங்கு சேமிக்க வேண்டும் என்று கேட்க",
+      "ask_location_desc": "படிவத்து செய்யும் முன்பத்தில் ஒவ்வொரு கோப்பையும் எங்கு சேமிக்க வேண்டும் என்று கேட்க"
+    },
+    "title": "அமைப்புகள்",
+    "search_placeholder": "அமைப்புகளை தேடுக",
+    "home": {
+      "title": "முகம்",
+      "url": "முகம் URL:",
+      "use_current": "தற்போதைய பக்கம் பயன்படுத்த",
+      "use_newtab": "புதிய முன்னல் பயன்படுத்த"
+    },
+    "startup": {
+      "title": "தொடக்கத்தில்",
+      "newtab": "புதிய முன்னல் திறக்க",
+      "continue_last": "உங்கள் முன்னத்தை நிறுத்திய இடத்தில் தொடர்க",
+      "specific_pages": "ஒரு குறிப்பிட்ட பக்கம் அல்லது பக்கங்களின் தொகுப்பு திறக்க",
+      "manage_pages": "பக்கங்களை மேலாணிக்க",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "அட்வர்டிஸிங் தடுக்க",
+      "none": "எத்தும் பிரகாசம் தடுப்பு செய்யாது",
+      "popup": "தான் பாப்-அப்ஸ் (popup) மட்டும் தடுக்க",
+      "aggressive": "பக்கங்களின் அட்வர்டிஸிங்களை முக்கியமாக தடுக்க",
+      "custom": "தானிய அட்வர்டிஸிங் தடுப்பு விதிகள்",
+      "custom_link": "தானிய விதிகள்",
+      "manage_rules": "என் விதிகளை மேலாணிக்க..."
+    },
+    "search": {
+      "title": "அட்டல் பாத்தி தேடல் இயந்திரம்",
+      "default_label": "முன்னணி தேடல் இயந்திரம்",
+      "desc": "அட்டல் பாத்தி மூலம் பயன்படுத்தப்படும் தேடல் இயந்திரம்",
+      "options": {
+        "360": "360",
+        "baidu": "பைடு",
+        "bing": "பிங்க்",
+        "google": "கூகுள்"
+      },
+      "manage_button": "தேடல் இயந்திரங்களை மேலாணிக்க"
+    },
+    "show_advanced": "முன்னணி அமைப்புகளை காட்ட...",
+    "advanced": {
+      "back_basic": "? அடிப்படை அமைப்புகளுக்கு முன்னத்து",
+      "gesture": {
+        "enable": "கலம் கொண்ட குறிப்புகளை செயல்படுத்த",
+        "title": "கலம் கொண்ட குறிப்புகள்"
+      },
+      "performance": {
+        "mem_release_time": "பின்னணி முன்னலின் நினைவு விடுபடும் இடைவெளி:",
+        "title": "செயல்திறன்"
+      },
+      "super_drag": {
+        "enable": "பெரிய முன்னல் (super drag) செயல்படுத்த"
+      },
+      "title": "முன்னணி அமைப்புகள்"
+    },
+    "default_browser": {
+      "checking": "பிரவாசி முன்னணி நிலையை சரிபார்க்க...",
+      "is_default": "{{app}} தற்போது உங்களுக்கு முன்னணி பிரவாசி ஆகும்",
+      "not_default": "{{app}} தற்போது உங்களுக்கு முன்னணி பிரவாசி இல்லை.",
+      "set_default": "முன்னணி பிரவாசி என்று அமைக்க",
+      "title": "முன்னணி பிரவாசி"
+    },
+    "history": {
+      "columns": {
+        "time": "கடந்த நேரம்",
+        "title": "தலைப்பு",
+        "url": "URL"
+      },
+      "title": "வரலாறு",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "சர்டிகேட்டுகளை மேலாணிக்க...",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "ப்ராக்ஸி அமைப்புகளை மாற்ற...",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "அமைப்புகளை அசல் முன்னணிகளுக்கு மீட்டு செய்ய",
+      "desc": "இது உங்கள் புக்கிரக்கு பட்டியல்கள், வரலாற்று அல்லது சேமிக்கப்பட்ட பாஸ்வொர்டுகளை பாதிக்காது.",
+      "title": "முன்னணி அமைப்புகளை மீட்டு செய்ய",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "அசல் அமைப்புகளை மீட்டு செய்ய",
+    "tabs": {
+      "double_click_close": "இரட்டை கிளிக் செய்யும்போது முன்னல்களை மூட",
+      "input_mode": {
+        "new_tab": "புதிய தாவலில் திறக்க"
+      },
+      "input_mode.enter": "Enter பிரச்சு செய்ய தேடல்",
+      "input_mode.instant": "தகவல் பிடித்து தேடல் (தேவையான)",
+      "new_tab_position": {
+        "last": "கடைசி இடத்தில் திறக்க",
+        "right": "தற்போதைய முன்னலின் வலது பக்கத்தில் திறக்க"
+      },
+      "open_new": "புதிய பக்கம் திறக்கும் போது:",
+      "select_all_on_click": "அட்டல் பாத்தி கிளிக்இயும் போது URL வண்ணத்தை முழுமையாக தேர்ந்தெடுக்க",
+      "show_full_url": "அட்டல் பாத்தியில் முழு URL ஐ காட்ட (Shift பிரகாசம் பொழிக்கும் போது கூட காணப்படும்)",
+      "title": "முன்னல்கள்",
+      "right_click_close_desc": "வலது சொடுக்கில் தற்போதைய தாவல் மூடப்படும் (சூழல் பட்டியை காட்ட Shift அழுத்திப் பிடிக்கவும்)",
+      "open_links_background": "சொடுக்கப்பட்ட இணைப்புகளை பின்னணி தாவலில் திறக்கவும்",
+      "input_mode_label": "புதிய பக்கம் திறக்கும் போது:"
+    },
+    "user_data": {
+      "import": "புக்கிரக்கு பட்டியல்கள் மற்றும் அமைப்புகளை இறக்க...",
+      "title": "பயனர் தரவு"
+    },
+    "features": {
+      "title": "அம்சங்கள்",
+      "mouse_gesture_label": "சுட்டி சைகைகள்",
+      "mouse_gesture_desc": "செயல்களை விரைவாக செய்ய சுட்டி சைகைகளை பயன்படுத்தவும்",
+      "super_drag_label": "சூப்பர் இழுத்தல்",
+      "super_drag_desc": "உரை அல்லது இணைப்புகளை இழுத்து விரைவாக தேட அல்லது திறக்கவும்"
+    },
+    "web": {
+      "title": "இணைய அமைப்புகள்",
+      "smooth_scrolling": "வலைப் பக்கங்களில் மிருதுவான ஸ்க்ரோலிங்கை இயக்கு (மறுதொடக்கம் செய்த பின் செயல்படும்)"
+    },
+    "cache": {
+      "title": "தனிப்பயன் கேச்",
+      "directory_label": "தனிப்பயன் கேச் அடைவு:",
+      "change_button": "மாற்று...",
+      "notice": "இதைக் மாற்றினால் தற்போதைய கேச் அழிக்கப்படும்; மறுதொடக்கத்திற்குப் பிறகு செயல்படும்.",
+      "open_dir": "கேச் அடைவைத் திற",
+      "reset_default": "இயல்புநிலைக்கு மீட்டமை",
+      "reset_confirm": "கேச் அடைவை இயல்புநிலைக்கு மீட்டமைக்க விரும்புகிறீர்களா?\\n\\nஇது உள்ள கேச்சை அழித்து, மறுதொடக்கத்திற்குப் பிறகு செயல்படும்."
+    },
+    "privacy": {
+      "title": "தனியுரிமை அமைப்புகள்",
+      "content_settings": "உள்ளடக்க அமைப்புகள்...",
+      "clear_browsing_data": "உலாவல் தரவை அழி...",
+      "crash_upload": "செயலிழப்பு அறிக்கை பதிவேற்றத்தை இயக்கு",
+      "crash_upload_desc": "உலாவியை மேம்படுத்த உதவ, செயலிழக்கும் போது பிழை அறிக்கைகளை தானாக பதிவேற்றும்."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "சேமித்து பயன்படுத்து",
+      "auto_hint": "அமைப்புகள் தானாகச் சேமிக்கப்படும்",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "படிவத்து பெறுதல்கள்",
+    "location_label": "படிவத்து பெறுவதற்கு இடத்து",
+    "location_desc": "படிவத்து பெறுதல்களுக்கு முன்பதிவு சேமிப்பு இடத்து",
+    "browse": "பார்க்க...",
+    "ask_location_label": "படிவத்து பெறுவதற்கு முன்பு ஒவ்வொரு கோப்புக்கு இடத்தை வேண்டுமா",
+    "default_tool_label": "முன்பதிவு படிவத்து கருவி தேர்ந்தெடுக்கவும்:",
+    "browse_desc": "படிவத்து சேமிப்பு கோப்புப்பை தேர்ந்தெடுக்கவும்",
+    "status": {
+      "downloading": "படிவத்து பெறுகிறது: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "முடிந்து",
+      "cancelled": "திருத்து",
+      "failed": "படிவத்து பெறலாமல்ல",
+      "pending": "தேவையான பொருத்தம்..."
+    }
+  },
+  "password_manager": {
+    "hide": "கட்டு",
+    "show": "காட்டு"
+  },
+  "import": {
+    "success": "வெற்றிகரமாக {{count}} புக்குக்கு முன்பதிவுகளை முன்பதிவு செய்யப்பட்டது",
+    "done": "முன்பதிவு முடிந்து",
+    "failed": "முன்பதிவு தோல்வி: {{msg}}"
+  },
+  "adblock": {
+    "allow": "தயாரிக்க",
+    "block": "தடக்க"
+  },
+  "task_manager": {
+    "tab_title": "● தக்கன்: {{title}}"
+  },
+  "clear": {
+    "success": "பின்வரும் தரவுகளை வெற்றிகரமாக சுத்தம் செய்யப்பட்டது:\n• {{items}}",
+    "done": "சுத்தம் முடிந்து",
+    "failed": "தரவு சுத்தம் செய்யும்போது தவறு: {{msg}}",
+    "in_progress": "சுத்தம் செய்யப்படுகிறது..."
+  },
+  "print": {
+    "failed": "பிரின்ட் செய்யலாமல்ல",
+    "failed_message": "பிரின்ட் செய்யும்போது தவறு:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "பக்கை சேமிக்கவும்",
+      "filter": "முன்பதிவு HTML மட்டும் (*.html)|*.html|முன்பதிவு முழு (*.html)|*.html|MHTML கோப்பு (*.mhtml)|*.mhtml|PDF ஆதிர் (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "புக்குக்கு முன்பதிவுகள் வெளியீடு",
+    "export_filter": "HTML கோப்புகள் (*.html)|*.html",
+    "export_success_path": "புக்குக்கு முன்பதிவுகள் வெளியீடு செய்யப்பட்டது:\n{{path}}",
+    "other": "பிற புக்குக்கு முன்பதிவுகள்",
+    "added_message": "{{count}} தக்கன்களை கோப்பு \"{{folder}}\"ல் சேர்த்து",
+    "added_status": "{{count}} புக்குக்கு முன்பதிவுகளை கோப்பு \"{{folder}}\"ல் சேர்த்து",
+    "already": "முன்பதிவு செய்யப்பட்டது",
+    "batch_confirm": "{{count}} தக்கன்களுக்கு ஒரு கோப்பு உருவாக்கப்படும்.\n\nதொடரிக்க?",
+    "batch_title": "பொது புக்குக்கு முன்பதிவுகள் சேர்க்க",
+    "cancelled": "புக்குக்கு முன்பதிவு ரத்து செய்யப்பட்டது",
+    "import_filter": "HTML கோப்புகள் (*.html;*.htm)|*.html;*.htm|அட்டவணை கோப்புகள் (*.*)|*.*",
+    "import_title": "புக்குக்கு முன்பதிவுகள் முன்பதிவு செய்ய",
+    "new_bookmark": "புதிய புக்குக்கு முன்பதிவு",
+    "unable_for_page": "இந்த பக்கத்தை முன்பதிவு செய்ய முடியாது",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "திறக்க",
+    "open_in_new_tab": "புதிய தக்கில் திறக்க",
+    "open_all_bookmarks": "புக்குக்கு முன்பதிவுகளை அனைத்தையும் திறக்க"
+  },
+  "actions": {
+    "add": "சேர்க்க",
+    "edit": "திருத்து",
+    "delete": "திருத்து",
+    "delete_all": "அனைத்தையும் திருத்து",
+    "done": "முடிந்து",
+    "copy_link": "இணையத்தை நகல் செய்ய",
+    "rename": "பெயரை மாற்ற",
+    "add_bookmark": "புக்குக்கு முன்பதிவு சேர்க்க",
+    "add_folder": "கோப்பு சேர்க்க"
+  },
+  "permissions": {
+    "allow": "தயாரிக்க",
+    "block": "தடக்க",
+    "ask": "புக்கிருக்க"
+  },
+  "site_settings": {
+    "desc": "{{category}} பாதுகாப்பு கொள்கைகளை அமைக்கலாம்",
+    "host_pattern": "ஹோஸ்ட்நேம் முறை:",
+    "columns": {
+      "host_pattern": "ஹோஸ்ட்நேம் முறை",
+      "behavior": "பொருந்தல்"
+    }
+  },
+  "time": {
+    "minute": "மினிட்"
+  },
+  "newtab": {
+    "title": "புதிய தக்க",
+    "search_placeholder": "தேடல் அல்லது முகவரி உள்ளீடு செய்ய",
+    "footer": "உள்ளம் · வேகம் · எளிமை",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "பrowse செய்யப்பட்ட தரவுகளை சுத்தம் செய்ய",
+    "clear_button": "பrowse செய்யப்பட்ட தரவுகளை சுத்தம் செய்ய...",
+    "clear_desc": "பrowse செய்யப்பட்ட வரலாறு, கூக்கIES், கேஷ் மற்றும் பிறக்கு சுத்தம் செய்ய",
+    "exit_clear": {
+      "title": "புக்கிருக்க பிறகு பொதுவாக சுத்தம் செய்ய",
+      "history": "பrowse செய்யப்பட்ட வரலாறு",
+      "downloads": "படிவத்து பெறுவதற்கு வரலாறு",
+      "cache": "கேஷ் செய்யப்பட்ட படங்கள் மற்றும் கோப்புகள்",
+      "cookies": "கூக்கIES் மற்றும் பிற அம்ச தரவுகள்"
+    },
+    "options": {
+      "title": "தகவல் பாதுகாப்பு விருப்பங்கள்",
+      "dnt": "புக்கிருக்க பொருத்தம் செய்யும் போது 'Do Not Track' வேண்டலாமா"
+    }
+  },
+  "update": {
+    "updater_missing": "புதுப்பித்து செய்யும் செயல்திறன் 'updater.exe' காணப்படவில்லை"
+  },
+  "address_dropdown": {
+    "search": "தேடல் '{{text}}'",
+    "visit": "{{text}} செல்ல",
+    "empty_history": "பொருத்தமான வரலாறு காணப்படவில்லை",
+    "empty_bookmark": "பொருத்தமான புக்குக்கு முன்பதிவுகள் காணப்படவில்லை",
+    "empty_tabs": "பொருத்தமான தக்கன்கள் காணப்படவில்லை",
+    "empty_all": "பொருத்தம் காணப்படவில்லை"
+  },
+  "image_dialog": {
+    "title": "படம் மூலங்களை பிரித்து பெற",
+    "found_count": "{{count}} படங்கள் கண்டு பெறப்பட்டது",
+    "columns": {
+      "url": "படம் URL",
+      "type": "படிவம்"
+    },
+    "preview": {
+      "select": "ஒரு படத்தை präview செய்ய தேர்ந்தெடுக்கவும்"
+    },
+    "save_to": "படிவத்து பெறுவதை சேமிக்க இடத்து",
+    "browse": "அடைவண்டை மாற்று",
+    "browse_desc": "படிவு சேமிப்பு அடைவண்டை தேர்ந்தெடு",
+    "download_now": "படிவு செய்ய தற்போதைக்கு",
+    "select_one_image": "படத்தை தேர்ந்தெடுக்கவும் (குறைந்தபட்சம் ஒரு) பதிவு செய்ய",
+    "select_all_toggle": "ஒவ்வொன்றும் தேர்ந்தெடு / மாற்று",
+    "loading_preview": "முன்னகண்ணல் முன்னேற்று...",
+    "modern_preview": "புதிய பட முறை (WebView2 முன்னுருக்கு)",
+    "modern": "புதிய பட முறை",
+    "preview_loading_webview": "முன்னகண்ணல் முன்னேற்று (WebView2 முறை)...",
+    "preview_unavailable": "முன்னகண்ணல் கிடைக்காது",
+    "preview_size": "{{width}} x {{height}} | {{kb}} கிலோபைட் பைட்"
+  },
+  "video_dialog": {
+    "title": "படிவு முறை தேர்ந்தெடு",
+    "columns": {
+      "resolution": "பரிமாணம்",
+      "ext": "பிரிவு",
+      "size": "அளவு",
+      "note": "குறிப்பு"
+    },
+    "save_to": "படிவு சேமிப்புகளை இல்லையில் சேமிக்க",
+    "browse": "அடைவண்டை மாற்று",
+    "browse_desc": "படிவு சேமிப்பு அடைவண்டை தேர்ந்தெடு",
+    "start_download": "படிவு தொடங்கு",
+    "select_format_first": "தயவு செய்து முன்னில் ஒரு முறை தேர்ந்தெடுக்கவும்",
+    "unknown_title": "அறியாத தலைப்பு",
+    "unknown": "அறியாத",
+    "parse_failed": "வீடியோ தகவலை பகிர்க்க முடியவில்லை: {{msg}}"
+  },
+  "common": {
+    "info": "தகவல்",
+    "done": "செய்யப்பட்டது",
+    "error": "பிழை",
+    "operation_failed_retry": "செயல்பாடு தோல்வி பெற்றது, மீண்டும் முயற்சிக்கவும்",
+    "empty": "(திருக்கு)",
+    "in_dev": "இந்த சிறப்பு வளர்ச்சியில் உள்ளது...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "ஒரு பற்றி",
+    "version_prefix": "பதிவு எண்",
+    "check_update": "புதுப்புகளுக்கு சரிபார்க்க",
+    "checking": "சரிபார்க்கிறது...",
+    "connecting": "புதுப்பு சேவையகத்துடன் இணைகிறது...",
+    "update_failed": "புதுப்புகளுக்கு சரிபார்க்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்",
+    "update_found_status": "புதிய பதிவு கண்டு கொண்டது: {{version}}",
+    "update_found_title": "புதுப்பு கண்டு கொண்டது",
+    "update_found_message": "புதிய பதிவு {{version}} கண்டு கொண்டது\\n\\nபுதுப்பு விவரங்கள்:\\n{{log}}\\n\\nபுதுப்பு செய்யவா?",
+    "latest": "நீங்கள் ஏற்கனவே மிகச்சிறந்த பதிவில் உள்ளீர்கள்.",
+    "error_prefix": "பிழை: ",
+    "simple_title": "ஒரு பற்றி",
+    "simple_message": "{{app}}\\nபதிவு எண் {{version}}\\n\\nWebView2 இயந்திரத்தை அடிப்படையாகக்",
+    "copyright": "© {{year}} {{app}}. அனைத்து உரிமைகள் மாகப்பட்டுள்ளன."
+  },
+  "font": {
+    "preview_standard": "{{size}}: லோரேம் இப்சும் டோலோர் சிட் அமெட்,\\nகன்செக்டுர் அடிபிஸிங் எலிட்",
+    "min": "குறைந்தபட்சம்",
+    "max": "பெரியபட்சம்",
+    "serif": "செரிப் புக்கிரக்கு",
+    "sans_serif": "சன்ஸ்-செரிப் புக்கிரக்கு",
+    "fixed_width": "பட்டிக்கு புக்கிரக்கு",
+    "minimum_size": "குறைந்தபட்ச புக்கிரக்கு அளவு",
+    "preview_generic": "{{size}}: லோரேம் இப்சும் டோலோர் சிட் அமெட்,\\nகன்செக்டுர் அடிபிஸிங் எலிட்",
+    "preview_fixed": "லோரேம் இப்சும் டோலோர் சிட் அமெட்,\\nகன்செக்டுர் அடிபிஸிங் எலிட்",
+    "preview_min": "{{size}}: லோரேம் இப்சும் டோலோர் சிட் அமெட், கன்செக்டுர்"
+  },
+  "appearance": {
+    "title": "தோற்றம்",
+    "show_home_button": "காட்ட \"முன்னை\" பொத்தான்",
+    "change": "மாற்று",
+    "show_bookmark_bar": "பட்டியல் புக்கிரக்கு பொத்தான் காட்ட",
+    "language": "மொழி",
+    "language_auto": "கணினி அமைப்பைப் பின்பற்று",
+    "language_zhCN": "சீனம் (எளிமைப்படுத்தப்பட்டது)",
+    "language_en": "ஆங்கிலம்",
+    "hide_bookmark_bar": "பட்டியல் புக்கிரக்கு பொத்தான் மறக்க"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "நீங்கள் {{name}} அடைவண்டை மற்றும் அதன் அனைத்து உள்ளடக்கங்களை நீக்க விரும்புகிறீர்களா?",
+    "confirm_delete_item": "நீங்கள் {{name}} ஐ நீக்க விரும்புகிறீர்களா?",
+    "export_failed": "உற்பாடு தோல்வி: {{msg}}",
+    "export_success": "உற்பாடு வெற்றிகரமாக!"
+  },
+  "images": {
+    "cancelled_status": "பட மூலங்களை பிரித்தெடுக்க நிர்வாகிக்கப்பட்டது",
+    "extracting_status": "பட மூலங்களை பிரித்தெடுக்கிறது...",
+    "failed_message": "பிரித்தெடுக்க தோல்வி: {{msg}}",
+    "failed_status": "பட மூலங்களின் பிரித்தெடுக்க தோல்வி",
+    "none_found_status": "பட மூலங்கள் கண்டு கிடைக்கவில்லை",
+    "submitted_tasks": "{{count}} பட முன்னுருக்கு செய்து"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "பட்டு",
+      "save": "கடவு சேமிக்க",
+      "title": "நீங்கள் இந்த வலையில் உள்ள KunQiong AI Browser க்கு உங்கள் கடவு சேமிக்க விரும்புகிறீர்களா?"
+    },
+    "saved": {
+      "done": "செய்யப்பட்டது",
+      "manage": "சேமிக்கப்பட்ட கடவுகளை மேலாணிக்க",
+      "title": "இந்த வலையிற்கு சேமிக்கப்பட்ட கடவு:"
+    }
+  },
+  "search": {
+    "manage_button": "தேடல் இயந்திரங்களை மேலாணிக்க"
+  },
+  "user": {
+    "logout": "புக்கிரக்கு வெளியேறு",
+    "manage_profile": "புக்கிரக்கு அமைப்புகள்"
+  },
+  "videos": {
+    "extract_failed_status": "பிரித்தெடுக்க தோல்வி",
+    "not_detected_desc": "இந்த பக்கத்தில் பிரித்தெடுக்கக்கூடிய வீடியோ மூலங்கள் கண்டு கிடைக்கவில்லை.\\n\\nகுறிப்பு: இந்த பக்கம் வீடியோவை உள்ளடக்க முடியாது அல்லது அது குறியீடு/DRM பிரேக்பேக் பயன்படுத்தலாம், எனவே நேரடி பிரித்தெடுக்க முடியாது.\\n\\nதேவை: உண்மையான வீடியோ பிரேக்பேக் பக்கத்தை திறக்கவும் மற்றும் பிரேக்பேக் தொடங்கியktan பிறகு மீண்டும் பிரித்தெடுக்க முயற்சிக்கவும்",
+    "not_detected_status": "வீடியோ மூலங்கள் கண்டு கிடைக்கவில்லை",
+    "not_detected_title": "வீடியோ மூலங்கள் கண்டு கிடைக்கவில்லை",
+    "not_supported": "இந்த பக்கத்தில் வீடியோ பிரித்தெடுக்க கொள்கை இல்லை",
+    "parsing_status": "வீடியோ தகவலை பகிர்க்கிறது..."
+  }
+}

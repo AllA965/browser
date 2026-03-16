@@ -499,7 +499,7 @@ public class SettingsForm : Form
         _showFullUrlCheck = new CheckBox { Text = Localization.T("settings.tabs.show_full_url"), Location = DpiHelper.Scale(new Point(15, 25)), AutoSize = true };
         _selectAllOnClickCheck = new CheckBox { Text = Localization.T("settings.tabs.select_all_on_click"), Location = DpiHelper.Scale(new Point(15, 50)), AutoSize = true };
         
-        var inputModeLabel = new Label { Text = Localization.T("settings.tabs.input_mode"), Location = DpiHelper.Scale(new Point(15, 80)), AutoSize = true };
+        var inputModeLabel = new Label { Text = Localization.T("settings.tabs.input_mode_label"), Location = DpiHelper.Scale(new Point(15, 80)), AutoSize = true };
         _inputModeCombo = new ComboBox { Location = DpiHelper.Scale(new Point(120, 77)), Width = DpiHelper.Scale(150), DropDownStyle = ComboBoxStyle.DropDownList };
         _inputModeCombo.Items.AddRange(new object[] { Localization.T("settings.tabs.input_mode.instant"), Localization.T("settings.tabs.input_mode.enter") });
         

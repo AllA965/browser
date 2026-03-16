@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "Tab Sabo"
+  },
+  "menu": {
+    "new_tab": "Tab Sabo (T)",
+    "new_window": "Janar Sabo (N)",
+    "new_incognito": "Janar InPrivate Sabo (I)",
+    "bookmarks": "Bookmarka (B)",
+    "show_bookmark_bar": "Nunin Bar Bookmarka (S)",
+    "bookmark_manager": "Manajin Bookmarka (B)",
+    "import_bookmarks": "Importa Bookmarka da Saiti...",
+    "add_bookmark": "Tare da Bookmark don Shafin Wannan...",
+    "add_all_bookmarks": "Tare da Bookmark don dukkanin shafin da aka bude...",
+    "more_bookmarks": "Bookmarka Fiye",
+    "no_bookmarks": "Ba a samu Bookmarka ba",
+    "history": "Tarihi (H)",
+    "show_all_history": "Nuna Dukkanin Tarihi",
+    "no_history": "Ba a samu Tarihi ba",
+    "clear_history": "Sace Bayanai na Bincike",
+    "downloads": "Downloads (D)",
+    "media_extract": "Fitar da Media",
+    "extract_images": "Fitar da Hotuna akan Shafin Wannan",
+    "extract_videos": "Fitar da Bidiyo akan Shafin Wannan",
+    "clear_data": "Sace Bayanan Bincike",
+    "exit_incognito": "Rufe Janar InPrivate",
+    "exit_normal": "Rufe KunQiong AI Browser",
+    "print": "Nora (P)",
+    "save_page_as": "Sake Shafin a matsayin (A)...",
+    "find_in_page": "Bincika akan Shafin",
+    "more_tools": "Hanyoyi Fiye",
+    "task_manager": "Hanyoyin Masana'antu (D)",
+    "encoding": "Kididdiga (E)",
+    "devtools": "Hana Ad (G)",
+    "view_resource_log": "Saiti (S)",
+    "adblock": "Sakarar Kwararrun",
+    "settings": "Game da Kunqiong AI Browser",
+    "feedback": "Game da InPrivate",
+    "about_app": "Rufe KunQiong AI Browser",
+    "about_incognito": "Buka Tab Sabo",
+    "exit_app": "Saka Sake"
+  },
+  "context": {
+    "new_tab": "Jinkirta Tab",
+    "reload": "Kwasa Tab",
+    "duplicate": "Bare Tab",
+    "pin": "Rufe Taba Saishen",
+    "unpin": "Rufe Taba Da Hagu",
+    "close": "Rufe Taba Da Dama",
+    "close_others": "Sake Buka Tab da aka rufe (E)",
+    "close_left": "Tare da Bookmark don dukkanin Taba...",
+    "close_right": "Tab Sabo (Ctrl+T)",
+    "reopen_closed": "Bincika Taba",
+    "bookmark_all": "Downloads (Ctrl+J)"
+  },
+  "tooltips": {
+    "new_tab": "Mai amsa/Shiga",
+    "search_tabs": "Fassara Wannan Shafin",
+    "download": "Zoom",
+    "user_login": "Sarrafawa Kullin Kudi",
+    "translate_page": "Baya (Alt Hagu)",
+    "zoom": "Fada (Alt Dama)",
+    "manage_passwords": "Sake Fitar da (F5)"
+  },
+  "nav": {
+    "back": "Daina (Esc)",
+    "forward": "Gida (Alt+Gida)",
+    "refresh": "Shirye",
+    "stop": "InPrivate - Ayyukan Bincikeka ba za a adana su akan wannan na'urar ba",
+    "home": "Ana ba da ba: {{file}}"
+  },
+  "status": {
+    "ready": "Tarihi An Kashe",
+    "incognito": "Mataimakin",
+    "downloading": "📝 Saka Makalma na Shafin Wannan",
+    "history_cleared": "Hanyar AI"
+  },
+  "ai": {
+    "assistant": "Bincike na Kaddamar da Assistant ya kasa",
+    "summarize": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>Aka kasa samun fayil na UI na Tattaunawa AI</h3><p>Da Gama a shigar da hanyoyin da ke nan sun kasance:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "mode": "Da Gama a fassara mahaifin babban shafin wannan zuwa Sinawa:\n\n{{text}}",
+    "init_failed": "Fassara AI ya kasa: {{msg}}",
+    "missing_html": "URL na Proxy na API:",
+    "translate_prompt": "Kunci na API:",
+    "translate_failed": "Suna na Model:",
+    "api": {
+      "base": "Saitin Samfurin Model:",
+      "key": "Saitin Mai ba da Sabis:",
+      "model_name": "Saitin API",
+      "model_preset": "Hanyar API Masu Kima (Wai da OpenAI)",
+      "provider": "Hanyar Sabis",
+      "title": "Hanyar Turanci da aka shigar da (DeepSeek)",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "Sanya ainihin AI Assistantka",
+    "mode.title": "Saitin AI",
+    "mode.web": "Al'ada: Ana aiki tare da DeepSeek, OpenAI, Ollama da sauran API masu dacewa",
+    "settings": {
+      "subtitle": "Al'ada: URL na Asali na DashScope da ke daidai da OpenAI yana daidai da https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "title": "Al'ada: Ark V3 na Volcengine yana buƙatar ID na Endpoint a cikin tsarin ep-2024xxxxxxxx-xxxxx"
+    },
+    "tip": {
+      "compatible": "Saitin Hanyar Turanci",
+      "dashscope": "URL na Turanci na AI:",
+      "volcengine": "InPrivate"
+    },
+    "web": {
+      "title": "Kuna amfani da Binciken InPrivate\n\n✓ InPrivate zai iya:\n  • Ba za a adana tarihin bincike ba\n  • Ba za a adana cookies da bayanan site ba\n  • Ba za a adana bayanan foma ba\n  • Yi amfani da al'ada na karkata\n\n✗ InPrivate ba zai iya:\n  • Watsa aikin daga masu gudanar da hanyar sadarwa\n  • Watsa aikin daga ISP ɗin ku\n  • Hana gasar da hanyoyi daga samun adireshin IP ɗin ku\n\nLura: Fayil ɗin da aka saukar da kuma bookmark ɗin da aka ƙirƙira sun kasance.",
+      "url": "Tabbatar"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "OK",
+      "message": "You are using InPrivate browsing\\n\\n✓ InPrivate can:\\n  • Not save browsing history\\n  • Not save cookies and site data\\n  • Not save form data\\n  • Use isolated session\\n\\n✗ InPrivate will not:\\n  • Hide activity from network administrators\\n  • Hide activity from your ISP\\n  • Prevent websites from getting your IP address\\n\\nNote: Downloaded files and created bookmarks remain."
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "Daina",
+    "ok": "OK",
+    "clear_history_all": "Zoom",
+    "cancel": "Saka Saiti"
+  },
+  "search_engine": {
+    "confirm_delete": "Saiti"
+  },
+  "menu_zoom": {
+    "label": "Saitin Bincike",
+    "reset": "Tarihi"
+  },
+  "settings": {
+    "header": {
+      "title": "Saituna",
+      "search_placeholder": "Bincika saituna"
+    },
+    "sidebar": {
+      "history": "Tarihi",
+      "settings": "Saituna",
+      "ai": "Saitunan AI",
+      "privacy": "Sirri",
+      "advanced": "Na gaba"
+    },
+    "set_startup_pages": "Nunin Bar Bookmarka",
+    "enter_urls_each_line": "Saiti",
+    "no_results": "Saitin AI",
+    "appearance": {
+      "title": "Mai amsa/Shiga",
+      "show_home_button": "Fassara Wannan Shafin",
+      "change": "Zoom",
+      "show_bookmark_bar": "Sarrafawa Kullin Kudi",
+      "language": "Harshe",
+      "language_auto": "Bi tsarin kwamfuta",
+      "language_zhCN": "Sinanci (Sauƙaƙe)",
+      "language_en": "Turanci",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "Gida (Alt+Gida)",
+      "location_label": "Shirye",
+      "location_desc": "InPrivate - Ayyukan Bincikeka ba za a adana su akan wannan na'urar ba",
+      "browse": "Ana ba da ba: {{file}}",
+      "ask_location_label": "Tarihi An Kashe",
+      "ask_location_desc": "Tarihi An Kashe"
+    },
+    "title": "Saituna",
+    "search_placeholder": "Bincika saituna",
+    "home": {
+      "title": "Hanyar AI",
+      "url": "Bincike na Kaddamar da Assistant ya kasa",
+      "use_current": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>Aka kasa samun fayil na UI na Tattaunawa AI</h3><p>Da Gama a shigar da hanyoyi da ke nan sun kasance:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+      "use_newtab": "Da Gama a fassara mahaifin babban shafin wannan zuwa Sinawa:\n\n{{text}}"
+    },
+    "startup": {
+      "title": "Fassara AI ya kasa: {{msg}}",
+      "newtab": "URL na Proxy na API:",
+      "continue_last": "Kunci na API:",
+      "specific_pages": "Suna na Model:",
+      "manage_pages": "Saitin Samfurin Model:",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "Saitin Mai ba da Sabis:",
+      "none": "Saitin API",
+      "popup": "Hanyar API Masu Kima (Wai da OpenAI)",
+      "aggressive": "Hanyar Sabis",
+      "custom": "Hanyar Turanci da aka shigar da (DeepSeek)",
+      "custom_link": "Sanya ainihin AI Assistantka",
+      "manage_rules": "Saitin AI"
+    },
+    "search": {
+      "title": "Al'ada: Ana aiki tare da DeepSeek, OpenAI, Ollama da sauran API masu dacewa",
+      "default_label": "Al'ada: URL na Asali na DashScope da ke daidai da OpenAI yana daidai da https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "desc": "Al'ada: Ark V3 na Volcengine yana buƙatar ID na Endpoint a cikin tsarin ep-2024xxxxxxxx-xxxxx",
+      "options": {
+        "360": "Saitin Hanyar Turanci",
+        "baidu": "URL na Turanci na AI:",
+        "bing": "InPrivate",
+        "google": "Kuna amfani da Binciken InPrivate\n\n✓ InPrivate zai iya:\n  • Ba za a adana tarihin bincike ba\n  • Ba za a adana cookies da bayanan site ba\n  • Ba za a adana bayanan foma ba\n  • Yi amfani da al'ada na karkata\n\n✗ InPrivate ba zai iya:\n  • Watsa aikin daga masu gudanar da hanyar sadarwa\n  • Watsa aikin daga ISP ɗin ku\n  • Hana gasar da hanyoyi daga samun adireshin IP ɗin ku\n\nLura: Fayil ɗin da aka saukar da kuma bookmark ɗin da aka ƙirƙira sun kasance."
+      },
+      "manage_button": "Tabbatar"
+    },
+    "show_advanced": "OK",
+    "advanced": {
+      "back_basic": "Kuna tabbacin da kake so in sace duka tarihi?",
+      "gesture": {
+        "enable": "Daina",
+        "title": "Mouse gestures"
+      },
+      "performance": {
+        "mem_release_time": "Zoom",
+        "title": "Saka Saiti"
+      },
+      "super_drag": {
+        "enable": "Saiti"
+      },
+      "title": "Saitin Bincike"
+    },
+    "default_browser": {
+      "checking": "Tarihi",
+      "is_default": "Saitin AI",
+      "not_default": "Yamma",
+      "set_default": "Cokar",
+      "title": "Saita Shafin Farko"
+    },
+    "history": {
+      "columns": {
+        "time": "Da Gama a shigar da URLs na gidan yanar gizo (da ɗaya a kowane layi):",
+        "title": "Ba a samu wani sait da ya dace da haka",
+        "url": "Bayyanci"
+      },
+      "title": "Nunin Bar Bookmarka",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "Saiti",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "Saitin AI",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "Mai amsa/Shiga",
+      "desc": "Fassara Wannan Shafin",
+      "title": "Zoom",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "Saka Sake",
+    "tabs": {
+      "double_click_close": "Jinkirta Tab",
+      "input_mode": {
+        "new_tab": "Buɗe a sabon shafi"
+      },
+      "input_mode.enter": "Bare Tab",
+      "input_mode.instant": "Rufe Taba Saishen",
+      "new_tab_position": {
+        "last": "Rufe Taba Da Hagu",
+        "right": "Rufe Taba Da Dama"
+      },
+      "open_new": "Sake Buka Tab da aka rufe (E)",
+      "select_all_on_click": "Tare da Bookmark don dukkanin Taba...",
+      "show_full_url": "Tab Sabo (Ctrl+T)",
+      "title": "Bincika Taba",
+      "right_click_close_desc": "Danna dama na rufe shafin na yanzu (riƙe Shift don nuna menu na mahallin)",
+      "open_links_background": "Buɗe hanyoyin da aka danna a shafin bango",
+      "input_mode_label": "Sake Buka Tab da aka rufe (E)"
+    },
+    "user_data": {
+      "import": "Downloads (Ctrl+J)",
+      "title": "Mai amsa/Shiga"
+    },
+    "features": {
+      "title": "Fasaloli",
+      "mouse_gesture_label": "Alamun linzamin kwamfuta",
+      "mouse_gesture_desc": "Yi amfani da alamun linzamin kwamfuta don aiwatar da ayyuka cikin sauri",
+      "super_drag_label": "Ja na musamman",
+      "super_drag_desc": "Ja rubutu ko hanyoyin ha?i don bincika ko bu?ewa cikin sauri"
+    },
+    "web": {
+      "title": "Saitunan yanar gizo",
+      "smooth_scrolling": "Kunna gungurawa mai laushi a shafukan yanar gizo (yana aiki bayan sake farawa)"
+    },
+    "cache": {
+      "title": "Musamman cache",
+      "directory_label": "Kundin adireshin cache na al'ada:",
+      "change_button": "Canza",
+      "notice": "Canza wannan zai share cache na yanzu kuma ya fara aiki bayan sake farawa.",
+      "open_dir": "Bude kundin adireshin cache",
+      "reset_default": "Sake saita zuwa tsoho",
+      "reset_confirm": "Shin ka tabbata kana so ka sake saita kundin adireshin cache zuwa tsoho?\\n\\ nThis zai share data kasance cache kuma ya fara aiki bayan sake farawa."
+    },
+    "privacy": {
+      "title": "Saitunan sirri",
+      "content_settings": "Saitunan abun ciki...",
+      "clear_browsing_data": "Bayyana bayanan bincike...",
+      "crash_upload": "Enable hadari rahoton upload",
+      "crash_upload_desc": "Rahotanni na kuskure ta atomatik akan hadarurruka don taimakawa inganta burauzar."
+    },
+    "passwords": {
+      "title": "Kalmomin wucewa da siffofi",
+      "autofill_desc": "Lokacin da autofill ya kunna, zaka iya cika fom ɗin yanar gizo tare da dannawa ɗaya.",
+      "manage_autofill": "Sarrafa saitunan autofill",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "Ajiye kuma aiwatar",
+      "auto_hint": "Ana ajiye saituna ta atomatik",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "Dokokin da aka sauke",
+    "location_label": "Wurin sauke doko",
+    "location_desc": "Wurin da aka saita a matsayin daidai don dokokin da aka sauke",
+    "browse": "Bincika...",
+    "ask_location_label": "Tanya inda ake sauke kowane fayil kafin a sauke",
+    "default_tool_label": "Zaɓi na'urar sauke doko daidai",
+    "browse_desc": "Zaɓi wurin aikin sauke doko",
+    "status": {
+      "downloading": "Ana sauke doko: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "An gama sauke",
+      "cancelled": "An daina",
+      "failed": "Shigar da doko ya kasa",
+      "pending": "Ana jiran..."
+    }
+  },
+  "password_manager": {
+    "hide": "Rufe",
+    "show": "Nuna"
+  },
+  "import": {
+    "success": "An shigar da {{count}} makiya da aka yi nasara.",
+    "done": "An gama shigarwa",
+    "failed": "Shigar da ya kasa: {{msg}}"
+  },
+  "adblock": {
+    "allow": "Amince",
+    "block": "Hana"
+  },
+  "task_manager": {
+    "tab_title": "● Tab: {{title}}"
+  },
+  "clear": {
+    "success": "An tsaftace bayanai daidai na: \n• {{items}}",
+    "done": "An gama saifi",
+    "failed": "Rauni a lokacin tsarkake da bayanai: {{msg}}",
+    "in_progress": "Ana tsarkake..."
+  },
+  "print": {
+    "failed": "Wani ba a iya fitar da bidiyo: {{msg}}",
+    "failed_message": "Rauni a lokacin buga: \n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "Sake da Webpage, HTML kawai (*.html)|Faida na Webpage, HTML kawai (*.html)|Faida na Webpage gaba (HTML duka) (*.html)|Faida na Webpage gaba (HTML duka) (*.html)|Mata MHTML (*.mhtml)|Faida na MHTML (*.mhtml)|PDF (*.pdf)|Faida na PDF (*.pdf)",
+      "filter": "Fitar da Makiya"
+    }
+  },
+  "bookmarks": {
+    "export_title": "Makiya HTML (*.html)|*.html",
+    "export_filter": "An fitar da Makiya a: \n{{path}}",
+    "export_success_path": "Makiya sauran",
+    "other": "An ƙara {{count}} tab zuwa rukunin \"{{folder}}\"",
+    "added_message": "An ƙara {{count}} makiya zuwa rukunin \"{{folder}}\"",
+    "added_status": "An riga makiya",
+    "already": "Already bookmarked",
+    "batch_confirm": "Taimako da makiya a jerin",
+    "batch_title": "Makiya an daina",
+    "cancelled": "Makiya HTML (*.html;*.htm)|*.html;*.htm|Mata All Files (*.*)|*.*",
+    "import_filter": "Shigar da Makiya",
+    "import_title": "Makiya Sabuwa",
+    "new_bookmark": "Ba za a iya shigar da wannan shiri ba",
+    "unable_for_page": "Abu",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "Abu a cikin tab sabuwa",
+    "open_in_new_tab": "Abu duka",
+    "open_all_bookmarks": "Yanke"
+  },
+  "actions": {
+    "add": "Sake",
+    "edit": "Sake",
+    "delete": "Sake da Makiya",
+    "delete_all": "Sake da Makiya",
+    "done": "Sake da Makiya",
+    "copy_link": "Sake da Makiya",
+    "rename": "Sake da Makiya",
+    "add_bookmark": "An shigar da Makiya da ta yi nasara",
+    "add_folder": "Abu"
+  },
+  "permissions": {
+    "allow": "Mata",
+    "block": "Saihu",
+    "ask": "Kuna iya saita {{category}} izini don gaɗaɗɗen gida."
+  },
+  "site_settings": {
+    "desc": "Nazarin Hostname:",
+    "host_pattern": "Nazarin Hostname",
+    "columns": {
+      "host_pattern": "Hali",
+      "behavior": "miniti"
+    }
+  },
+  "time": {
+    "minute": "Tab Sabuwa"
+  },
+  "newtab": {
+    "title": "Bincike ko shigar da adiresi",
+    "search_placeholder": "Saihu · Saiti · Sauke",
+    "footer": "Ske da bayanai na bincike",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "Ske da bayanai na bincike...",
+    "clear_button": "Ske da tarihin bincike, kuki, cache da sauransu",
+    "clear_desc": "Auto-saihu bayan fita",
+    "exit_clear": {
+      "title": "Tarihin bincike",
+      "history": "Tarihin sauke doko",
+      "downloads": "Kokin da aka yi cache da files",
+      "cache": "Kuki da sauran bayanan gida",
+      "cookies": "Irinin sirri"
+    },
+    "options": {
+      "title": "Sada bukatar 'Kada a Tare da Bincike' tare da hanyar bincike",
+      "dnt": "Ba a samu 'updater.exe' da ake iya aiki"
+    }
+  },
+  "update": {
+    "updater_missing": "Bincika '{{text}}'"
+  },
+  "address_dropdown": {
+    "search": "Ku zo '{{text}}'",
+    "visit": "Ba a samo wani tarihi da ya dace ba",
+    "empty_history": "Ba a samo wani makiya da ya dace ba",
+    "empty_bookmark": "Ba a samo wani tab da ya dace ba",
+    "empty_tabs": "Ba a samu wani abu da ya dace ba",
+    "empty_all": "Fitar da kayan hoto"
+  },
+  "image_dialog": {
+    "title": "An samu {{count}} hotuna",
+    "found_count": "URL na hoto",
+    "columns": {
+      "url": "Hali",
+      "type": "Zaɓi hoto don nuna"
+    },
+    "preview": {
+      "select": "Saita doko a"
+    },
+    "save_to": "Sauya rukunin",
+    "browse": "Zaɓi wurin aikin sauke doko",
+    "browse_desc": "Sake doko yanzu",
+    "download_now": "Daɗe zaɓi hoto aƙalla daya don a sauke doko",
+    "select_one_image": "Zaɓi duka / Canza",
+    "select_all_toggle": "Ana daukar nuna...",
+    "loading_preview": "Format na hoto na zamani (Nuna WebView2)",
+    "modern_preview": "Format na hoto na zamani",
+    "modern": "Ana daukar nuna (modin WebView2)...",
+    "preview_loading_webview": "Ba a iya nuna",
+    "preview_unavailable": "{{width}} x {{height}} | {{kb}} KB",
+    "preview_size": "Zaɓi format ɗin da aka sauke"
+  },
+  "video_dialog": {
+    "title": "Kuduri",
+    "columns": {
+      "resolution": "Haɗin",
+      "ext": "Girman",
+      "size": "Lura",
+      "note": "Saita doko a"
+    },
+    "save_to": "Sauya rukunin",
+    "browse": "Zaɓi wurin aikin sauke doko",
+    "browse_desc": "Sake doko",
+    "start_download": "Daɗe zaɓi format da farko",
+    "select_format_first": "Suna da sanannen",
+    "unknown_title": "Ba a san",
+    "unknown": "Ba a iya fassara bayanan bidiyo: {{msg}}",
+    "parse_failed": "Bayani"
+  },
+  "common": {
+    "info": "Sai",
+    "done": "Rauni",
+    "error": "Ayyukan ya kasa, daidai sake yin shi",
+    "operation_failed_retry": "(khoji)",
+    "empty": "Wannan fitaccen yana cikin ci gaba...",
+    "in_dev": "Game da ",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "Bayanar ",
+    "version_prefix": "Duba don sabbin sauye-sauye",
+    "check_update": "Ana duba...",
+    "checking": "Ana haɗuwa da server ɗin sabbin sauye-sauye...",
+    "connecting": "Ba a iya duba don sabbin sauye-sauye. Daɗe sake yin shi daga baya.",
+    "update_failed": "An samo bayanar sabuwa: {{version}}",
+    "update_found_status": "An samo sabuwa",
+    "update_found_title": "Update found",
+    "update_found_message": "Kuna a kan bayanar da ta fi kowa aiki.",
+    "latest": "Rauni: ",
+    "error_prefix": "Game da ",
+    "simple_title": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "simple_message": "Min",
+    "copyright": "Max"
+  },
+  "font": {
+    "preview_standard": "Fonto na Serif",
+    "min": "Fonto na Sans-serif",
+    "max": "Fonto mai tsayi daidai",
+    "serif": "Matsakaicin girman fonto",
+    "sans_serif": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "fixed_width": "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "minimum_size": "{{size}}: Lorem ipsum dolor sit amet, consectetur",
+    "preview_generic": "Harshe",
+    "preview_fixed": "Saihu da Harshe",
+    "preview_min": "Saihu da Harshe"
+  },
+  "appearance": {
+    "title": "Saihu da Harshe",
+    "show_home_button": "Saihu da Harshe",
+    "change": "Saihu da Harshe",
+    "show_bookmark_bar": "Saihu da Harshe",
+    "language": "Harshe",
+    "language_auto": "Bi tsarin kwamfuta",
+    "language_zhCN": "Sinanci (Sauƙaƙe)",
+    "language_en": "Turanci",
+    "hide_bookmark_bar": "Saihu da Harshe"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "Saihu da Harshe",
+    "confirm_delete_item": "Saihu da Harshe",
+    "export_failed": "Saihu da Harshe",
+    "export_success": "Saihu da Harshe"
+  },
+  "images": {
+    "cancelled_status": "Saihu da Harshe",
+    "extracting_status": "Saihu da Harshe",
+    "failed_message": "Saihu da Harshe",
+    "failed_status": "Saihu da Harshe",
+    "none_found_status": "Saihu da Harshe",
+    "submitted_tasks": "Saihu da Harshe"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "Saihu da Harshe",
+      "save": "Saihu da Harshe",
+      "title": "Saihu da Harshe"
+    },
+    "saved": {
+      "done": "Saihu da Harshe",
+      "manage": "Saihu da Harshe",
+      "title": "Saihu da Harshe"
+    }
+  },
+  "search": {
+    "manage_button": "Saihu da Harshe"
+  },
+  "user": {
+    "logout": "Saihu da Harshe",
+    "manage_profile": "Saihu da Harshe"
+  },
+  "videos": {
+    "extract_failed_status": "Saihu da Harshe",
+    "not_detected_desc": "Saihu da Harshe",
+    "not_detected_status": "Saihu da Harshe",
+    "not_detected_title": "Saihu da Harshe",
+    "not_supported": "Saihu da Harshe",
+    "parsing_status": "Saihu da Harshe"
+  }
+}

@@ -1,0 +1,668 @@
+{
+  "tab": {
+    "new": "새 탭"
+  },
+  "menu": {
+    "new_tab": "새 탭 (T)",
+    "new_window": "새 창 (N)",
+    "new_incognito": "새 비공개 창 (I)",
+    "bookmarks": "즐겨찾기 (B)",
+    "show_bookmark_bar": "즐겨찾기 바 표시 (S)",
+    "bookmark_manager": "즐겨찾기 관리자 (B)",
+    "import_bookmarks": "즐겨찾기 및 설정 가져오기...",
+    "add_bookmark": "이 페이지에 즐겨찾기 추가...",
+    "add_all_bookmarks": "모든 열린 페이지에 즐겨찾기 추가...",
+    "more_bookmarks": "더 많은 즐겨찾기",
+    "no_bookmarks": "즐겨찾기 없음",
+    "history": "기록 (H)",
+    "show_all_history": "전체 기록 표시",
+    "no_history": "기록 없음",
+    "clear_history": "브라우징 기록 지우기",
+    "downloads": "다운로드 (D)",
+    "media_extract": "미디어 추출",
+    "extract_images": "이 페이지의 이미지 추출",
+    "extract_videos": "이 페이지의 동영상 추출",
+    "clear_data": "브라우징 데이터 지우기",
+    "exit_incognito": "비공개 창 닫기",
+    "exit_normal": "KunQiong AI 브라우저 닫기",
+    "print": "인쇄 (P)",
+    "save_page_as": "페이지 저장하기 (A)...",
+    "find_in_page": "페이지 내 검색",
+    "more_tools": "더 많은 도구",
+    "task_manager": "작업 관리자 (T)",
+    "encoding": "인코딩 (E)",
+    "devtools": "개발자 도구 (D)",
+    "view_resource_log": "자원 로드 로그 보기 (L)",
+    "adblock": "광고 차단 (G)",
+    "settings": "설정 (S)",
+    "feedback": "피드백",
+    "about_app": "KunQiong AI 브라우저 정보",
+    "about_incognito": "비공개 정보",
+    "exit_app": "새 탭 (Ctrl+T)"
+  },
+  "context": {
+    "new_tab": "탭 검색",
+    "reload": "다운로드 (Ctrl+J)",
+    "duplicate": "사용자/로그인",
+    "pin": "이 페이지 번역하기",
+    "unpin": "줌",
+    "close": "암호 관리",
+    "close_others": "뒤로 가기 (Alt+왼쪽)",
+    "close_left": "앞으로 가기 (Alt+오른쪽)",
+    "close_right": "새로 고침 (F5)",
+    "reopen_closed": "중지 (Esc)",
+    "bookmark_all": "홈 (Alt+Home)"
+  },
+  "tooltips": {
+    "new_tab": "준비됨",
+    "search_tabs": "비공개 - 이 디바이스에 브라우징 활동이 저장되지 않습니다",
+    "download": "다운로드 중: {{file}}",
+    "user_login": "기록이 지워짐",
+    "translate_page": "도우미",
+    "zoom": "📝 이 페이지 요약하기",
+    "manage_passwords": "AI 모드"
+  },
+  "nav": {
+    "back": "도우미 초기화 실패",
+    "forward": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI 채팅 UI 파일을 찾을 수 없음</h3><p>다음 경로가 존재하는지 확인하세요:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "refresh": "이 페이지의 주요 내용을 중국어로 번역해 주세요:\n\n{{text}}",
+    "stop": "AI 번역 실패: {{msg}}",
+    "home": "API 프록시 URL:"
+  },
+  "status": {
+    "ready": "API 키:",
+    "incognito": "모델 이름:",
+    "downloading": "모델 프리셋:",
+    "history_cleared": "공급자 프리셋:"
+  },
+  "ai": {
+    "assistant": "API 구성",
+    "summarize": "사용자 지정 API 모드 (OpenAI 호환)",
+    "mode": "서비스 모드",
+    "init_failed": "내장 웹 모드 (DeepSeek)",
+    "missing_html": "AI 도우미 구성",
+    "translate_prompt": "AI 설정",
+    "translate_failed": "팁: DeepSeek, OpenAI, Ollama 및 기타 호환 API와 함께 작동합니다",
+    "api": {
+      "base": "팁: DashScope OpenAI 호환 BaseUrl은 기본적으로 https://dashscope.aliyuncs.com/compatible-mode/v1입니다",
+      "key": "팁: Volcengine Ark V3은 ep-2024xxxxxxxx-xxxxx 형식의 Endpoint ID가 필요합니다",
+      "model_name": "웹 모드 설정",
+      "model_preset": "AI 웹 URL:",
+      "provider": "비공개",
+      "title": "당신은 비공개 브라우징을 사용하고 있습니다\n\n✓ 비공개는 다음을 할 수 있습니다:\n  • 브라우징 기록을 저장하지 않습니다\n  • 쿠키 및 사이트 데이터를 저장하지 않습니다\n  • 양식 데이터를 저장하지 않습니다\n  • 격리된 세션을 사용합니다\n\n✗ 비공개는 다음을 할 수 없습니다:\n  • 네트워크 관리자에게 활동을 숨기지 않습니다\n  • ISP(인터넷 서비스 제공업체)에게 활동을 숨기지 않습니다\n  • 웹사이트가 IP 주소를 얻는 것을 방지하지 않습니다\n\n참고: 다운로드한 파일과 생성한 즐겨찾기는 유지됩니다.",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "확인",
+    "mode.title": "확인",
+    "mode.web": "Built-in web mode (DeepSeek)",
+    "settings": {
+      "subtitle": "취소",
+      "title": "AI Settings"
+    },
+    "tip": {
+      "compatible": "줌",
+      "dashscope": "리셋",
+      "volcengine": "설정"
+    },
+    "web": {
+      "title": "검색 설정",
+      "url": "기록"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "설정",
+      "message": "AI 설정"
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "개인 정보 보호",
+    "ok": "고급",
+    "clear_history_all": "시작 페이지 설정",
+    "cancel": "웹사이트 URL을 입력하세요 (한 줄에 하나씩):"
+  },
+  "search_engine": {
+    "confirm_delete": "일치하는 설정을 찾을 수 없습니다"
+  },
+  "menu_zoom": {
+    "label": "외관",
+    "reset": "'홈' 버튼 표시"
+  },
+  "settings": {
+    "header": {
+      "title": "설정",
+      "search_placeholder": "설정 검색"
+    },
+    "sidebar": {
+      "history": "기록",
+      "settings": "설정",
+      "ai": "AI 설정",
+      "privacy": "개인정보",
+      "advanced": "고급"
+    },
+    "set_startup_pages": "다운로드 위치",
+    "enter_urls_each_line": "다운로드 기본 저장 위치",
+    "no_results": "찾아보기...",
+    "appearance": {
+      "title": "다운로드 전 각 파일의 저장 위치를 묻습니다",
+      "show_home_button": "설정",
+      "change": "검색 설정",
+      "show_bookmark_bar": "홈",
+      "language": "언어",
+      "language_auto": "시스템 따르기",
+      "language_zhCN": "중국어(간체)",
+      "language_en": "영어",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "새 탭 열기",
+      "location_label": "이전에 중단한 곳에서 계속",
+      "location_desc": "특정 페이지 또는 페이지 집합 열기",
+      "browse": "페이지 관리",
+      "ask_location_label": "광고 차단",
+      "ask_location_desc": "광고 차단"
+    },
+    "title": "설정",
+    "search_placeholder": "설정 검색",
+    "home": {
+      "title": "적극적으로 웹페이지 광고 차단",
+      "url": "사용자 지정 광고 차단 규칙",
+      "use_current": "사용자 지정 규칙",
+      "use_newtab": "내 규칙 관리..."
+    },
+    "startup": {
+      "title": "주소 표시줄 검색 엔진",
+      "newtab": "기본 검색 엔진",
+      "continue_last": "주소 표시줄에서 사용하는 검색 엔진",
+      "specific_pages": "360",
+      "manage_pages": "바이두",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "빙",
+      "none": "구글",
+      "popup": "검색 엔진 관리",
+      "aggressive": "고급 설정 표시...",
+      "custom": "Custom ad blocking rules",
+      "custom_link": "마우스 제스처 활성화",
+      "manage_rules": "마우스 제스처"
+    },
+    "search": {
+      "title": "배경 탭 메모리 해제 간격:",
+      "default_label": "성능",
+      "desc": "슈퍼 드래그 활성화",
+      "options": {
+        "360": "고급 설정",
+        "baidu": "기본 브라우저 상태 확인 중...",
+        "bing": "{{app}}이 현재 기본 브라우저입니다.",
+        "google": "{{app}}이 현재 기본 브라우저가 아닙니다."
+      },
+      "manage_button": "기본 브라우저로 설정"
+    },
+    "show_advanced": "기본 브라우저",
+    "advanced": {
+      "back_basic": "방문 시간",
+      "gesture": {
+        "enable": "제목",
+        "title": "URL"
+      },
+      "performance": {
+        "mem_release_time": "기록 관리",
+        "title": "증서 관리..."
+      },
+      "super_drag": {
+        "enable": "프록시 설정 변경..."
+      },
+      "title": "기본 설정으로 복원"
+    },
+    "default_browser": {
+      "checking": "이 작업은 즐겨찾기, 기록 또는 저장된 암호에 영향을 미치지 않습니다.",
+      "is_default": "설정 리셋",
+      "not_default": "기본 설정 복원",
+      "set_default": "탭을 닫으려면 더블 클릭",
+      "title": "주소 표시줄 입력 모드:"
+    },
+    "history": {
+      "columns": {
+        "time": "검색하려면 Enter를 누르세요",
+        "title": "타이핑 시 검색 (권장)",
+        "url": "마지막 위치에서 열기"
+      },
+      "title": "현재 탭 오른쪽에 열기",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "새 페이지를 열 때:",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "주소 표시줄 클릭 시 모든 URL 텍스트 선택",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "주소 표시줄에 전체 URL 표시 (Shift 누르고 있을 때도 표시)",
+      "desc": "탭",
+      "title": "즐겨찾기 및 설정 가져오기...",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "사용자 데이터",
+    "tabs": {
+      "double_click_close": "Double-click to close tabs",
+      "input_mode": {
+        "new_tab": "새 탭에서 열기",
+        "instant": "입력할 때마다 검색(권장)",
+        "enter": "Enter 키로 검색"
+      },
+      "input_mode.enter": "Enter ?? ??",
+      "input_mode.instant": "Search as you type (Recommended)",
+      "new_tab_position": {
+        "last": "마지막 위치에서 열기",
+        "right": "현재 탭 오른쪽에서 열기"
+      },
+      "open_new": "새 페이지를 열 때:",
+      "select_all_on_click": "Select all URL text when clicking the address bar",
+      "show_full_url": "Show full URL in address bar (also shown while holding Shift)",
+      "title": "탭",
+      "right_click_close_desc": "오른쪽 클릭으로 현재 탭 닫기(Shift를 누르면 컨텍스트 메뉴 표시)",
+      "open_links_background": "클릭한 링크를 백그라운드 탭에서 열기",
+      "input_mode_label": "When opening a new page:"
+    },
+    "user_data": {
+      "import": "Import bookmarks and settings...",
+      "title": "User data"
+    },
+    "features": {
+      "title": "??",
+      "mouse_gesture_label": "마우스 제스처",
+      "mouse_gesture_desc": "마우스 제스처를 사용하여 신속하게 작업 수행",
+      "super_drag_label": "슈퍼 드래그",
+      "super_drag_desc": "텍스트 또는 링크를 드래그하여 빠르게 검색하거나 엽니다"
+    },
+    "web": {
+      "title": "웹 설정",
+      "smooth_scrolling": "웹 페이지에서 원활한 스크롤 활성화 (재시작 후 적용)"
+    },
+    "cache": {
+      "title": "사용자 정의 캐시",
+      "directory_label": "사용자 정의 캐시 디렉터리:",
+      "change_button": "변경...",
+      "notice": "이 값을 변경하면 현재 캐시가 지워지고 다시 시작된 후에 적용됩니다.",
+      "open_dir": "캐시 디렉터리 열기",
+      "reset_default": "기본값으로 초기화",
+      "reset_confirm": "캐시 디렉토리를 기본값으로 재설정하시겠습니까?\\ n\\ n기존 캐시를 지우고 다시 시작한 후 적용됩니다."
+    },
+    "privacy": {
+      "title": "Privacy settings",
+      "content_settings": "Content settings...",
+      "clear_browsing_data": "Clear browsing data...",
+      "crash_upload": "Enable crash report upload",
+      "crash_upload_desc": "Automatically upload error reports on crashes to help improve the browser."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "저장 및 적용",
+      "auto_hint": "설정은 자동으로 저장됩니다",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "다운로드",
+    "location_label": "다운로드 위치",
+    "location_desc": "다운로드 기본 저장 위치",
+    "browse": "찾아보기...",
+    "ask_location_label": "다운로드 전에 각 파일의 저장 위치를 묻기",
+    "default_tool_label": "기본 다운로드 도구 선택:",
+    "browse_desc": "다운로드 저장 폴더 선택",
+    "status": {
+      "downloading": "다운로드 중: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "완료",
+      "cancelled": "취소됨",
+      "failed": "다운로드 실패",
+      "pending": "대기 중..."
+    }
+  },
+  "password_manager": {
+    "hide": "숨기기",
+    "show": "보이기"
+  },
+  "import": {
+    "success": "성공적으로 {{count}} 개의 북마크가 임포트되었습니다.",
+    "done": "임포트 완료",
+    "failed": "임포트 실패: {{msg}}"
+  },
+  "adblock": {
+    "allow": "허용",
+    "block": "차단"
+  },
+  "task_manager": {
+    "tab_title": "● 탭: {{title}}"
+  },
+  "clear": {
+    "success": "다음 데이터가 성공적으로 삭제되었습니다:\n• {{items}}",
+    "done": "삭제 완료",
+    "failed": "데이터 삭제 중 오류: {{msg}}",
+    "in_progress": "삭제 중..."
+  },
+  "print": {
+    "failed": "인쇄 실패",
+    "failed_message": "인쇄 중 오류:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "페이지 저장하기",
+      "filter": "HTML만으로 된 웹페이지 (*.html)|*.html|완전한 웹페이지 (*.html)|*.html|MHTML 파일 (*.mhtml)|*.mhtml|PDF 문서 (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "북마크 내보내기",
+    "export_filter": "HTML 파일 (*.html)|*.html",
+    "export_success_path": "북마크가 {{path}}에 내보내졌습니다:\n{{path}}",
+    "other": "기타 북마크",
+    "added_message": "{{count}} 개의 탭이 폴더 \"{{folder}}\"에 추가되었습니다",
+    "added_status": "{{count}} 개의 북마크가 폴더 \"{{folder}}\"에 추가되었습니다",
+    "already": "이미 북마크됨",
+    "batch_confirm": "{{count}} 개의 탭을 위한 폴더가 생성됩니다.\\n\\n계속하시겠습니까?",
+    "batch_title": "배치 북마크 추가",
+    "cancelled": "북마크가 취소되었습니다",
+    "import_filter": "HTML 파일 (*.html;*.htm)|*.html;*.htm|모든 파일 (*.*)|*.*",
+    "import_title": "북마크 임포트",
+    "new_bookmark": "새 북마크",
+    "unable_for_page": "이 페이지를 북마크할 수 없습니다",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "열기",
+    "open_in_new_tab": "새 탭에서 열기",
+    "open_all_bookmarks": "모든 북마크 열기"
+  },
+  "actions": {
+    "add": "추가",
+    "edit": "편집",
+    "delete": "삭제",
+    "delete_all": "전체 삭제",
+    "done": "완료",
+    "copy_link": "링크 복사",
+    "rename": "이름 바꾸기",
+    "add_bookmark": "북마크 추가",
+    "add_folder": "폴더 추가"
+  },
+  "permissions": {
+    "allow": "허용",
+    "block": "차단",
+    "ask": "물어보기"
+  },
+  "site_settings": {
+    "desc": "{{category}} 권한을 특정 사이트에 대해 설정할 수 있습니다",
+    "host_pattern": "호스트명 패턴:",
+    "columns": {
+      "host_pattern": "호스트명 패턴",
+      "behavior": "동작"
+    }
+  },
+  "time": {
+    "minute": "분"
+  },
+  "newtab": {
+    "title": "새 탭",
+    "search_placeholder": "검색 또는 주소 입력",
+    "footer": "가볍고 · 빠르고 · 간결한",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "브라우징 데이터 삭제",
+    "clear_button": "브라우징 데이터 삭제...",
+    "clear_desc": "브라우징 기록, 쿠키, 캐시 등을 삭제",
+    "exit_clear": {
+      "title": "종료 시 자동 삭제",
+      "history": "브라우징 기록",
+      "downloads": "다운로드 기록",
+      "cache": "캐시된 이미지 및 파일",
+      "cookies": "쿠키 및 기타 사이트 데이터"
+    },
+    "options": {
+      "title": "개인 정보 옵션",
+      "dnt": "브라우징 트래픽과 함께 '추적 거부' 요청 보내기"
+    }
+  },
+  "update": {
+    "updater_missing": "업데이터 실행 파일 'updater.exe'를 찾을 수 없습니다"
+  },
+  "address_dropdown": {
+    "search": "\"{{text}}\" 검색",
+    "visit": "\"{{text}}\" 방문",
+    "empty_history": "일치하는 기록을 찾을 수 없습니다",
+    "empty_bookmark": "일치하는 북마크를 찾을 수 없습니다",
+    "empty_tabs": "일치하는 탭을 찾을 수 없습니다",
+    "empty_all": "일치하는 결과가 없습니다"
+  },
+  "image_dialog": {
+    "title": "이미지 리소스 추출",
+    "found_count": "{{count}} 개의 이미지를 찾았습니다",
+    "columns": {
+      "url": "이미지 URL",
+      "type": "유형"
+    },
+    "preview": {
+      "select": "미리보기할 이미지를 선택하세요"
+    },
+    "save_to": "다운로드 저장 위치",
+    "browse": "폴더 변경",
+    "browse_desc": "다운로드 저장 폴더 선택",
+    "download_now": "지금 다운로드",
+    "select_one_image": "다운로드할 적어도 한 개의 이미지를 선택해주세요",
+    "select_all_toggle": "전체 선택 / 토글",
+    "loading_preview": "미리보기 로딩 중...",
+    "modern_preview": "현대 이미지 형식 (WebView2 미리보기)",
+    "modern": "현대 이미지 형식",
+    "preview_loading_webview": "미리보기 로딩 중 (WebView2 모드)...",
+    "preview_unavailable": "미리보기 불가",
+    "preview_size": "{{width}} x {{height}} | {{kb}} KB"
+  },
+  "video_dialog": {
+    "title": "다운로드 형식 선택",
+    "columns": {
+      "resolution": "해상도",
+      "ext": "확장자",
+      "size": "크기",
+      "note": "노트"
+    },
+    "save_to": "다운로드 저장 위치",
+    "browse": "폴더 변경",
+    "browse_desc": "다운로드 저장 폴더 선택",
+    "start_download": "다운로드 시작",
+    "select_format_first": "먼저 형식을 선택해주세요",
+    "unknown_title": "알 수 없는 제목",
+    "unknown": "알 수 없음",
+    "parse_failed": "비디오 정보 파싱 실패: {{msg}}"
+  },
+  "common": {
+    "info": "정보",
+    "done": "완료",
+    "error": "오류",
+    "operation_failed_retry": "작업이 실패했습니다. 다시 시도해 주세요.",
+    "empty": "(비어 있음)",
+    "in_dev": "이 기능은 개발 중입니다...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "소개",
+    "version_prefix": "버전 ",
+    "check_update": "업데이트 검사",
+    "checking": "검사 중...",
+    "connecting": "업데이트 서버에 연결 중...",
+    "update_failed": "업데이트 검사에 실패했습니다. 나중에 다시 시도해 주세요.",
+    "update_found_status": "새 버전이 발견되었습니다: {{version}}",
+    "update_found_title": "업데이트 발견",
+    "update_found_message": "새 버전 {{version}}이 발견되었습니다\\n\\n릴리스 노트:\\n{{log}}\\n\\n지금 업데이트?",
+    "latest": "이미 최신 버전입니다.",
+    "error_prefix": "오류: ",
+    "simple_title": "소개",
+    "simple_message": "{{app}}\\n버전 {{version}}\\n\\nWebView2 엔진 기반",
+    "copyright": "© {{year}} {{app}}. 저작권 전체 보유."
+  },
+  "font": {
+    "preview_standard": "{{size}}: 롬 ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "min": "최소",
+    "max": "최대",
+    "serif": "세리프 글꼴",
+    "sans_serif": "산세리프 글꼴",
+    "fixed_width": "고정 폭 글꼴",
+    "minimum_size": "최소 글꼴 크기",
+    "preview_generic": "외관",
+    "preview_fixed": "\"홈\" 버튼 표시",
+    "preview_min": "변경"
+  },
+  "appearance": {
+    "title": "북마크 바를 항상 표시",
+    "show_home_button": "언어",
+    "change": "시스템 따르기",
+    "show_bookmark_bar": "중국어 (간체)",
+    "language": "언어",
+    "language_auto": "시스템 따르기",
+    "language_zhCN": "중국어(간체)",
+    "language_en": "영어",
+    "hide_bookmark_bar": "내보내기 실패: {{msg}}"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "내보내기 성공!",
+    "confirm_delete_item": "이미지 추출이 취소되었습니다",
+    "export_failed": "이미지 리소스 추출 중...",
+    "export_success": "추출 실패: {{msg}}"
+  },
+  "images": {
+    "cancelled_status": "이미지 추출 실패",
+    "extracting_status": "이미지 리소스를 찾을 수 없습니다",
+    "failed_message": "{{count}} 개의 이미지 다운로드 작업을 제출했습니다",
+    "failed_status": "절대",
+    "none_found_status": "암호 저장",
+    "submitted_tasks": "Submitted {{count}} image download tasks"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "완료",
+      "save": "저장된 암호 관리",
+      "title": "이 사이트에 대한 저장된 암호:"
+    },
+    "saved": {
+      "done": "검색 엔진 관리",
+      "manage": "로그아웃",
+      "title": "프로필 설정"
+    }
+  },
+  "search": {
+    "manage_button": "추출 실패"
+  },
+  "user": {
+    "logout": "이 페이지에서 추출 가능한 비디오 리소스를 감지할 수 없습니다.\\n\\n참고: 페이지에 비디오가 포함되지 않거나, 암호화된/DRM 재생을 사용할 수도 있어 직접 추출할 수 없습니다.\\n\\n제안: 실제 비디오 재생 페이지를 열고 재생이 시작된 후 다시 추출해 보세요.",
+    "manage_profile": "비디오 리소스를 감지할 수 없습니다"
+  },
+  "videos": {
+    "extract_failed_status": "비디오 리소스를 감지할 수 없습니다",
+    "not_detected_desc": "이 페이지에서는 비디오 추출이 지원되지 않습니다",
+    "not_detected_status": "비디오 정보 파싱 중...",
+    "not_detected_title": "No video resources detected",
+    "not_supported": "Video extraction is not supported on this page",
+    "parsing_status": "Parsing video information..."
+  }
+}

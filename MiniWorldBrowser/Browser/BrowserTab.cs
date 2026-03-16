@@ -1675,7 +1675,7 @@ public class BrowserTab : IDisposable
                 var settings = _settingsService?.Settings ?? new Models.BrowserSettings();
                 var settingsHtml = HtmlGenerator.GenerateSettingsPage(settings);
                 Url = "about:settings";
-                Title = "设置";
+                Title = Localization.T("settings.header.title");
                 IsSecure = true;
                 WebView.CoreWebView2.NavigateToString(settingsHtml);
                 TitleChanged?.Invoke(this);

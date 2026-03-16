@@ -1,4 +1,4 @@
-using MiniWorldBrowser.Helpers;
+﻿using MiniWorldBrowser.Helpers;
 using MiniWorldBrowser.Helpers.Extensions;
 
 namespace MiniWorldBrowser.Browser;
@@ -39,7 +39,7 @@ public partial class BrowserTabManager
                     {
                         var key = msg.RootElement.GetProperty("key").GetString();
                         var value = msg.RootElement.GetProperty("value");
-                        HandleSettingUpdate(key, value);
+                        HandleSettingUpdate(tab, key, value);
                     }
                     else if (action == "getHistory")
                     {
@@ -68,24 +68,24 @@ public partial class BrowserTabManager
                     }
                     else if (action == "click")
                     {
-                        // 点击网页内容时触发事件，用于关闭弹出窗口
+                        // 鐐瑰嚮缃戦〉鍐呭鏃惰Е鍙戜簨浠讹紝鐢ㄤ簬鍏抽棴寮瑰嚭绐楀彛
                         WebViewClicked?.Invoke();
                     }
                     else if (action == "resetSettings")
                     {
-                        // 恢复默认设置
+                        // 鎭㈠榛樿璁剧疆
                         _settingsService?.Reset();
-                        // 重新导航到设置页面以刷新显示
+                        // 閲嶆柊瀵艰埅鍒拌缃〉闈互鍒锋柊鏄剧ず
                         tab.Navigate("about:settings");
                     }
                     else if (action == "browseDownloadPath")
                     {
-                        // 打开文件夹选择对话框
+                        // 鎵撳紑鏂囦欢澶归€夋嫨瀵硅瘽妗?
                         BrowseDownloadPath(tab);
                     }
                     else if (action == "openSearchEngineManager")
                     {
-                        // 打开搜索引擎管理对话框
+                        // 鎵撳紑鎼滅储寮曟搸绠＄悊瀵硅瘽妗?
                         OpenSearchEngineManager(tab);
                     }
                     else if (action == "getBookmarks")
@@ -216,46 +216,53 @@ public partial class BrowserTabManager
         catch { }
     }
 
-    private void HandleSettingUpdate(string? key, System.Text.Json.JsonElement value)
+    private void HandleSettingUpdate(BrowserTab tab, string? key, System.Text.Json.JsonElement value)
     {
-        if (string.IsNullOrEmpty(key) || _settingsService?.Settings == null) return;
-        
+        if (string.IsNullOrWhiteSpace(key) || _settingsService?.Settings == null)
+        {
+            PostSettingUpdateResult(tab, key ?? string.Empty, false, "invalid_key_or_settings");
+            return;
+        }
+
+        var normalizedKey = key.Trim().ToLowerInvariant();
         try
         {
-            switch (key)
+            var handled = true;
+            switch (normalizedKey)
             {
                 case "hidebookmarkbar":
-                    var hideBookmarkBar = value.GetBoolean();
+                    var hideBookmarkBar = ReadBoolean(value);
                     _settingsService.Settings.AlwaysShowBookmarkBar = !hideBookmarkBar;
                     _settingsService.Save();
                     SettingChanged?.Invoke("hidebookmarkbar", hideBookmarkBar);
                     break;
                 case "bookmarkbar":
-                    var showBookmarkBar = value.GetBoolean();
+                    var showBookmarkBar = ReadBoolean(value);
                     _settingsService.Settings.AlwaysShowBookmarkBar = showBookmarkBar;
                     _settingsService.Save();
                     SettingChanged?.Invoke("bookmarkbar", showBookmarkBar);
                     break;
                 case "homebutton":
-                    _settingsService.Settings.ShowHomeButton = value.GetBoolean();
+                    var showHomeButton = ReadBoolean(value);
+                    _settingsService.Settings.ShowHomeButton = showHomeButton;
                     _settingsService.Save();
-                    SettingChanged?.Invoke("homebutton", value.GetBoolean());
+                    SettingChanged?.Invoke("homebutton", showHomeButton);
                     break;
                 case "homepage":
-                    _settingsService.Settings.HomePage = value.GetString() ?? "";
+                    _settingsService.Settings.HomePage = ReadString(value);
                     _settingsService.Save();
                     break;
                 case "adblock":
-                    _settingsService.Settings.EnableAdBlock = value.GetBoolean();
+                    var enableAdBlock = ReadBoolean(value);
+                    _settingsService.Settings.EnableAdBlock = enableAdBlock;
                     _settingsService.Save();
-                    SettingChanged?.Invoke("adblock", value.GetBoolean());
+                    SettingChanged?.Invoke("adblock", enableAdBlock);
                     break;
                 case "adblockmode":
-                    var adBlockMode = int.Parse(value.GetString() ?? "2");
+                    var adBlockMode = ReadInt(value, 2);
                     _settingsService.Settings.AdBlockMode = adBlockMode;
                     _settingsService.Settings.EnableAdBlock = adBlockMode > 0;
                     _settingsService.Save();
-                    // 更新 AdBlockService
                     if (_adBlockService != null)
                     {
                         _adBlockService.Mode = adBlockMode;
@@ -264,17 +271,19 @@ public partial class BrowserTabManager
                     SettingChanged?.Invoke("adblockmode", adBlockMode);
                     break;
                 case "gesture":
-                    _settingsService.Settings.EnableMouseGesture = value.GetBoolean();
+                    var enableGesture = ReadBoolean(value);
+                    _settingsService.Settings.EnableMouseGesture = enableGesture;
                     _settingsService.Save();
-                    SettingChanged?.Invoke("gesture", value.GetBoolean());
+                    SettingChanged?.Invoke("gesture", enableGesture);
                     break;
                 case "superdrag":
-                    _settingsService.Settings.EnableSuperDrag = value.GetBoolean();
+                    var enableSuperDrag = ReadBoolean(value);
+                    _settingsService.Settings.EnableSuperDrag = enableSuperDrag;
                     _settingsService.Save();
-                    SettingChanged?.Invoke("superdrag", value.GetBoolean());
+                    SettingChanged?.Invoke("superdrag", enableSuperDrag);
                     break;
                 case "search":
-                    var searchIndex = int.Parse(value.GetString() ?? "1");
+                    var searchIndex = ReadInt(value, 1);
                     _settingsService.Settings.AddressBarSearchEngine = searchIndex;
                     _settingsService.Settings.SearchEngine = searchIndex switch
                     {
@@ -288,27 +297,25 @@ public partial class BrowserTabManager
                     SettingChanged?.Invoke("search", searchIndex);
                     break;
                 case "startup":
-                    var startupIndex = int.Parse(value.GetString() ?? "0");
-                    _settingsService.Settings.StartupBehavior = startupIndex;
+                    _settingsService.Settings.StartupBehavior = ReadInt(value, 0);
                     _settingsService.Save();
                     break;
                 case "downloadpath":
-                    _settingsService.Settings.DownloadPath = value.GetString() ?? "";
+                    _settingsService.Settings.DownloadPath = ReadString(value);
                     _settingsService.Save();
                     break;
                 case "askdownload":
-                    _settingsService.Settings.AskDownloadLocation = value.GetBoolean();
+                    _settingsService.Settings.AskDownloadLocation = ReadBoolean(value);
                     _settingsService.Save();
                     break;
                 case "crashupload":
-                    _settingsService.Settings.EnableCrashUpload = value.GetBoolean();
+                    _settingsService.Settings.EnableCrashUpload = ReadBoolean(value);
                     _settingsService.Save();
                     break;
                 case "rightclickclosetab":
-                    var rightClickClose = value.GetBoolean();
+                    var rightClickClose = ReadBoolean(value);
                     _settingsService.Settings.RightClickCloseTab = rightClickClose;
                     _settingsService.Save();
-                    // 更新所有标签的右击关闭设置
                     foreach (var t in _tabs)
                     {
                         if (t.TabButton != null)
@@ -317,71 +324,175 @@ public partial class BrowserTabManager
                     SettingChanged?.Invoke("rightclickclosetab", rightClickClose);
                     break;
                 case "openlinksbackground":
-                    _settingsService.Settings.OpenLinksInBackground = value.GetBoolean();
+                    _settingsService.Settings.OpenLinksInBackground = ReadBoolean(value);
                     _settingsService.Save();
                     break;
                 case "addressbarinput":
-                    _settingsService.Settings.AddressBarInputMode = int.Parse(value.GetString() ?? "0");
+                    _settingsService.Settings.AddressBarInputMode = ReadInt(value, 0);
                     _settingsService.Save();
                     break;
                 case "newtabposition":
-                    _settingsService.Settings.NewTabPosition = int.Parse(value.GetString() ?? "0");
+                    _settingsService.Settings.NewTabPosition = ReadInt(value, 0);
                     _settingsService.Save();
                     break;
                 case "smoothscrolling":
-                    _settingsService.Settings.EnableSmoothScrolling = value.GetBoolean();
+                    _settingsService.Settings.EnableSmoothScrolling = ReadBoolean(value);
                     _settingsService.Save();
                     break;
                 case "enableautofill":
-                    _settingsService.Settings.EnableAutofill = value.GetBoolean();
+                    _settingsService.Settings.EnableAutofill = ReadBoolean(value);
                     _settingsService.Save();
                     break;
                 case "savepasswords":
-                    _settingsService.Settings.SavePasswords = value.GetBoolean();
+                    _settingsService.Settings.SavePasswords = ReadBoolean(value);
                     _settingsService.Save();
                     break;
                 case "fontsize":
-                    var fontSize = int.Parse(value.GetString() ?? "2");
+                    var fontSize = ReadInt(value, 2);
                     _settingsService.Settings.FontSize = fontSize;
                     _settingsService.Save();
-                    // 应用字体大小到所有标签页
                     ApplyFontSizeToAllTabs(fontSize);
                     break;
                 case "pagezoom":
-                    var pageZoom = int.Parse(value.GetString() ?? "100");
+                    var pageZoom = ReadInt(value, 100);
                     _settingsService.Settings.PageZoom = pageZoom;
                     _settingsService.Save();
-                    // 应用缩放到所有标签页
                     ApplyZoomToAllTabs(pageZoom);
                     break;
                 case "aimode":
-                    _settingsService.Settings.AiServiceMode = int.Parse(value.GetString() ?? "0");
+                    _settingsService.Settings.AiServiceMode = ReadInt(value, 0);
                     _settingsService.Save();
                     SettingChanged?.Invoke("aimode", _settingsService.Settings.AiServiceMode);
                     break;
                 case "aiapikey":
-                    _settingsService.Settings.AiApiKey = value.GetString() ?? "";
+                    _settingsService.Settings.AiApiKey = ReadString(value);
                     _settingsService.Save();
                     break;
                 case "aiapibaseurl":
-                    _settingsService.Settings.AiApiBaseUrl = value.GetString() ?? "";
+                    _settingsService.Settings.AiApiBaseUrl = ReadString(value);
                     _settingsService.Save();
                     break;
                 case "aimodelname":
-                    _settingsService.Settings.AiModelName = value.GetString() ?? "";
+                    _settingsService.Settings.AiModelName = ReadString(value);
                     _settingsService.Save();
                     break;
                 case "aicustomweburl":
-                    _settingsService.Settings.AiCustomWebUrl = value.GetString() ?? "";
+                    _settingsService.Settings.AiCustomWebUrl = ReadString(value);
                     _settingsService.Save();
                     break;
                 case "language":
-                    _settingsService.Settings.LanguageCode = value.GetString() ?? "auto";
+                    var languageCode = ReadString(value, "auto");
+                    _settingsService.Settings.LanguageCode = languageCode;
                     _settingsService.Save();
+                    try
+                    {
+                        Localization.Initialize(string.Equals(languageCode, "auto", StringComparison.OrdinalIgnoreCase) ? null : languageCode);
+                    }
+                    catch { }
+                    SettingChanged?.Invoke("language", languageCode);
+                    RefreshAllSettingsPages();
+                    break;
+                default:
+                    handled = false;
                     break;
             }
+
+            if (handled)
+            {
+                PostSettingUpdateResult(tab, normalizedKey, true, null);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogSettingUpdateError(normalizedKey, value, ex);
+            PostSettingUpdateResult(tab, normalizedKey, false, ex.Message);
+        }
+    }
+
+    private static bool ReadBoolean(System.Text.Json.JsonElement value, bool fallback = false)
+    {
+        return value.ValueKind switch
+        {
+            System.Text.Json.JsonValueKind.True => true,
+            System.Text.Json.JsonValueKind.False => false,
+            System.Text.Json.JsonValueKind.Number => value.TryGetInt32(out var i) ? i != 0 : fallback,
+            System.Text.Json.JsonValueKind.String => ParseBooleanString(value.GetString(), fallback),
+            _ => fallback
+        };
+    }
+
+    private static bool ParseBooleanString(string? text, bool fallback)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return fallback;
+        if (bool.TryParse(text, out var b)) return b;
+        if (int.TryParse(text, out var i)) return i != 0;
+        return fallback;
+    }
+
+    private static int ReadInt(System.Text.Json.JsonElement value, int fallback = 0)
+    {
+        return value.ValueKind switch
+        {
+            System.Text.Json.JsonValueKind.Number => value.TryGetInt32(out var i) ? i : fallback,
+            System.Text.Json.JsonValueKind.String => int.TryParse(value.GetString(), out var i) ? i : fallback,
+            System.Text.Json.JsonValueKind.True => 1,
+            System.Text.Json.JsonValueKind.False => 0,
+            _ => fallback
+        };
+    }
+
+    private static string ReadString(System.Text.Json.JsonElement value, string fallback = "")
+    {
+        return value.ValueKind switch
+        {
+            System.Text.Json.JsonValueKind.String => value.GetString() ?? fallback,
+            System.Text.Json.JsonValueKind.Number => value.GetRawText(),
+            System.Text.Json.JsonValueKind.True => "true",
+            System.Text.Json.JsonValueKind.False => "false",
+            _ => fallback
+        };
+    }
+
+    private static void LogSettingUpdateError(string key, System.Text.Json.JsonElement value, Exception ex)
+    {
+        try
+        {
+            var rawValue = value.GetRawText();
+            System.Diagnostics.Debug.WriteLine($"HandleSettingUpdate failed: key={key}, value={rawValue}, error={ex.Message}");
+        }
+        catch
+        {
+            System.Diagnostics.Debug.WriteLine($"HandleSettingUpdate failed: key={key}, error={ex.Message}");
+        }
+    }
+
+    private static void PostSettingUpdateResult(BrowserTab tab, string key, bool success, string? error)
+    {
+        try
+        {
+            if (tab.WebView?.CoreWebView2 == null) return;
+
+            var payload = System.Text.Json.JsonSerializer.Serialize(new
+            {
+                action = "settingUpdateResult",
+                key,
+                success,
+                error = error ?? string.Empty
+            });
+            tab.WebView.CoreWebView2.PostWebMessageAsJson(payload);
         }
         catch { }
+    }
+
+    private void RefreshAllSettingsPages()
+    {
+        foreach (var t in _tabs)
+        {
+            if (string.Equals(t.Url, "about:settings", StringComparison.OrdinalIgnoreCase))
+            {
+                t.Navigate("about:settings");
+            }
+        }
     }
 
     private void HandleGesture(BrowserTab tab, string? gesture)
@@ -390,28 +501,28 @@ public partial class BrowserTabManager
         
         switch (gesture)
         {
-            case "L": // 左滑 - 后退
-            case "UL": // 上左 - 后退
+            case "L": // 宸︽粦 - 鍚庨€€
+            case "UL": // 涓婂乏 - 鍚庨€€
                 tab.GoBack();
                 break;
-            case "R": // 右滑 - 前进
-            case "UR": // 上右 - 前进
+            case "R": // 鍙虫粦 - 鍓嶈繘
+            case "UR": // 涓婂彸 - 鍓嶈繘
                 tab.GoForward();
                 break;
-            case "U": // 上滑 - 滚动到顶部
+            case "U": // 涓婃粦 - 婊氬姩鍒伴《閮?
                 _ = tab.WebView?.CoreWebView2?.ExecuteScriptAsync("window.scrollTo(0, 0);");
                 break;
-            case "D": // 下滑 - 滚动到底部
+            case "D": // 涓嬫粦 - 婊氬姩鍒板簳閮?
                 _ = tab.WebView?.CoreWebView2?.ExecuteScriptAsync("window.scrollTo(0, document.body.scrollHeight);");
                 break;
-            case "UD": // 上下 - 刷新
+            case "UD": // 涓婁笅 - 鍒锋柊
                 tab.Refresh();
                 break;
-            case "DR": // 下右 - 关闭标签页
-            case "RD": // 右下 - 关闭标签页
+            case "DR": // 涓嬪彸 - 鍏抽棴鏍囩椤?
+            case "RD": // 鍙充笅 - 鍏抽棴鏍囩椤?
                 CloseTab(tab);
                 break;
-            case "DU": // 下上 - 新建标签页
+            case "DU": // 涓嬩笂 - 鏂板缓鏍囩椤?
                 _ = CreateTabAsync(_settingsService?.Settings?.HomePage ?? "about:newtab");
                 break;
         }
@@ -426,13 +537,13 @@ public partial class BrowserTabManager
             bool isDefault = false;
             try
             {
-                // 检查HTTP协议的默认处理程序
+                // 妫€鏌TTP鍗忚鐨勯粯璁ゅ鐞嗙▼搴?
                 using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
                     @"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice");
                 if (key != null)
                 {
                     var progId = key.GetValue("ProgId")?.ToString() ?? "";
-                    // 检查是否是我们的浏览器（通过ProgId判断）
+                    // 妫€鏌ユ槸鍚︽槸鎴戜滑鐨勬祻瑙堝櫒锛堥€氳繃ProgId鍒ゆ柇锛?
                     isDefault = progId.Contains("MiniWorld", StringComparison.OrdinalIgnoreCase);
                 }
             }
@@ -461,3 +572,4 @@ public partial class BrowserTabManager
         }
     }
 }
+

@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": " вклад جديد"
+  },
+  "menu": {
+    "new_tab": " вклад جديد (T)",
+    "new_window": "نافذة جديدة InPrivate (I)",
+    "new_incognito": "العلامات (B)",
+    "bookmarks": "عرض شريط العلامات (S)",
+    "show_bookmark_bar": "مدير العلامات (B)",
+    "bookmark_manager": "استيراد العلامات والإعدادات...",
+    "import_bookmarks": "إضافة علامة لصفحة هذه...",
+    "add_bookmark": "إضافة علامات للصفحات المفتوحة...",
+    "add_all_bookmarks": "علامات أخرى",
+    "more_bookmarks": "لا يوجد علامات",
+    "no_bookmarks": "التاريخ (H)",
+    "history": "عرض التاريخ الكلي",
+    "show_all_history": "لا يوجد تاريخ",
+    "no_history": "مسح التاريخ الاستعراضي",
+    "clear_history": "التحميلات (D)",
+    "downloads": "استخراج الإعلام",
+    "media_extract": "استخراج الصور على هذه الصفحة",
+    "extract_images": "استخراج الفيديو على هذه الصفحة",
+    "extract_videos": "مسح البيانات الاستعراضية",
+    "clear_data": "إغلاق نافذة InPrivate",
+    "exit_incognito": "إغلاق متصفح KunQiong AI",
+    "exit_normal": "طباعة (P)",
+    "print": "حفظ الصفحة كـ (A)...",
+    "save_page_as": "ابحث على الصفحة",
+    "find_in_page": "أدوات أخرى",
+    "more_tools": "مدير المهام (T)",
+    "task_manager": "الترميز (E)",
+    "encoding": "أدوات المطور (D)",
+    "devtools": "عرض سجلات تحميل الموارد (L)",
+    "view_resource_log": "حظر الإعلانات (G)",
+    "adblock": "الإعدادات (S)",
+    "settings": "الملاحظات",
+    "feedback": "معلومات عن متصفح Kunqiong AI",
+    "about_app": "معلومات عن InPrivate",
+    "about_incognito": "إغلاق متصفح Kunqiong AI",
+    "exit_app": "فتح علامة جديدة"
+  },
+  "context": {
+    "new_tab": "إعادة تحميل",
+    "reload": "إعادة تكرار",
+    "duplicate": "رفع علامة",
+    "pin": "إلغاء رفع العلامة",
+    "unpin": "إغلاق العلامة",
+    "close": "إغلاق العلامات الأخرى",
+    "close_others": "إغلاق علامات الأيسر",
+    "close_left": "إغلاق علامات الأيمن",
+    "close_right": "إعادة فتح العلامة المغلقة (E)",
+    "reopen_closed": "إضافة علامات للعلامات الكل...",
+    "bookmark_all": " вклад جديد (Ctrl+T)"
+  },
+  "tooltips": {
+    "new_tab": "بحث في العلامات",
+    "search_tabs": "التحميلات (Ctrl+J)",
+    "download": "مستخدم/تسجيل الدخول",
+    "user_login": "ترجمة هذه الصفحة",
+    "translate_page": "التكبير",
+    "zoom": "إدارة كلمات المرور",
+    "manage_passwords": "العودة (Alt+يسار)"
+  },
+  "nav": {
+    "back": "التقدم (Alt+يمين)",
+    "forward": "تحديث (F5)",
+    "refresh": "إيقاف (Esc)",
+    "stop": "الصفحة الرئيسية (Alt+صفحة الرئيسية)",
+    "home": "جاهز"
+  },
+  "status": {
+    "ready": "InPrivate - لن يتم حفظ نشاط استعراضك على هذا الجهاز",
+    "incognito": "تحميل: {{file}}",
+    "downloading": "تم مسح التاريخ",
+    "history_cleared": "مساعد"
+  },
+  "ai": {
+    "assistant": "📝 ملخص هذه الصفحة",
+    "summarize": "نمط الذكاء الاصطناعي",
+    "mode": "فشل تشغيل مساعد",
+    "init_failed": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI chat UI file not found</h3><p>Please check these paths exist:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "missing_html": "يرجى ترجمة محتوى الصفحة الرئيسية إلى الصينية:\n\n{{text}}",
+    "translate_prompt": "فشل الترجمة الذكية: {{msg}}",
+    "translate_failed": "عنوان وصول الإمكانية (API Proxy):",
+    "api": {
+      "base": "مفتاح API:",
+      "key": "اسم النموذج:",
+      "model_name": "التنسيق النمودي:",
+      "model_preset": "التنسيق للمورد:",
+      "provider": "إعدادات API",
+      "title": "نمط API مخصّص (مست совّق مع OpenAI)",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "نمط الخدمة",
+    "mode.title": "نمط الويب المدمج (DeepSeek)",
+    "mode.web": "تهيئة مساعدك الذكي",
+    "settings": {
+      "subtitle": "إعدادات الذكاء الاصطناعي",
+      "title": "توصية: يعمل مع DeepSeek، OpenAI، Ollama وAPI أخرى متوافقة"
+    },
+    "tip": {
+      "compatible": "توصية: قيمة الأساسية متوافقة مع OpenAI لـ DashScope تُعطى تلقائيًّا على https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "dashscope": "توصية: يتطلب Volcengine Ark V3 معرف نقطه نتيجة (Endpoint ID) بالتنسيق ep-2024xxxxxxxx-xxxxx",
+      "volcengine": "إعدادات نمط الويب"
+    },
+    "web": {
+      "title": "عنوان الويب الذكي:",
+      "url": "InPrivate"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "أنت تستخدم عرض InPrivate\n\n✓ يمكن InPrivate:\n  • لا يحفظ نشاط الاستعراض\n  • لا يحفظ ملفات تعريف الارتباط وبيانات الموقع\n  • لا يحفظ بيانات النموذج\n  • يستخدم جلسة منفصلة\n\n✗ لن يفعل InPrivate:\n  • يخفي نشاط من قبل مديرو الشبكة\n  • يخفي نشاط من قبل موردك للإنترنت\n  • يمنع المواقع من الحصول على عنوان IP الخاص بك\n\nملاحظة: ستظل الملفات المُتحملة والعلامات المرتبطة بذلك.",
+      "message": "تأكيد"
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "موافق",
+    "ok": "هل أنت متأكد أنك تريد مسح التاريخ الكل؟",
+    "clear_history_all": "إلغاء",
+    "cancel": "هل أنت متأكد من حذف مصدر البحث \"{{name}}\"؟"
+  },
+  "search_engine": {
+    "confirm_delete": "التكبير"
+  },
+  "menu_zoom": {
+    "label": "إعادة تعيين",
+    "reset": "الإعدادات"
+  },
+  "settings": {
+    "header": {
+      "title": "الإعدادات",
+      "search_placeholder": "بحث في الإعدادات"
+    },
+    "sidebar": {
+      "history": "السجل",
+      "settings": "الإعدادات",
+      "ai": "إعدادات الذكاء الاصطناعي",
+      "privacy": "الخصوصية",
+      "advanced": "متقدم"
+    },
+    "set_startup_pages": "لم يتم العثور على إعدادات تتطابق",
+    "enter_urls_each_line": "الظهور",
+    "no_results": "عرض زر \"صفحة الرئيسية\"",
+    "appearance": {
+      "title": "تغيير",
+      "show_home_button": "عرض شريط العلامات دائمًا",
+      "change": "اللغة",
+      "show_bookmark_bar": "تبع النظام",
+      "language": "اللغة",
+      "language_auto": "اتباع النظام",
+      "language_zhCN": "الصينية (المبسطة)",
+      "language_en": "الإنجليزية",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "موقع الحفظ الافتراضي للتحميلات",
+      "location_label": "تصفح...",
+      "location_desc": "أسأل عن موقع حفظ كل ملف قبل التحميل",
+      "browse": "الإعدادات",
+      "ask_location_label": "إعدادات البحث",
+      "ask_location_desc": "إعدادات البحث"
+    },
+    "title": "الإعدادات",
+    "search_placeholder": "بحث في الإعدادات",
+    "home": {
+      "title": "استخدام الصفحة الحالية",
+      "url": "استخدام علامة جديدة",
+      "use_current": "عند تشغيل",
+      "use_newtab": "فتح علامة جديدة"
+    },
+    "startup": {
+      "title": "استمرار من حيث أتخفّضت",
+      "newtab": "فتح صفحة معينة أو مجموعة من الصفحات",
+      "continue_last": "إدارة الصفحات",
+      "specific_pages": "حظر الإعلانات",
+      "manage_pages": "لا يقوم بحظر أي إعلانات",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "حظر فقط النافذات التلقائية",
+      "none": "حظر إعلانات الصفحات الويب بثبات",
+      "popup": "قواعد حظر إعلانات مخصّصة",
+      "aggressive": "قواعد مخصّصة",
+      "custom": "إدارة قواعدي...",
+      "custom_link": "مصدر البحث في شريط العنوان",
+      "manage_rules": "مصدر البحث الافتراضي"
+    },
+    "search": {
+      "title": "مصدر البحث المستخدم في شريط العنوان",
+      "default_label": "360",
+      "desc": "Search engine used by the address bar",
+      "options": {
+        "360": "360",
+        "baidu": "Baidu",
+        "bing": "إدارة مواقع البحث",
+        "google": "عرض إعدادات متقدمة..."
+      },
+      "manage_button": "؟ عودة إلى الإعدادات الأساسية"
+    },
+    "show_advanced": "تمكين إشارات الماوس",
+    "advanced": {
+      "back_basic": "إشارات الماوس",
+      "gesture": {
+        "enable": "فترة إفراغ الذاكرة للعلامات الخلفية:",
+        "title": "الأداء"
+      },
+      "performance": {
+        "mem_release_time": "تمكين السحب السريع",
+        "title": "إعدادات متقدمة"
+      },
+      "super_drag": {
+        "enable": "تحقق من حالة المتصفح الافتراضي..."
+      },
+      "title": "Advanced settings"
+    },
+    "default_browser": {
+      "checking": "Checking default browser status...",
+      "is_default": "تحديد كمتصفح افتراضي",
+      "not_default": "متصفح افتراضي",
+      "set_default": "زمان الزيارة",
+      "title": "العنوان"
+    },
+    "history": {
+      "columns": {
+        "time": "الرابط",
+        "title": "إدارة الوثائق...",
+        "url": "تغيير إعدادات الوصول عبر الخلفية..."
+      },
+      "title": "إعادة تعيين الإعدادات إلى الافتراضيات الأصليّة",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "سيؤثر ذلك على علاماتك، التاريخ، أو كلمات المرور المحفوظة.",
+      "title": "https://ssl."
+    },
+    "network": {
+      "proxy_change": "إعادة تعيين الإعدادات",
+      "title": "شبكتنا",
+      "system_proxy_desc": "يستخدم متصفح KunQiong AI إعدادات وكيل النظام للاتصال بالشبكة."
+    },
+    "reset": {
+      "button": "إعادة تعيين الإعدادات الافتراضية",
+      "desc": "انقر مرتين للغلق على العلامات",
+      "title": "نوع إدخال شريط العنوان:",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "Restore default settings",
+    "tabs": {
+      "double_click_close": "بحث أثناء الكتابة (موصى به)",
+      "input_mode": {
+        "new_tab": "در زبانه جدید باز شود"
+      },
+      "input_mode.enter": "فتح إلى اليمين من العلامة الحالية",
+      "input_mode.instant": "عند فتح صفحة جديدة:",
+      "new_tab_position": {
+        "last": "اختيار جميع نصوص الرابط عند النقر على شريط العنوان",
+        "right": "Open to the right of current tab"
+      },
+      "open_new": "العلامات",
+      "select_all_on_click": "استيراد العلامات والإعدادات...",
+      "show_full_url": "بيانات المستخدم",
+      "title": "علامات التبويب",
+      "right_click_close_desc": "Right-click closes current tab (hold Shift to show context menu)",
+      "open_links_background": "فتح الروابط التي يتم النقر عليها في علامة تبويب بالخلفية",
+      "input_mode_label": "وضع إدخال شريط العنوان"
+    },
+    "user_data": {
+      "import": "Import bookmarks and settings...",
+      "title": "User data"
+    },
+    "features": {
+      "title": "ویژگی‌ها",
+      "mouse_gesture_label": "حرکات ماوس",
+      "mouse_gesture_desc": "حرکات ماوس را فعال کنید تا با نگه داشتن دکمه راست و حرکت ماوس، فرمان اجرا شود",
+      "super_drag_label": "کشیدن پیشرفته",
+      "super_drag_desc": "با کشیدن متن یا پیوند می‌توانید جستجو کنید یا آن را در زبانه جدید باز کنید"
+    },
+    "web": {
+      "title": "إعدادات الويب",
+      "smooth_scrolling": "تمكين التمرير السلس على صفحات الويب (يسري بعد إعادة التشغيل)"
+    },
+    "cache": {
+      "title": "ذاكرة التخزين المؤقت المخصصة",
+      "directory_label": "دليل ذاكرة التخزين المؤقت المخصصة:",
+      "change_button": "...تغيير",
+      "notice": "سيؤدي تغيير هذا إلى مسح ذاكرة التخزين المؤقت الحالية ويصبح ساري المفعول بعد إعادة التشغيل.",
+      "open_dir": "فتح دليل ذاكرة التخزين المؤقت",
+      "reset_default": "إعادة تعيين للإفتراضي",
+      "reset_confirm": "هل أنت متأكد أنك تريد إعادة تعيين دليل ذاكرة التخزين المؤقت إلى الوضع الافتراضي ؟\\ n\\nسيؤدي هذا إلى مسح ذاكرة التخزين المؤقت الحالية ويصبح ساري المفعول بعد إعادة التشغيل."
+    },
+    "privacy": {
+      "title": "إعدادات الخصوصية",
+      "content_settings": "إعدادات المحتوى",
+      "clear_browsing_data": "مسح بيانات التصفح",
+      "crash_upload": "تمكين تحميل تقرير التصادم",
+      "crash_upload_desc": "قم تلقائيًا بتحميل تقارير الأخطاء عن الأعطال للمساعدة في تحسين المتصفح."
+    },
+    "passwords": {
+      "title": "كلمات المرور والنماذج",
+      "autofill_desc": "عند تمكين الملء التلقائي، يمكنك ملء نماذج الويب بنقرة واحدة.",
+      "manage_autofill": "إدارة إعدادات الملء التلقائي",
+      "save_passwords_desc": "اطلب حفظ كلمات المرور التي تم إدخالها على مواقع الويب.",
+      "manage_saved_passwords": "إدارة كلمات المرور المحفوظة"
+    },
+    "web_content": {
+      "title": "محتوى الويب",
+      "font_size": "حجم الخط:",
+      "font_size_very_small": "صغير جدًا",
+      "font_size_small": "صغيرة",
+      "font_size_medium": "متوسطة",
+      "font_size_large": "الأوقاف الكبيرة",
+      "font_size_very_large": "كبير جدًا",
+      "customize_fonts": "تخصيص الخطوط...",
+      "page_zoom": "تكبير/تصغير الصفحة:"
+    },
+    "save": {
+      "apply_button": "حفظ وتطبيق",
+      "auto_hint": "يتم حفظ الإعدادات تلقائيًا",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "تحميلات",
+    "location_label": "موقع التحميل",
+    "location_desc": "الموقع الافتراضي لحفظ التحميلات",
+    "browse": "تصفح...",
+    "ask_location_label": "أسأل عن موضع حفظ الملف قبل تحميله",
+    "default_tool_label": "اختر أداة التحميل الافتراضية:",
+    "browse_desc": "اختر папку حفظ التحميل",
+    "status": {
+      "downloading": "تحميل: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "مكتمل",
+      "cancelled": "منع",
+      "failed": "فشل التحميل",
+      "pending": "معلق..."
+    }
+  },
+  "password_manager": {
+    "hide": "إخفاء",
+    "show": "عرض"
+  },
+  "import": {
+    "success": "تم استيراد {{count}} علامة تعريف بنجاح.",
+    "done": "استيراد مكتمل",
+    "failed": "فشل الاستيراد: {{msg}}"
+  },
+  "adblock": {
+    "allow": "إذن",
+    "block": "حظر"
+  },
+  "task_manager": {
+    "tab_title": "● تبويب: {{title}}"
+  },
+  "clear": {
+    "success": "تم مسح البيانات التالية بنجاح:\n• {{items}}",
+    "done": "مسح مكتمل",
+    "failed": "خطأ أثناء مسح البيانات: {{msg}}",
+    "in_progress": "مسح..."
+  },
+  "print": {
+    "failed": "فشل الطباعة",
+    "failed_message": "خطأ أثناء الطباعة:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "حفظ الصفحة كـ",
+      "filter": "صفحة الويب، فقط HTML (*.html)|*.html|صفحة الويب، كاملة (*.html)|*.html|ملف MHTML (*.mhtml)|*.mhtml|وثيقة PDF (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "تصدير علامات تعريف",
+    "export_filter": "ملفات HTML (*.html)|*.html",
+    "export_success_path": "تم تصدير العلامات إلى:\n{{path}}",
+    "other": "علامات تعريف أخرى",
+    "added_message": "تمت إضافة {{count}} علامة تبويب إلى المجلد \"{{folder}}\"",
+    "added_status": "تم إضافة {{count}} علامات تعريف إلى папка \"{{folder}}\"",
+    "already": "تم الاضافة مسبقًا",
+    "batch_confirm": "سيتم إنشاء ملفًا لـ {{count}} تبويب.\\n\\nمتابعة؟",
+    "batch_title": "إضافة علامات تعريف بعمليات مسبقة",
+    "cancelled": "تم إلغاء الاضافة إلى العلامات",
+    "import_filter": "ملفات HTML (*.html;*.htm)|*.html;*.htm|كل الملفات (*.*)|*.*",
+    "import_title": "استيراد علامات تعريف",
+    "new_bookmark": "علامة تعريف جديدة",
+    "unable_for_page": "لا يمكن إضافة علامة تعريف لهذه الصفحة",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "فتح",
+    "open_in_new_tab": "فتح في تبويب جديد",
+    "open_all_bookmarks": "فتح جميع العلامات"
+  },
+  "actions": {
+    "add": "إضافة",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "delete_all": "حذف الكل",
+    "done": "انتهاء",
+    "copy_link": "نسخ الرابط",
+    "rename": "إعادة اسم",
+    "add_bookmark": "إضافة علامة تعريف",
+    "add_folder": "إضافة ملف"
+  },
+  "permissions": {
+    "allow": "إذن",
+    "block": "حظر",
+    "ask": "أسأل"
+  },
+  "site_settings": {
+    "desc": "يمكنك ضبط صلاحيات {{category}} للمحللات المحددة.",
+    "host_pattern": "نموذج العنوان الرئيسي:",
+    "columns": {
+      "host_pattern": "نموذج العنوان الرئيسي",
+      "behavior": "سلوك"
+    }
+  },
+  "time": {
+    "minute": "دقيقة"
+  },
+  "newtab": {
+    "title": "تبويب جديد",
+    "search_placeholder": "ابحث أو ادخل العنوان",
+    "footer": "مدني · سريع · بسيط",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "مسح بيانات الاستكشاف",
+    "clear_button": "مسح بيانات الاستكشاف...",
+    "clear_desc": "مسح التاريخ الاستكشافي، ملفات التخزين المؤقت، ملفات تعريف الورقة، وآخرات أخرى",
+    "exit_clear": {
+      "title": "مسح تلقائي عند الخروج",
+      "history": "التاريخ الاستكشافي",
+      "downloads": "التاريخ التحميل",
+      "cache": "الصور والملفات المخزونة مؤقتًا",
+      "cookies": "ملفات تعريف الورقة وبيانات الموقع الأخرى"
+    },
+    "options": {
+      "title": "خيارات الخصوصية",
+      "dnt": "إرسال طلب 'لا تتبع' مع تدفق الاستكشاف"
+    }
+  },
+  "update": {
+    "updater_missing": "لم يتم العثور على مُنشط التحديث 'updater.exe'"
+  },
+  "address_dropdown": {
+    "search": "ابحث '{{text}}'",
+    "visit": "زيارة '{{text}}'",
+    "empty_history": "لم يتم العثور على تاريخ مطابق",
+    "empty_bookmark": "لم يتم العثور على علامات تعريف مطابقة",
+    "empty_tabs": "لم يتم العثور على تبويب مطابق",
+    "empty_all": "لم يتم العثور على أية تطابق"
+  },
+  "image_dialog": {
+    "title": "استخراج موارد الصورة",
+    "found_count": "تم العثور على {{count}} صور",
+    "columns": {
+      "url": "URL الصورة",
+      "type": "نوع"
+    },
+    "preview": {
+      "select": "اختر صورة لمعاينةها"
+    },
+    "save_to": "حفظ التحميلات في",
+    "browse": "تغيير المجلد",
+    "browse_desc": "اختر ملف حفظ التحميل",
+    "download_now": "تحميل الآن",
+    "select_one_image": "الرجاء اختيار صورة على الأقل لتتحميلها",
+    "select_all_toggle": "اختيار الكل / متعادل",
+    "loading_preview": "تحميل المعاينة...",
+    "modern_preview": "تنسيق الصورة الحديث (معاينة WebView2)",
+    "modern": "تنسيق الصورة الحديث",
+    "preview_loading_webview": "تحميل المعاينة (في وضع WebView2)...",
+    "preview_unavailable": "غير متاح المعاينة",
+    "preview_size": "{{width}} × {{height}} | {{kb}} كيلوبايت"
+  },
+  "video_dialog": {
+    "title": "اختر تنسيق التحميل",
+    "columns": {
+      "resolution": "الحجم",
+      "ext": "الإضافة",
+      "size": "الحجم",
+      "note": "ملاحظة"
+    },
+    "save_to": "بدء التحميل",
+    "browse": "الرجاء اختيار تنسيق أولاً",
+    "browse_desc": "عنوان معروف",
+    "start_download": "غير معروف",
+    "select_format_first": "فشل تحليل معلومات الفيديو: {{msg}}",
+    "unknown_title": "معلومات",
+    "unknown": "فشل العمليّة، الرجاء المحاولة مرة أخرى",
+    "parse_failed": "فشل تحليل معلومات الفيديو: {{msg}}"
+  },
+  "common": {
+    "info": "هذه الميزة تحت تطوير...",
+    "done": "معلومات عن",
+    "error": "نسخة ",
+    "operation_failed_retry": "تحقق من التحديثات",
+    "empty": "تحقق...",
+    "in_dev": "اتصال بالخادم التحديثي...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "فشل فحص التحديثات. الرجاء المحاولة لاحقًا.",
+    "version_prefix": "تم العثور على نسخة جديدة: {{version}}",
+    "check_update": "تم العثور على تحديث",
+    "checking": "تم العثور على نسخة جديدة {{version}}\n\nملاحظات الإصدار:\n{{log}}\n\nتحديث الآن؟",
+    "connecting": "أنت بالفعل على الإصدار الأخير.",
+    "update_failed": "خطأ: ",
+    "update_found_status": "معلومات",
+    "update_found_title": "{{app}}\\nنسخة {{version}}\\n\\nبناءً على движك WebView2",
+    "update_found_message": "© {{year}} {{app}}. جميع الحقوق محفوظة.",
+    "latest": "{{size}}: لورم ایپسوم dolor sit amet,\nconsectetur adipiscing elit.",
+    "error_prefix": "أقل",
+    "simple_title": "أكثر",
+    "simple_message": "خط سريف",
+    "copyright": "خط غير سريف"
+  },
+  "font": {
+    "preview_standard": "خط عرض ثابت",
+    "min": "أقل حجم خط",
+    "max": "الظهور",
+    "serif": "عرض زر 'الصفحة الرئيسية'",
+    "sans_serif": "تغيير",
+    "fixed_width": "دائمًا عرض شريط العلامات",
+    "minimum_size": "اللغة",
+    "preview_generic": "تبع النظام",
+    "preview_fixed": "الصينية (بسيطة)",
+    "preview_min": "الإنجليزية"
+  },
+  "appearance": {
+    "title": "إخفاء شريط العلامات",
+    "show_home_button": "هل أنت متأكد من رغبتك في حذف المجلد \"{{name}}\" وجميع محتواه؟",
+    "change": "هل أنت متأكد من رغبتك في حذف \"{{name}}\"؟",
+    "show_bookmark_bar": "فشل التصدير: {{msg}}",
+    "language": "اللغة",
+    "language_auto": "اتباع النظام",
+    "language_zhCN": "الصينية (المبسطة)",
+    "language_en": "الإنجليزية",
+    "hide_bookmark_bar": "فشل استخراج الصورة"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "لم يتم العثور على موارد صورة",
+    "confirm_delete_item": "تم إرسال {{count}} مهام تحميل صورة",
+    "export_failed": "م永",
+    "export_success": "حفظ كلمة المرور"
+  },
+  "images": {
+    "cancelled_status": "هل تريد أن يحفظ كلمة المرور هذه للموقع من قبل KunQiong AI Browser؟",
+    "extracting_status": "انتهاء",
+    "failed_message": "إدارة كلمات المرور المحفوظة",
+    "failed_status": "كلمة المرور المحفوظة للموقع هذا:",
+    "none_found_status": "إدارة مواصفات البحث",
+    "submitted_tasks": "تسجيل الخروج"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "إعدادات الملف الشخصي",
+      "save": "فشل الاستخراج",
+      "title": "لم يتم اكتشاف أي موارد فيديو قابلة للاستخراج على هذه الصفحة.\\n\\nملاحظة: قد لا يحتوي الصفحة على فيديو، أو قد تستخدم إعتمادًا محفوظًا/DRM، لذا لا يمكن الاستخراج المباشر.\\n\\nاقتراح: افتح صفحة воспроduction الفيديو الحقيقية واولي استخراج مرة أخرى بعد أن يبدأ воспроduction."
+    },
+    "saved": {
+      "done": "لم يتم اكتشاف أي موارد فيديو",
+      "manage": "لم يتم اكتشاف أي موارد فيديو",
+      "title": "غير مدعوم استخراج الفيديو على هذه الصفحة"
+    }
+  },
+  "search": {
+    "manage_button": "تحليل معلومات الفيديو..."
+  },
+  "user": {
+    "logout": "Log out",
+    "manage_profile": "Profile settings"
+  },
+  "videos": {
+    "extract_failed_status": "Extraction failed",
+    "not_detected_desc": "No extractable video resources were detected on this page.\\n\\nNote: The page may not embed a video, or it may use encrypted/DRM playback, so direct extraction is unavailable.\\n\\nSuggestion: Open the actual video playback page and try extraction again after playback starts.",
+    "not_detected_status": "No video resources detected",
+    "not_detected_title": "No video resources detected",
+    "not_supported": "Video extraction is not supported on this page",
+    "parsing_status": "Parsing video information..."
+  }
+}

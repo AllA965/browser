@@ -2824,6 +2824,15 @@ public partial class MainForm : Form
                 // 显示主页按钮
                 _homeBtn.Visible = (bool)value;
                 break;
+            case "language":
+                try
+                {
+                    var languageCode = value?.ToString();
+                    Localization.Initialize(string.Equals(languageCode, "auto", StringComparison.OrdinalIgnoreCase) ? null : languageCode);
+                }
+                catch { }
+                RefreshLocalizedTexts();
+                break;
         }
     }
     

@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "Nouvel onglet"
+  },
+  "menu": {
+    "new_tab": "Nouvel onglet (T)",
+    "new_window": "Nouvelle fenêtre (N)",
+    "new_incognito": "Nouvelle fenêtre InPrivate (I)",
+    "bookmarks": "Favoris (B)",
+    "show_bookmark_bar": "Afficher la barre de favoris (S)",
+    "bookmark_manager": "Gestionnaire de favoris (B)",
+    "import_bookmarks": "Importer des favoris et des paramètres...",
+    "add_bookmark": "Ajouter un favori pour cette page...",
+    "add_all_bookmarks": "Ajouter des favoris pour toutes les pages ouvertes...",
+    "more_bookmarks": "Plus de favoris",
+    "no_bookmarks": "Aucun favori",
+    "history": "Histoire (H)",
+    "show_all_history": "Afficher l'historique complet",
+    "no_history": "Aucun historique",
+    "clear_history": "Vider l'historique de navigation",
+    "downloads": "Téléchargements (D)",
+    "media_extract": "Extraction de médias",
+    "extract_images": "Extraire les images de cette page",
+    "extract_videos": "Extraire les vidéos de cette page",
+    "clear_data": "Vider les données de navigation",
+    "exit_incognito": "Fermer la fenêtre InPrivate",
+    "exit_normal": "Fermer KunQiong AI Browser",
+    "print": "Imprimer (P)",
+    "save_page_as": "Enregistrer la page sous (A)...",
+    "find_in_page": "Rechercher sur la page",
+    "more_tools": "Outils supplémentaires",
+    "task_manager": "Gestionnaire de tâches (T)",
+    "encoding": "Codage (E)",
+    "devtools": "Outils de développement (D)",
+    "view_resource_log": "Voir le journal de chargement des ressources (L)",
+    "adblock": "Bloqueur de publicités (G)",
+    "settings": "Paramètres (S)",
+    "feedback": "Retour",
+    "about_app": "À propos de Kunqiong AI Browser",
+    "about_incognito": "À propos de InPrivate",
+    "exit_app": "Fermer KunQiong AI Browser"
+  },
+  "context": {
+    "new_tab": "Ouvrir un nouvel onglet",
+    "reload": "Recharger",
+    "duplicate": "Dupliquer",
+    "pin": "Fixer l'onglet",
+    "unpin": "Désanimer l'onglet",
+    "close": "Fermer l'onglet",
+    "close_others": "Fermer les autres onglets",
+    "close_left": "Fermer les onglets à gauche",
+    "close_right": "Fermer les onglets à droite",
+    "reopen_closed": "Réouvrir l'onglet fermé (E)",
+    "bookmark_all": "Ajouter des favoris pour toutes les onglets..."
+  },
+  "tooltips": {
+    "new_tab": "Nouvel onglet (Ctrl+T)",
+    "search_tabs": "Rechercher les onglets",
+    "download": "Téléchargements (Ctrl+J)",
+    "user_login": "Utilisateur/Connexion",
+    "translate_page": "Traduire cette page",
+    "zoom": "Zoom",
+    "manage_passwords": "Gérer les mots de passe"
+  },
+  "nav": {
+    "back": "Retour arrière (Alt+Gauche)",
+    "forward": "Avancer (Alt+Droite)",
+    "refresh": "Rafraîchir (F5)",
+    "stop": "Arrêter (Éch)",
+    "home": "Accueil (Alt+Accueil)"
+  },
+  "status": {
+    "ready": "Prêt",
+    "incognito": "InPrivate - Votre activité de navigation ne sera pas enregistrée sur cet appareil",
+    "downloading": "Téléchargement : {{file}}",
+    "history_cleared": "Historique vidé"
+  },
+  "ai": {
+    "assistant": "Assistant",
+    "summarize": "📝 Résumer cette page",
+    "mode": "Mode IA",
+    "init_failed": "Échec de l'initialisation de l'Assistant",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>Fichier d'interface chat AI introuvable</h3><p>Veuillez vérifier que ces chemins existent :</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "Veuillez traduire le contenu principal de cette page en chinois:\n\n{{text}}",
+    "translate_failed": "Échec de la traduction par l'IA : {{msg}}",
+    "api": {
+      "base": "URL du proxy API :",
+      "key": "Clé API :",
+      "model_name": "Nom du modèle :",
+      "model_preset": "Préset du modèle :",
+      "provider": "Préset du fournisseur :",
+      "title": "Configuration API",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "Mode API personnalisé (compatible avec OpenAI)",
+    "mode.title": "Mode service",
+    "mode.web": "Mode web intégré (DeepSeek)",
+    "settings": {
+      "subtitle": "Configurer votre assistant IA",
+      "title": "Paramètres IA"
+    },
+    "tip": {
+      "compatible": "Conseil : Fonctionne avec DeepSeek, OpenAI, Ollama et d'autres APIs compatibles",
+      "dashscope": "Conseil : L'URL de base compatible avec OpenAI de DashScope est par défaut https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "volcengine": "Conseil : Volcengine Ark V3 nécessite un ID de point de terminaison au format ep-2024xxxxxxxx-xxxxx"
+    },
+    "web": {
+      "title": "Paramètres du mode web",
+      "url": "URL web de l'IA :"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "InPrivate",
+      "message": "Vous utilisez la navigation InPrivate\n\n✓ InPrivate peut :\n  • Ne pas enregistrer l'historique de navigation\n  • Ne pas enregistrer les cookies et les données du site\n  • Ne pas enregistrer les données du formulaire\n  • Utiliser une session isolée\n\n✗ InPrivate ne pourra pas :\n  • Cacher l'activité des administrateurs du réseau\n  • Cacher l'activité de votre ISP (fournisseur d'accès Internet)\n  • Empêcher les sites web d'obtenir votre adresse IP\n\nNote : Les fichiers téléchargés et les favoris créés restent."
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "Confirmer",
+    "ok": "OK",
+    "clear_history_all": "Êtes-vous sûr de vouloir effacer tout l'historique ?",
+    "cancel": "Annuler"
+  },
+  "search_engine": {
+    "confirm_delete": "Êtes-vous sûr de vouloir supprimer le moteur de recherche «{{name}}» ?"
+  },
+  "menu_zoom": {
+    "label": "Zoom",
+    "reset": "Réinitialiser"
+  },
+  "settings": {
+    "header": {
+      "title": "Paramètres",
+      "search_placeholder": "Rechercher dans les paramètres"
+    },
+    "sidebar": {
+      "history": "Historique",
+      "settings": "Paramètres",
+      "ai": "Paramètres IA",
+      "privacy": "Confidentialité",
+      "advanced": "Avancé"
+    },
+    "set_startup_pages": "Définir les pages de démarrage",
+    "enter_urls_each_line": "Veuillez entrer les URLs des sites web (une par ligne) :",
+    "no_results": "Aucun paramètre correspondant trouvé",
+    "appearance": {
+      "title": "Apparence",
+      "show_home_button": "Afficher le bouton «Accueil»",
+      "change": "Changer",
+      "show_bookmark_bar": "Toujours afficher la barre de signets",
+      "language": "Langue",
+      "language_auto": "Suivre le système",
+      "language_zhCN": "Chinois (simplifié)",
+      "language_en": "Anglais",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "Téléchargements",
+      "location_label": "Emplacement de téléchargement",
+      "location_desc": "Emplacement de sauvegarde par défaut pour les téléchargements",
+      "browse": "Parcourir...",
+      "ask_location_label": "Demander où enregistrer chaque fichier avant téléchargement",
+      "ask_location_desc": "Demander où enregistrer chaque fichier avant téléchargement"
+    },
+    "title": "Paramètres",
+    "search_placeholder": "Rechercher dans les paramètres",
+    "home": {
+      "title": "Accueil",
+      "url": "URL de l'accueil :",
+      "use_current": "Utiliser la page actuelle",
+      "use_newtab": "Utiliser un nouvel onglet"
+    },
+    "startup": {
+      "title": "Au démarrage",
+      "newtab": "Ouvrir un nouvel onglet",
+      "continue_last": "Continuer là où vous avez laissé",
+      "specific_pages": "Ouvrir une page spécifique ou un ensemble de pages",
+      "manage_pages": "Gérer les pages",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "Bloqueur publicitaire",
+      "none": "Ne bloquer aucun publicité",
+      "popup": "Bloquer uniquement les pop-ups",
+      "aggressive": "Bloquer de manière agressive les publicités sur les pages web",
+      "custom": "Règles personnalisées de blocage publicitaire",
+      "custom_link": "Règles personnalisées",
+      "manage_rules": "Gérer mes règles..."
+    },
+    "search": {
+      "title": "Moteur de recherche de la barre d'adresse",
+      "default_label": "Moteur de recherche par défaut",
+      "desc": "Moteur de recherche utilisé par la barre d'adresse",
+      "options": {
+        "360": "360",
+        "baidu": "Baidu",
+        "bing": "Bing",
+        "google": "Google"
+      },
+      "manage_button": "Gérer les moteurs de recherche"
+    },
+    "show_advanced": "Afficher les paramètres avancés...",
+    "advanced": {
+      "back_basic": "? Retour aux paramètres de base",
+      "gesture": {
+        "enable": "Activer les gestes de souris",
+        "title": "Gestes de souris"
+      },
+      "performance": {
+        "mem_release_time": "Intervalle de libération de mémoire des onglets en arrière-plan :",
+        "title": "Performance"
+      },
+      "super_drag": {
+        "enable": "Activer le super glisser"
+      },
+      "title": "Paramètres avancés"
+    },
+    "default_browser": {
+      "checking": "Vérification de l'état du navigateur par défaut...",
+      "is_default": "{{app}} est actuellement votre navigateur par défaut.",
+      "not_default": "{{app}} n'est pas actuellement votre navigateur par défaut.",
+      "set_default": "Définir comme navigateur par défaut",
+      "title": "Navigateur par défaut"
+    },
+    "history": {
+      "columns": {
+        "time": "Heure de visite",
+        "title": "Titre",
+        "url": "URL"
+      },
+      "title": "Historique",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "Gérer les certificats...",
+      "title": "HTTPS (SSL)"
+    },
+    "network": {
+      "proxy_change": "Changer les paramètres de proxy...",
+      "title": "Réseau",
+      "system_proxy_desc": "KunQiong AI Browser utilise les paramètres de votre proxy système pour se connecter au réseau."
+    },
+    "reset": {
+      "button": "Rétablir les paramètres aux valeurs par défaut originales",
+      "desc": "Ceci n'affectera pas vos signets, votre historique ou vos mots de passe enregistrés.",
+      "title": "Réinitialiser les paramètres",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "Rétablir les paramètres par défaut",
+    "tabs": {
+      "double_click_close": "Double-cliquez pour fermer les onglets",
+      "input_mode": {
+        "new_tab": "Ouvrir dans un nouvel onglet"
+      },
+      "input_mode.enter": "Appuyez sur Entrée pour rechercher",
+      "input_mode.instant": "Recherchez en tapant (Recommandé)",
+      "new_tab_position": {
+        "last": "Ouvrir à la dernière position",
+        "right": "Ouvrir à droite de l'onglet actuel"
+      },
+      "open_new": "Lors de l'ouverture d'une nouvelle page :",
+      "select_all_on_click": "Sélectionner tout le texte de l'URL lors du clic sur la barre d'adresse",
+      "show_full_url": "Afficher l'URL complète dans la barre d'adresse (aussi affiché en tenant la touche Maj)",
+      "title": "Onglets",
+      "right_click_close_desc": "Le clic droit ferme l’onglet actuel (maintenez Shift pour afficher le menu contextuel)",
+      "open_links_background": "Ouvrir les liens cliqués dans un onglet en arrière-plan",
+      "input_mode_label": "Lors de l'ouverture d'une nouvelle page :"
+    },
+    "user_data": {
+      "import": "Importer des signets et des paramètres...",
+      "title": "Données utilisateur"
+    },
+    "features": {
+      "title": "Fonctionnalit?s",
+      "mouse_gesture_label": "Gestes de la souris",
+      "mouse_gesture_desc": "Utilisez les gestes de la souris pour effectuer rapidement des actions",
+      "super_drag_label": "Super glisser-d?poser",
+      "super_drag_desc": "Faites glisser du texte ou des liens pour rechercher ou ouvrir rapidement"
+    },
+    "web": {
+      "title": "Param?tres Web",
+      "smooth_scrolling": "Activer le d?filement fluide sur les pages Web (prend effet apr?s red?marrage)"
+    },
+    "cache": {
+      "title": "Cache personnalisé",
+      "directory_label": "Répertoire cache personnalisé :",
+      "change_button": "Changer…",
+      "notice": "La modification de cette option effacera le cache actuel et prendra effet après le redémarrage.",
+      "open_dir": "Répertoire Cache",
+      "reset_default": "Réinitialiser par défaut",
+      "reset_confirm": "Voulez-vous vraiment réinitialiser le répertoire du cache par défaut ?\\n\\nCela effacera le cache existant et prendra effet après le redémarrage."
+    },
+    "privacy": {
+      "title": "Paramètres de confidentialité",
+      "content_settings": "Paramètres contenu",
+      "clear_browsing_data": "effacer données de navigation",
+      "crash_upload": "Activer le téléchargement du rapport d'accident",
+      "crash_upload_desc": "Téléchargez automatiquement des rapports d'erreur sur les plantages pour aider à améliorer le navigateur."
+    },
+    "passwords": {
+      "title": "Mots de passe et formulaires",
+      "autofill_desc": "Lorsque le remplissage automatique est activé, vous pouvez remplir des formulaires Web en un clic.",
+      "manage_autofill": "Gérer les paramètres de remplissage automatique",
+      "save_passwords_desc": "Demandez à enregistrer les mots de passe saisis sur les sites Web.",
+      "manage_saved_passwords": "Gérer les mots de passe enregistrés"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Taille de police :",
+      "font_size_very_small": "Très petit modèle",
+      "font_size_small": "Petite",
+      "font_size_medium": "Moyen",
+      "font_size_large": "Grand",
+      "font_size_very_large": "Très grande",
+      "customize_fonts": "Personnaliser les polices",
+      "page_zoom": "Zoom de la page"
+    },
+    "save": {
+      "apply_button": "Enregistrer et appliquer",
+      "auto_hint": "Les paramètres sont enregistrés automatiquement",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "Téléchargements",
+    "location_label": "Emplacement de téléchargement",
+    "location_desc": "Emplacement par défaut de sauvegarde pour les téléchargements",
+    "browse": "Parcourir...",
+    "ask_location_label": "Demander où enregistrer chaque fichier avant le téléchargement",
+    "default_tool_label": "Choisir l'outil de téléchargement par défaut:",
+    "browse_desc": "Choisir le dossier de sauvegarde du téléchargement",
+    "status": {
+      "downloading": "Téléchargement en cours: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "Terminé",
+      "cancelled": "Annulé",
+      "failed": "Téléchargement échoué",
+      "pending": "En attente..."
+    }
+  },
+  "password_manager": {
+    "hide": "Cacher",
+    "show": "Afficher"
+  },
+  "import": {
+    "success": "Importation de {{count}} signets effectuée avec succès.",
+    "done": "Importation terminée",
+    "failed": "Importation échouée: {{msg}}"
+  },
+  "adblock": {
+    "allow": "Autoriser",
+    "block": "Bloquer"
+  },
+  "task_manager": {
+    "tab_title": "● Onglet: {{title}}"
+  },
+  "clear": {
+    "success": "Données suivantes effacées avec succès:\n• {{items}}",
+    "done": "Effacement terminé",
+    "failed": "Erreur lors de la suppression des données: {{msg}}",
+    "in_progress": "Effacement en cours..."
+  },
+  "print": {
+    "failed": "Impression échouée",
+    "failed_message": "Erreur lors de l'impression:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "Enregistrer la page sous",
+      "filter": "Page web, HTML seulement (*.html)|*.html|Page web complète (*.html)|*.html|Fichier MHTML (*.mhtml)|*.mhtml|Document PDF (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "Exporter les signets",
+    "export_filter": "Fichiers HTML (*.html)|*.html",
+    "export_success_path": "Signets exportés vers:\n{{path}}",
+    "other": "Autres signets",
+    "added_message": "Ajout de {{count}} onglets au dossier \"{{folder}}\"",
+    "added_status": "Ajout de {{count}} signets au dossier \"{{folder}}\"",
+    "already": "Déjà signeté",
+    "batch_confirm": "Un dossier sera créé pour {{count}} onglets.\\n\\nContinuer ?",
+    "batch_title": "Ajout en lot de signets",
+    "cancelled": "Signet annulé",
+    "import_filter": "Fichiers HTML (*.html;*.htm)|*.html;*.htm|Tous les fichiers (*.*)|*.*",
+    "import_title": "Importer les signets",
+    "new_bookmark": "Nouveau signet",
+    "unable_for_page": "Impossible de signeter cette page",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "Ouvrir",
+    "open_in_new_tab": "Ouvrir dans un nouvel onglet",
+    "open_all_bookmarks": "Ouvrir tous les signets"
+  },
+  "actions": {
+    "add": "Ajouter",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "delete_all": "Supprimer tout",
+    "done": "Terminé",
+    "copy_link": "Copier le lien",
+    "rename": "Renommer",
+    "add_bookmark": "Ajouter un signet",
+    "add_folder": "Ajouter un dossier"
+  },
+  "permissions": {
+    "allow": "Autoriser",
+    "block": "Bloquer",
+    "ask": "Demander"
+  },
+  "site_settings": {
+    "desc": "Vous pouvez configurer les autorisations {{category}} pour des sites spécifiques.",
+    "host_pattern": "Modèle d'hôte:",
+    "columns": {
+      "host_pattern": "Modèle d'hôte",
+      "behavior": "Comportement"
+    }
+  },
+  "time": {
+    "minute": "minute"
+  },
+  "newtab": {
+    "title": "Nouvel Onglet",
+    "search_placeholder": "Rechercher ou entrer une adresse",
+    "footer": "Légère · Rapide · Simple",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "Effacer les données de navigation",
+    "clear_button": "Effacer les données de navigation...",
+    "clear_desc": "Historique de navigation, cookies, cache et autres données effacées",
+    "exit_clear": {
+      "title": "Auto-effacement à la fermeture",
+      "history": "Historique de navigation",
+      "downloads": "Historique des téléchargements",
+      "cache": "Images et fichiers mis en cache",
+      "cookies": "Cookies et autres données de site"
+    },
+    "options": {
+      "title": "Options de confidentialité",
+      "dnt": "Envoyer une demande de « Ne pas suivre » avec le trafic de navigation"
+    }
+  },
+  "update": {
+    "updater_missing": "Exécutable de mise à jour « updater.exe » introuvable"
+  },
+  "address_dropdown": {
+    "search": "Rechercher '{{text}}'",
+    "visit": "Visiter '{{text}}'",
+    "empty_history": "Aucun historique correspondant trouvé",
+    "empty_bookmark": "Aucun signet correspondant trouvé",
+    "empty_tabs": "Aucun onglet correspondant trouvé",
+    "empty_all": "Aucun résultat trouvé"
+  },
+  "image_dialog": {
+    "title": "Extraire les ressources d'image",
+    "found_count": "{{count}} images trouvées",
+    "columns": {
+      "url": "URL de l'image",
+      "type": "Type"
+    },
+    "preview": {
+      "select": "Sélectionnez une image pour la prévisualisation"
+    },
+    "save_to": "Enregistrer les téléchargements dans",
+    "browse": "Changer de dossier",
+    "browse_desc": "Choisir le dossier de sauvegarde du téléchargement",
+    "download_now": "Télécharger maintenant",
+    "select_one_image": "Veuillez sélectionner au moins une image à télécharger",
+    "select_all_toggle": "Tout sélectionner / Inverser",
+    "loading_preview": "Chargement de la prévisualisation...",
+    "modern_preview": "Format d'image moderne (prévisualisation WebView2)",
+    "modern": "Format d'image moderne",
+    "preview_loading_webview": "Chargement de la prévisualisation (mode WebView2)...",
+    "preview_unavailable": "Prévisualisation indisponible",
+    "preview_size": "{{width}} x {{height}} | {{kb}} Ko"
+  },
+  "video_dialog": {
+    "title": "Sélectionner le format de téléchargement",
+    "columns": {
+      "resolution": "Résolution",
+      "ext": "Extension",
+      "size": "Taille",
+      "note": "Note"
+    },
+    "save_to": "Enregistrer les téléchargements dans",
+    "browse": "Changer de dossier",
+    "browse_desc": "Choisir le dossier de sauvegarde du téléchargement",
+    "start_download": "Démarrer le téléchargement",
+    "select_format_first": "Veuillez sélectionner un format d'abord",
+    "unknown_title": "Titre inconnu",
+    "unknown": "Inconnu",
+    "parse_failed": "Échec du parsage des informations vidéo: {{msg}}"
+  },
+  "common": {
+    "info": "Info",
+    "done": "Terminé",
+    "error": "Erreur",
+    "operation_failed_retry": "Opération échouée, veuillez réessayer",
+    "empty": "(vide)",
+    "in_dev": "Cette fonctionnalité est en développement...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "À propos de",
+    "version_prefix": "Version ",
+    "check_update": "Vérifier les mises à jour",
+    "checking": "Vérification...",
+    "connecting": "Connexion au serveur de mise à jour...",
+    "update_failed": "Échec de la vérification des mises à jour. Veuillez réessayer plus tard.",
+    "update_found_status": "Nouvelle version trouvée: {{version}}",
+    "update_found_title": "Mise à jour trouvée",
+    "update_found_message": "Nouvelle version {{version}} trouvée\\n\\nNotes de version:\\n{{log}}\\n\\nMettre à jour maintenant ?",
+    "latest": "Vous utilisez déjà la dernière version.",
+    "error_prefix": "Erreur: ",
+    "simple_title": "À propos",
+    "simple_message": "{{app}}\\nVersion {{version}}\\n\\nBasé sur le moteur WebView2",
+    "copyright": "© {{year}} {{app}}. Tous droits réservés."
+  },
+  "font": {
+    "preview_standard": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "min": "Min",
+    "max": "Max",
+    "serif": "Police de caractères serif",
+    "sans_serif": "Police de caractères sans-serif",
+    "fixed_width": "Police à largeur fixe",
+    "minimum_size": "Taille de police minimale",
+    "preview_generic": "Suivre le système",
+    "preview_fixed": "Chinois (simplifié)",
+    "preview_min": "Anglais"
+  },
+  "appearance": {
+    "title": "Cacher la barre de signets",
+    "show_home_button": "Show \"Home\" button",
+    "change": "Change",
+    "show_bookmark_bar": "Exportation échouée: {{msg}}",
+    "language": "Langue",
+    "language_auto": "Suivre le système",
+    "language_zhCN": "Chinois (simplifié)",
+    "language_en": "Anglais",
+    "hide_bookmark_bar": "Extraction d'image échouée"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "Aucune ressource d'image trouvée",
+    "confirm_delete_item": "Tâches de téléchargement d'images soumises: {{count}}",
+    "export_failed": "Jamais",
+    "export_success": "Enregistrer le mot de passe"
+  },
+  "images": {
+    "cancelled_status": "Image extraction canceled",
+    "extracting_status": "Terminé",
+    "failed_message": "Gérer les mots de passe enregistrés",
+    "failed_status": "Mot de passe enregistré pour ce site:",
+    "none_found_status": "Gérer les moteurs de recherche",
+    "submitted_tasks": "Déconnexion"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "Paramètres du profil",
+      "save": "Extraction échouée",
+      "title": "Aucune ressource vidéo extractible n'a été détectée sur cette page.\\n\\nNote: La page ne peut pas intégrer une vidéo, ou peut utiliser une lecture chiffrée/DRM, donc l'extraction directe n'est pas disponible.\\n\\nSuggestion: Ouvrez la page de lecture vidéo réelle et essayez à nouveau l'extraction après le démarrage de la lecture."
+    },
+    "saved": {
+      "done": "Aucune ressource vidéo détectée",
+      "manage": "Aucune ressource vidéo détectée",
+      "title": "L'extraction vidéo n'est pas prise en charge sur cette page"
+    }
+  },
+  "search": {
+    "manage_button": "Analyse des informations vidéo..."
+  },
+  "user": {
+    "logout": "Log out",
+    "manage_profile": "Profile settings"
+  },
+  "videos": {
+    "extract_failed_status": "Extraction failed",
+    "not_detected_desc": "No extractable video resources were detected on this page.\\n\\nNote: The page may not embed a video, or it may use encrypted/DRM playback, so direct extraction is unavailable.\\n\\nSuggestion: Open the actual video playback page and try extraction again after playback starts.",
+    "not_detected_status": "No video resources detected",
+    "not_detected_title": "No video resources detected",
+    "not_supported": "Video extraction is not supported on this page",
+    "parsing_status": "Parsing video information..."
+  }
+}

@@ -1,0 +1,668 @@
+{
+  "tab": {
+    "new": "نیو ٹیب"
+  },
+  "menu": {
+    "new_tab": "نیو ٹیب (T)",
+    "new_window": "نیو ونڈو (N)",
+    "new_incognito": "نیو انپروائٹ ونڈو (I)",
+    "bookmarks": "بُک مارکس (B)",
+    "show_bookmark_bar": "بُک مارکس بار دکھائیں (S)",
+    "bookmark_manager": "بُک مارکس منیجر (B)",
+    "import_bookmarks": "بُک مارکس اور سیٹنگز کو درآمد کریں...",
+    "add_bookmark": "اس صفحہ کے لیے بُک مارک شامل کریں...",
+    "add_all_bookmarks": "تمام کھولے ہوئے صفحات کے لیے بُک مارکس شامل کریں...",
+    "more_bookmarks": "مزید بُک مارکس",
+    "no_bookmarks": "کوئی بُک مارکس نہیں",
+    "history": "تاریخ (H)",
+    "show_all_history": "تمام تاریخ دکھائیں",
+    "no_history": "کوئی تاریخ نہیں",
+    "clear_history": "براؤزنگ تاریخ صاف کریں",
+    "downloads": "ڈاؤنلوڈز (D)",
+    "media_extract": "میڈیا نکالنا",
+    "extract_images": "اس صفحہ پر موجود تصاویر نکالیں",
+    "extract_videos": "اس صفحہ پر موجود ویڈیوز نکالیں",
+    "clear_data": "براؤزنگ ڈیٹا صاف کریں",
+    "exit_incognito": "انپروائٹ ونڈو بند کریں",
+    "exit_normal": "کنقینگ ای آئی براؤزر بند کریں",
+    "print": "پرینٹ (P)",
+    "save_page_as": "صفحہ کو (A)... کیسے بچائیں",
+    "find_in_page": "صفحہ پر تلاش کریں",
+    "more_tools": "مزید ٹولز",
+    "task_manager": "ٹاسک منیجر (T)",
+    "encoding": "انکوڈنگ (E)",
+    "devtools": "ڈیولپر ٹولز (D)",
+    "view_resource_log": "ریسورس لوڈ لگ دیکھیں (L)",
+    "adblock": "ایڈ بلاک (G)",
+    "settings": "سیٹنگز (S)",
+    "feedback": "فیڈ بیک",
+    "about_app": "کنقینگ ای آئی براؤزر کے بارے میں",
+    "about_incognito": "انپروائٹ کے بارے میں",
+    "exit_app": "کنقینگ ای آئی براؤزر بند کریں"
+  },
+  "context": {
+    "new_tab": "نیو ٹیب کھولیں",
+    "reload": "ریلوڈ",
+    "duplicate": "نکالوگ",
+    "pin": "ٹیب کو پین کریں",
+    "unpin": "پین منٹیب کو ناپین کریں",
+    "close": "ٹیب بند کریں",
+    "close_others": "دیگر ٹیبز بند کریں",
+    "close_left": "بائیں طرف کے ٹیبز بند کریں",
+    "close_right": "دائیں طرف کے ٹیبز بند کریں",
+    "reopen_closed": "بند کردہ ٹیب دوبارہ کھولیں (E)",
+    "bookmark_all": "تمام ٹیبز کے لیے بُک مارکس شامل کریں..."
+  },
+  "tooltips": {
+    "new_tab": "نیو ٹیب (Ctrl+T)",
+    "search_tabs": "ٹیبز تلاش کریں",
+    "download": "ڈاؤنلوڈز (Ctrl+J)",
+    "user_login": "یوزر/لوگ ان",
+    "translate_page": "اس صفحہ کو ترجمہ کریں",
+    "zoom": "زوم",
+    "manage_passwords": "پاسورڈز کو منیجر کریں"
+  },
+  "nav": {
+    "back": "پچھلی (Alt+Left)",
+    "forward": "آگے (Alt+Right)",
+    "refresh": "ریفریش (F5)",
+    "stop": "روک (Esc)",
+    "home": "گھر (Alt+Home)"
+  },
+  "status": {
+    "ready": "تیار",
+    "incognito": "انپروائٹ - تمہارے براؤزنگ سرگرمیوں کو اس آلے پر محفوظ نہیں کیا جائے گا",
+    "downloading": "ڈاؤنلوڈ کر رہا ہے: {{file}}",
+    "history_cleared": "تاریخ صاف کیا گیا"
+  },
+  "ai": {
+    "assistant": "آسیسٹنٹ",
+    "summarize": "📝 اس صفحہ کو خلاصہ دیں",
+    "mode": "آئی ای مود",
+    "init_failed": "آسیسٹنٹ کی ابتدائی تشخیص ناکامی",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI چیٹ UI فائل نہیں ملا</h3><p>براہ کرم یہ راستے موجود ہیں:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "براہ کرم اس صفحہ کے بنیادی مواد کو چینی زبان میں ترجمہ کریں:\n\n{{text}}",
+    "translate_failed": "آئی ای ترجمہ ناکامی: {{msg}}",
+    "api": {
+      "base": "API پروکسی URL:",
+      "key": "API کلید:",
+      "model_name": "ماڈل نام:",
+      "model_preset": "ماڈل پریسٹ:",
+      "provider": "پرووائڈر پریسٹ:",
+      "title": "API ترتیب",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "کसٹم API موڈ (OpenAI متعادل)",
+    "mode.title": "سرورس موڈ",
+    "mode.web": "بنائے گئی ویب موڈ (DeepSeek)",
+    "settings": {
+      "subtitle": "اپنے AI آسیسٹنٹ کو ترتیب دیں",
+      "title": "AI سیٹنگز"
+    },
+    "tip": {
+      "compatible": "تکمیل: DeepSeek, OpenAI, Ollama اور دیگر مطابقت پذیر APIs کے ساتھ کام کرتا ہے",
+      "dashscope": "تکمیل: DashScope OpenAI متعادل BaseUrl https://dashscope.aliyuncs.com/compatible-mode/v1 پر ڈیفالٹ کرتا ہے",
+      "volcengine": "تکمیل: Volcengine Ark V3 کو فرمت ep-2024xxxxxxxx-xxxxx میں ایک Endpoint ID درکار ہے"
+    },
+    "web": {
+      "title": "ویب موڈ سیٹنگز",
+      "url": "AI ویب URL:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "انپروائٹ",
+      "message": "تم انپروائٹ براؤزنگ کر رہے ہیں\n\n✓ انپروائٹ کرسکتا ہے:\n  • براؤزنگ تاریخ کو محفوظ نہیں کریں گا\n  • کوکیز اور سائٹ ڈیٹا کو محفوظ نہیں کریں گا\n  • فارم ڈیٹا کو محفوظ نہیں کریں گا\n  • متمایزہ سیشن استعمال کریں\n\n✗ انپروائٹ نہیں کرسکتا:\n  • نیٹ ورک ایڈمنسٹریٹرز سے سرگرمیوں کو چھپائیں گا\n  • اپنے ISP سے سرگرمیوں کو چھپائیں گا\n  • ویب سائٹوں کو اپنے IP ایڈریس کو حاصل کرنے سے روکے گا\n\nنوٹ: ڈاؤنلوڈ شدہ فائلز اور بنائے گئے بُک مارکس باقی رہیں گے."
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "تأیید",
+    "ok": "ٹھیک ہے",
+    "clear_history_all": "کیا تم یقین سے تمام تاریخ کو صاف کرنا چاہتے ہیں؟",
+    "cancel": "منسوخ کرنا"
+  },
+  "search_engine": {
+    "confirm_delete": "کیا تم یقین سے سرچ انجن \"{{name}}\" کو حذف کرنا چاہتے ہیں؟"
+  },
+  "menu_zoom": {
+    "label": "زوم",
+    "reset": "ری سیٹ"
+  },
+  "settings": {
+    "header": {
+      "title": "ترتیبات",
+      "search_placeholder": "ترتیبات تلاش کریں"
+    },
+    "sidebar": {
+      "history": "تاریخچہ",
+      "settings": "ترتیبات",
+      "ai": "AI ترتیبات",
+      "privacy": "رازداری",
+      "advanced": "اعلیٰ"
+    },
+    "set_startup_pages": "کوئی مطابقت پذیر سیٹنگز نہیں ملا",
+    "enter_urls_each_line": "ظاہری شکل",
+    "no_results": "'گھر' بٹن دکھائیں",
+    "appearance": {
+      "title": "تبدیل کریں",
+      "show_home_button": "براہ کرم بُک مارکس بار کو ہمیشہ دکھائیں",
+      "change": " زبان",
+      "show_bookmark_bar": "سیسٹم کی پیروی کرنا",
+      "language": "زبان",
+      "language_auto": "سسٹم کے مطابق",
+      "language_zhCN": "چینی (سادہ)",
+      "language_en": "انگریزی",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "ڈیفالٹ سیو پوزیشن",
+      "location_label": "براہ کرم بُک مارکس بار (ایک لائن میں ایک):",
+      "location_desc": "براہ کرم بُک مارکس بار کو ہمیشہ دکھائیں",
+      "browse": " زبان",
+      "ask_location_label": "سیسٹم کی پیروی کرنا",
+      "ask_location_desc": "سیسٹم کی پیروی کرنا"
+    },
+    "title": "ترتیبات",
+    "search_placeholder": "ترتیبات تلاش کریں",
+    "home": {
+      "title": "ڈاؤنلوڈز",
+      "url": "ڈاؤنلوڈ پوزیشن",
+      "use_current": "ڈیفالٹ سیو پوزیشن",
+      "use_newtab": "360"
+    },
+    "startup": {
+      "title": "بائڈو",
+      "newtab": "بنگ",
+      "continue_last": "گوگل",
+      "specific_pages": "سرچ انجنوں کو منیج کریں",
+      "manage_pages": "متقدم سیٹنگز دکھائیں...",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "؟ بنیادی سیٹنگز پر واپس جانا",
+      "none": "ماؤس جیسچرز کو فعال کریں",
+      "popup": "ماؤس جیسچرز",
+      "aggressive": "بیکگراؤنڈ ٹیب میموری ریلیز انٹروال:",
+      "custom": "پرفارمنس",
+      "custom_link": "سوپر ڈریگ کو فعال کریں",
+      "manage_rules": "متقدم سیٹنگز"
+    },
+    "search": {
+      "title": "ڈیفالٹ براؤزر کی حالت کی جانچ کر رہا ہے...",
+      "default_label": "{{app}} حاليہ تمہارا ڈیفالٹ براؤزر ہے.",
+      "desc": "{{app}} حاليہ تمہارا ڈیفالٹ براؤزر نہیں ہے.",
+      "options": {
+        "360": "ڈیفالٹ براؤزر کے طور پر سیٹ کریں",
+        "baidu": "ڈیفالٹ براؤزر",
+        "bing": "مقام شدہ وقت",
+        "google": "عنوان"
+      },
+      "manage_button": "URL"
+    },
+    "show_advanced": "سرٹیفیکٹس کو منیج کریں...",
+    "advanced": {
+      "back_basic": "پروکسی سیٹنگز کو تبدیل کریں...",
+      "gesture": {
+        "enable": "سیٹنگز کو اصل ڈیفالٹ پر بحال کریں",
+        "title": "یہ تمہارے بُک مارکس، تاریخ یا محفوظ پاسورڈز کو متاثر نہیں کریگا."
+      },
+      "performance": {
+        "mem_release_time": "سیٹنگز کو ری سیٹ کریں",
+        "title": "مقامی سیٹنگز بحال کریں"
+      },
+      "super_drag": {
+        "enable": "ٹیبز کو بند کرنے کے لیے دو کلیک کریں"
+      },
+      "title": "ایڈریس بار ان پٹ موڈ:"
+    },
+    "default_browser": {
+      "checking": "ابھی سرچ کرنے کے لیے اینٹر دبائیں",
+      "is_default": "تم درج کرتے ہو سرچ کریں (توصیف)",
+      "not_default": "آخری پوزیشن پر کھولیں",
+      "set_default": "موجودہ ٹیب کے دائیں طرف کھولیں",
+      "title": "جب ایک نئی صفحہ کھولیں:"
+    },
+    "history": {
+      "columns": {
+        "time": "ایڈریس بار پر کلک کرتے وقت تمام URL متن کو منتخب کریں",
+        "title": "ایڈریس بار میں پوری URL دکھائیں (شیفٹ دائرنے کے وقت بھی دکھائیں)",
+        "url": "ٹیبز"
+      },
+      "title": "بُک مارکس اور سیٹنگز کو درآمد کریں...",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "یوزر ڈیٹا",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "Change proxy settings...",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "Restore settings to original defaults",
+      "desc": "This will not affect your bookmarks, history, or saved passwords.",
+      "title": "Reset settings",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "Restore default settings",
+    "tabs": {
+      "double_click_close": "Double-click to close tabs",
+      "input_mode": {
+        "new_tab": "نئے ٹیب میں کھولیں",
+        "instant": "ٹائپ کرتے وقت تلاش کریں (تجویز کردہ)",
+        "enter": "تلاش کے لیے Enter دبائیں"
+      },
+      "input_mode.enter": "Press Enter to search",
+      "input_mode.instant": "Search as you type (Recommended)",
+      "new_tab_position": {
+        "last": "آخری مقام پر کھولیں",
+        "right": "موجودہ ٹیب کے دائیں طرف کھولیں"
+      },
+      "open_new": "نیا صفحہ کھولتے وقت:",
+      "select_all_on_click": "Select all URL text when clicking the address bar",
+      "show_full_url": "Show full URL in address bar (also shown while holding Shift)",
+      "title": "ٹیبز",
+      "right_click_close_desc": "دائیں کلک موجودہ ٹیب بند کرتا ہے (سیاقی مینو دکھانے کے لیے Shift دبائے رکھیں)",
+      "open_links_background": "کلک کیے گئے لنکس کو پس منظر والے ٹیب میں کھولیں",
+      "input_mode_label": "When opening a new page:"
+    },
+    "user_data": {
+      "import": "Import bookmarks and settings...",
+      "title": "User data"
+    },
+    "features": {
+      "title": "خصوصیات",
+      "mouse_gesture_label": "ماؤس کے اشارے",
+      "mouse_gesture_desc": "کارروائیوں کو تیزی سے انجام دینے کے لیے ماؤس کے اشاروں کا استعمال کریں",
+      "super_drag_label": "سپر ڈریگ",
+      "super_drag_desc": "تیزی سے تلاش کرنے یا کھولنے کے لیے متن یا لنکس کھینچیں"
+    },
+    "web": {
+      "title": "ویب سیٹنگز",
+      "smooth_scrolling": "ویب صفحات پر ہموار اسکرولنگ کو فعال کریں (دوبارہ شروع کرنے کے بعد اثر انداز ہوتا ہے)"
+    },
+    "cache": {
+      "title": "حسب ضرورت کیشے",
+      "directory_label": "حسب ضرورت کیشے ڈائریکٹری:",
+      "change_button": "بدلیں...",
+      "notice": "اس کو تبدیل کرنے سے موجودہ کیشے ختم ہو جائے گا اور دوبارہ شروع ہونے کے بعد اثر پڑے گا ۔",
+      "open_dir": "کیشے ڈائرکٹری کھولیں",
+      "reset_default": "ڈیفالٹ پر ری سیٹ کریں",
+      "reset_confirm": "کیا آپ واقعی کیشے ڈائرکٹری کو ڈیفالٹ پر ری سیٹ کرنا چاہتے ہیں ؟\\n\\nیہ موجودہ کیشے کو صاف کر دے گا اور دوبارہ شروع ہونے کے بعد مؤثر ہو جائے گا ۔"
+    },
+    "privacy": {
+      "title": "Privacy settings",
+      "content_settings": "Content settings...",
+      "clear_browsing_data": "Clear browsing data...",
+      "crash_upload": "Enable crash report upload",
+      "crash_upload_desc": "Automatically upload error reports on crashes to help improve the browser."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "محفوظ کریں اور لاگو کریں",
+      "auto_hint": "ترتیبات خودکار طور پر محفوظ ہوتی ہیں",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "ڈاؤنلوڈز",
+    "location_label": "ڈاؤنلوڈ کی جگہ",
+    "location_desc": "ڈاؤنلوڈز کے لیے ڈیفالٹ سیو جگہ",
+    "browse": "براؤز...",
+    "ask_location_label": "ہر فائل کو ڈاؤنلوڈ کرنے سے پہلے اس پر جگہ لگانے پر پوچھو",
+    "default_tool_label": "ڈیفالٹ ڈاؤنلوڈ ٹول چọn کریں:",
+    "browse_desc": "ڈاؤنلوڈ سیو فولڈر چọn کریں",
+    "status": {
+      "downloading": "ڈاؤنلوڈ ہو رہا ہے: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "تمام ہو گیا",
+      "cancelled": "منسوخ کردیا گیا",
+      "failed": "ڈاؤنلوڈ ناکام",
+      "pending": "پینڈنگ..."
+    }
+  },
+  "password_manager": {
+    "hide": "چھپائیں",
+    "show": "دکھائیں"
+  },
+  "import": {
+    "success": "{{count}} بک مارکز کامیابی سے درآمد کیے گئے ہیں.",
+    "done": "درآمد مکمل",
+    "failed": "درآمد ناکام: {{msg}}"
+  },
+  "adblock": {
+    "allow": "متعین کریں",
+    "block": "بلاک"
+  },
+  "task_manager": {
+    "tab_title": "● تب: {{title}}"
+  },
+  "clear": {
+    "success": "یہاں درج کردہ اعداد و شمار کامیابی سے ختم کر دیا گیا: \n• {{items}}",
+    "done": "ختم مکمل",
+    "failed": "آداد و شمار ختم کرتے وقت خطا: {{msg}}",
+    "in_progress": "ختم ہو رہا ہے..."
+  },
+  "print": {
+    "failed": "پرینٹ ناکام",
+    "failed_message": "پرینٹ کرتے وقت خطا: \n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "صفحہ حفظ کرنے کے طور پر",
+      "filter": "ویب پیج، صرف HTML (*.html)|*.html|ویب پیج، مکمل (*.html)|*.html|MHTML فائل (*.mhtml)|*.mhtml|پی ڈی ایف دستاویز (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "بک مارکز نکالنا",
+    "export_filter": "ایچ ٹی ایم ایل فائلز (*.html)|*.html",
+    "export_success_path": "بک مارکز: {{path}} پر نکال گئے ہیں.",
+    "other": "دیگر بک مارکز",
+    "added_message": "{{count}} تب کو فولڈر \"{{folder}}\" میں شامل کیا گیا",
+    "added_status": "{{count}} بک مارکز کو فولڈر \"{{folder}}\" میں شامل کیا گیا",
+    "already": "پہلے ہی بک مارک کیا گیا",
+    "batch_confirm": "{{count}} تب کے لیے ایک فولڈر بنایا جائے گا.\\n\\nجاری رکھیں؟",
+    "batch_title": "بچ بک مارکز شامل کریں",
+    "cancelled": "بک مارک منسوخ کردیا گیا",
+    "import_filter": "ایچ ٹی ایم ایل فائلز (*.html;*.htm)|*.html;*.htm|تمام فائلز (*.*)|*.*",
+    "import_title": "بک مارکز درآمد کریں",
+    "new_bookmark": "نیا بک مارک",
+    "unable_for_page": "یہ صفحہ کو بک مارک نہیں کیا جا سکتا",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "کھولیں",
+    "open_in_new_tab": "نیا تب میں کھولیں",
+    "open_all_bookmarks": "تمام بک مارکز کھولیں"
+  },
+  "actions": {
+    "add": " شامل کریں",
+    "edit": "ترمیم کریں",
+    "delete": "حذف کریں",
+    "delete_all": "تمام حذف کریں",
+    "done": "تمام",
+    "copy_link": "لنک کاپی کریں",
+    "rename": "نام دینا",
+    "add_bookmark": "بک مارک شامل کریں",
+    "add_folder": "فولڈر شامل کریں"
+  },
+  "permissions": {
+    "allow": "متعین کریں",
+    "block": "بلاک",
+    "ask": "پوچھو"
+  },
+  "site_settings": {
+    "desc": "آپ {{category}} اجازتوں کو مخصوص سائٹس کے لیے سیٹ کر سکتے ہیں.",
+    "host_pattern": "ہوسٹ نیم پیٹرن:",
+    "columns": {
+      "host_pattern": "ہوسٹ نیم پیٹرن",
+      "behavior": "رفتار"
+    }
+  },
+  "time": {
+    "minute": "مجھ"
+  },
+  "newtab": {
+    "title": "نیا تب",
+    "search_placeholder": "سرچ یا ایڈریس درج کریں",
+    "footer": "لائٹ · فاسٹ · سیمپل",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "براؤزنگ ڈیٹا خالی کریں",
+    "clear_button": "براؤزنگ ڈیٹا خالی کر رہا ہے...",
+    "clear_desc": "براؤزنگ ہسٹری، کوکیز، کیچ و زیادہ کو خالی کریں",
+    "exit_clear": {
+      "title": "خروج پر خود بخود خالی",
+      "history": "براؤزنگ ہسٹری",
+      "downloads": "ڈاؤنلوڈ ہسٹری",
+      "cache": "کیچ شدہ امیجز اور فائلز",
+      "cookies": "کوکیز اور دیگر سائٹ ڈیٹا"
+    },
+    "options": {
+      "title": "رازداری اختیارات",
+      "dnt": "براؤزنگ ٹریفک کے ساتھ \"نہ درت کریں\" درخواست بھیجیں"
+    }
+  },
+  "update": {
+    "updater_missing": "اپڈیٹر ایگزیکیوٹیبل 'updater.exe' نہیں ملا"
+  },
+  "address_dropdown": {
+    "search": "سرچ \"{{text}}\"",
+    "visit": "زور \"{{text}}\"",
+    "empty_history": "مطابقت پذیر ہسٹری نہیں ملا",
+    "empty_bookmark": "مطابقت پذیر بک مارکز نہیں ملا",
+    "empty_tabs": "مطابقت پذیر تب نہیں ملا",
+    "empty_all": "کوئی مطابقت نہیں ملا"
+  },
+  "image_dialog": {
+    "title": "امیج وسائل نکالیں",
+    "found_count": "{{count}} امیج پائے گئے",
+    "columns": {
+      "url": "امیج یور ایل",
+      "type": "نوع"
+    },
+    "preview": {
+      "select": "پر-preview کرنے کے لیے ایک امیج منتخب کریں"
+    },
+    "save_to": "ڈاؤنلوڈز کو اس پر حفظ کریں",
+    "browse": "فولڈر تبدیل کریں",
+    "browse_desc": "ڈاؤنلوڈ سیو فولڈر انتخاب کریں",
+    "download_now": "ابھی ڈاؤنلوڈ کریں",
+    "select_one_image": "براہ کرم کم سے کم ایک تصویر منتخب کریں تاکہ ڈاؤنلوڈ کیا جا سکے",
+    "select_all_toggle": "تمام منتخب کریں / ٹوگل",
+    "loading_preview": "پریویو لوڈ ہو رہا ہے...",
+    "modern_preview": "جدید تصویر فارمیٹ (WebView2 پیشنک)",
+    "modern": "جدید تصویر فارمیٹ",
+    "preview_loading_webview": "پریویو لوڈ ہو رہا ہے (WebView2 موڈ)...",
+    "preview_unavailable": "پریویو دستیاب نہیں",
+    "preview_size": "{{width}} x {{height}} | {{kb}} KB"
+  },
+  "video_dialog": {
+    "title": "ڈاؤنلوڈ فارمیٹ منتخب کریں",
+    "columns": {
+      "resolution": "ریزولوشن",
+      "ext": "ایکسٹینشن",
+      "size": "حجم",
+      "note": "نوٹ"
+    },
+    "save_to": "ڈاؤنلوڈ کو اس فولڈر پر بچائیں",
+    "browse": "فولڈر تبدیل کریں",
+    "browse_desc": "ڈاؤنلوڈ سیو فولڈر انتخاب کریں",
+    "start_download": "ڈاؤنلوڈ شروع کریں",
+    "select_format_first": "براہ کرم پہلے ایک فارمیٹ منتخب کریں",
+    "unknown_title": "انجناوین عنوان",
+    "unknown": "انجناوین",
+    "parse_failed": "ویڈیو کی معلومات کو تحلیل کرنے میں ناکامی: {{msg}}"
+  },
+  "common": {
+    "info": "انفو",
+    "done": "تمام",
+    "error": "خطا",
+    "operation_failed_retry": "آپریشن ناکام ہو گئی، براہ کرم دوبارہ کوشش کریں",
+    "empty": "(خالی)",
+    "in_dev": "یہ خصوصیت تیار ہو رہی ہے...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "بارے ",
+    "version_prefix": "ورژن ",
+    "check_update": "اپڈیٹس کی تلاش کریں",
+    "checking": "تلاش کر رہا ہے...",
+    "connecting": "اپڈیٹ سرور سے متصل ہو رہا ہے...",
+    "update_failed": "اپڈیٹس کی تلاش میں ناکامی. براہ کرم بعد میں دوبارہ کوشش کریں.",
+    "update_found_status": "نئی ورژن ملی: {{version}}",
+    "update_found_title": "اپڈیٹ ملی",
+    "update_found_message": "نیا ورژن {{version}} ملی\n\nرلیز نوٹس:\n{{log}}\n\nآپڈیٹ کریں؟",
+    "latest": "آپ پہلے ہی سب سے جدید ورژن پر ہیں.",
+    "error_prefix": "خطا: ",
+    "simple_title": "بارے",
+    "simple_message": "{{app}}\nورژن {{version}}\n\nWebView2 انجن پر مبنی",
+    "copyright": "© {{year}} {{app}}. تمام حقوق محفوظ ہیں."
+  },
+  "font": {
+    "preview_standard": "{{size}}: لورم ایپسوم dolor sit amet,\nکنسیکٹور adipiscing elit.",
+    "min": "من",
+    "max": "میکس",
+    "serif": "سرِف فونٹ",
+    "sans_serif": "سنزِرِف فونٹ",
+    "fixed_width": "مستحکم عرض فونٹ",
+    "minimum_size": "منیمام فونٹ سائز",
+    "preview_generic": "{{size}}: لورم ایپسوم dolor sit amet,\nکنسیکٹور adipiscing elit.",
+    "preview_fixed": "لورم ایپسوم dolor sit amet,\nکنسیکٹور adipiscing elit.",
+    "preview_min": "{{size}}: لورم ایپسوم dolor sit amet, consectetur"
+  },
+  "appearance": {
+    "title": "ظاہر",
+    "show_home_button": "گھر بटन دکھائیں",
+    "change": "تبدیل",
+    "show_bookmark_bar": "بک مارکس بار کو ہمیشہ دکھائیں",
+    "language": "زبان",
+    "language_auto": "سسٹم کے مطابق",
+    "language_zhCN": "چینی (سادہ)",
+    "language_en": "انگریزی",
+    "hide_bookmark_bar": "بک مارکس بار چھپائیں"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "کیا آپ یقین سے فولڈر \"{{name}}\" اور اس کے تمام مواد کو حذف کرنا چاہتے ہیں؟",
+    "confirm_delete_item": "کیا آپ یقین سے \"{{name}}\" کو حذف کرنا چاہتے ہیں؟",
+    "export_failed": "خروجی ناکامی: {{msg}}",
+    "export_success": "خروجی کامیاب!"
+  },
+  "images": {
+    "cancelled_status": "تصویر نکالنے کو منسوخ کر دیا گیا",
+    "extracting_status": "تصویر کے وسائل نکال رہے ہیں...",
+    "failed_message": " نکالنے میں ناکامی: {{msg}}",
+    "failed_status": "تصویر نکالنے میں ناکامی",
+    "none_found_status": "کوئی تصویر وسائل نہیں پائے گئے",
+    "submitted_tasks": "{{count}} تصویر ڈاؤنلوڈ ٹاسکز جمع کر دیا گیا"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "کبھی نہیں",
+      "save": "پاسورڈ بچائیں",
+      "title": "کیا آپ چاہتے ہیں کہ KunQiong AI Browser یہاں اس سائٹ کے لیے آپ کا پاسورڈ بچائے؟"
+    },
+    "saved": {
+      "done": "تمام",
+      "manage": "بچائے گئے پاسورڈز کو منظم کریں",
+      "title": "اس سائٹ کے لیے بچائے گئے پاسورڈ:"
+    }
+  },
+  "search": {
+    "manage_button": "سرچ انجنز کو منظم کریں"
+  },
+  "user": {
+    "logout": "لاگ آؤٹ",
+    "manage_profile": "پروفائل سیٹنگز"
+  },
+  "videos": {
+    "extract_failed_status": " نکالنے میں ناکامی",
+    "not_detected_desc": "اس صفحہ پر کوئی قابل نکال ویدیو وسائل پائے گئے نہیں.\\n\\nتیق: یہ صفحہ ممکنہ طور پر ویدیو کو اینبڈ نہ کر سکتا، یا یہ ایمکریپٹ/DRM پلے بیک استعمال کر سکتا ہے، اس لیے براہ راست نکال ناقابل.\\n\\nتوصیہ: اصل ویدیو پلے بیک صفحہ کھولیں اور پلے بیک شروع ہونے کے بعد دوبارہ نکال کوشش کریں.",
+    "not_detected_status": "کوئی ویدیو وسائل پائے گئے نہیں",
+    "not_detected_title": "کوئی ویدیو وسائل پائے گئے نہیں",
+    "not_supported": "اس صفحہ پر ویدیو نکالنے کی حمایت نہیں",
+    "parsing_status": "ویڈیو کی معلومات کو تحلیل کر رہا ہے..."
+  }
+}

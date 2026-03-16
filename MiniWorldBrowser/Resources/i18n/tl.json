@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "Bagong Tab"
+  },
+  "menu": {
+    "new_tab": "Bagong Tab (T)",
+    "new_window": "Bagong Bintana (N)",
+    "new_incognito": "Bagong InPrivate na Bintana (I)",
+    "bookmarks": "Mga Bookmark (B)",
+    "show_bookmark_bar": "Ipakita ang bookmarks bar (S)",
+    "bookmark_manager": "Mga Bookmark Manager (B)",
+    "import_bookmarks": "Mag-import ng mga bookmark at settings...",
+    "add_bookmark": "Magdagdag ng bookmark para sa pahina na ito...",
+    "add_all_bookmarks": "Magdagdag ng mga bookmark para sa lahat ng bukas na pahina...",
+    "more_bookmarks": "Higit pang mga bookmark",
+    "no_bookmarks": "Walang mga bookmark",
+    "history": "Mga Kasaysayan (H)",
+    "show_all_history": "Ipakita ang lahat ng kasaysayan",
+    "no_history": "Walang kasaysayan",
+    "clear_history": "Linisin ang kasaysayan ng pag-browsing",
+    "downloads": "Mga Pag-download (D)",
+    "media_extract": "Pagsasama ng Media",
+    "extract_images": "Extrakt ang mga larawan sa pahina na ito",
+    "extract_videos": "Extrakt ang mga video sa pahina na ito",
+    "clear_data": "Linisin ang data ng pag-browsing",
+    "exit_incognito": "Isara ang InPrivate na bintana",
+    "exit_normal": "Isara ang KunQiong AI Browser",
+    "print": "Imprimir (P)",
+    "save_page_as": "I-save ang pahina bilang (A)...",
+    "find_in_page": "Maghanap sa pahina",
+    "more_tools": "Higit pang mga tool",
+    "task_manager": "Task Manager (T)",
+    "encoding": "Pag-encode (E)",
+    "devtools": "Mga Tools ng Developer (D)",
+    "view_resource_log": "Tingnan ang log ng pag-load ng resource (L)",
+    "adblock": "Ad Block (G)",
+    "settings": "Mga Settings (S)",
+    "feedback": "Mga Feedback",
+    "about_app": "Tungkol sa KunQiong AI Browser",
+    "about_incognito": "Tungkol sa InPrivate",
+    "exit_app": "Isara ang KunQiong AI Browser"
+  },
+  "context": {
+    "new_tab": "Buksan ang bagong tab",
+    "reload": "I-reload",
+    "duplicate": "Duplicate",
+    "pin": "I-pin ang tab",
+    "unpin": "I-unpin ang tab",
+    "close": "Isara ang tab",
+    "close_others": "Isara ang ibang mga tab",
+    "close_left": "Isara ang mga tab sa kaliwa",
+    "close_right": "Isara ang mga tab sa kanan",
+    "reopen_closed": "Muli-buksan ang naiwang tab (E)",
+    "bookmark_all": "Magdagdag ng mga bookmark para sa lahat ng tab..."
+  },
+  "tooltips": {
+    "new_tab": "Bagong Tab (Ctrl+T)",
+    "search_tabs": "Mag-search ng mga tab",
+    "download": "Mga Pag-download (Ctrl+J)",
+    "user_login": "User/Pag-login",
+    "translate_page": "Isalin ang pahina na ito",
+    "zoom": "Zoom",
+    "manage_passwords": "Pamahalaan ang mga password"
+  },
+  "nav": {
+    "back": "Pabalik (Alt+Kaliwa)",
+    "forward": "Pang-Forward (Alt+Kanan)",
+    "refresh": "I-refresh (F5)",
+    "stop": "Hinto (Esc)",
+    "home": "Tahanan (Alt+Home)"
+  },
+  "status": {
+    "ready": "Handa",
+    "incognito": "InPrivate - Ang iyong aktibidad sa pag-browsing ay hindi ilalagay sa device na ito",
+    "downloading": "Nag-download: {{file}}",
+    "history_cleared": "History cleared"
+  },
+  "ai": {
+    "assistant": "Asistente",
+    "summarize": "📝 Sumuriin ang pahina",
+    "mode": "AI Mode",
+    "init_failed": "Assistant initialization failed",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI chat UI file not found</h3><p>Please check these paths exist:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "Please translate the main content of this page into Chinese:\n\n{{text}}",
+    "translate_failed": "AI translation failed: {{msg}}",
+    "api": {
+      "base": "API Proxy URL:",
+      "key": "API Key:",
+      "model_name": "Pangalan ng Modelo:",
+      "model_preset": "Modelo na preset:",
+      "provider": "Provider na preset:",
+      "title": "Konfigurasyon ng API",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "Custom na mode ng API (OpenAI-compatible)",
+    "mode.title": "Mode ng Serbisyo",
+    "mode.web": "Built-in na web mode (DeepSeek)",
+    "settings": {
+      "subtitle": "Konfigure ang iyong AI assistant",
+      "title": "AI Settings"
+    },
+    "tip": {
+      "compatible": "Tip: Gumagana kasama ang DeepSeek, OpenAI, Ollama at iba pang mga compatible na API",
+      "dashscope": "Tip: Ang default na BaseUrl ng DashScope na OpenAI-compatible ay https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "volcengine": "Tip: Ang Volcengine Ark V3 ay nangangailangan ng Endpoint ID sa format na ep-2024xxxxxxxx-xxxxx"
+    },
+    "web": {
+      "title": "Web mode settings",
+      "url": "AI web URL:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "InPrivate - Ang iyong browsing ay hindi ilalagay sa device na ito\n\n✓ Ang InPrivate ay maaaring:\n  • Hindi mag-save ng kasaysayan ng pag-browsing\n  • Hindi mag-save ng mga cookie at data ng site\n  • Hindi mag-save ng data ng form\n  • Gumamit ng isolated session\n\n✗ Ang InPrivate ay hindi:\n  • Itago ang aktibidad mula sa network administrators\n  • Itago ang aktibidad mula sa iyong ISP\n  • Pigilan ang mga website na makakuha ng iyong IP address\n\nTandaan: Ang mga nai-download na file at mga bookmark ay nananatili.",
+      "message": "Confirm"
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "OK",
+    "ok": "OK",
+    "clear_history_all": "Cancel",
+    "cancel": "Cancel"
+  },
+  "search_engine": {
+    "confirm_delete": "Zoom"
+  },
+  "menu_zoom": {
+    "label": "Reset",
+    "reset": "Settings"
+  },
+  "settings": {
+    "header": {
+      "title": "Mga Setting",
+      "search_placeholder": "Maghanap ng settings"
+    },
+    "sidebar": {
+      "history": "Kasaysayan",
+      "settings": "Mga Setting",
+      "ai": "AI Settings",
+      "privacy": "Privacy",
+      "advanced": "Advanced"
+    },
+    "set_startup_pages": "No matching settings found",
+    "enter_urls_each_line": "Appearance",
+    "no_results": "Show 'Home' button",
+    "appearance": {
+      "title": "Change",
+      "show_home_button": "Always show bookmarks bar",
+      "change": "Language",
+      "show_bookmark_bar": "Follow system",
+      "language": "Wika",
+      "language_auto": "Sundin ang system",
+      "language_zhCN": "Chinese (Pinasimple)",
+      "language_en": "English",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "Default save location for downloads",
+      "location_label": "Browse...",
+      "location_desc": "Ask where to save each file before downloading",
+      "browse": "Settings",
+      "ask_location_label": "Search settings",
+      "ask_location_desc": "Search settings"
+    },
+    "title": "Mga Setting",
+    "search_placeholder": "Maghanap ng settings",
+    "home": {
+      "title": "Use current page",
+      "url": "Use New Tab",
+      "use_current": "On startup",
+      "use_newtab": "Open New Tab"
+    },
+    "startup": {
+      "title": "Continue where you left off",
+      "newtab": "Open a specific page or set of pages",
+      "continue_last": "Manage pages",
+      "specific_pages": "Ad Blocking",
+      "manage_pages": "Do not block any ads",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "Block pop-ups only",
+      "none": "Aggressively block webpage ads",
+      "popup": "Custom ad blocking rules",
+      "aggressive": "Custom rules",
+      "custom": "Manage my rules...",
+      "custom_link": "Address bar search engine",
+      "manage_rules": "Default search engine"
+    },
+    "search": {
+      "title": "Search engine used by the address bar",
+      "default_label": "360",
+      "desc": "Baidu",
+      "options": {
+        "360": "Bing",
+        "baidu": "Google",
+        "bing": "Manage search engines",
+        "google": "Show advanced settings..."
+      },
+      "manage_button": "Manage search engines"
+    },
+    "show_advanced": "Enable mouse gestures",
+    "advanced": {
+      "back_basic": "Mouse gestures",
+      "gesture": {
+        "enable": "Background tab memory release interval:",
+        "title": "Performance"
+      },
+      "performance": {
+        "mem_release_time": "Enable super drag",
+        "title": "Advanced settings"
+      },
+      "super_drag": {
+        "enable": "Checking default browser status..."
+      },
+      "title": "{{app}} is currently your default browser."
+    },
+    "default_browser": {
+      "checking": "{{app}} is not currently your default browser.",
+      "is_default": "Set as default browser",
+      "not_default": "Default browser",
+      "set_default": "Visited time",
+      "title": "Title"
+    },
+    "history": {
+      "columns": {
+        "time": "URL",
+        "title": "History",
+        "url": "Manage certificates..."
+      },
+      "title": "Change proxy settings...",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "Restore settings to original defaults",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "This will not affect your bookmarks, history, or saved passwords.",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "Reset settings",
+      "desc": "Restore default settings",
+      "title": "Double-click to close tabs",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "Address bar input mode:",
+    "tabs": {
+      "double_click_close": "Press Enter to search",
+      "input_mode": {
+        "new_tab": "Buksan sa bagong tab"
+      },
+      "input_mode.enter": "Open at last position",
+      "input_mode.instant": "Open to the right of current tab",
+      "new_tab_position": {
+        "last": "When opening a new page:",
+        "right": "Select all URL text when clicking the address bar"
+      },
+      "open_new": "Show full URL in address bar (also shown while holding Shift)",
+      "select_all_on_click": "Tabs",
+      "show_full_url": "Import bookmarks and settings...",
+      "title": "User/Login",
+      "right_click_close_desc": "Isinasara ng right-click ang kasalukuyang tab (hawakan ang Shift para ipakita ang context menu)",
+      "open_links_background": "Buksan ang mga na-click na link sa background tab",
+      "input_mode_label": "Show full URL in address bar (also shown while holding Shift)"
+    },
+    "user_data": {
+      "import": "Import bookmarks and settings...",
+      "title": "User data"
+    },
+    "features": {
+      "title": "Mga tampok",
+      "mouse_gesture_label": "Mga galaw ng mouse",
+      "mouse_gesture_desc": "Gumamit ng mga galaw ng mouse para mabilis na magsagawa ng mga aksyon",
+      "super_drag_label": "Super hila",
+      "super_drag_desc": "I-drag ang teksto o mga link para mabilis na maghanap o magbukas"
+    },
+    "web": {
+      "title": "Mga setting ng web",
+      "smooth_scrolling": "I-enable ang smooth scrolling sa mga web page (magkakabisa pagkatapos mag-restart)"
+    },
+    "cache": {
+      "title": "Iniangkop na cache",
+      "directory_label": "Iniangkop na direktoryo ng cache:",
+      "change_button": "Palitan",
+      "notice": "Ang pagbabago nito ay i - clear ang kasalukuyang cache at magkakabisa pagkatapos i - restart.",
+      "open_dir": "Buksan ang direktoryo ng cache",
+      "reset_default": "I-reset sa Default",
+      "reset_confirm": "Sigurado ka bang gusto mong i - reset ang direktoryo ng cache sa default?\\n\\ nIto ay i - clear ang umiiral na cache at magkakabisa pagkatapos i - restart."
+    },
+    "privacy": {
+      "title": "Privacy settings",
+      "content_settings": "Content settings...",
+      "clear_browsing_data": "Clear browsing data...",
+      "crash_upload": "Enable crash report upload",
+      "crash_upload_desc": "Automatically upload error reports on crashes to help improve the browser."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "I-save at ilapat",
+      "auto_hint": "Awtomatikong nase-save ang mga setting",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "Mga Pag-download",
+    "location_label": "Lugar ng Pag-download",
+    "location_desc": "Pambansang Lugar ng Pag-save para sa Mga Pag-download",
+    "browse": "Mag-browse...",
+    "ask_location_label": "Tanungin kung saan ilagay ang bawat file bago i-download",
+    "default_tool_label": "Pumili ng default na tool para sa pag-download:",
+    "browse_desc": "Pumili ng folder para sa pag-save ng download",
+    "status": {
+      "downloading": "Nag-i-download: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "Nagawa na",
+      "cancelled": "Nakancel",
+      "failed": "Ang pag-download ay nabigo",
+      "pending": "Naghihintay..."
+    }
+  },
+  "password_manager": {
+    "hide": "Itago",
+    "show": "Ipakita"
+  },
+  "import": {
+    "success": "Matagumpay na na-import ang {{count}} na bookmark.",
+    "done": "Ang pag-import ay tapos na",
+    "failed": "Ang pag-import ay nabigo: {{msg}}"
+  },
+  "adblock": {
+    "allow": "Payagan",
+    "block": "I-block"
+  },
+  "task_manager": {
+    "tab_title": "● Tab: {{title}}"
+  },
+  "clear": {
+    "success": "Matagumpay na inalis ang sumusunod na data:\n• {{items}}",
+    "done": "Ang pag-alis ay tapos na",
+    "failed": "Error habang nag-aalis ng data: {{msg}}",
+    "in_progress": "Naglilinis..."
+  },
+  "print": {
+    "failed": "Ang pag-print ay nabigo",
+    "failed_message": "Error habang nag-print:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "I-save bilang Pagina",
+      "filter": "Mga Webpage, HTML lamang (*.html)|*.html|Mga Webpage, Completa (*.html)|*.html|MHTML file (*.mhtml)|*.mhtml|PDF na Dokumento (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "Export ng Mga Bookmark",
+    "export_filter": "Mga File ng HTML (*.html)|*.html",
+    "export_success_path": "Ang mga Bookmark ay na-export sa:\n{{path}}",
+    "other": "Iba pang Mga Bookmark",
+    "added_message": "Nagdagdag ng {{count}} na tab sa folder \"{{folder}}\"",
+    "added_status": "Nagdagdag ng {{count}} na bookmark sa folder \"{{folder}}\"",
+    "already": "Nakabookmark na",
+    "batch_confirm": "Isang folder ang gagawa para sa {{count}} na tab.\\n\\nPatuloy?",
+    "batch_title": "Batch na Pagdagdag ng Mga Bookmark",
+    "cancelled": "Nakancel ang bookmark",
+    "import_filter": "Mga File ng HTML (*.html;*.htm)|*.html;*.htm|Mga Lahat ng Files (*.*)|*.*",
+    "import_title": "Import ng Mga Bookmark",
+    "new_bookmark": "Bagong Bookmark",
+    "unable_for_page": "Hindi maaaring i-bookmark ang pahina na ito",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "Buksan",
+    "open_in_new_tab": "Buksan sa bagong tab",
+    "open_all_bookmarks": "Buksan ang lahat ng mga bookmark"
+  },
+  "actions": {
+    "add": "Magdagdag",
+    "edit": "I-edit",
+    "delete": "I-delete",
+    "delete_all": "I-delete lahat",
+    "done": "Tapos",
+    "copy_link": "Kopyahin ang link",
+    "rename": "Pangalanan muli",
+    "add_bookmark": "Magdagdag ng Bookmark",
+    "add_folder": "Magdagdag ng Folder"
+  },
+  "permissions": {
+    "allow": "Payagan",
+    "block": "I-block",
+    "ask": "Tanungin"
+  },
+  "site_settings": {
+    "desc": "Maaari mong mag-set ng {{category}} na mga permiso para sa mga tiyak na site.",
+    "host_pattern": "Pattern ng Hostname:",
+    "columns": {
+      "host_pattern": "Pattern ng Hostname",
+      "behavior": "Ugali"
+    }
+  },
+  "time": {
+    "minute": "minuto"
+  },
+  "newtab": {
+    "title": "Bagong Tab",
+    "search_placeholder": "Mag-search o pumasok ng address",
+    "footer": "Liwanag · Mabilis · Simple",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "Alisin ang browsing data",
+    "clear_button": "Alisin ang browsing data...",
+    "clear_desc": "Alisin ang browsing history, cookies, cache at marami pa",
+    "exit_clear": {
+      "title": "Awto-alisin kapag umalis",
+      "history": "History ng Pag-browse",
+      "downloads": "History ng Pag-download",
+      "cache": "Cached na mga larawan at file",
+      "cookies": "Cookies at iba pang data ng site"
+    },
+    "options": {
+      "title": "Mga Pagpipilian ng Privacy",
+      "dnt": "Magpadala ng request na 'Huwag I-trace' kasama ang browsing traffic"
+    }
+  },
+  "update": {
+    "updater_missing": "Hindi natagpuan ang executable ng Updater na 'updater.exe'"
+  },
+  "address_dropdown": {
+    "search": "Mag-search ng '{{text}}'",
+    "visit": "Bisitahin '{{text}}'",
+    "empty_history": "Walang natagpuan na history na nagtatugma",
+    "empty_bookmark": "Walang natagpuan na bookmark na nagtatugma",
+    "empty_tabs": "Walang natagpuan na tab na nagtatugma",
+    "empty_all": "Walang natagpuan na pagtatugma"
+  },
+  "image_dialog": {
+    "title": "Kumuha ng mga mapagkukunan ng larawan",
+    "found_count": "Natagpuan ang {{count}} na larawan",
+    "columns": {
+      "url": "URL ng Larawan",
+      "type": "Uri"
+    },
+    "preview": {
+      "select": "Pumili ng isang larawan para sa preview"
+    },
+    "save_to": "I-save ang mga download sa",
+    "browse": "Baguhin ang folder",
+    "browse_desc": "Pumili ng folder para sa pag-save ng download",
+    "download_now": "I-download na ngayon",
+    "select_one_image": "Mangyaring pumili ng hindi bababa sa isang larawan upang i-download",
+    "select_all_toggle": "Pumili ng Lahat / Palitan",
+    "loading_preview": "Naglo-load ng preview...",
+    "modern_preview": "Modernong format ng larawan (WebView2 preview)",
+    "modern": "Modernong format ng larawan",
+    "preview_loading_webview": "Naglo-load ng preview (WebView2 mode)...",
+    "preview_unavailable": "Preview ay hindi magagamit",
+    "preview_size": "{{width}} x {{height}} | {{kb}} KB"
+  },
+  "video_dialog": {
+    "title": "Pumili ng format ng download",
+    "columns": {
+      "resolution": "Resolisyon",
+      "ext": "Extension",
+      "size": "Sukat",
+      "note": "Tandaan"
+    },
+    "save_to": "I-save ang mga download sa",
+    "browse": "Baguhin ang folder",
+    "browse_desc": "Pumili ng folder para sa pag-save ng download",
+    "start_download": "Simulan ang pag-download",
+    "select_format_first": "Mangyaring pumili ng format muna",
+    "unknown_title": "Hindi kilalang pamagat",
+    "unknown": "Hindi kilala",
+    "parse_failed": "Nabigo ang pag-parsa ng impormasyon ng video: {{msg}}"
+  },
+  "common": {
+    "info": "Impormasyon",
+    "done": "Tapos",
+    "error": "Error",
+    "operation_failed_retry": "Nabigo ang operasyon, mangyaring subukan muli",
+    "empty": "(empty)",
+    "in_dev": "Ang feature na ito ay nasa pag-unlad...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "Tungkol sa",
+    "version_prefix": "Versyon ",
+    "check_update": "Suriin para sa mga update",
+    "checking": "Nagche-check...",
+    "connecting": "Nagko-connect sa server ng update...",
+    "update_failed": "Nabigo sa pag-checheck ng mga update. Mangyaring subukan muli sa susunod na pagkakataon.",
+    "update_found_status": "Natagpuan ang bagong bersyon: {{version}}",
+    "update_found_title": "Nabanggit ang update.",
+    "update_found_message": "Bagong bersyon {{version}} na natagpuan\\n\\nMga Pambalangkas ng Pag-update:\\n{{log}}\\n\\nPumunta na ng Update?",
+    "latest": "Nasa pinaka-latest na bersyon ka na.",
+    "error_prefix": "Error: ",
+    "simple_title": "Tungkol sa",
+    "simple_message": "{{app}}\\nVersyon {{version}}\\n\\nBatay sa WebView2 engine",
+    "copyright": "© {{year}} {{app}}. Lahat ng mga karapatan ay nasa iyo."
+  },
+  "font": {
+    "preview_standard": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "min": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "max": "{{size}}: Lorem ipsum dolor sit amet, consectetur",
+    "serif": "Anyo",
+    "sans_serif": "Ipakita ang 'Home' button",
+    "fixed_width": "Baguhin",
+    "minimum_size": "Palaging ipakita ang bookmarks bar",
+    "preview_generic": "Wika",
+    "preview_fixed": "Sunod sa sistema",
+    "preview_min": "Tsino (Simpleng)"
+  },
+  "appearance": {
+    "title": "Ingles",
+    "show_home_button": "Itago ang bookmarks bar",
+    "change": "Change",
+    "show_bookmark_bar": "Always show bookmarks bar",
+    "language": "Wika",
+    "language_auto": "Sundin ang system",
+    "language_zhCN": "Chinese (Pinasimple)",
+    "language_en": "English",
+    "hide_bookmark_bar": "Nabigo ang extraction: {{msg}}"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "Nabigo ang extraction ng larawan",
+    "confirm_delete_item": "Walang mapagkukunan ng larawan ang natagpuan",
+    "export_failed": "Nagsumite ng {{count}} na task ng pag-download ng larawan",
+    "export_success": "Hindi Kailanman"
+  },
+  "images": {
+    "cancelled_status": "I-save ang password",
+    "extracting_status": "Extracting image resources...",
+    "failed_message": "Tapos",
+    "failed_status": "Gumana ng mga nai-save na password",
+    "none_found_status": "Ang nai-save na password para sa site na ito:",
+    "submitted_tasks": "Gumana ng mga search engine"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "Mag-log out",
+      "save": "Mga settings ng Profile",
+      "title": "Nabigo ang extraction"
+    },
+    "saved": {
+      "done": "Walang natagpuan na extractable na video resources sa pahina na ito.\\n\\nNote: Ang pahina ay maaaring hindi nag-embed ng video, o maaaring gumamit ng encrypted/DRM playback, kaya direct extraction ay hindi magagamit.\\n\\nSuggestion: Pumunta sa aktwal na video playback page at subukan ang extraction muli pagkatapos ng playback.",
+      "manage": "Walang video resources na natagpuan",
+      "title": "Walang video resources na natagpuan"
+    }
+  },
+  "search": {
+    "manage_button": "Ang extraction ng video ay hindi suportado sa pahina na ito"
+  },
+  "user": {
+    "logout": "Nag-parsa ng impormasyon ng video...",
+    "manage_profile": "Profile settings"
+  },
+  "videos": {
+    "extract_failed_status": "Extraction failed",
+    "not_detected_desc": "No extractable video resources were detected on this page.\\n\\nNote: The page may not embed a video, or it may use encrypted/DRM playback, so direct extraction is unavailable.\\n\\nSuggestion: Open the actual video playback page and try extraction again after playback starts.",
+    "not_detected_status": "No video resources detected",
+    "not_detected_title": "No video resources detected",
+    "not_supported": "Video extraction is not supported on this page",
+    "parsing_status": "Parsing video information..."
+  }
+}

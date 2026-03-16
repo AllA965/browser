@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "Neuer Tab"
+  },
+  "menu": {
+    "new_tab": "Neuer Tab (T)",
+    "new_window": "Neues Fenster (N)",
+    "new_incognito": "Neues InPrivate-Fenster (I)",
+    "bookmarks": "Lesezeichen (B)",
+    "show_bookmark_bar": "Zeige Lesezeichenleiste (S)",
+    "bookmark_manager": "Lesezeichen-Manager (B)",
+    "import_bookmarks": "Importieren von Lesezeichen und Einstellungen...",
+    "add_bookmark": "Lesezeichen für diese Seite hinzufügen...",
+    "add_all_bookmarks": "Lesezeichen für alle offenen Seiten hinzufügen...",
+    "more_bookmarks": "Mehr Lesezeichen",
+    "no_bookmarks": "Keine Lesezeichen",
+    "history": "Geschichte (H)",
+    "show_all_history": "Alle Geschichte anzeigen",
+    "no_history": "Keine Geschichte",
+    "clear_history": "Browsing-Geschichte löschen",
+    "downloads": "Herunterladungen (D)",
+    "media_extract": "Medienextraktion",
+    "extract_images": "Bilder auf dieser Seite extrahieren",
+    "extract_videos": "Videos auf dieser Seite extrahieren",
+    "clear_data": "Browsing-Daten löschen",
+    "exit_incognito": "InPrivate-Fenster schließen",
+    "exit_normal": "KunQiong AI Browser schließen",
+    "print": "Drucken (P)",
+    "save_page_as": "Seite als speichern (A)...",
+    "find_in_page": "Auf dieser Seite suchen",
+    "more_tools": "Mehr Werkzeuge",
+    "task_manager": "Aufgabenmanager (T)",
+    "encoding": "Kodierung (E)",
+    "devtools": "Entwicklertools (D)",
+    "view_resource_log": "Ressourcen-Ladekontrolle anzeigen (L)",
+    "adblock": "Werbeblock (G)",
+    "settings": "Einstellungen (S)",
+    "feedback": "Feedback",
+    "about_app": "Über Kunqiong AI Browser",
+    "about_incognito": "Über InPrivate",
+    "exit_app": "KunQiong AI Browser schließen"
+  },
+  "context": {
+    "new_tab": "Neuen Tab öffnen",
+    "reload": "Neuladen",
+    "duplicate": "Duplizieren",
+    "pin": "Registerkarte fixieren",
+    "unpin": "Registerkarte freigeben",
+    "close": "Registerkarte schließen",
+    "close_others": "Andere Registerkarten schließen",
+    "close_left": "Registerkarten links schließen",
+    "close_right": "Registerkarten rechts schließen",
+    "reopen_closed": "Geschlossene Registerkarte neu öffnen (E)",
+    "bookmark_all": "Lesezeichen für alle Registerkarten hinzufügen..."
+  },
+  "tooltips": {
+    "new_tab": "Neuer Tab (Strg+T)",
+    "search_tabs": "Registerkarten suchen",
+    "download": "Herunterladungen (Strg+J)",
+    "user_login": "Benutzer/Einloggen",
+    "translate_page": "Diese Seite übersetzen",
+    "zoom": "Zoom",
+    "manage_passwords": "Passwörter verwalten"
+  },
+  "nav": {
+    "back": "Zurück (Alt+Links)",
+    "forward": "Vorwärts (Alt+Rechts)",
+    "refresh": "Aktualisieren (F5)",
+    "stop": "Stoppen (Esc)",
+    "home": "Startseite (Alt+Startseite)"
+  },
+  "status": {
+    "ready": "Bereit",
+    "incognito": "InPrivate - Ihre Browsingaktivität wird nicht auf diesem Gerät gespeichert",
+    "downloading": "Herunterladen: {{file}}",
+    "history_cleared": "Geschichte gelöscht"
+  },
+  "ai": {
+    "assistant": "Assistent",
+    "summarize": "📝 Diese Seite zusammenfassen",
+    "mode": "KI-Modus",
+    "init_failed": "Assistenten-Initialisierung fehlgeschlagen",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI chat UI Datei nicht gefunden</h3><p>Bitte prüfen, ob diese Pfade existieren:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "Bitte übersetzen Sie den Hauptinhalt dieser Seite ins Chinesische:\\n\\n{{text}}",
+    "translate_failed": "KI-Übersetzung fehlgeschlagen: {{msg}}",
+    "api": {
+      "base": "API-Proxy-URL:",
+      "key": "API-Schlüssel:",
+      "model_name": "Modellname:",
+      "model_preset": "Modellvoreinstellung:",
+      "provider": "Anbietervoreinstellung:",
+      "title": "API-Konfiguration",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "Benutzerdefinierter API-Modus (OpenAI-konform)",
+    "mode.title": "Dienstmodus",
+    "mode.web": "Eingebauter Web-Modus (DeepSeek)",
+    "settings": {
+      "subtitle": "Ihren KI-Assistenten konfigurieren",
+      "title": "KI-Einstellungen"
+    },
+    "tip": {
+      "compatible": "Tipp: Funktioniert mit DeepSeek, OpenAI, Ollama und anderen kompatiblen APIs",
+      "dashscope": "Tipp: Die OpenAI-konforme Basis-URL von DashScope ist standardmäßig https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "volcengine": "Tipp: Volcengine Ark V3 erfordert eine Endpunkt-ID im Format ep-2024xxxxxxxx-xxxxx"
+    },
+    "web": {
+      "title": "Web-Modus-Einstellungen",
+      "url": "KI-Web-URL:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "InPrivate",
+      "message": "Sie nutzen InPrivate-Browsing\\n\\n✓ InPrivate kann:\\n  • Keine Browsing-Geschichte speichern\\n  • Keine Cookies und Sitespezifischen Daten speichern\\n  • Keine Formulardaten speichern\\n  • Isolierte Sitzung verwenden\\n\\n✗ InPrivate wird nicht:\\n  • Aktivität vor Netzwerkadministratoren verbergen\\n  • Aktivität vor Ihrem ISP verbergen\\n  • Websites, Ihre IP-Adresse zu erhalten, verhindern\\n\\nHinweis: Heruntergeladene Dateien und erstellte Lesezeichen bleiben erhalten."
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "Bestätigen",
+    "ok": "OK",
+    "clear_history_all": "Sind Sie sicher, dass Sie alle Geschichte löschen möchten?",
+    "cancel": "Abbrechen"
+  },
+  "search_engine": {
+    "confirm_delete": "Sind Sie sicher, dass Sie den Suchmotor „{{name}}“ löschen möchten?"
+  },
+  "menu_zoom": {
+    "label": "Zoom",
+    "reset": "Zurücksetzen"
+  },
+  "settings": {
+    "header": {
+      "title": "Einstellungen",
+      "search_placeholder": "Einstellungen durchsuchen"
+    },
+    "sidebar": {
+      "history": "Verlauf",
+      "settings": "Einstellungen",
+      "ai": "KI-Einstellungen",
+      "privacy": "Datenschutz",
+      "advanced": "Erweitert"
+    },
+    "set_startup_pages": "Startseiten festlegen",
+    "enter_urls_each_line": "Bitte geben Sie Website-URLs ein (eine pro Zeile):",
+    "no_results": "Keine passenden Einstellungen gefunden",
+    "appearance": {
+      "title": "Darstellung",
+      "show_home_button": "„Startseite“-Schaltfläche anzeigen",
+      "change": "Ändern",
+      "show_bookmark_bar": "Lesezeichenleiste immer anzeigen",
+      "language": "Sprache",
+      "language_auto": "System folgen",
+      "language_zhCN": "Chinesisch (Vereinfacht)",
+      "language_en": "Englisch",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "Herunterladungen",
+      "location_label": "Downloadspeicherort",
+      "location_desc": "Standard-Speicherort für Downloads",
+      "browse": "Durchsuchen...",
+      "ask_location_label": "Fragen, wo jede Datei gespeichert werden soll, bevor das Herunterladen beginnt",
+      "ask_location_desc": "Fragen, wo jede Datei gespeichert werden soll, bevor das Herunterladen beginnt"
+    },
+    "title": "Einstellungen",
+    "search_placeholder": "Einstellungen durchsuchen",
+    "home": {
+      "title": "Startseite",
+      "url": "Startseite-URL:",
+      "use_current": "Aktuelle Seite verwenden",
+      "use_newtab": "Neuen Tab verwenden"
+    },
+    "startup": {
+      "title": "Bei Start",
+      "newtab": "Neuen Tab öffnen",
+      "continue_last": "Wo Sie aufgehört haben, fortfahren",
+      "specific_pages": "Eine bestimmte Seite oder eine Menge an Seiten öffnen",
+      "manage_pages": "Seiten verwalten",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "Werbeblockierung",
+      "none": "Keine Werbung blockieren",
+      "popup": "Nur Pop-ups blockieren",
+      "aggressive": "Aggressiv Webseitenwerbung blockieren",
+      "custom": "Benutzerdefinierte Werbeblockregeln",
+      "custom_link": "Benutzerdefinierte Regeln",
+      "manage_rules": "Meine Regeln verwalten..."
+    },
+    "search": {
+      "title": "Suchmotor in der Adressleiste",
+      "default_label": "Standardsuchmotor",
+      "desc": "Suchmotor, der von der Adressleiste verwendet wird",
+      "options": {
+        "360": "360",
+        "baidu": "Baidu",
+        "bing": "Bing",
+        "google": "Google"
+      },
+      "manage_button": "Suchmotoren verwalten"
+    },
+    "show_advanced": "Erweiterte Einstellungen anzeigen...",
+    "advanced": {
+      "back_basic": "? Zurück zu den Grundeinstellungen",
+      "gesture": {
+        "enable": "Mausgesten aktivieren",
+        "title": "Mausgesten"
+      },
+      "performance": {
+        "mem_release_time": "Intervall für die Freigabe von Arbeitsspeicher in Hintergrundregisterkarten:",
+        "title": "Leistung"
+      },
+      "super_drag": {
+        "enable": "Übermäßiges Ziehen aktivieren"
+      },
+      "title": "Erweiterte Einstellungen"
+    },
+    "default_browser": {
+      "checking": "Prüfe den Status des Standardbrowsers...",
+      "is_default": "{{app}} ist derzeit Ihr Standardbrowser.",
+      "not_default": "{{app}} ist derzeit nicht Ihr Standardbrowser",
+      "set_default": "Als Standardbrowser festlegen",
+      "title": "Standardbrowser"
+    },
+    "history": {
+      "columns": {
+        "time": "Besuchzeit",
+        "title": "Titel",
+        "url": "URL"
+      },
+      "title": "Zertifikate verwalten...",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "Proxy-Einstellungen ändern...",
+      "title": "HTTPS (SSL)"
+    },
+    "network": {
+      "proxy_change": "Einstellungen auf die ursprünglichen Standardwerte zurücksetzen",
+      "title": "Netzwerk-",
+      "system_proxy_desc": "Der KunQiong AI Browser verwendet die Proxy-Einstellungen Ihres Systems, um eine Verbindung zum Netzwerk herzustellen."
+    },
+    "reset": {
+      "button": "Dies wird Ihre Lesezeichen, Geschichte oder gespeicherten Passwörter nicht beeinflussen.",
+      "desc": "Einstellungen zurücksetzen",
+      "title": "Standardeinstellungen wiederherstellen",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "Doppelklicken, um Registerkarten zu schließen",
+    "tabs": {
+      "double_click_close": "Eingabemodus der Adressleiste:",
+      "input_mode": {
+        "new_tab": "In neuem Tab öffnen"
+      },
+      "input_mode.enter": "Suchen, während Sie tippen (Empfohlen)",
+      "input_mode.instant": "An letzter Position öffnen",
+      "new_tab_position": {
+        "last": "Rechts neben der aktuellen Registerkarte öffnen",
+        "right": "Bei Öffnen einer neuen Seite:"
+      },
+      "open_new": "Alle URL-Text auswählen, wenn die Adressleiste angeklickt wird",
+      "select_all_on_click": "Vollständige URL in der Adressleiste anzeigen (auch angezeigt, wenn Shift gedrückt wird)",
+      "show_full_url": "Registerkarten",
+      "title": "Importieren von Lesezeichen und Einstellungen...",
+      "right_click_close_desc": "Rechtsklick schließt den aktuellen Tab (Shift gedrückt halten, um das Kontextmenü anzuzeigen)",
+      "open_links_background": "Angeklickte Links im Hintergrundtab öffnen",
+      "input_mode_label": "Alle URL-Text auswählen, wenn die Adressleiste angeklickt wird"
+    },
+    "user_data": {
+      "import": "Benutzerdaten",
+      "title": "User data"
+    },
+    "features": {
+      "title": "Funktionen",
+      "mouse_gesture_label": "Mausgesten",
+      "mouse_gesture_desc": "Verwenden Sie Mausgesten, um Aktionen schnell auszuf?hren",
+      "super_drag_label": "Super-Drag",
+      "super_drag_desc": "Ziehen Sie Text oder Links, um schnell zu suchen oder zu ?ffnen"
+    },
+    "web": {
+      "title": "Web-Einstellungen",
+      "smooth_scrolling": "Sanftes Scrollen auf Webseiten aktivieren (wirksam nach Neustart)"
+    },
+    "cache": {
+      "title": "Benutzerdefinierter Cache",
+      "directory_label": "Benutzerdefiniertes Cache-Verzeichnis:",
+      "change_button": "Ändern...",
+      "notice": "Wenn Sie dies ändern, wird der aktuelle Cache gelöscht und nach dem Neustart wirksam.",
+      "open_dir": "Cache-Verzeichnis öffnen",
+      "reset_default": "Auf Standard zurücksetzen",
+      "reset_confirm": "Sind Sie sicher, dass Sie das Cache-Verzeichnis auf den Standardwert zurücksetzen möchten?\\n\\nDies löscht den vorhandenen Cache und wird nach dem Neustart wirksam."
+    },
+    "privacy": {
+      "title": "Einstellungen",
+      "content_settings": "Inhalts-Einstellungen",
+      "clear_browsing_data": "Browserdaten löschen",
+      "crash_upload": "Hochladen von Absturzberichten aktivieren",
+      "crash_upload_desc": "Laden Sie automatisch Fehlerberichte über Abstürze hoch, um den Browser zu verbessern."
+    },
+    "passwords": {
+      "title": "Passwörter und Formulare",
+      "autofill_desc": "Wenn das automatische Ausfüllen aktiviert ist, können Sie Webformulare mit einem Klick ausfüllen.",
+      "manage_autofill": "Einstellungen zum automatischen Ausfüllen verwalten",
+      "save_passwords_desc": "Bitten Sie darum, auf Websites eingegebene Passwörter zu speichern.",
+      "manage_saved_passwords": "Gespeicherte Passwörter verwalten"
+    },
+    "web_content": {
+      "title": "Web-Content",
+      "font_size": "Schriftgröße:",
+      "font_size_very_small": "Sehr klein",
+      "font_size_small": "Klein",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Sehr groß",
+      "customize_fonts": "Schriften",
+      "page_zoom": "Seitenzoom:"
+    },
+    "save": {
+      "apply_button": "Speichern und anwenden",
+      "auto_hint": "Einstellungen werden automatisch gespeichert",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "Herunterladungen",
+    "location_label": "Herunterladestandort",
+    "location_desc": "Standard-Speicherort für Downloads",
+    "browse": "Durchsuchen...",
+    "ask_location_label": "Fragen, wo jede Datei gespeichert werden soll, bevor das Herunterladen beginnt",
+    "default_tool_label": "Standard-Herunterladetool auswählen:",
+    "browse_desc": "Herunterladestandardordner auswählen",
+    "status": {
+      "downloading": "Herunterladen: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "Abgeschlossen",
+      "cancelled": "Abgebrochen",
+      "failed": "Herunterladen fehlgeschlagen",
+      "pending": "Ausstehend..."
+    }
+  },
+  "password_manager": {
+    "hide": "Verbergen",
+    "show": "Zeigen"
+  },
+  "import": {
+    "success": "Erfolgreich {{count}} Lesezeichen importiert.",
+    "done": "Import abgeschlossen",
+    "failed": "Import fehlgeschlagen: {{msg}}"
+  },
+  "adblock": {
+    "allow": "Erlauben",
+    "block": "Blockieren"
+  },
+  "task_manager": {
+    "tab_title": "● Registerkarte: {{title}}"
+  },
+  "clear": {
+    "success": "Erfolgreich die folgenden Daten gelöscht:\n• {{items}}",
+    "done": "Löschen abgeschlossen",
+    "failed": "Fehler beim Löschen der Daten: {{msg}}",
+    "in_progress": "Löschen..."
+  },
+  "print": {
+    "failed": "Drucken fehlgeschlagen",
+    "failed_message": "Fehler beim Drucken:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "Seite als speichern",
+      "filter": "Webseite, nur HTML (*.html)|*.html|Vollständige Webseite (*.html)|*.html|MHTML-Datei (*.mhtml)|*.mhtml|PDF-Dokument (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "Lesezeichen exportieren",
+    "export_filter": "HTML-Dateien (*.html)|*.html",
+    "export_success_path": "Lesezeichen exportiert nach:\n{{path}}",
+    "other": "Andere Lesezeichen",
+    "added_message": "Hinzugefügt {{count}} Registerkarten zum Ordner \"{{folder}}\"",
+    "added_status": "Hinzugefügt {{count}} Lesezeichen zum Ordner \"{{folder}}\"",
+    "already": "Schon als Lesezeichen markiert",
+    "batch_confirm": "Es wird ein Ordner für {{count}} Registerkarten erstellt.\\n\\nWeiter?",
+    "batch_title": "Batch-Lesezeichen hinzufügen",
+    "cancelled": "Lesezeichen abgebrochen",
+    "import_filter": "HTML-Dateien (*.html;*.htm)|*.html;*.htm|Alle Dateien (*.*)|*.*",
+    "import_title": "Lesezeichen importieren",
+    "new_bookmark": "Neues Lesezeichen",
+    "unable_for_page": "Diese Seite kann nicht als Lesezeichen markiert werden",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "Öffnen",
+    "open_in_new_tab": "In neuem Tab öffnen",
+    "open_all_bookmarks": "Alle Lesezeichen öffnen"
+  },
+  "actions": {
+    "add": "Hinzufügen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "delete_all": "Alle löschen",
+    "done": "Abgeschlossen",
+    "copy_link": "Link kopieren",
+    "rename": "Umbenennen",
+    "add_bookmark": "Lesezeichen hinzufügen",
+    "add_folder": "Ordner hinzufügen"
+  },
+  "permissions": {
+    "allow": "Erlauben",
+    "block": "Blockieren",
+    "ask": "Fragen"
+  },
+  "site_settings": {
+    "desc": "Sie können {{category}} Berechtigungen für bestimmte Websites einstellen.",
+    "host_pattern": "Hostnamenmuster:",
+    "columns": {
+      "host_pattern": "Hostnamenmuster",
+      "behavior": "Verhalten"
+    }
+  },
+  "time": {
+    "minute": "Minute"
+  },
+  "newtab": {
+    "title": "Neuer Tab",
+    "search_placeholder": "Suchen oder Adresse eingeben",
+    "footer": "Leicht · Schnell · Einfach",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "Löschen der Browsing-Daten",
+    "clear_button": "Löschen der Browsing-Daten...",
+    "clear_desc": "Löschen der Browsing-Historie, Cookies, Cache und mehr",
+    "exit_clear": {
+      "title": "Automatisches Löschen beim Beenden",
+      "history": "Browsing-Historie",
+      "downloads": "Download-Historie",
+      "cache": "Gekachelte Bilder und Dateien",
+      "cookies": "Cookies und andere Sitespezifische Daten"
+    },
+    "options": {
+      "title": "Datenschutzoptionen",
+      "dnt": "Senden der Anfrage „Nicht verfolgen“ mit Browsingverkehr"
+    }
+  },
+  "update": {
+    "updater_missing": "Updater-Executable „updater.exe“ nicht gefunden"
+  },
+  "address_dropdown": {
+    "search": "Suchen nach „{{text}}“",
+    "visit": "Besuchen „{{text}}“",
+    "empty_history": "Keine passenden Einträge in der Browsing-Historie gefunden",
+    "empty_bookmark": "Keine passenden Lesezeichen gefunden",
+    "empty_tabs": "Keine passenden Registerkarten gefunden",
+    "empty_all": "Keine Übereinstimmungen gefunden"
+  },
+  "image_dialog": {
+    "title": "Bildressourcen extrahieren",
+    "found_count": "Gefunden {{count}} Bilder",
+    "columns": {
+      "url": "Bild-URL",
+      "type": "Typ"
+    },
+    "preview": {
+      "select": "Wählen Sie ein Bild aus, um es zu vorschauen"
+    },
+    "save_to": "Herunterladungen speichern in",
+    "browse": "Ordner ändern",
+    "browse_desc": "Downloads Speicherordner auswählen",
+    "download_now": "Jetzt herunterladen",
+    "select_one_image": "Bitte wählen Sie mindestens ein Bild aus, um es herunterzuladen",
+    "select_all_toggle": "Alles auswählen / Umschalten",
+    "loading_preview": "Vorschau wird geladen...",
+    "modern_preview": "Modernes Bildformat (WebView2 Vorschau)",
+    "modern": "Modernes Bildformat",
+    "preview_loading_webview": "Vorschau wird geladen (WebView2-Modus)...",
+    "preview_unavailable": "Vorschau nicht verfügbar",
+    "preview_size": "{{width}} x {{height}} | {{kb}} KB"
+  },
+  "video_dialog": {
+    "title": "Herunterladedateiformat auswählen",
+    "columns": {
+      "resolution": "Auflösung",
+      "ext": "Erweiterung",
+      "size": "Größe",
+      "note": "Hinweis"
+    },
+    "save_to": "Herunterladungen speichern in",
+    "browse": "Ordner ändern",
+    "browse_desc": "Downloads Speicherordner auswählen",
+    "start_download": "Herunterladen starten",
+    "select_format_first": "Bitte wählen Sie zuerst ein Format aus",
+    "unknown_title": "Unbekannter Titel",
+    "unknown": "Unbekannt",
+    "parse_failed": "Fehler beim Parsen der Videoinformation: {{msg}}"
+  },
+  "common": {
+    "info": "Info",
+    "done": "Abgeschlossen",
+    "error": "Fehler",
+    "operation_failed_retry": "Vorgang fehlgeschlagen, bitte erneut versuchen",
+    "empty": "(leer)",
+    "in_dev": "Diese Funktion ist in der Entwicklung...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "Über ",
+    "version_prefix": "Version ",
+    "check_update": "Updates prüfen",
+    "checking": "Prüfen...",
+    "connecting": "Verbindung zum Update-Server herstellen...",
+    "update_failed": "Fehler bei der Prüfung der Updates. Bitte versuchen Sie es später erneut.",
+    "update_found_status": "Neue Version gefunden: {{version}}",
+    "update_found_title": "Update gefunden",
+    "update_found_message": "Neue Version {{version}} gefunden\\n\\nRelease-Notes:\\n{{log}}\\n\\nJetzt updaten?",
+    "latest": "Sie sind bereits auf der neuesten Version.",
+    "error_prefix": "Fehler: ",
+    "simple_title": "Über",
+    "simple_message": "{{app}}\\nVersion {{version}}\\n\\nAuf der WebView2-Motor-Basis",
+    "copyright": "© {{year}} {{app}}. Alle Rechte vorbehalten."
+  },
+  "font": {
+    "preview_standard": "{{größe}}: Lorem ipsum dolor sit amet,\\nconsectetur adipiscing elit.",
+    "min": "Min",
+    "max": "Max",
+    "serif": "Serifen-Schrift",
+    "sans_serif": "Sans-Serif-Schrift",
+    "fixed_width": "Festbreit-Schrift",
+    "minimum_size": "Minimum Schriftgröße",
+    "preview_generic": "{{größe}}: Lorem ipsum dolor sit amet,\\nconsectetur adipiscing elit.",
+    "preview_fixed": "Lorem ipsum dolor sit amet,\\nconsectetur adipiscing elit.",
+    "preview_min": "{{größe}}: Lorem ipsum dolor sit amet, consectetur"
+  },
+  "appearance": {
+    "title": "Darstellung",
+    "show_home_button": "Schaltfläche \"Startseite\" anzeigen",
+    "change": "Ändern",
+    "show_bookmark_bar": "Lesezeichenleiste immer anzeigen",
+    "language": "Sprache",
+    "language_auto": "System folgen",
+    "language_zhCN": "Chinesisch (Vereinfacht)",
+    "language_en": "Englisch",
+    "hide_bookmark_bar": "Lesezeichenleiste ausblenden"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "Sind Sie sicher, dass Sie den Ordner \"{{name}}\" und seinen gesamten Inhalt löschen möchten?",
+    "confirm_delete_item": "Sind Sie sicher, dass Sie \"{{name}}\" löschen möchten?",
+    "export_failed": "Export fehlgeschlagen: {{msg}}",
+    "export_success": "Export erfolgreich!"
+  },
+  "images": {
+    "cancelled_status": "Bildextraktion abgebrochen",
+    "extracting_status": "Bildressourcen werden extrahiert...",
+    "failed_message": "Extraktion fehlgeschlagen: {{msg}}",
+    "failed_status": "Bildextraktion fehlgeschlagen",
+    "none_found_status": "Keine Bildressourcen gefunden",
+    "submitted_tasks": "Es wurden {{count}} Bildherunterladetasks eingereicht"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "Nie",
+      "save": "Passwort speichern",
+      "title": "Möchten Sie, dass KunQiong AI Browser Ihr Passwort für diese Seite speichert?"
+    },
+    "saved": {
+      "done": "Abgeschlossen",
+      "manage": "Gespeicherte Passwörter verwalten",
+      "title": "Gespeichertes Passwort für diese Seite:"
+    }
+  },
+  "search": {
+    "manage_button": "Suchmaschinen verwalten"
+  },
+  "user": {
+    "logout": "Abmelden",
+    "manage_profile": "Profileinstellungen"
+  },
+  "videos": {
+    "extract_failed_status": "Extraktion fehlgeschlagen",
+    "not_detected_desc": "Keine extrahierbaren Videoressourcen wurden auf dieser Seite erkannt.\\n\\nHinweis: Die Seite enthält möglicherweise kein Video oder verwendet verschlüsseltes/DRM-Playback, daher ist eine direkte Extraktion nicht möglich.\\n\\nEmpfehlung: Öffnen Sie die tatsächliche Videowiederseite und versuchen Sie die Extraktion erneut, nachdem die Wiedergabe gestartet hat.",
+    "not_detected_status": "Keine Videoressourcen erkannt",
+    "not_detected_title": "Keine Videoressourcen erkannt",
+    "not_supported": "Videoextraktion wird auf dieser Seite nicht unterstützt",
+    "parsing_status": "Videoinformation wird analysiert..."
+  }
+}

@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "Новая вкладка"
+  },
+  "menu": {
+    "new_tab": "Новая вкладка (Т)",
+    "new_window": "Новое окно (Н)",
+    "new_incognito": "Новое окно InPrivate (И)",
+    "bookmarks": "Закладки (Б)",
+    "show_bookmark_bar": "Показать панель закладок (С)",
+    "bookmark_manager": "Менеджер закладок (Б)",
+    "import_bookmarks": "Импортировать закладки и настройки...",
+    "add_bookmark": "Добавить закладку для этой страницы...",
+    "add_all_bookmarks": "Добавить закладки для всех открытых страниц...",
+    "more_bookmarks": "Дополнительные закладки",
+    "no_bookmarks": "Нет закладок",
+    "history": "История (H)",
+    "show_all_history": "Показать всю историю",
+    "no_history": "Нет истории",
+    "clear_history": "Очистить историю посещений",
+    "downloads": "Загрузки (Д)",
+    "media_extract": "Извлечение медиа",
+    "extract_images": "Извлечь изображения с этой страницы",
+    "extract_videos": "Извлечь видео с этой страницы",
+    "clear_data": "Очистить данные посещений",
+    "exit_incognito": "Закрыть окно InPrivate",
+    "exit_normal": "Закрыть KunQiong AI Browser",
+    "print": "Печать (П)",
+    "save_page_as": "Сохранить страницу как (А)...",
+    "find_in_page": "Найти на странице",
+    "more_tools": "Дополнительные инструменты",
+    "task_manager": "Задачник (Т)",
+    "encoding": "Кодировка (Е)",
+    "devtools": "Инструменты разработчика (Д)",
+    "view_resource_log": "Просмотреть лог загрузки ресурсов (Л)",
+    "adblock": "Блокер рекламы (Г)",
+    "settings": "Настройки (С)",
+    "feedback": "Обратная связь",
+    "about_app": "О Kunqiong AI Browser",
+    "about_incognito": "О InPrivate",
+    "exit_app": "Закрыть KunQiong AI Browser"
+  },
+  "context": {
+    "new_tab": "Открыть новую вкладку",
+    "reload": "Перезагрузить",
+    "duplicate": "Дублировать",
+    "pin": "Закрепить вкладку",
+    "unpin": "Открепить вкладку",
+    "close": "Закрыть вкладку",
+    "close_others": "Закрыть другие вкладки",
+    "close_left": "Закрыть вкладки слева",
+    "close_right": "Закрыть вкладки справа",
+    "reopen_closed": "Открыть закрытую вкладку заново (Е)",
+    "bookmark_all": "Добавить закладки для всех вкладок..."
+  },
+  "tooltips": {
+    "new_tab": "Новая вкладка (Ctrl+T)",
+    "search_tabs": "Поиск вкладок",
+    "download": "Загрузки (Ctrl+J)",
+    "user_login": "Пользователь/Вход",
+    "translate_page": "Перевести эту страницу",
+    "zoom": "Увеличение",
+    "manage_passwords": "Управление паролями"
+  },
+  "nav": {
+    "back": "Назад (Alt+Левая стрелка)",
+    "forward": "Вперед (Alt+Правая стрелка)",
+    "refresh": "Обновить (F5)",
+    "stop": "Остановить (Esc)",
+    "home": "Домашняя страница (Alt+Домашняя)"
+  },
+  "status": {
+    "ready": "Готово",
+    "incognito": "InPrivate - Ваша активность в браузере не будет сохранена на этом устройстве",
+    "downloading": "Загрузка: {{file}}",
+    "history_cleared": "История очищена"
+  },
+  "ai": {
+    "assistant": "Ассистент",
+    "summarize": "📝 Сжать содержание этой страницы",
+    "mode": "Режим AI",
+    "init_failed": "Инициализация ассистента не удалась",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>Файл интерфейса AI чата не найден</h3><p>Пожалуйста, проверьте, что эти пути существуют:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "Пожалуйста, переведите основной контент этой страницы на китайский:\n\n{{text}}",
+    "translate_failed": "Перевод AI не удался: {{msg}}",
+    "api": {
+      "base": "URL прокси API:",
+      "key": "Ключ API:",
+      "model_name": "Название модели:",
+      "model_preset": "Предустановка модели:",
+      "provider": "Предустановка провайдера:",
+      "title": "Конфигурация API",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "Производственный режим API (совместим с OpenAI)",
+    "mode.title": "Режим сервиса",
+    "mode.web": "Встроенный веб-режим (DeepSeek)",
+    "settings": {
+      "subtitle": "Настроить вашего AI-ассистента",
+      "title": "Настройки AI"
+    },
+    "tip": {
+      "compatible": "Совет: Работает с DeepSeek, OpenAI, Ollama и другими совместимыми API",
+      "dashscope": "Совет: BaseUrl DashScope, совместимая с OpenAI, по умолчанию равен https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "volcengine": "Совет: Volcengine Ark V3 требует идентификатора конечной точки в формате ep-2024xxxxxxxx-xxxxx"
+    },
+    "web": {
+      "title": "Настройки веб-режима",
+      "url": "URL AI веб:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "InPrivate",
+      "message": "Вы используете инприватное просмотр:\n\n✓ InPrivate позволяет:\n  • Не сохранять историю посещений\n  • Не сохранять куки и данные сайта\n  • Не сохранять данные форм\n  • Использовать изолированную сессию\n\n✗ InPrivate не позволяет:\n  • Скрыть активность от администраторов сети\n  • Скрыть активность от вашего ISP\n  • Предотвратить веб-сайтам получение вашего IP-адреса\n\nПримечание: Скачанные файлы и созданные закладки остаются."
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "Подтвердить",
+    "ok": "ОК",
+    "clear_history_all": "Вы уверены, что хотите очистить всю историю?",
+    "cancel": "Отмена"
+  },
+  "search_engine": {
+    "confirm_delete": "Вы уверены, что хотите удалить поисковый движок \"{{name}}\"?"
+  },
+  "menu_zoom": {
+    "label": "Увеличение",
+    "reset": "Сбросить"
+  },
+  "settings": {
+    "header": {
+      "title": "Настройки",
+      "search_placeholder": "Поиск настроек"
+    },
+    "sidebar": {
+      "history": "История",
+      "settings": "Настройки",
+      "ai": "Настройки ИИ",
+      "privacy": "Конфиденциальность",
+      "advanced": "Дополнительно"
+    },
+    "set_startup_pages": "Установить страницы запуска",
+    "enter_urls_each_line": "Пожалуйста, введите URL веб-сайтов (по одному на строке):",
+    "no_results": "Нет найденных соответствующих настроек",
+    "appearance": {
+      "title": "Внешний вид",
+      "show_home_button": "Показать кнопку 'Домашняя страница'",
+      "change": "Изменить",
+      "show_bookmark_bar": "Всегда показывать панель закладок",
+      "language": "Язык",
+      "language_auto": "Следовать системе",
+      "language_zhCN": "Китайский (упрощённый)",
+      "language_en": "Английский",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "Загрузки",
+      "location_label": "Расположение загрузок",
+      "location_desc": "По умолчанию расположение для сохранения загрузок",
+      "browse": "Обзор...",
+      "ask_location_label": "Спросить, куда сохранить каждый файл перед загрузкой",
+      "ask_location_desc": "Спросить, куда сохранить каждый файл перед загрузкой"
+    },
+    "title": "Настройки",
+    "search_placeholder": "Поиск настроек",
+    "home": {
+      "title": "Домашняя страница",
+      "url": "URL домашней страницы:",
+      "use_current": "Использовать текущую страницу",
+      "use_newtab": "Использовать новую вкладку"
+    },
+    "startup": {
+      "title": "При запуске",
+      "newtab": "Открыть новую вкладку",
+      "continue_last": "Продолжить с места остановки",
+      "specific_pages": "Открыть конкретную страницу или набор страниц",
+      "manage_pages": "Управление страницами",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "Блокировка рекламы",
+      "none": "Не блокировать никакую рекламу",
+      "popup": "Только блокировать всплывающие окна",
+      "aggressive": "Агрессивно блокировать рекламу на веб-страницах",
+      "custom": "Производственные правила блокировки рекламы",
+      "custom_link": "Производственные правила",
+      "manage_rules": "Управлять своими правилами..."
+    },
+    "search": {
+      "title": "Поисковый движок в строке адреса",
+      "default_label": "По умолчанию поисковой движок",
+      "desc": "Поисковый движок, используемый строкой адреса",
+      "options": {
+        "360": "360",
+        "baidu": "Baidu",
+        "bing": "Bing",
+        "google": "Google"
+      },
+      "manage_button": "Управление поисковыми движками"
+    },
+    "show_advanced": "Показать дополнительные настройки...",
+    "advanced": {
+      "back_basic": "? Вернуться к базовым настройкам",
+      "gesture": {
+        "enable": "Включить мышиные жестки",
+        "title": "Мышиные жестки"
+      },
+      "performance": {
+        "mem_release_time": "Интервал освобождения памяти вкладок в фоне:",
+        "title": "Производительность"
+      },
+      "super_drag": {
+        "enable": "Включить супер-драгирование"
+      },
+      "title": "Дополнительные настройки"
+    },
+    "default_browser": {
+      "checking": "Проверка статуса браузера по умолчанию...",
+      "is_default": "{{app}} является вашим текущим браузером по умолчанию.",
+      "not_default": "{{app}} не является вашим текущим браузером по умолчанию.",
+      "set_default": "Установить как браузер по умолчанию",
+      "title": "Браузер по умолчанию"
+    },
+    "history": {
+      "columns": {
+        "time": "Время посещения",
+        "title": "Заголовок",
+        "url": "URL"
+      },
+      "title": "Назад (Alt+Левая стрелка)",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "Вперед (Alt+Правая стрелка)",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "Обновить (F5)",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "Остановить (Esc)",
+      "desc": "Домашняя страница (Alt+Домашняя)",
+      "title": "Готово",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "InPrivate - Ваша активность в браузере не будет сохранена на этом устройстве",
+    "tabs": {
+      "double_click_close": "Загрузка: {{file}}",
+      "input_mode": {
+        "new_tab": "Открывать в новой вкладке"
+      },
+      "input_mode.enter": "Ассистент",
+      "input_mode.instant": "📝 Сжать содержание этой страницы",
+      "new_tab_position": {
+        "last": "Режим AI",
+        "right": "Инициализация ассистента не удалась"
+      },
+      "open_new": "При открытии новой страницы:",
+      "select_all_on_click": "Select all URL text when clicking the address bar",
+      "show_full_url": "Show full URL in address bar (also shown while holding Shift)",
+      "title": "Вкладки",
+      "right_click_close_desc": "Щелчок правой кнопкой закрывает текущую вкладку (удерживайте Shift, чтобы показать контекстное меню)",
+      "open_links_background": "Открывать нажатые ссылки в фоновой вкладке",
+      "input_mode_label": "When opening a new page:"
+    },
+    "user_data": {
+      "import": "Import bookmarks and settings...",
+      "title": "User data"
+    },
+    "features": {
+      "title": "Характеристики",
+      "mouse_gesture_label": "Управление мышью",
+      "mouse_gesture_desc": "Используйте жесты мыши для быстрого выполнения действий",
+      "super_drag_label": "Супер перетаскивание",
+      "super_drag_desc": "Перетащите текст или ссылки для быстрого поиска или открытия"
+    },
+    "web": {
+      "title": "Веб-настройки",
+      "smooth_scrolling": "Включить плавную прокрутку на веб-страницах (вступает в силу после перезапуска)"
+    },
+    "cache": {
+      "title": "Пользовательский кэш",
+      "directory_label": "Пользовательский каталог кэша:",
+      "change_button": "Изменить...",
+      "notice": "Изменение этого параметра очистит текущий кэш и вступит в силу после перезапуска.",
+      "open_dir": "Каталог CACHE",
+      "reset_default": "Сбросить настройки по умолчанию",
+      "reset_confirm": "Вы уверены, что хотите сбросить каталог кэша по умолчанию?\\n\\nЭто очистит существующий кэш и вступит в силу после перезапуска."
+    },
+    "privacy": {
+      "title": "Privacy settings",
+      "content_settings": "Content settings...",
+      "clear_browsing_data": "Clear browsing data...",
+      "crash_upload": "Enable crash report upload",
+      "crash_upload_desc": "Automatically upload error reports on crashes to help improve the browser."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "Сохранить и применить",
+      "auto_hint": "Настройки сохраняются автоматически",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "Загрузки",
+    "location_label": "Место загрузки",
+    "location_desc": "Место по умолчанию для сохранения загрузок",
+    "browse": "Обзор...",
+    "ask_location_label": "Спросить, куда сохранить каждый файл перед загрузкой",
+    "default_tool_label": "Выбрать инструмент загрузки по умолчанию",
+    "browse_desc": "Выбрать папку для сохранения загрузок",
+    "status": {
+      "downloading": "Загрузка: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "Завершено",
+      "cancelled": "Отменено",
+      "failed": "Загрузка не удалась",
+      "pending": "Ожидает..."
+    }
+  },
+  "password_manager": {
+    "hide": "Скрыть",
+    "show": "Показать"
+  },
+  "import": {
+    "success": "Успешно импортировано {{count}} закладок.",
+    "done": "Импорт завершен",
+    "failed": "Импорт не удался: {{msg}}"
+  },
+  "adblock": {
+    "allow": "Разрешить",
+    "block": "Запретить"
+  },
+  "task_manager": {
+    "tab_title": "● Вкладка: {{title}}"
+  },
+  "clear": {
+    "success": "Успешно очищены следующие данные:\n• {{items}}",
+    "done": "Очистка завершена",
+    "failed": "Ошибка при очистке данных: {{msg}}",
+    "in_progress": "Очищается..."
+  },
+  "print": {
+    "failed": "Печать не удалась",
+    "failed_message": "Ошибка при печати:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "Сохранить страницу как",
+      "filter": "Только HTML страницы (*.html)|*.html|Полная страница HTML (*.html)|*.html|Файл MHTML (*.mhtml)|*.mhtml|Документ PDF (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "Экспорт закладок",
+    "export_filter": "Файлы HTML (*.html)|*.html",
+    "export_success_path": "Закладки экспортированы в:\n{{path}}",
+    "other": "Другие закладки",
+    "added_message": "Добавлено {{count}} вкладок в папку \"{{folder}}\"",
+    "added_status": "Добавлено {{count}} закладок в папку \"{{folder}}\"",
+    "already": "Уже добавлено в закладки",
+    "batch_confirm": "Для {{count}} вкладок будет создана папка.\\n\\nПродолжить?",
+    "batch_title": "Пакетное добавление закладок",
+    "cancelled": "Закладка отменена",
+    "import_filter": "Файлы HTML (*.html;*.htm)|*.html;*.htm|Все файлы (*.*)|*.*",
+    "import_title": "Импортировать закладки",
+    "new_bookmark": "Новая закладка",
+    "unable_for_page": "Нельзя добавить эту страницу в закладки",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "Открыть",
+    "open_in_new_tab": "Открыть в новой вкладке",
+    "open_all_bookmarks": "Открыть все закладки"
+  },
+  "actions": {
+    "add": "Добавить",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "delete_all": "Удалить все",
+    "done": "Готово",
+    "copy_link": "Скопировать ссылку",
+    "rename": "Переименовать",
+    "add_bookmark": "Добавить закладку",
+    "add_folder": "Добавить папку"
+  },
+  "permissions": {
+    "allow": "Разрешить",
+    "block": "Запретить",
+    "ask": "Запросить"
+  },
+  "site_settings": {
+    "desc": "Вы можете настроить разрешения {{category}} для конкретных сайтов.",
+    "host_pattern": "Шаблон хоста:",
+    "columns": {
+      "host_pattern": "Шаблон хоста",
+      "behavior": "Поведение"
+    }
+  },
+  "time": {
+    "minute": "минута"
+  },
+  "newtab": {
+    "title": "Новая вкладка",
+    "search_placeholder": "Поиск или ввод адреса",
+    "footer": "Лёгкий · Быстрый · Простой",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "Очистить данные просмотра",
+    "clear_button": "Очистка данных просмотра...",
+    "clear_desc": "Очистить историю просмотра, куки, кэш и другое",
+    "exit_clear": {
+      "title": "Автоочистка при выходе",
+      "history": "История просмотра",
+      "downloads": "История загрузок",
+      "cache": "Кэшированные изображения и файлы",
+      "cookies": "Куки и другие данные сайта"
+    },
+    "options": {
+      "title": "Настройки конфиденциальности",
+      "dnt": "Отправить запрос 'Не отслеживать' с трафиком просмотра"
+    }
+  },
+  "update": {
+    "updater_missing": "Экземпляр обновления 'updater.exe' не найден"
+  },
+  "address_dropdown": {
+    "search": "Поиск '{{text}}'",
+    "visit": "Посетить '{{text}}'",
+    "empty_history": "Ничего не найдено в истории",
+    "empty_bookmark": "Ни одна закладка не найдена",
+    "empty_tabs": "Ни одна вкладка не найдена",
+    "empty_all": "Ничего не найдено"
+  },
+  "image_dialog": {
+    "title": "Извлечь ресурсы изображений",
+    "found_count": "Найдено {{count}} изображений",
+    "columns": {
+      "url": "URL изображения",
+      "type": "Тип"
+    },
+    "preview": {
+      "select": "Выберите изображение для предварительного просмотра"
+    },
+    "save_to": "Сохранять загрузки в",
+    "browse": "Сменить папку",
+    "browse_desc": "Выбрать папку для сохранения загрузок",
+    "download_now": "Загрузить сейчас",
+    "select_one_image": "Пожалуйста, выберите хотя бы одно изображение для загрузки",
+    "select_all_toggle": "Выбрать все / Переключить",
+    "loading_preview": "Загрузка предварительного просмотра...",
+    "modern_preview": "Современный формат изображения (предварительный просмотр WebView2)",
+    "modern": "Современный формат изображения",
+    "preview_loading_webview": "Загрузка предварительного просмотра (режим WebView2)...",
+    "preview_unavailable": "Предварительный просмотр недоступен",
+    "preview_size": "{{width}} × {{height}} | {{kb}} КБ"
+  },
+  "video_dialog": {
+    "title": "Выбрать формат загрузки",
+    "columns": {
+      "resolution": "Разрешение",
+      "ext": "Расширение",
+      "size": "Размер",
+      "note": "Примечание"
+    },
+    "save_to": "Сохранять загрузки в",
+    "browse": "Сменить папку",
+    "browse_desc": "Выбрать папку для сохранения загрузок",
+    "start_download": "Начать загрузку",
+    "select_format_first": "Пожалуйста, выберите формат сначала",
+    "unknown_title": "Неизвестный заголовок",
+    "unknown": "Неизвестно",
+    "parse_failed": "Ошибка парсинга информации о видео: {{msg}}"
+  },
+  "common": {
+    "info": "Информация",
+    "done": "Готово",
+    "error": "Ошибка",
+    "operation_failed_retry": "Операция не удалась, пожалуйста, повторите",
+    "empty": "(пусто)",
+    "in_dev": "Эта функция находится в разработке...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "О программе ",
+    "version_prefix": "Версия ",
+    "check_update": "Проверить на обновления",
+    "checking": "Проверка...",
+    "connecting": "Подключение к серверу обновлений...",
+    "update_failed": "Не удалось проверить обновления. Пожалуйста, попробуйте позже.",
+    "update_found_status": "Найдена новая версия: {{version}}",
+    "update_found_title": "Обновление найдено",
+    "update_found_message": "Найдена новая версия {{version}}\\n\\nПримечания к выпуску:\\n{{log}}\\n\\nBновить сейчас?",
+    "latest": "Вы уже на последней версии.",
+    "error_prefix": "Ошибка: ",
+    "simple_title": "О программе",
+    "simple_message": "{{app}}\\nВерсия {{version}}\\n\\nНа основе движка WebView2",
+    "copyright": "© {{year}} {{app}}. Все права защищены."
+  },
+  "font": {
+    "preview_standard": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "min": "Мин",
+    "max": "Макс",
+    "serif": "Шрифт со стилями (serif)",
+    "sans_serif": "Шрифт без засечек (sans-serif)",
+    "fixed_width": "Шрифт с фиксированной шириной",
+    "minimum_size": "Минимальный размер шрифта",
+    "preview_generic": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "preview_fixed": "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "preview_min": "{{size}}: Lorem ipsum dolor sit amet, consectetur"
+  },
+  "appearance": {
+    "title": "Внешний вид",
+    "show_home_button": "Показать кнопку «Домой»",
+    "change": "Изменить",
+    "show_bookmark_bar": "Всегда показывать панель закладок",
+    "language": "Язык",
+    "language_auto": "Следовать системе",
+    "language_zhCN": "Китайский (упрощённый)",
+    "language_en": "Английский",
+    "hide_bookmark_bar": "Скрыть панель закладок"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "Вы уверены, что хотите удалить папку \"{{name}}\" и все её содержимое?",
+    "confirm_delete_item": "Вы уверены, что хотите удалить \"{{name}}\"?",
+    "export_failed": "Экспорт не удался: {{msg}}",
+    "export_success": "Экспорт успешен!"
+  },
+  "images": {
+    "cancelled_status": "Извлечение изображений отменено",
+    "extracting_status": "Извлечение ресурсов изображений...",
+    "failed_message": "Извлечение не удалось: {{msg}}",
+    "failed_status": "Извлечение изображений не удалось",
+    "none_found_status": "Ресурсы изображений не найдены",
+    "submitted_tasks": "Отправлено {{count}} задач загрузки изображений"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "Никогда",
+      "save": "Сохранить пароль",
+      "title": "Хотите ли KunQiong AI Browser сохранить ваш пароль для этого сайта?"
+    },
+    "saved": {
+      "done": "Готово",
+      "manage": "Управлять сохранёнными паролями",
+      "title": "Сохранённый пароль для этого сайта:"
+    }
+  },
+  "search": {
+    "manage_button": "Управлять поисковыми системами"
+  },
+  "user": {
+    "logout": "Выйти",
+    "manage_profile": "Настройки профиля"
+  },
+  "videos": {
+    "extract_failed_status": "Извлечение не удалось",
+    "not_detected_desc": "На этой странице не обнаружены видеоресурсы, которые можно извлечь.\\n\\nПримечание: На странице может не быть встроенного видео, или оно может использовать зашифрованное воспроизведение с DRM, поэтому прямой извлечение недоступно.\\n\\nСовет: Откройте фактическую страницу воспроизведения видео и попробуйте извлечь снова после начала воспроизведения.",
+    "not_detected_status": "Видеоресурсы не обнаружены",
+    "not_detected_title": "Видеоресурсы не обнаружены",
+    "not_supported": "Извлечение видео не поддерживается на этой странице",
+    "parsing_status": "Парсинг информации о видео..."
+  }
+}

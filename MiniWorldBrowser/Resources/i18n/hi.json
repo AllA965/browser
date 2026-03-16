@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "नया टैब"
+  },
+  "menu": {
+    "new_tab": "नया टैब (T)",
+    "new_window": "नया विंडो (N)",
+    "new_incognito": "नया निजी विंडो (I)",
+    "bookmarks": "बुकमार्क्स (B)",
+    "show_bookmark_bar": "बुकमार्क्स बार दिखाना (S)",
+    "bookmark_manager": "बुकमार्क मैनेजर (B)",
+    "import_bookmarks": "बुकमार्क्स और सेटिंग्स को आयात...",
+    "add_bookmark": "इस पृष्ठ के लिए बुकमार्क जोड़ें...",
+    "add_all_bookmarks": "सभी खुले पृष्ठों के लिए बुकमार्क जोड़ें...",
+    "more_bookmarks": "अधिक बुकमार्क्स",
+    "no_bookmarks": "कोई बुकमार्क नहीं",
+    "history": "इतिहास (H)",
+    "show_all_history": "सभी इतिहास दिखाना",
+    "no_history": "कोई इतिहास नहीं",
+    "clear_history": "ब्राउज़िंग इतिहास साफ़ करना",
+    "downloads": "डाउनलोड्स (D)",
+    "media_extract": "मीडिया निष्कर्षण",
+    "extract_images": "इस पृष्ठ पर छवियां निकालें",
+    "extract_videos": "इस पृष्ठ पर वीडियो निकालें",
+    "clear_data": "ब्राउज़िंग डेटा साफ़ करना",
+    "exit_incognito": "निजी विंडो बंद करें",
+    "exit_normal": "कुंकुम AI ब्राउज़र बंद करें",
+    "print": "प्रिंट (P)",
+    "save_page_as": "पृष्ठ को (A) के रूप में सहेजें...",
+    "find_in_page": "पृष्ठ में खोजें",
+    "more_tools": "अधिक उपकरण",
+    "task_manager": "टास्क मैनेजर (T)",
+    "encoding": "एन्कोडिंग (E)",
+    "devtools": "डेवलपर टूल्स (D)",
+    "view_resource_log": "संसाधन लोड लॉग देखें (L)",
+    "adblock": "एड ब्लॉक (G)",
+    "settings": "सेटिंग्स (S)",
+    "feedback": "फ़ीडबैक",
+    "about_app": "कुंकुम AI ब्राउज़र के बारे में",
+    "about_incognito": "निजी विंडो के बारे में",
+    "exit_app": "कुंकुम AI ब्राउज़र बंद करें"
+  },
+  "context": {
+    "new_tab": "नया टैब खोलें",
+    "reload": "फिर से लोड करना",
+    "duplicate": "दोहराना",
+    "pin": "टैब को पिन करना",
+    "unpin": "टैब को पिन से हटाना",
+    "close": "टैब बंद करें",
+    "close_others": "अन्य टैब बंद करें",
+    "close_left": "बाएं तरफ़ के टैब बंद करें",
+    "close_right": "दाएं तरफ़ के टैब बंद करें",
+    "reopen_closed": "बंद टैब फिर से खोलें (E)",
+    "bookmark_all": "सभी टैबों के लिए बुकमार्क जोड़ें..."
+  },
+  "tooltips": {
+    "new_tab": "नया टैब (Ctrl+T)",
+    "search_tabs": "टैबों को खोजें",
+    "download": "डाउनलोड्स (Ctrl+J)",
+    "user_login": "यूज़र/लॉगिन",
+    "translate_page": "इस पृष्ठ का अनुवाद करें",
+    "zoom": "ज़ूम",
+    "manage_passwords": "पासवर्डों का प्रबंधन"
+  },
+  "nav": {
+    "back": "पीछे (Alt+बाएं)",
+    "forward": "आगे (Alt+दाएं)",
+    "refresh": "फिर से लोड (F5)",
+    "stop": "रोकें (Esc)",
+    "home": "घर (Alt+Home)"
+  },
+  "status": {
+    "ready": "तैयार",
+    "incognito": "निजी - आपकी ब्राउज़िंग गतिविधि इस उपकरण पर सेव नहीं की जाएगी",
+    "downloading": "डाउनलोड हो रहा है: {{file}}",
+    "history_cleared": "इतिहास साफ़ कर दिया गया"
+  },
+  "ai": {
+    "assistant": "सहायक",
+    "summarize": "📝 इस पृष्ठ को सारांश दें",
+    "mode": "AI मोड",
+    "init_failed": "सहायक का प्रारंभन असफल हो गया",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI चैट UI फ़ाइल नहीं मिली</h3><p>कृपया ये पथों की मौजूदगी की जांच करें:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "कृपया इस पृष्ठ की मुख्य सामग्री को चीनी में अनुवाद करें:\\n\\n{{text}}",
+    "translate_failed": "AI अनुवाद असफल: {{msg}}",
+    "api": {
+      "base": "API प्रॉक्सी URL:",
+      "key": "API की मूल्यांकन:",
+      "model_name": "मॉडल नाम:",
+      "model_preset": "मॉडल प्रीसेट:",
+      "provider": "प्रोवाइडर प्रीसेट:",
+      "title": "API कॉन्फ़िगरेशन",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "कस्टम API मोड (OpenAI-संगत)",
+    "mode.title": "सेवा मोड",
+    "mode.web": "बिल्ट-इन वेब मोड (DeepSeek)",
+    "settings": {
+      "subtitle": "अपने AI सहायक को कॉन्फ़िगर करें",
+      "title": "AI सेटिंग्स"
+    },
+    "tip": {
+      "compatible": "सुझाव: DeepSeek, OpenAI, Ollama और अन्य संगत API के साथ काम करता है",
+      "dashscope": "सुझाव: DashScope OpenAI-संगत BaseUrl https://dashscope.aliyuncs.com/compatible-mode/v1 पर डिफ़ॉल्ट है",
+      "volcengine": "सुझाव: Volcengine Ark V3 को ep-2024xxxxxxxx-xxxxx के स्वरूप में Endpoint ID की आवश्यकता है"
+    },
+    "web": {
+      "title": "वेब मोड सेटिंग्स",
+      "url": "AI वेब URL:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "निजी",
+      "message": "आप निजी ब्राउज़िंग का उपयोग कर रहे हैं\\n\\n✓ निजी ब्राउज़िंग कर सकता है:\\n  • ब्राउज़िंग इतिहास को सेव नहीं करेगा\\n  • कुकीज़ और साइट डेटा को सेव नहीं करेगा\\n  • फॉर्म डेटा को सेव नहीं करेगा\\n  • अलगावी सेशन का उपयोग करेगा\\n\\n✗ निजी ब्राउज़िंग नहीं करेगा:\\n  • नेटवर्क प्रशासकों से गतिविधि को छिपाएगा\\n  • आपके ISP से गतिविधि को छिपाएगा\\n  • वेबसाइटों को आपका IP adres प्राप्त करने से रोकेगा\\n\\nटिप्पणी: डाउनलोड किए गए फ़ाइलें और बनाए गए बुकमार्क्स बचेंगे"
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "पुष्टि करें",
+    "ok": "ठीक है",
+    "clear_history_all": "क्या आप सभी इतिहास को साफ करना चाहते हैं?",
+    "cancel": "रद्द"
+  },
+  "search_engine": {
+    "confirm_delete": "क्या आप {{name}} खोज़-मशीन को हटाना चाहते हैं?"
+  },
+  "menu_zoom": {
+    "label": "ज़ूम",
+    "reset": "रीसेट"
+  },
+  "settings": {
+    "header": {
+      "title": "सेटिंग्स",
+      "search_placeholder": "सेटिंग्स खोजें"
+    },
+    "sidebar": {
+      "history": "इतिहास",
+      "settings": "सेटिंग्स",
+      "ai": "AI सेटिंग्स",
+      "privacy": "गोपनीयता",
+      "advanced": "उन्नत"
+    },
+    "set_startup_pages": "स्टार्टअप पेज़ सेट करना",
+    "enter_urls_each_line": "कृपया वेबसाइट URL प्रविष्ट करें (एक प्रति पंक्ति):",
+    "no_results": "मेल नहीं खोजा गया सेटिंग्स",
+    "appearance": {
+      "title": "दिखावट",
+      "show_home_button": "होम बटन दिखाना",
+      "change": "बदलना",
+      "show_bookmark_bar": "बुकमार्क्स बार को हमेशा दिखाना",
+      "language": "भाषा",
+      "language_auto": "सिस्टम का अनुसरण करें",
+      "language_zhCN": "चीनी (सरलीकृत)",
+      "language_en": "अंग्रेज़ी",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "डाउनलोड",
+      "location_label": "डाउनलोड स्थान",
+      "location_desc": "डाउनलोड के लिए डिफ़ॉल्ट सहेज स्थान",
+      "browse": "ब्राउज़...",
+      "ask_location_label": "प्रत्येक फ़ाइल को डाउनलोड करने से पहले स्थान पूछें",
+      "ask_location_desc": "प्रत्येक फ़ाइल को डाउनलोड करने से पहले स्थान पूछें"
+    },
+    "title": "सेटिंग्स",
+    "search_placeholder": "सेटिंग्स खोजें",
+    "home": {
+      "title": "होम",
+      "url": "होम URL:",
+      "use_current": "वर्तमान पृष्ठ प्रयोग करना",
+      "use_newtab": "नया टैब प्रयोग करना"
+    },
+    "startup": {
+      "title": "स्टार्टअप पर",
+      "newtab": "नया टैब खोलना",
+      "continue_last": "जहां आप रोड़े गए थे वहां जारी रखें",
+      "specific_pages": "एक विशेष पृष्ठ या पृष्ठों के सेट खोलें",
+      "manage_pages": "पृष्ठों का प्रबंधन",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "विज्ञापन अवरोध",
+      "none": "कोई भी विज्ञापन अवरोधित न करें",
+      "popup": "केवल पॉप-अप अवरोधित करें",
+      "aggressive": "पृष्ठ विज्ञापनों को आक्रामक रूप से अवरोधित करें",
+      "custom": "निजी विज्ञापन अवरोधन नियम",
+      "custom_link": "निजी नियम",
+      "manage_rules": "मेरे नियमों का प्रबंधन..."
+    },
+    "search": {
+      "title": "पत्रिका बार खोज़-मशीन",
+      "default_label": "डिफ़ॉल्ट खोज़-मशीन",
+      "desc": "पत्रिका बार द्वारा प्रयोग की गई खोज़-मशीन",
+      "options": {
+        "360": "360",
+        "baidu": "बैडू",
+        "bing": "बिंग",
+        "google": "गूगल"
+      },
+      "manage_button": "खोज़-मशीनों का प्रबंधन"
+    },
+    "show_advanced": "अद्वितीय सेटिंग्स...",
+    "advanced": {
+      "back_basic": "? बेसिक सेटिंग्स में वापस जाएं",
+      "gesture": {
+        "enable": "माउस गेस्चर्स सक्षम करना",
+        "title": "माउस गेस्चर्स"
+      },
+      "performance": {
+        "mem_release_time": "बैकग्राउंड टैब मेमोरी रिलीज़ अंतराल:",
+        "title": "प्रदर्शन"
+      },
+      "super_drag": {
+        "enable": "सुपर ड्रैग सक्षम करना"
+      },
+      "title": "अद्वितीय सेटिंग्स"
+    },
+    "default_browser": {
+      "checking": "डिफ़ॉल्ट ब्राउज़र की स्थिति की जांच...",
+      "is_default": "{{app}} वर्तमान में आपका डिफ़ॉल्ट ब्राउज़र है।",
+      "not_default": "{{app}} वर्तमान में आपका डिफ़ॉल्ट ब्राउज़र नहीं है।",
+      "set_default": "डिफ़ॉल्ट ब्राउज़र के रूप में सेट करें",
+      "title": "डिफ़ॉल्ट ब्राउज़र"
+    },
+    "history": {
+      "columns": {
+        "time": "यहां पर जाने का समय",
+        "title": "शीर्षक",
+        "url": "यूआरएल"
+      },
+      "title": "इतिहास",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "प्रमाणपत्रों का प्रबंधन...",
+      "title": "??????????/??????"
+    },
+    "network": {
+      "proxy_change": "प्रॉक्सी सेटिंग्स बदलें...",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "सेटिंग्स को मूल डिफ़ॉल्ट्स में बहाल करें",
+      "desc": "यह आपके बुकमार्क, इतिहास, या बचाए गए पासवर्ड को प्रभावित नहीं करेगा।",
+      "title": "सेटिंग्स रीसेट करना",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "डिफ़ॉल्ट सेटिंग्स बहाल करना",
+    "tabs": {
+      "double_click_close": "टैबों को बंद करने के लिए दोहरा क्लिक करें",
+      "input_mode": {
+        "new_tab": "नए टैब में खोलें"
+      },
+      "input_mode.enter": "खोज़ करने के लिए एंटर दबाएं",
+      "input_mode.instant": "जैसे ही आप टाइप करते हैं, खोज़ करें (सिफारिश)",
+      "new_tab_position": {
+        "last": "अंतिम स्थान पर खोलें",
+        "right": "वर्तमान टैब के दायें ओर खोलें"
+      },
+      "open_new": "नया पृष्ठ खोलने के समय:",
+      "select_all_on_click": "पत्रिका बार पर क्लिक करने पर सभी URL टेक्स्ट का चयन करें",
+      "show_full_url": "पत्रिका बार में पूर्ण URL दिखाएं (शिफ्ट को पकड़ते समय भी दिखाई देगा)",
+      "title": "टैब्स",
+      "right_click_close_desc": "राइट-क्लिक वर्तमान टैब बंद करता है (कॉन्टेक्स्ट मेनू दिखाने के लिए Shift दबाए रखें)",
+      "open_links_background": "क्लिक किए गए लिंक को बैकग्राउंड टैब में खोलें",
+      "input_mode_label": "नया पृष्ठ खोलने के समय:"
+    },
+    "user_data": {
+      "import": "बुकमार्क्स और सेटिंग्स का आयात...",
+      "title": "उपयोगकर्ता डेटा"
+    },
+    "features": {
+      "title": "विशेषताएँ",
+      "mouse_gesture_label": "माउस के इशारे",
+      "mouse_gesture_desc": "जल्दी से कार्रवाई करने के लिए माउस इशारों का उपयोग करें",
+      "super_drag_label": "सुपर ड्रैग",
+      "super_drag_desc": "जल्दी से खोजने या खोलने के लिए टेक्स्ट या लिंक खींचें"
+    },
+    "web": {
+      "title": "वेब सेटिंग्स",
+      "smooth_scrolling": "वेब पेजों पर स्मूथ स्क्रॉलिंग सक्षम करें (रीस्टार्ट के बाद प्रभावी होता है)"
+    },
+    "cache": {
+      "title": "कस्टम कैश",
+      "directory_label": "कस्टम कैश निर्देशिका:",
+      "change_button": "बदलें...",
+      "notice": "इसे बदलने से वर्तमान कैश साफ़ हो जाएगा और पुनरारंभ होने के बाद प्रभावी हो जाएगा।",
+      "open_dir": "कैश निर्देशिका खोलें",
+      "reset_default": "डिफ़ॉल्ट पर रीसेट करें",
+      "reset_confirm": "क्या आप वाकई कैश निर्देशिका को डिफ़ॉल्ट पर रीसेट करना चाहते हैं?\\n\\nयह मौजूदा कैश को साफ़ करेगा और फिर से शुरू होने के बाद प्रभावी होगा।"
+    },
+    "privacy": {
+      "title": "Privacy settings",
+      "content_settings": "Content settings...",
+      "clear_browsing_data": "Clear browsing data...",
+      "crash_upload": "Enable crash report upload",
+      "crash_upload_desc": "Automatically upload error reports on crashes to help improve the browser."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "सेव करें और लागू करें",
+      "auto_hint": "सेटिंग्स अपने-आप सेव होती हैं",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "डाउनलोड्स",
+    "location_label": "डाउनलोड स्थान",
+    "location_desc": "डाउनलोड्स के लिए डिफ़ॉल्ट सहेजने का स्थान",
+    "browse": "ब्राउज़...",
+    "ask_location_label": "प्रत्येक फ़ाइल को डाउनलोड करने से पहले कहां सहेजें, का प्रश्न",
+    "default_tool_label": "डिफ़ॉल्ट डाउनलोड टूल चुनें:",
+    "browse_desc": "डाउनलोड सहेजने का फोल्डर चुनें",
+    "status": {
+      "downloading": "डाउनलोड हो रहा है: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "पूर्ण",
+      "cancelled": "रद्द",
+      "failed": "डाउनलोड विफल",
+      "pending": "रुका हुआ..."
+    }
+  },
+  "password_manager": {
+    "hide": "छिपाना",
+    "show": "दिखाना"
+  },
+  "import": {
+    "success": "सफलतापूर्वक {{count}} बुकमार्क्स आयात किए गए।",
+    "done": "आयात पूर्ण",
+    "failed": "आयात विफल: {{msg}}"
+  },
+  "adblock": {
+    "allow": "अनुमति",
+    "block": "ब्लॉक"
+  },
+  "task_manager": {
+    "tab_title": "● टैब: {{title}}"
+  },
+  "clear": {
+    "success": "निम्नलिखित डेटा सफलतापूर्वक साफ़ किया गया:\n• {{items}}",
+    "done": "सफलतापूर्वक साफ़",
+    "failed": "डेटा साफ़ करने के दौरान त्रुटि: {{msg}}",
+    "in_progress": "साफ़ कर रहा है..."
+  },
+  "print": {
+    "failed": "प्रिंट विफल",
+    "failed_message": "प्रिंट करते समय त्रुटि:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "पृष्ठ को सहेजें के रूप में",
+      "filter": "वेबपेज, केवल HTML (*.html)|*.html|पूर्ण वेबपेज (*.html)|*.html|MHTML फ़ाइल (*.mhtml)|*.mhtml|पीडीएफ दस्तावेज़ (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "बुकमार्क्स निर्यात",
+    "export_filter": "HTML फ़ाइलें (*.html)",
+    "export_success_path": "बुकमार्क्स {{path}} पर निर्यात किए गए:\n{{path}}",
+    "other": "अन्य बुकमार्क्स",
+    "added_message": "फोल्डर \"{{folder}}\" में {{count}} टैब जोड़े गए",
+    "added_status": "फोल्डर \"{{folder}}\" में {{count}} बुकमार्क्स जोड़े गए",
+    "already": "पहले से ही बुकमार्क किया गया",
+    "batch_confirm": "{{count}} टैबों के लिए एक फोल्डर बनाया जाएगा।\n\nजारी रखें?",
+    "batch_title": "बैच में बुकमार्क जोड़ें",
+    "cancelled": "बुकमार्क रद्द",
+    "import_filter": "HTML फ़ाइलें (*.html;*.htm)|*.html;*.htm|सभी फ़ाइलें (*.*)|*.*",
+    "import_title": "बुकमार्क्स आयात",
+    "new_bookmark": "नया बुकमार्क",
+    "unable_for_page": "इस पृष्ठ को बुकमार्क नहीं किया जा सकता",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "खोलें",
+    "open_in_new_tab": "नए टैब में खोलें",
+    "open_all_bookmarks": "सभी बुकमार्क्स खोलें"
+  },
+  "actions": {
+    "add": "जोड़ें",
+    "edit": "संपादित करें",
+    "delete": "हटाना",
+    "delete_all": "सभी हटाना",
+    "done": "कर दिया",
+    "copy_link": "लिंक कॉपी करें",
+    "rename": "नाम बदलें",
+    "add_bookmark": "बुकमार्क जोड़ें",
+    "add_folder": "फोल्डर जोड़ें"
+  },
+  "permissions": {
+    "allow": "अनुमति",
+    "block": "ब्लॉक",
+    "ask": "पूछें"
+  },
+  "site_settings": {
+    "desc": "आप {{category}} अनुमतियों को विशिष्ट साइटों के लिए सेट कर सकते हैं।",
+    "host_pattern": "होस्टनेम पैटर्न:",
+    "columns": {
+      "host_pattern": "होस्टनेम पैटर्न",
+      "behavior": "व्यवहार"
+    }
+  },
+  "time": {
+    "minute": "मिनट"
+  },
+  "newtab": {
+    "title": "नया टैब",
+    "search_placeholder": "खोजें या स्थान दर्ज करें",
+    "footer": "लाइट · फास्ट · सिम्पल",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "ब्राउज़िंग डेटा साफ़ करें",
+    "clear_button": "ब्राउज़िंग डेटा साफ़ करें...",
+    "clear_desc": "ब्राउज़िंग हिस्ट्री, कुकीज़ और कैश और ज्यादा को साफ़ करें",
+    "exit_clear": {
+      "title": "बाहर जाने पर स्वचालित साफ़",
+      "history": "ब्राउज़िंग हिस्ट्री",
+      "downloads": "डाउनलोड हिस्ट्री",
+      "cache": "कैश किए गए छवियां और फ़ाइलें",
+      "cookies": "कुकीज़ और अन्य साइट डेटा"
+    },
+    "options": {
+      "title": "गोपनीयता विकल्प",
+      "dnt": "ब्राउज़िंग ट्रैफ़िक के साथ \"ना ट्रैक करें\" अनुरोध भेजें"
+    }
+  },
+  "update": {
+    "updater_missing": "अपडेटर एक्सीक्यूटेबल 'updater.exe' नहीं मिला"
+  },
+  "address_dropdown": {
+    "search": "खोजें \"{{text}}\"",
+    "visit": "आपको \"{{text}}\" पर जाना है",
+    "empty_history": "मेल खाने वाला हिस्ट्री नहीं मिला",
+    "empty_bookmark": "मेल खाने वाले बुकमार्क्स नहीं मिले",
+    "empty_tabs": "मेल खाने वाले टैब नहीं मिले",
+    "empty_all": "कोई मेल नहीं मिला"
+  },
+  "image_dialog": {
+    "title": "छवि संसाधनों को निकालें",
+    "found_count": "{{count}} छवियां मिली",
+    "columns": {
+      "url": "छवि URL",
+      "type": "प्रकार"
+    },
+    "preview": {
+      "select": "पूर्वावलोकन करने के लिए एक छवि चुनें"
+    },
+    "save_to": "डाउनलोड्स को सहेजने के लिए स्थान",
+    "browse": "फोल्डर बदलें",
+    "browse_desc": "डाउनलोड सहेजने का फोल्डर चुनें",
+    "download_now": "अब डाउनलोड करें",
+    "select_one_image": "कृपया डाउनलोड करने के लिए कम से कम एक छवि चुनें",
+    "select_all_toggle": "सभी चुनें / टॉगल",
+    "loading_preview": "पूर्वावलोकन लोड हो रहा है...",
+    "modern_preview": "आधुनिक छवि स्वरूप (WebView2 पूर्वावलोकन)",
+    "modern": "आधुनिक छवि स्वरूप",
+    "preview_loading_webview": "पूर्वावलोकन लोड हो रहा है (WebView2 मोड)...",
+    "preview_unavailable": "पूर्वावलोकन उपलब्ध नहीं",
+    "preview_size": "{{width}} x {{height}} | {{kb}} किलोबाइट"
+  },
+  "video_dialog": {
+    "title": "डाउनलोड स्वरूप चुनें",
+    "columns": {
+      "resolution": "रिजोल्यूशन",
+      "ext": "एक्सटेंशन",
+      "size": "साइज़",
+      "note": "नोट"
+    },
+    "save_to": "डाउनलोड्स को सहेजने के लिए स्थान",
+    "browse": "फोल्डर बदलें",
+    "browse_desc": "डाउनलोड सहेजने का फोल्डर चुनें",
+    "start_download": "डाउनलोड शुरू करें",
+    "select_format_first": "कृपया पहले एक स्वरूप चुनें",
+    "unknown_title": "अज्ञात शीर्षक",
+    "unknown": "अज्ञात",
+    "parse_failed": "वीडियो जानकारी को विश्लेषित करने में असफल: {{msg}}"
+  },
+  "common": {
+    "info": "सूचना",
+    "done": "कर दिया",
+    "error": "त्रुटि",
+    "operation_failed_retry": "ऑपरेशन असफल, कृपया फिर से प्रयास करें",
+    "empty": "(रिक्त)",
+    "in_dev": "यह विशेषता विकास में है...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "बारे में ",
+    "version_prefix": "संस्करण ",
+    "check_update": "अपडेटों की जांच करें",
+    "checking": "जांच रहा है...",
+    "connecting": "अपडेट सर्वर से संपर्क स्थापित हो रहा है...",
+    "update_failed": "अपडेटों की जांच में असफलता हुई। कृपया बाद में फिर से प्रयास करें।",
+    "update_found_status": "नई संस्करण {{version}} मिला",
+    "update_found_title": "अपडेट मिला",
+    "update_found_message": "नई संस्करण {{version}} मिला\n\nरिलीज़ नोट्स:\n{{log}}\n\nअब अपडेट करें?",
+    "latest": "आप पहले से ही नवीनतम संस्करण पर हैं।",
+    "error_prefix": "त्रुटि: ",
+    "simple_title": "बारे में",
+    "simple_message": "{{app}}\nसंस्करण {{version}}\n\nWebView2 इंजन पर आधारित",
+    "copyright": "© {{year}} {{app}}. सभी हक सुरक्षित हैं।"
+  },
+  "font": {
+    "preview_standard": "{{size}} किलोबाइट: लोरम इप्सम डोलर सिट एमेट,\nकंसेक्टेटर एडिपिसिंग एलिट.",
+    "min": "मिन",
+    "max": "मैक्स",
+    "serif": "सरिफ फ़ॉन्ट",
+    "sans_serif": "सैन्स-सरिफ फ़ॉन्ट",
+    "fixed_width": "फिक्स्ड-विड्थ फ़ॉन्ट",
+    "minimum_size": "न्यूनतम फ़ॉन्ट आकार",
+    "preview_generic": "{{size}} किलोबाइट: लोरम इप्सम डोलर सिट एमेट,\nकंसेक्टेटर एडिपिसिंग एलिट.",
+    "preview_fixed": "दिखावट",
+    "preview_min": "होम बटन दिखाएं"
+  },
+  "appearance": {
+    "title": "बदलें",
+    "show_home_button": "हमेशा बुकमार्क्स बार दिखाएं",
+    "change": "भाषा",
+    "show_bookmark_bar": "सिस्टम के अनुसार",
+    "language": "भाषा",
+    "language_auto": "सिस्टम का अनुसरण करें",
+    "language_zhCN": "चीनी (सरलीकृत)",
+    "language_en": "अंग्रेज़ी",
+    "hide_bookmark_bar": "Hide bookmarks bar"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "निर्यात असफल: {{msg}}",
+    "confirm_delete_item": "निर्यात सफल!",
+    "export_failed": "छवि निकासी रद्द",
+    "export_success": "छवि संसाधनों को निकाल रहा है..."
+  },
+  "images": {
+    "cancelled_status": "निकासी असफल: {{msg}}",
+    "extracting_status": "छवि निकासी असफल",
+    "failed_message": "कोई छवि संसाधन नहीं मिले",
+    "failed_status": "{{count}} छवि डाउनलोड कार्य प्रस्तुत किए गए",
+    "none_found_status": "कभी नहीं",
+    "submitted_tasks": "पासवर्ड सहेजें"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "Never",
+      "save": "कर दिया",
+      "title": "सहेजे गए पासवर्डों का प्रबंधन करें"
+    },
+    "saved": {
+      "done": "इस साइट के लिए सहेजा गया पासवर्ड:",
+      "manage": "खोज मोटरों का प्रबंधन करें",
+      "title": "लॉग आउट"
+    }
+  },
+  "search": {
+    "manage_button": "प्रोफ़ाइल सेटिंग्स"
+  },
+  "user": {
+    "logout": "निकासी असफल",
+    "manage_profile": "इस पृष्ठ पर कोई निकालने योग्य वीडियो संसाधनों का पता नहीं चला है।\n\nनोट: यह पृष्ठ वीडियो को एम्बेड नहीं कर सकता है, या यह एन्क्रिप्टेड/DRM प्लेबैक का उपयोग कर सकता है, इसलिए सीधा निकासी अनुपलब्ध है।\n\nसुझाव: वास्तविक वीडियो प्लेबैक पृष्ठ खोलें और प्लेबैक शुरू होने के बाद फिर से निकासी की कोशिश करें।"
+  },
+  "videos": {
+    "extract_failed_status": "कोई वीडियो संसाधनों का पता नहीं चला",
+    "not_detected_desc": "कोई वीडियो संसाधनों का पता नहीं चला",
+    "not_detected_status": "इस पृष्ठ पर वीडियो निकासी का समर्थन नहीं किया जाता है",
+    "not_detected_title": "वीडियो जानकारी का विश्लेषण...",
+    "not_supported": "Video extraction is not supported on this page",
+    "parsing_status": "Parsing video information..."
+  }
+}

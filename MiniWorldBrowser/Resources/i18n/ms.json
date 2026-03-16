@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "Tab Baharu"
+  },
+  "menu": {
+    "new_tab": "Tab Baharu (T)",
+    "new_window": "Tetingkap Baharu (N)",
+    "new_incognito": "Tetingkap InPrivate Baharu (I)",
+    "bookmarks": "Buku Tanda (B)",
+    "show_bookmark_bar": "Tunjukkan bar buku tanda (S)",
+    "bookmark_manager": "Pengurus Buku Tanda (B)",
+    "import_bookmarks": "Import buku tanda dan setting...",
+    "add_bookmark": "Tambah buku tanda untuk laman ini...",
+    "add_all_bookmarks": "Tambah buku tanda untuk semua laman terbuka...",
+    "more_bookmarks": "Buku Tanda Lain",
+    "no_bookmarks": "Tiada buku tanda",
+    "history": "Sejarah (H)",
+    "show_all_history": "Tunjukkan semua sejarah",
+    "no_history": "Tiada sejarah",
+    "clear_history": "Bersihkan sejarah browsing",
+    "downloads": "Muat Turun (D)",
+    "media_extract": "Ekstraksi Media",
+    "extract_images": "Ekstrak imej pada laman ini",
+    "extract_videos": "Ekstrak video pada laman ini",
+    "clear_data": "Bersihkan data browsing",
+    "exit_incognito": "Tutup tetingkap InPrivate",
+    "exit_normal": "Tutup Browser AI KunQiong",
+    "print": "Cetak (P)",
+    "save_page_as": "Simpan laman sebagai (A)...",
+    "find_in_page": "Cari pada laman",
+    "more_tools": "Alat Lain",
+    "task_manager": "Pengurus Tugas (T)",
+    "encoding": "Pengekodan (E)",
+    "devtools": "Alat Pembangun (D)",
+    "view_resource_log": "Lihat log beban sumber (L)",
+    "adblock": "Penapis Iklan (G)",
+    "settings": "Seting (S)",
+    "feedback": "Komen",
+    "about_app": "Tentang Browser AI KunQiong",
+    "about_incognito": "Tentang InPrivate",
+    "exit_app": "Tutup Browser AI KunQiong"
+  },
+  "context": {
+    "new_tab": "Buka tab baharu",
+    "reload": "Kemaskini",
+    "duplicate": "Gandakan",
+    "pin": "Kunci tab",
+    "unpin": "Buka kunci tab",
+    "close": "Tutup tab",
+    "close_others": "Tutup tab lain",
+    "close_left": "Tutup tab ke kiri",
+    "close_right": "Tutup tab ke kanan",
+    "reopen_closed": "Buka tab yang ditutup semula (E)",
+    "bookmark_all": "Tambah buku tanda untuk semua tab..."
+  },
+  "tooltips": {
+    "new_tab": "Tab Baharu (Ctrl+T)",
+    "search_tabs": "Cari tab",
+    "download": "Muat Turun (Ctrl+J)",
+    "user_login": "Pengguna/Masuk",
+    "translate_page": "Terjemahkan laman ini",
+    "zoom": "Zom",
+    "manage_passwords": "Pengurus kata laluan"
+  },
+  "nav": {
+    "back": "Kembali (Alt+Kiri)",
+    "forward": "Maju (Alt+Kanan)",
+    "refresh": "Kemaskini (F5)",
+    "stop": "Berhenti (Esc)",
+    "home": "Halaman (Alt+Home)"
+  },
+  "status": {
+    "ready": "Siap",
+    "incognito": "InPrivate - Aktiviti browsing anda tidak akan disimpan pada peranti ini",
+    "downloading": "Muat Turun: {{file}}",
+    "history_cleared": "Sejarah dibersihkan"
+  },
+  "ai": {
+    "assistant": "Penolong",
+    "summarize": "📝 Ringkas laman ini",
+    "mode": "Mod AI",
+    "init_failed": "Penghasilan Penolong gagal",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>Fail UI percakapan AI tidak ditemui</h3><p>Sila semak bahawa laluan berikut wujud:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "Sila terjemahkan kandungan utama laman ini ke bahasa Cina:\\n\\n{{text}}",
+    "translate_failed": "Terjemahan AI gagal: {{msg}}",
+    "api": {
+      "base": "URL Proxy API:",
+      "key": "Kunci API:",
+      "model_name": "Nama Model:",
+      "model_preset": "Setel Model:",
+      "provider": "Setel Penyedia:",
+      "title": "Konfigurasi API",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "Mod API Sendiri (kompatibel dengan OpenAI)",
+    "mode.title": "Mod Perkhidmatan",
+    "mode.web": "Mod Web Bersedia (DeepSeek)",
+    "settings": {
+      "subtitle": "Konfigurasi Penolong AI anda",
+      "title": "Setel AI"
+    },
+    "tip": {
+      "compatible": "Petua: Beroperasi dengan DeepSeek, OpenAI, Ollama dan API lain yang kompatibel",
+      "dashscope": "Petua: BaseUrl kompatibel dengan OpenAI DashScope secara lalai adalah https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "volcengine": "Petua: Ark V3 Volcengine memerlukan ID Endpoint dalam format ep-2024xxxxxxxx-xxxxx"
+    },
+    "web": {
+      "title": "Setelan Mod Web",
+      "url": "URL Web AI:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "InPrivate",
+      "message": "Anda sedang menggunakan perjalanan InPrivate\\n\\n✓ InPrivate boleh:\\n  • Satu tidak menyimpan sejarah perjalanan\\n  • Satu tidak menyimpan kuki dan data laman\\n  • Satu tidak menyimpan data borang\\n  • Menggunakan sesi yang diasingkan\\n\\n✗ InPrivate tidak boleh:\\n  • Sembunyikan aktiviti daripada pentadbir rangkaian\\n  • Sembunyikan aktiviti daripada ISP anda\\n  • Mencegah laman web daripada mendapatkan alamat IP anda\\n\\nCatatan: Fail yang dimuat turun dan buku tanda yang dicipta kekal."
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "Sahkan",
+    "ok": "OK",
+    "clear_history_all": "Adakah anda pasti mahu bersihkan semua sejarah?",
+    "cancel": "Batal"
+  },
+  "search_engine": {
+    "confirm_delete": "Adakah anda pasti untuk memadamkan enjin carian \"{{name}}\"?"
+  },
+  "menu_zoom": {
+    "label": "Zom",
+    "reset": "Setel Semula"
+  },
+  "settings": {
+    "header": {
+      "title": "Tetapan",
+      "search_placeholder": "Cari tetapan"
+    },
+    "sidebar": {
+      "history": "Sejarah",
+      "settings": "Tetapan",
+      "ai": "Tetapan AI",
+      "privacy": "Privasi",
+      "advanced": "Lanjutan"
+    },
+    "set_startup_pages": "Rupa",
+    "enter_urls_each_line": "Tunjukkan butang 'Halaman'",
+    "no_results": "Ubah",
+    "appearance": {
+      "title": "Sijalankan tunjukkan bar buku tanda",
+      "show_home_button": "Bahasa",
+      "change": "Ikut Sistem",
+      "show_bookmark_bar": "Bahasa Cina (Sederhana)",
+      "language": "Bahasa",
+      "language_auto": "Ikut sistem",
+      "language_zhCN": "Cina (Ringkas)",
+      "language_en": "Inggeris",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "Rambang...",
+      "location_label": "Tanya di mana menyimpan setiap fail sebelum muat turun",
+      "location_desc": "Seting",
+      "browse": "Seting Carian",
+      "ask_location_label": "Halaman",
+      "ask_location_desc": "Halaman"
+    },
+    "title": "Tetapan",
+    "search_placeholder": "Cari tetapan",
+    "home": {
+      "title": "Gunakan Tab Baharu",
+      "url": "Saat permulaan",
+      "use_current": "Buka Tab Baharu",
+      "use_newtab": "Teruskan di mana anda berhenti"
+    },
+    "startup": {
+      "title": "Buka laman tertentu atau set laman",
+      "newtab": "Pengurus laman",
+      "continue_last": "Penapis iklan",
+      "specific_pages": "Tiada penyaring iklan",
+      "manage_pages": "Hanya blok pop-up",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "Blok iklan laman web dengan agresif",
+      "none": "Aturan penyaring iklan khusus",
+      "popup": "Aturan Khusus",
+      "aggressive": "Pengurus aturan saya...",
+      "custom": "Enjin carian pita alamat",
+      "custom_link": "Enjin carian lalai",
+      "manage_rules": "Enjin carian yang digunakan oleh pita alamat"
+    },
+    "search": {
+      "title": "360",
+      "default_label": "Baidu",
+      "desc": "Bing",
+      "options": {
+        "360": "Google",
+        "baidu": "Pengurus enjin carian",
+        "bing": "Tunjukkan seting lanjutan...",
+        "google": "Google"
+      },
+      "manage_button": "Benarkan gerakan tetikus"
+    },
+    "show_advanced": "Gerakan Tetikus",
+    "advanced": {
+      "back_basic": "Tempoh pembebasan memori tab latar belakang:",
+      "gesture": {
+        "enable": "Kinerja",
+        "title": "Benarkan tarik super"
+      },
+      "performance": {
+        "mem_release_time": "Seting Lanjutan",
+        "title": "Memeriksa status penyemak lalai..."
+      },
+      "super_drag": {
+        "enable": "{{app}} adalah penyemak lalai anda pada masa ini."
+      },
+      "title": "{{app}} bukan penyemak lalai anda pada masa ini."
+    },
+    "default_browser": {
+      "checking": "Tetapkan sebagai penyemak lalai",
+      "is_default": "Penyemak Lalai",
+      "not_default": "Masa Dikunjungi",
+      "set_default": "Judul",
+      "title": "URL"
+    },
+    "history": {
+      "columns": {
+        "time": "Sejarah",
+        "title": "Pengurus sijil...",
+        "url": "Ubah seting proxy..."
+      },
+      "title": "Kembalikan seting ke nilai asli",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "Ini tidak akan mempengaruhi buku tanda, sejarah, atau kata laluan yang disimpan anda.",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "Setel Semula",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "Kembalikan seting lalai",
+      "desc": "Klik dua kali untuk menutup tab",
+      "title": "Mod input pita alamat:",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "Tekan Enter untuk mencari",
+    "tabs": {
+      "double_click_close": "Cari semasa anda mengetik (Diranjang)",
+      "input_mode": {
+        "new_tab": "Buka dalam tab baharu"
+      },
+      "input_mode.enter": "Buka di sebelah kanan tab semasa",
+      "input_mode.instant": "Apabila membuka laman baharu:",
+      "new_tab_position": {
+        "last": "Pilih semua teks URL apabila klik pita alamat",
+        "right": "Tunjukkan URL penuh dalam pita alamat (juga ditunjukkan semasa menahan Shift)"
+      },
+      "open_new": "Tab",
+      "select_all_on_click": "Import buku tanda dan setting...",
+      "show_full_url": "Data Pengguna",
+      "title": "Tab",
+      "right_click_close_desc": "Klik kanan menutup tab semasa (tahan Shift untuk memaparkan menu konteks)",
+      "open_links_background": "Buka pautan yang diklik dalam tab latar belakang",
+      "input_mode_label": "Tab"
+    },
+    "user_data": {
+      "import": "Import bookmarks and settings...",
+      "title": "User data"
+    },
+    "features": {
+      "title": "Ciri-ciri",
+      "mouse_gesture_label": "Gerak isyarat tetikus",
+      "mouse_gesture_desc": "Gunakan gerak isyarat tetikus untuk melakukan tindakan dengan cepat",
+      "super_drag_label": "Seretan super",
+      "super_drag_desc": "Seret teks atau pautan untuk mencari atau membuka dengan cepat"
+    },
+    "web": {
+      "title": "Tetapan web",
+      "smooth_scrolling": "Dayakan skrol lancar pada halaman web (berkuat kuasa selepas dimulakan semula)"
+    },
+    "cache": {
+      "title": "Cache tersuai",
+      "directory_label": "Direktori cache tersuai:",
+      "change_button": "Tukar...",
+      "notice": "Mengubah ini akan mengosongkan cache semasa dan berkuat kuasa selepas dimulakan semula.",
+      "open_dir": "Buka direktori cache",
+      "reset_default": "Tidak dapat menterjemah proksi",
+      "reset_confirm": "Adakah anda pasti mahu menetapkan semula direktori cache kepada lalai?\\n\\nIni akan mengosongkan cache sedia ada dan berkuat kuasa selepas dimulakan semula."
+    },
+    "privacy": {
+      "title": "Privacy settings",
+      "content_settings": "Content settings...",
+      "clear_browsing_data": "Clear browsing data...",
+      "crash_upload": "Enable crash report upload",
+      "crash_upload_desc": "Automatically upload error reports on crashes to help improve the browser."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "Simpan dan guna",
+      "auto_hint": "Tetapan disimpan secara automatik",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "Muat turun",
+    "location_label": "Lokasi muat turun",
+    "location_desc": "Lokasi simpan muat turun",
+    "browse": "Rujuk...",
+    "ask_location_label": "Tanya di mana menyimpan setiap fail sebelum muat turun",
+    "default_tool_label": "Pilih alat muat turun laluan",
+    "browse_desc": "Pilih folder simpan muat turun",
+    "status": {
+      "downloading": "Muat turun: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "Selesai",
+      "cancelled": "Dibatalkan",
+      "failed": "Muat turun gagal",
+      "pending": "Tertunda..."
+    }
+  },
+  "password_manager": {
+    "hide": "Sembunyikan",
+    "show": "Tunjukkan"
+  },
+  "import": {
+    "success": "Berjaya mengimport {{count}} bookmark.",
+    "done": "Import selesai",
+    "failed": "Import gagal: {{msg}}"
+  },
+  "adblock": {
+    "allow": "Izinkan",
+    "block": "Blok"
+  },
+  "task_manager": {
+    "tab_title": "● Tab: {{title}}"
+  },
+  "clear": {
+    "success": "Berjaya membersihkan data berikut:\n• {{items}}",
+    "done": "Membersihkan selesai",
+    "failed": "Ralat semasa membersihkan data: {{msg}}",
+    "in_progress": "Membersihkan..."
+  },
+  "print": {
+    "failed": "Cetak gagal",
+    "failed_message": "Ralat semasa mencetak:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "Simpan Halaman Sebagai",
+      "filter": "Halaman web, hanya HTML (*.html)|*.html|Halaman web lengkap (*.html)|*.html|Berkas MHTML (*.mhtml)|*.mhtml|Dokumen PDF (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "Eksport Bookmark",
+    "export_filter": "Fail HTML (*.html)|*.html",
+    "export_success_path": "Bookmark dieksport ke:\n{{path}}",
+    "other": "Bookmark lain",
+    "added_message": "Ditambah {{count}} tab ke folder \"{{folder}}\"",
+    "added_status": "Ditambah {{count}} bookmark ke folder \"{{folder}}\"",
+    "already": "Sudah ditandai sebagai bookmark",
+    "batch_confirm": "Sebuah folder akan dicipta untuk {{count}} tab.\\n\\nSeterusnya?",
+    "batch_title": "Tambah bookmark dalam lot",
+    "cancelled": "Bookmark dibatalkan",
+    "import_filter": "Fail HTML (*.html;*.htm)|*.html;*.htm|Semua Fail (*.*)|*.*",
+    "import_title": "Import Bookmark",
+    "new_bookmark": "Bookmark Baharu",
+    "unable_for_page": "Tiada boleh menandakan halaman ini sebagai bookmark",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "Buka",
+    "open_in_new_tab": "Buka dalam tab baharu",
+    "open_all_bookmarks": "Buka semua bookmark"
+  },
+  "actions": {
+    "add": "Tambah",
+    "edit": "Sunting",
+    "delete": "Hapus",
+    "delete_all": "Hapus semua",
+    "done": "Selesai",
+    "copy_link": "Salin pautan",
+    "rename": "Sedia nama",
+    "add_bookmark": "Tambah bookmark",
+    "add_folder": "Tambah folder"
+  },
+  "permissions": {
+    "allow": "Izinkan",
+    "block": "Blok",
+    "ask": "Tanya"
+  },
+  "site_settings": {
+    "desc": "Anda boleh menyetel kebenaran {{category}} untuk tapak tertentu.",
+    "host_pattern": "Corak nama host:",
+    "columns": {
+      "host_pattern": "Corak nama host",
+      "behavior": "Kelakuan"
+    }
+  },
+  "time": {
+    "minute": "minit"
+  },
+  "newtab": {
+    "title": "Tab Baharu",
+    "search_placeholder": "Cari atau masuk alamat",
+    "footer": "Ringan · Cepat · Ringkas",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "Membersihkan data browsing",
+    "clear_button": "Membersihkan data browsing...",
+    "clear_desc": "Membersihkan sejarah browsing, kuki dan lain-lain",
+    "exit_clear": {
+      "title": "Auto-membersihkan semasa keluar",
+      "history": "Sejarah browsing",
+      "downloads": "Sejarah muat turun",
+      "cache": "Imej dan fail disimpan cache",
+      "cookies": "Kuki dan data tapak lain"
+    },
+    "options": {
+      "title": "Opsi privasi",
+      "dnt": "Hantar permintaan 'Jangan Sempatkan' dengan trafik browsing"
+    }
+  },
+  "update": {
+    "updater_missing": "Eksekutable updater 'updater.exe' tidak ditemui"
+  },
+  "address_dropdown": {
+    "search": "Cari '{{text}}'",
+    "visit": "Kunjungi '{{text}}'",
+    "empty_history": "Tiada sejarah yang sesuai ditemui",
+    "empty_bookmark": "Tiada bookmark yang sesuai ditemui",
+    "empty_tabs": "Tiada tab yang sesuai ditemui",
+    "empty_all": "Tiada padanan ditemui"
+  },
+  "image_dialog": {
+    "title": "Ekstrak sumber imej",
+    "found_count": "Ditemui {{count}} imej",
+    "columns": {
+      "url": "URL Imej",
+      "type": "Jenis"
+    },
+    "preview": {
+      "select": "Pilih satu imej untuk pratonton"
+    },
+    "save_to": "Simpan muat turun ke",
+    "browse": "Ubah folder",
+    "browse_desc": "Pilih folder simpan muat turun",
+    "download_now": "Muat turun sekarang",
+    "select_one_image": "Sila pilih sekurang-kurangnya satu imej untuk muat turun",
+    "select_all_toggle": "Pilih Semua / Toggle",
+    "loading_preview": "Memuat pratonton...",
+    "modern_preview": "Format imej moden (pratonton WebView2)",
+    "modern": "Format imej moden",
+    "preview_loading_webview": "Memuat pratonton (mod WebView2)...",
+    "preview_unavailable": "Pratonton tidak tersedia",
+    "preview_size": "{{width}} x {{height}} | {{kb}} KB"
+  },
+  "video_dialog": {
+    "title": "Pilih format muat turun",
+    "columns": {
+      "resolution": "Resolusi",
+      "ext": "Ekstensi",
+      "size": "Saiz",
+      "note": "Catatan"
+    },
+    "save_to": "Simpan muat turun ke",
+    "browse": "Ubah folder",
+    "browse_desc": "Pilih folder simpan muat turun",
+    "start_download": "Muat turun mula",
+    "select_format_first": "Sila pilih format terlebih dahulu",
+    "unknown_title": "Judul tidak diketahui",
+    "unknown": "Tidak diketahui",
+    "parse_failed": "Gagal menganalisis maklumat video: {{msg}}"
+  },
+  "common": {
+    "info": "Maklumat",
+    "done": "Selesai",
+    "error": "Ralat",
+    "operation_failed_retry": "Operasi gagal, sila cuba semula",
+    "empty": "(kosong)",
+    "in_dev": "Fitur ini sedang dibangunkan...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "Tentang ",
+    "version_prefix": "Versi ",
+    "check_update": "Semak kemasukan",
+    "checking": "Semak...",
+    "connecting": "Berhubung ke seserver kemasukan...",
+    "update_failed": "Gagal semak kemasukan. Sila cuba lagi kemudian.",
+    "update_found_status": "Versi baharu ditemui: {{version}}",
+    "update_found_title": "Kemasukan ditemui",
+    "update_found_message": "Versi baharu {{version}} ditemui\\n\\nCatatan Rilis:\\n{{log}}\\n\\nKemasukan sekarang?",
+    "latest": "Anda berada di versi terbaru.",
+    "error_prefix": "Ralat: ",
+    "simple_title": "Tentang",
+    "simple_message": "{{app}}\\nVersi {{version}}\\n\\nBerdasarkan enjin WebView2",
+    "copyright": "© {{year}} {{app}}. Hak cipta semua diselenggarakan."
+  },
+  "font": {
+    "preview_standard": "Saiz: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "min": "Min",
+    "max": "Maks",
+    "serif": "Font Serif",
+    "sans_serif": "Font Sans-serif",
+    "fixed_width": "Font lebar tetap",
+    "minimum_size": "Saiz font minimum",
+    "preview_generic": "Saiz: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "preview_fixed": "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "preview_min": "Saiz: Lorem ipsum dolor sit amet, consectetur"
+  },
+  "appearance": {
+    "title": "Rupa bentuk",
+    "show_home_button": "Tunjukkan butang 'Rumah'",
+    "change": "Ubah",
+    "show_bookmark_bar": "Sentiasa tunjukkan bar bookmark",
+    "language": "Bahasa",
+    "language_auto": "Ikut sistem",
+    "language_zhCN": "Cina (Ringkas)",
+    "language_en": "Inggeris",
+    "hide_bookmark_bar": "Sembunyikan bar bookmark"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "Adakah anda pasti mahu hapus folder \"{{name}}\" dan semua kandunganannya?",
+    "confirm_delete_item": "Adakah anda pasti mahu hapus \"{{name}}\"?",
+    "export_failed": "Eksport gagal: {{msg}}",
+    "export_success": "Eksport berjaya!"
+  },
+  "images": {
+    "cancelled_status": "Ekstrak imej dibatalkan",
+    "extracting_status": "Mengekstrak sumber imej...",
+    "failed_message": "Ekstrak gagal: {{msg}}",
+    "failed_status": "Ekstrak imej gagal",
+    "none_found_status": "Tiada sumber imej ditemui",
+    "submitted_tasks": "Dihantar {{count}} tugas muat turun imej"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "Tidak pernah",
+      "save": "Simpan kata laluan",
+      "title": "Adakah anda mahu KunQiong AI Browser menyimpan kata laluan anda untuk tapak ini?"
+    },
+    "saved": {
+      "done": "Selesai",
+      "manage": "Urus kata laluan yang disimpan",
+      "title": "Kata laluan yang disimpan untuk tapak ini:"
+    }
+  },
+  "search": {
+    "manage_button": "Urus enjin carian"
+  },
+  "user": {
+    "logout": "Log keluar",
+    "manage_profile": "Tetapan Profil"
+  },
+  "videos": {
+    "extract_failed_status": "Ekstrak gagal",
+    "not_detected_desc": "Tiada sumber video yang boleh diekstrak detected di halaman ini.\\n\\nCatatan: Halaman ini mungkin tidak menyisipkan video, atau mungkin menggunakan pemutaran terenkripsi/DRM, jadi pengeluaran langsung tidak tersedia.\\n\\nCadangan: Buka halaman pemutaran video sebenar dan cuba ekstrasi semula selepas pemutaran dimulakan.",
+    "not_detected_status": "Tiada sumber video detected",
+    "not_detected_title": "Tiada sumber video detected",
+    "not_supported": "Ekstrak video tidak disokong di halaman ini",
+    "parsing_status": "Menganalisis maklumat video..."
+  }
+}

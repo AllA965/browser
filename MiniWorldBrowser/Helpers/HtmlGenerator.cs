@@ -1,7 +1,8 @@
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Net;
+using System.Text;
 using Microsoft.Web.WebView2.Core;
 using MiniWorldBrowser.Models;
 using MiniWorldBrowser.Constants;
@@ -9,21 +10,82 @@ using MiniWorldBrowser.Constants;
 namespace MiniWorldBrowser.Helpers;
 
 /// <summary>
-/// HTML 页面生成器 - 生成新标签页和错误页面
+/// HTML 椤甸潰鐢熸垚鍣?- 鐢熸垚鏂版爣绛鹃〉鍜岄敊璇〉闈?
 /// </summary>
 public static class HtmlGenerator
 {
-    #region 新标签页
+    #region 鏂版爣绛鹃〉
     
     private static string? _cachedIconBase64;
 
     private static readonly object _iconCacheLock = new();
     private static readonly Dictionary<string, string> _cachedIconPngByKey = new();
+    private static readonly string[] LanguageOptions =
+    {
+        "zh-CN", "zh_TW", "en", "hi", "es", "fr", "ar", "bn", "pt_BR", "pt",
+        "ru", "id", "ur", "de", "ja", "tr", "vi", "ko", "th", "it",
+        "fa", "sw", "tl", "ta", "jv", "ms", "ha",
+    };
+
+    private static readonly Dictionary<string, string> LanguageLabelFallbacks = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["zh-CN"] = "Chinese (Simplified)",
+        ["zh_TW"] = "Chinese (Traditional)",
+        ["en"] = "English",
+        ["hi"] = "Hindi",
+        ["es"] = "Spanish",
+        ["fr"] = "French",
+        ["ar"] = "Arabic",
+        ["bn"] = "Bengali",
+        ["pt_BR"] = "Portuguese (Brazil)",
+        ["pt"] = "Portuguese",
+        ["ru"] = "Russian",
+        ["id"] = "Indonesian",
+        ["ur"] = "Urdu",
+        ["de"] = "German",
+        ["ja"] = "Japanese",
+        ["tr"] = "Turkish",
+        ["vi"] = "Vietnamese",
+        ["ko"] = "Korean",
+        ["th"] = "Thai",
+        ["it"] = "Italian",
+        ["fa"] = "Persian",
+        ["sw"] = "Swahili",
+        ["tl"] = "Filipino",
+        ["ta"] = "Tamil",
+        ["jv"] = "Javanese",
+        ["ms"] = "Malay",
+        ["ha"] = "Hausa",
+    };
+
+    private static string BuildLanguageOptionsHtml(string selectedLanguageCode)
+    {
+        var sb = new StringBuilder();
+        var selected = string.IsNullOrWhiteSpace(selectedLanguageCode) ? "auto" : selectedLanguageCode;
+        sb.Append($"<option value='auto' {(string.Equals(selected, "auto", StringComparison.OrdinalIgnoreCase) ? "selected" : "")}>{Escape(Localization.T("settings.appearance.language_auto"))}</option>");
+        foreach (var code in LanguageOptions)
+        {
+            var label = ResolveLanguageLabel(code);
+            sb.Append($"<option value='{code}' {(string.Equals(selected, code, StringComparison.OrdinalIgnoreCase) ? "selected" : "")}>{Escape(label)}</option>");
+        }
+        return sb.ToString();
+    }
+
+    private static string ResolveLanguageLabel(string languageCode)
+    {
+        var keySuffix = languageCode.Replace("-", "_", StringComparison.Ordinal);
+        var key = $"settings.appearance.language_names.{keySuffix}";
+        var localized = Localization.T(key);
+        if (!string.Equals(localized, key, StringComparison.Ordinal) && !string.IsNullOrWhiteSpace(localized))
+            return localized;
+
+        return LanguageLabelFallbacks.TryGetValue(languageCode, out var fallback) ? fallback : languageCode;
+    }
 
     private static string ResolveIconPath(string? preferredName = null)
     {
-        var names = preferredName != null 
-            ? new[] { preferredName } 
+        var names = preferredName != null
+            ? new[] { preferredName }
             : new[] { "鲲穹_.png", "鲲穹01.ico", "鲲穹AI浏览器.ico" };
 
         var baseDirs = new[]
@@ -130,7 +192,7 @@ public static class HtmlGenerator
     }
     
     /// <summary>
-    /// 生成新标签页 HTML
+    /// 鐢熸垚鏂版爣绛鹃〉 HTML
     /// </summary>
     public static string GenerateNewTabPage(BrowserSettings settings, List<FrequentSite>? frequentSites = null, bool isIncognito = false)
     {
@@ -140,8 +202,8 @@ public static class HtmlGenerator
         }
 
         var shortcutsHtml = GenerateShortcutsHtml(frequentSites);
-        var watermarkPngBase64 = GetIconPngBase64(1024, "鲲穹_.png"); // 使用用户指定的 PNG 水印
-        var logoPngBase64 = GetIconPngBase64(144, "鲲穹AI浏览器.ico"); // Logo 保持原样
+        var watermarkPngBase64 = GetIconPngBase64(1024, "椴茬┕_.png"); // 浣跨敤鐢ㄦ埛鎸囧畾鐨?PNG 姘村嵃
+        var logoPngBase64 = GetIconPngBase64(144, "椴茬┕AI娴忚鍣?ico"); // Logo 淇濇寔鍘熸牱
         
         var backgroundColor = "#ffffff";
         var textColor = "#1e293b";
@@ -170,7 +232,7 @@ public static class HtmlGenerator
         }}";
 
         var logoHtml = string.IsNullOrEmpty(logoPngBase64)
-            ? "<div class='logo'>🌐</div>"
+            ? "<div class='logo'>馃寪</div>"
             : $"<div class='logo'><img class='logo-img' src='data:image/png;base64,{logoPngBase64}' alt='logo'></div>";
         
         return $@"<!DOCTYPE html>
@@ -299,7 +361,7 @@ public static class HtmlGenerator
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>InPrivate 浏览</title>
+    <title>{Localization.T("incognito.page.title")}</title>
     <style>
         body {{
             background-color: #202124;
@@ -382,34 +444,34 @@ public static class HtmlGenerator
 <body>
     <div class='container'>
         <div class='header'>
-            <div class='icon'>🕶️</div>
+            <div class='icon'>&#128374;</div>
             <div>
-                <h1>您已进入 InPrivate 浏览模式</h1>
+                <h1>{Localization.T("incognito.page.heading")}</h1>
             </div>
         </div>
-        <p>现在，您可以私密地浏览网页，其他人使用此设备时将不会看到您的活动。不过，您下载的内容和添加的书签仍会保存在此设备上。</p>
+        <p>{Localization.T("incognito.page.intro")}</p>
         
         <div class='cards'>
             <div class='card'>
-                <h3>鲲穹AI浏览器 不会保存以下信息：</h3>
+                <h3>{Localization.T("incognito.page.will_not_save")}</h3>
                 <ul>
-                    <li>您的浏览历史记录</li>
-                    <li>Cookie 和网站数据</li>
-                    <li>表单中输入的信息</li>
+                    <li>{Localization.T("incognito.page.item.history")}</li>
+                    <li>{Localization.T("incognito.page.item.cookies")}</li>
+                    <li>{Localization.T("incognito.page.item.forms")}</li>
                 </ul>
             </div>
             <div class='card'>
-                <h3>以下主体可能仍会看到您的活动：</h3>
+                <h3>{Localization.T("incognito.page.may_still_see")}</h3>
                 <ul>
-                    <li>您访问的网站</li>
-                    <li>您的雇主或您所在的学校</li>
-                    <li>您的互联网服务提供商</li>
+                    <li>{Localization.T("incognito.page.visible.sites")}</li>
+                    <li>{Localization.T("incognito.page.visible.employer")}</li>
+                    <li>{Localization.T("incognito.page.visible.isp")}</li>
                 </ul>
             </div>
         </div>
 
         <div class='search-box'>
-            <input type='text' class='search-input' id='searchInput' placeholder='搜索或输入网址'>
+            <input type='text' class='search-input' id='searchInput' placeholder='{Localization.T("newtab.search_placeholder")}'>
         </div>
     </div>
     <script>
@@ -431,20 +493,20 @@ public static class HtmlGenerator
     }
     
     /// <summary>
-    /// 生成快捷方式 HTML
+    /// 鐢熸垚蹇嵎鏂瑰紡 HTML
     /// </summary>
     private static string GenerateShortcutsHtml(List<FrequentSite>? frequentSites)
     {
-        // 如果没有经常访问的网站，显示默认快捷方式
+        // 濡傛灉娌℃湁缁忓父璁块棶鐨勭綉绔欙紝鏄剧ず榛樿蹇嵎鏂瑰紡
         if (frequentSites == null || frequentSites.Count == 0)
         {
-            return @"
-            <a href='https://www.baidu.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.baidu.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>百度</div></a>
-            <a href='https://www.bing.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.bing.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>必应</div></a>
-            <a href='https://www.google.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.google.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>G</span></div><div class='shortcut-name'>Google</div></a>
-            <a href='https://www.bilibili.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.bilibili.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>哔哩哔哩</div></a>
-            <a href='https://www.zhihu.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.zhihu.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>知</span></div><div class='shortcut-name'>知乎</div></a>
-            <a href='https://github.com' class='shortcut'><div class='shortcut-icon'><img src='https://github.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>G</span></div><div class='shortcut-name'>GitHub</div></a>";
+            return $@"
+            <a href='https://www.baidu.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.baidu.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.baidu")}</div></a>
+            <a href='https://www.bing.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.bing.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.bing")}</div></a>
+            <a href='https://www.google.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.google.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>G</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.google")}</div></a>
+            <a href='https://www.bilibili.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.bilibili.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>B</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.bilibili")}</div></a>
+            <a href='https://www.zhihu.com' class='shortcut'><div class='shortcut-icon'><img src='https://www.zhihu.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>Z</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.zhihu")}</div></a>
+            <a href='https://github.com' class='shortcut'><div class='shortcut-icon'><img src='https://github.com/favicon.ico' onerror=""this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'""><span class='letter' style='display:none'>G</span></div><div class='shortcut-name'>{Localization.T("newtab.shortcuts.github")}</div></a>";
         }
         
         var sb = new System.Text.StringBuilder();
@@ -453,7 +515,7 @@ public static class HtmlGenerator
             var title = Escape(site.Title);
             var url = Escape(site.Url);
             var firstChar = GetFirstChar(site.Title, site.Domain);
-            // 直接使用网站的 favicon.ico
+            // 鐩存帴浣跨敤缃戠珯鐨?favicon.ico
             var faviconUrl = $"https://{Escape(site.Domain)}/favicon.ico";
             
             sb.AppendLine($@"
@@ -470,7 +532,7 @@ public static class HtmlGenerator
     }
     
     /// <summary>
-    /// 获取网站首字母用于显示
+    /// 鑾峰彇缃戠珯棣栧瓧姣嶇敤浜庢樉绀?
     /// </summary>
     private static string GetFirstChar(string title, string domain)
     {
@@ -479,11 +541,11 @@ public static class HtmlGenerator
             var c = title[0];
             if (char.IsLetter(c))
                 return char.ToUpper(c).ToString();
-            if (c >= 0x4e00 && c <= 0x9fff) // 中文字符
+            if (c >= 0x4e00 && c <= 0x9fff) // 涓枃瀛楃
                 return c.ToString();
         }
         
-        // 使用域名首字母
+        // 浣跨敤鍩熷悕棣栧瓧姣?
         var d = domain.StartsWith("www.") ? domain[4..] : domain;
         return d.Length > 0 ? char.ToUpper(d[0]).ToString() : "?";
     }
@@ -498,10 +560,10 @@ public static class HtmlGenerator
     
     #endregion
     
-    #region 设置页面
+    #region 璁剧疆椤甸潰
     
     /// <summary>
-    /// 生成设置页面 HTML
+    /// 鐢熸垚璁剧疆椤甸潰 HTML
     /// </summary>
     public static string GenerateSettingsPage(BrowserSettings settings)
     {
@@ -512,43 +574,54 @@ public static class HtmlGenerator
     <title>{Localization.T("settings.header.title")}</title>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        body {{ font-family: 'Microsoft YaHei UI', 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; }}
-        .container {{ display: flex; min-height: 100vh; }}
+        :root {{
+            --page-bg: radial-gradient(1200px 700px at 15% -10%, #e9f2ff 0%, #f5f8ff 45%, #f3f5f8 100%);
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --line-color: #dbe4f0;
+            --text-main: #1f2a37;
+            --text-sub: #6e7c8f;
+            --primary: #1d63d8;
+            --primary-strong: #1550b6;
+            --primary-soft: rgba(29, 99, 216, 0.14);
+        }}
+        body {{ font-family: 'Microsoft YaHei UI', 'Segoe UI', sans-serif; background: var(--page-bg); color: var(--text-main); }}
+        .container {{ display: flex; min-height: 100vh; position: relative; }}
         .sidebar {{ 
-            width: 200px; 
-            background: #fff; 
-            border-right: 1px solid #e0e0e0; 
+            width: 220px; 
+            background: rgba(255, 255, 255, 0.86); 
+            border-right: 1px solid var(--line-color); 
             padding: 20px 0;
             position: sticky;
             top: 0;
             height: 100vh;
             flex-shrink: 0;
+            backdrop-filter: blur(8px);
         }}
-        .sidebar h2 {{ padding: 10px 20px; font-size: 18px; color: #333; margin-bottom: 10px; }}
-        .nav-item {{ padding: 12px 20px; cursor: pointer; color: #666; transition: all 0.2s; }}
-        .nav-item:hover {{ background: #f0f0f0; }}
-        .nav-item.active {{ background: #e8f0fe; color: #1a73e8; border-left: 3px solid #1a73e8; }}
-        .content {{ flex: 1; padding: 30px 40px; max-width: 800px; }}
+        .sidebar h2 {{ padding: 10px 20px; font-size: 18px; color: var(--text-main); margin-bottom: 10px; }}
+        .nav-item {{ padding: 12px 20px; cursor: pointer; color: var(--text-sub); transition: all 0.2s ease; border-left: 3px solid transparent; }}
+        .nav-item:hover {{ background: #eef3fb; color: #2f4a6d; }}
+        .nav-item.active {{ background: linear-gradient(90deg, var(--primary-soft) 0%, rgba(255,255,255,0) 100%); color: var(--primary); border-left: 3px solid var(--primary); }}
+        .content {{ flex: 1; padding: 30px 40px 130px; max-width: 900px; }}
         .content h1 {{ font-size: 24px; margin-bottom: 30px; font-weight: normal; }}
-        .section {{ background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }}
-        .section h3 {{ font-size: 14px; color: #666; margin-bottom: 15px; text-transform: uppercase; }}
-        .setting-item {{ display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }}
+        .section {{ background: var(--card-bg); border-radius: 14px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--line-color); box-shadow: 0 10px 26px rgba(31, 57, 99, 0.08); }}
+        .section h3 {{ font-size: 14px; color: #5b6f89; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.6px; }}
+        .setting-item {{ display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #edf2f8; }}
         .setting-item:last-child {{ border-bottom: none; }}
         .setting-label {{ font-size: 14px; }}
-        .setting-desc {{ font-size: 12px; color: #888; margin-top: 4px; }}
+        .setting-desc {{ font-size: 12px; color: var(--text-sub); margin-top: 4px; }}
         .toggle {{ position: relative; width: 44px; height: 24px; }}
         .toggle input {{ opacity: 0; width: 0; height: 0; }}
         .toggle .slider {{ position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; border-radius: 24px; transition: 0.3s; }}
         .toggle .slider:before {{ position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; }}
-        .toggle input:checked + .slider {{ background: #1a73e8; }}
+        .toggle input:checked + .slider {{ background: var(--primary); }}
         .toggle input:checked + .slider:before {{ transform: translateX(20px); }}
-        select, input[type='text'] {{ padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }}
+        select, input[type='text'] {{ padding: 8px 12px; border: 1px solid #cfdae8; border-radius: 8px; font-size: 14px; background: #fff; }}
         select {{ min-width: 150px; }}
         input[type='text'] {{ width: 300px; }}
         .btn {{ 
             padding: 10px 20px; 
             border: none; 
-            border-radius: 4px; 
+            border-radius: 10px; 
             cursor: pointer; 
             font-size: 14px; 
             min-height: 44px; 
@@ -556,27 +629,53 @@ public static class HtmlGenerator
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s, transform 0.1s;
+            transition: all 0.2s ease, transform 0.1s;
             user-select: none;
         }}
         .btn:active {{
             transform: scale(0.98);
             filter: brightness(0.9);
         }}
-        .btn-primary {{ background: #1a73e8; color: white; }}
-        .btn-primary:hover {{ background: #1557b0; }}
-        .btn-secondary {{ background: #f0f0f0; color: #333; }}
-        .btn-secondary:hover {{ background: #e0e0e0; }}
+        .btn-primary {{ background: linear-gradient(135deg, var(--primary) 0%, #2f7be9 100%); color: white; box-shadow: 0 8px 18px rgba(29, 99, 216, 0.28); }}
+        .btn-primary:hover {{ background: linear-gradient(135deg, #2c72e0 0%, #1d63d8 100%); transform: translateY(-1px); }}
+        .btn-primary:disabled {{ opacity: 0.55; cursor: not-allowed; box-shadow: none; transform: none; }}
+        .btn-secondary {{ background: #eef2f7; color: #2d3748; border: 1px solid #d8e1ee; }}
+        .btn-secondary:hover {{ background: #e2e9f3; }}
         .header-row {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }}
         .header-row h1 {{ margin-bottom: 0; }}
         .search-box {{ position: relative; }}
-        .search-box input {{ width: 200px; padding: 8px 30px 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }}
-        .search-box input:focus {{ outline: none; border-color: #1a73e8; }}
+        .search-box input {{ width: 220px; padding: 8px 30px 8px 12px; border: 1px solid #cfdae8; border-radius: 8px; font-size: 14px; }}
+        .search-box input:focus {{ outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }}
         .search-box .clear-btn {{ position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #999; font-size: 14px; display: none; }}
         .search-box .clear-btn:hover {{ color: #666; }}
         .highlight {{ background-color: #ffeb3b; padding: 0 2px; }}
         .section.hidden {{ display: none; }}
-        .no-results {{ text-align: center; padding: 40px; color: #888; }}
+        .no-results {{ text-align: center; padding: 40px; color: var(--text-sub); }}
+        .settings-action-bar {{
+            position: fixed;
+            left: 236px;
+            right: 24px;
+            bottom: 16px;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid #d4dfef;
+            border-radius: 14px;
+            box-shadow: 0 14px 30px rgba(27, 52, 90, 0.18);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 16px;
+            z-index: 999;
+        }}
+        .save-status {{ font-size: 13px; color: #617389; }}
+        .save-status.dirty {{ color: var(--primary); font-weight: 600; }}
+        .save-btn {{ min-width: 150px; }}
+        @media (max-width: 960px) {{
+            .sidebar {{ width: 0; overflow: hidden; padding: 0; border-right: none; }}
+            .content {{ max-width: none; padding: 22px 16px 130px; }}
+            .settings-action-bar {{ left: 16px; right: 16px; }}
+        }}
     </style>
 </head>
 <body>
@@ -592,75 +691,75 @@ public static class HtmlGenerator
                 <h1>{Localization.T("settings.header.title")}</h1>
                 <div class='search-box'>
                     <input type='text' id='settingsSearch' placeholder='{Localization.T("settings.header.search_placeholder")}' oninput='searchSettings(this.value)'>
-                    <button class='clear-btn' id='clearSearchBtn' onclick='clearSearch()'>✕</button>
+                    <button class='clear-btn' id='clearSearchBtn' onclick='clearSearch()'>&times;</button>
                 </div>
             </div>
             <div id='noResults' class='no-results' style='display:none;'>{Localization.T("settings.no_results")}</div>
             
             <div class='section' id='ai-section'>
-                <h3>AI 设置</h3>
+                <h3>{Localization.T("ai.settings.title")}</h3>
                 <div class='setting-item'>
                     <div>
-                        <div class='setting-label'>服务模式</div>
-                        <div class='setting-desc'>选择 AI 助手的工作模式</div>
+                        <div class='setting-label'>{Localization.T("ai.mode.title")}</div>
+                        <div class='setting-desc'>{Localization.T("ai.settings.subtitle")}</div>
                     </div>
                     <select onchange='updateSetting(""aimode"", this.value)'>
-                        <option value='0' {(settings.AiServiceMode == 0 ? "selected" : "")}>内置网页模式 (DeepSeek)</option>
-                        <option value='1' {(settings.AiServiceMode == 1 ? "selected" : "")}>自定义 API 模式 (支持 OpenAI 兼容接口)</option>
+                        <option value='0' {(settings.AiServiceMode == 0 ? "selected" : "")}>{Localization.T("ai.mode.web")}</option>
+                        <option value='1' {(settings.AiServiceMode == 1 ? "selected" : "")}>{Localization.T("ai.mode.api")}</option>
                     </select>
                 </div>
-                
+
                 <div id='ai-api-settings' style='display:{(settings.AiServiceMode == 1 ? "block" : "none")};'>
                     <div class='setting-item'>
                         <div>
-                            <div class='setting-label'>服务商预设</div>
-                            <div class='setting-desc'>选择常见的 AI 服务商自动配置</div>
+                            <div class='setting-label'>{Localization.T("ai.api.provider")}</div>
+                            <div class='setting-desc'>{Localization.T("ai.tip.compatible")}</div>
                         </div>
                         <select id='aiProviderSelect' onchange='applyAiProviderPreset(this.value)'>
-                            <option value='custom'>自定义</option>
-                            <option value='deepseek' {(settings.AiApiBaseUrl?.Contains("deepseek") == true ? "selected" : "")}>DeepSeek</option>
-                            <option value='volcengine' {(settings.AiApiBaseUrl?.Contains("volces.com") == true || settings.AiApiBaseUrl?.Contains("volcengine") == true ? "selected" : "")}>火山引擎 (Volcengine Ark)</option>
-                            <option value='openai' {(settings.AiApiBaseUrl?.Contains("openai") == true ? "selected" : "")}>OpenAI</option>
-                            <option value='anthropic' {(settings.AiApiBaseUrl?.Contains("anthropic") == true ? "selected" : "")}>Anthropic (Claude)</option>
-                            <option value='groq' {(settings.AiApiBaseUrl?.Contains("groq") == true ? "selected" : "")}>Groq</option>
-                            <option value='minimax' {(settings.AiApiBaseUrl?.Contains("minimax") == true || settings.AiApiBaseUrl?.Contains("minimaxi") == true ? "selected" : "")}>MiniMax</option>
-                            <option value='dashscope' {(settings.AiApiBaseUrl?.Contains("dashscope") == true || settings.AiApiBaseUrl?.Contains("aliyuncs") == true ? "selected" : "")}>阿里百炼 (DashScope)</option>
-                            <option value='ollama' {(settings.AiApiBaseUrl?.Contains("localhost") == true ? "selected" : "")}>Ollama (本地)</option>
+                            <option value='custom'>{Localization.T("ai.provider.custom")}</option>
+                            <option value='deepseek' {(settings.AiApiBaseUrl?.Contains("deepseek") == true ? "selected" : "")}>{Localization.T("ai.provider.deepseek")}</option>
+                            <option value='volcengine' {(settings.AiApiBaseUrl?.Contains("volces.com") == true || settings.AiApiBaseUrl?.Contains("volcengine") == true ? "selected" : "")}>{Localization.T("ai.provider.volcengine")}</option>
+                            <option value='openai' {(settings.AiApiBaseUrl?.Contains("openai") == true ? "selected" : "")}>{Localization.T("ai.provider.openai")}</option>
+                            <option value='anthropic' {(settings.AiApiBaseUrl?.Contains("anthropic") == true ? "selected" : "")}>{Localization.T("ai.provider.anthropic")}</option>
+                            <option value='groq' {(settings.AiApiBaseUrl?.Contains("groq") == true ? "selected" : "")}>{Localization.T("ai.provider.groq")}</option>
+                            <option value='minimax' {(settings.AiApiBaseUrl?.Contains("minimax") == true || settings.AiApiBaseUrl?.Contains("minimaxi") == true ? "selected" : "")}>{Localization.T("ai.provider.minimax")}</option>
+                            <option value='dashscope' {(settings.AiApiBaseUrl?.Contains("dashscope") == true || settings.AiApiBaseUrl?.Contains("aliyuncs") == true ? "selected" : "")}>{Localization.T("ai.provider.dashscope")}</option>
+                            <option value='ollama' {(settings.AiApiBaseUrl?.Contains("localhost") == true ? "selected" : "")}>{Localization.T("ai.provider.ollama_local")}</option>
                         </select>
                     </div>
                     <div class='setting-item'>
                         <div>
-                            <div class='setting-label'>API Key</div>
-                            <div class='setting-desc'>您的 API 密钥（将加密保存）</div>
+                            <div class='setting-label'>{Localization.T("ai.api.key")}</div>
+                            <div class='setting-desc'>{Localization.T("ai.api.key_stored_local")}</div>
                         </div>
                         <input type='password' id='aiApiKey' value='{settings.AiApiKey}' onchange='updateSetting(""aiapikey"", this.value)' style='padding:8px 12px; border:1px solid #ddd; border-radius:4px; font-size:14px; width:300px;'>
                     </div>
                     <div class='setting-item'>
                         <div>
-                            <div class='setting-label'>API Proxy URL</div>
-                            <div class='setting-desc'>接口代理地址 (如 https://api.deepseek.com/v1)</div>
+                            <div class='setting-label'>{Localization.T("ai.api.base")}</div>
+                            <div class='setting-desc'>{Localization.T("ai.api.base_example")}</div>
                         </div>
                         <input type='text' id='aiApiBaseUrl' value='{settings.AiApiBaseUrl}' onchange='updateSetting(""aiapibaseurl"", this.value)'>
                     </div>
                     <div class='setting-item'>
                         <div>
-                            <div class='setting-label'>模型名称</div>
-                            <div class='setting-desc'>手动输入或从下方预设选择</div>
+                            <div class='setting-label'>{Localization.T("ai.api.model_name")}</div>
+                            <div class='setting-desc'>{Localization.T("ai.api.model_desc")}</div>
                         </div>
                         <div style='display:flex; flex-direction:column; gap:8px;'>
                             <input type='text' id='aiModelName' value='{settings.AiModelName}' onchange='updateSetting(""aimodelname"", this.value)'>
                             <select id='aiModelPreset' onchange='applyAiModelPreset(this.value)' style='width:300px;'>
-                                <option value=''>选择预设模型...</option>
+                                <option value=''>{Localization.T("ai.api.select_preset_model")}</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                
+
                 <div id='ai-web-settings' style='display:{(settings.AiServiceMode == 0 ? "block" : "none")};'>
                     <div class='setting-item'>
                         <div>
-                            <div class='setting-label'>AI 网页地址</div>
-                            <div class='setting-desc'>内置网页模式使用的 URL</div>
+                            <div class='setting-label'>{Localization.T("ai.web.url")}</div>
+                            <div class='setting-desc'>{Localization.T("ai.web.title")}</div>
                         </div>
                         <input type='text' value='{settings.AiCustomWebUrl}' onchange='updateSetting(""aicustomweburl"", this.value)'>
                     </div>
@@ -668,82 +767,82 @@ public static class HtmlGenerator
             </div>
 
             <div class='section'>
-                <h3>启动时</h3>
+                <h3>{Localization.T("settings.startup.title")}</h3>
                 <div style='padding:8px 0;'>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='radio' name='startupBehavior' value='0' {(settings.StartupBehavior == 0 ? "checked" : "")} onchange='updateSetting(""startup"", ""0"")' style='margin-right:8px;'>
-                        <span>打开新标签页</span>
+                        <span>{Localization.T("settings.startup.newtab")}</span>
                     </label>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='radio' name='startupBehavior' value='1' {(settings.StartupBehavior == 1 ? "checked" : "")} onchange='updateSetting(""startup"", ""1"")' style='margin-right:8px;'>
-                        <span>继续浏览上次关闭浏览器时在看的网页</span>
+                        <span>{Localization.T("settings.startup.continue_last")}</span>
                     </label>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='radio' name='startupBehavior' value='2' {(settings.StartupBehavior == 2 ? "checked" : "")} onchange='updateSetting(""startup"", ""2"")' style='margin-right:8px;'>
-                        <span>打开特定网页或一组网页</span>
-                        <a href='javascript:void(0)' onclick='openHomePageDialog()' style='color:#0066cc;margin-left:8px;text-decoration:none;'>设置网页</a>
+                        <span>{Localization.T("settings.startup.specific_pages")}</span>
+                        <a href='javascript:void(0)' onclick='openHomePageDialog()' style='color:#0066cc;margin-left:8px;text-decoration:none;'>{Localization.T("settings.startup.manage_pages")}</a>
                     </label>
                     <div id='startupPagesDisplay' style='display:{(settings.StartupBehavior == 2 && !string.IsNullOrEmpty(settings.HomePage) && settings.HomePage != "about:newtab" ? "block" : "none")};padding:6px 0 6px 24px;color:#666;font-size:13px;'>
-                        当前设置: {Escape(settings.HomePage != "about:newtab" ? settings.HomePage : "")}
+                        {Localization.T("settings.startup.current_setting")} {Escape(settings.HomePage != "about:newtab" ? settings.HomePage : "")}
                     </div>
                 </div>
             </div>
-            
+
             <div class='section'>
-                <h3>广告过滤</h3>
+                <h3>{Localization.T("settings.adblock.title")}</h3>
                 <div style='padding:8px 0;'>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='radio' name='adblockmode' value='0' {(settings.AdBlockMode == 0 ? "checked" : "")} onchange='updateSetting(""adblockmode"", ""0"")' style='margin-right:8px;'>
-                        <span>不过滤任何广告</span>
+                        <span>{Localization.T("settings.adblock.none")}</span>
                     </label>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='radio' name='adblockmode' value='1' {(settings.AdBlockMode == 1 ? "checked" : "")} onchange='updateSetting(""adblockmode"", ""1"")' style='margin-right:8px;'>
-                        <span>仅拦截弹出窗口</span>
+                        <span>{Localization.T("settings.adblock.popup")}</span>
                     </label>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='radio' name='adblockmode' value='2' {(settings.AdBlockMode == 2 ? "checked" : "")} onchange='updateSetting(""adblockmode"", ""2"")' style='margin-right:8px;'>
-                        <span>强力拦截页面广告</span>
+                        <span>{Localization.T("settings.adblock.aggressive")}</span>
                     </label>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='radio' name='adblockmode' value='3' {(settings.AdBlockMode == 3 ? "checked" : "")} onchange='updateSetting(""adblockmode"", ""3"")' style='margin-right:8px;'>
-                        <span>自定义过滤规则</span>
+                        <span>{Localization.T("settings.adblock.custom")}</span>
                     </label>
                 </div>
                 <div style='display:flex;gap:10px;padding-top:10px;border-top:1px solid #f0f0f0;margin-top:8px;'>
-                    <button onclick='openAdBlockExceptions()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>管理例外网站...</button>
-                    <button onclick='openAdBlockRulesFolder()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>打开规则文件夹</button>
+                    <button onclick='openAdBlockExceptions()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.adblock.custom_link")}...</button>
+                    <button onclick='openAdBlockRulesFolder()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.adblock.manage_rules")}</button>
                 </div>
             </div>
-            
+
             <div class='section'>
-                <h3>标签</h3>
+                <h3>{Localization.T("settings.tabs.title")}</h3>
                 <div style='padding:8px 0;'>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='checkbox' {(settings.RightClickCloseTab ? "checked" : "")} onchange='updateSetting(""rightclickclosetab"", this.checked)' style='margin-right:8px;'>
-                        <span>右击关闭对应标签（按住Shift右击可显示菜单）</span>
+                        <span>{Localization.T("settings.tabs.right_click_close_desc")}</span>
                     </label>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='checkbox' {(settings.OpenLinksInBackground ? "checked" : "")} onchange='updateSetting(""openlinksbackground"", this.checked)' style='margin-right:8px;'>
-                        <span>点击链接在后台标签打开</span>
+                        <span>{Localization.T("settings.tabs.open_links_background")}</span>
                     </label>
                 </div>
                 <div class='setting-item' style='border-top:1px solid #f0f0f0;margin-top:8px;padding-top:12px;'>
-                    <div class='setting-label'>地址栏输入内容时：</div>
+                    <div class='setting-label'>{Localization.T("settings.tabs.input_mode_label")}</div>
                     <select onchange='updateSetting(""addressbarinput"", this.value)' style='padding:6px 10px;border:1px solid #ddd;border-radius:4px;'>
-                        <option value='0' {(settings.AddressBarInputMode == 0 ? "selected" : "")}>智能选择打开方式（推荐）</option>
-                        <option value='1' {(settings.AddressBarInputMode == 1 ? "selected" : "")}>在当前标签打开</option>
-                        <option value='2' {(settings.AddressBarInputMode == 2 ? "selected" : "")}>在新标签打开</option>
+                        <option value='0' {(settings.AddressBarInputMode == 0 ? "selected" : "")}>{Localization.T("settings.tabs.input_mode.instant")}</option>
+                        <option value='1' {(settings.AddressBarInputMode == 1 ? "selected" : "")}>{Localization.T("settings.tabs.input_mode.enter")}</option>
+                        <option value='2' {(settings.AddressBarInputMode == 2 ? "selected" : "")}>{Localization.T("settings.tabs.input_mode.new_tab")}</option>
                     </select>
                 </div>
                 <div class='setting-item'>
-                    <div class='setting-label'>新打开网页时：</div>
+                    <div class='setting-label'>{Localization.T("settings.tabs.open_new")}</div>
                     <select onchange='updateSetting(""newtabposition"", this.value)' style='padding:6px 10px;border:1px solid #ddd;border-radius:4px;'>
-                        <option value='0' {(settings.NewTabPosition == 0 ? "selected" : "")}>当前标签右侧打开</option>
-                        <option value='1' {(settings.NewTabPosition == 1 ? "selected" : "")}>所有标签右侧打开</option>
+                        <option value='0' {(settings.NewTabPosition == 0 ? "selected" : "")}>{Localization.T("settings.tabs.new_tab_position.right")}</option>
+                        <option value='1' {(settings.NewTabPosition == 1 ? "selected" : "")}>{Localization.T("settings.tabs.new_tab_position.last")}</option>
                     </select>
                 </div>
             </div>
-            
+
             <div class='section'>
                 <h3>{Localization.T("settings.search.title")}</h3>
                 <div class='setting-item'>
@@ -781,10 +880,8 @@ public static class HtmlGenerator
                     <div class='setting-item' style='margin-top:8px;'>
                         <div class='setting-label'>{Localization.T("settings.appearance.language")}</div>
                         <div>
-                            <select onchange='updateSetting(""language"", this.value)'>
-                                <option value='auto' {(settings.LanguageCode == "auto" ? "selected" : "")}>{Localization.T("settings.appearance.language_auto")}</option>
-                                <option value='zh-CN' {(settings.LanguageCode == "zh-CN" ? "selected" : "")}>{Localization.T("settings.appearance.language_zhCN")}</option>
-                                <option value='en' {(settings.LanguageCode == "en" ? "selected" : "")}>{Localization.T("settings.appearance.language_en")}</option>
+                            <select id='languageSelect' onchange='updateSetting(""language"", this.value)' oninput='updateSetting(""language"", this.value)'>
+                                {BuildLanguageOptionsHtml(settings.LanguageCode)}
                             </select>
                         </div>
                     </div>
@@ -792,11 +889,11 @@ public static class HtmlGenerator
             </div>
             
             <div class='section'>
-                <h3>功能</h3>
+                <h3>{Localization.T("settings.features.title")}</h3>
                 <div class='setting-item'>
                     <div>
-                        <div class='setting-label'>鼠标手势</div>
-                        <div class='setting-desc'>使用鼠标手势快速执行操作</div>
+                        <div class='setting-label'>{Localization.T("settings.features.mouse_gesture_label")}</div>
+                        <div class='setting-desc'>{Localization.T("settings.features.mouse_gesture_desc")}</div>
                     </div>
                     <label class='toggle'>
                         <input type='checkbox' id='mouseGesture' {(settings.EnableMouseGesture ? "checked" : "")} onchange='updateSetting(""gesture"", this.checked)'>
@@ -805,8 +902,8 @@ public static class HtmlGenerator
                 </div>
                 <div class='setting-item'>
                     <div>
-                        <div class='setting-label'>超级拖拽</div>
-                        <div class='setting-desc'>拖拽文字或链接快速搜索或打开</div>
+                        <div class='setting-label'>{Localization.T("settings.features.super_drag_label")}</div>
+                        <div class='setting-desc'>{Localization.T("settings.features.super_drag_desc")}</div>
                     </div>
                     <label class='toggle'>
                         <input type='checkbox' id='superDrag' {(settings.EnableSuperDrag ? "checked" : "")} onchange='updateSetting(""superdrag"", this.checked)'>
@@ -814,7 +911,7 @@ public static class HtmlGenerator
                     </label>
                 </div>
             </div>
-            
+             
             <div class='section'>
                 <h3>{Localization.T("settings.downloads.title")}</h3>
                 <div class='setting-item'>
@@ -830,7 +927,7 @@ public static class HtmlGenerator
                 <div class='setting-item'>
                     <div>
                         <div class='setting-label'>{Localization.T("settings.downloads.ask_location_label")}</div>
-                        <div class='setting-desc'>{Localization.T("settings.downloads.ask_location_label")}</div>
+                        <div class='setting-desc'>{LocalizeOrFallback("settings.downloads.ask_location_desc", "settings.downloads.ask_location_label")}</div>
                     </div>
                     <label class='toggle'>
                         <input type='checkbox' id='askDownload' {(settings.AskDownloadLocation ? "checked" : "")} onchange='updateSetting(""askdownload"", this.checked)'>
@@ -838,98 +935,98 @@ public static class HtmlGenerator
                     </label>
                 </div>
             </div>
-            
+             
             <div class='section'>
-                <h3>用户数据</h3>
+                <h3>{Localization.T("settings.user_data.title")}</h3>
                 <div style='padding:12px 0;'>
-                    <button onclick='openImportData()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>导入收藏和设置...</button>
+                    <button onclick='openImportData()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.user_data.import")}</button>
                 </div>
             </div>
-            
+             
             <div class='section'>
-                <h3>网页设置</h3>
+                <h3>{Localization.T("settings.web.title")}</h3>
                 <div style='padding:8px 0;'>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='checkbox' id='smoothScrolling' {(settings.EnableSmoothScrolling ? "checked" : "")} onchange='updateSetting(""smoothscrolling"", this.checked)' style='margin-right:8px;'>
-                        <span>启用网页平滑滚动效果（重启浏览器后生效）</span>
+                        <span>{Localization.T("settings.web.smooth_scrolling")}</span>
                     </label>
                 </div>
             </div>
-            
+             
             <div class='section'>
-                <h3>自定义缓存</h3>
+                <h3>{Localization.T("settings.cache.title")}</h3>
                 <div class='setting-item'>
                     <div>
-                        <div class='setting-label'>自定义缓存目录位置:</div>
+                        <div class='setting-label'>{Localization.T("settings.cache.directory_label")}</div>
                     </div>
                     <div style='display:flex;gap:8px;align-items:center'>
                         <input type='text' id='cachePath' value='{Escape(GetCachePath(settings))}' readonly style='flex:1;background:#f9f9f9;'>
-                        <button class='btn btn-secondary' onclick='changeCachePath()'>更改...</button>
+                        <button class='btn btn-secondary' onclick='changeCachePath()'>{Localization.T("settings.cache.change_button")}</button>
                     </div>
                 </div>
                 <div style='padding:8px 0;color:#888;font-size:13px;'>
-                    更改后，将清空现有缓存，重启生效
-                    <a href='#' onclick='openCacheDir();return false;' style='color:#1a73e8;text-decoration:none;margin-left:10px;'>打开缓存目录</a>
-                    <a href='#' onclick='resetCachePath();return false;' style='color:#1a73e8;text-decoration:none;margin-left:10px;'>设回默认</a>
+                    {Localization.T("settings.cache.notice")}
+                    <a href='#' onclick='openCacheDir();return false;' style='color:#1a73e8;text-decoration:none;margin-left:10px;'>{Localization.T("settings.cache.open_dir")}</a>
+                    <a href='#' onclick='resetCachePath();return false;' style='color:#1a73e8;text-decoration:none;margin-left:10px;'>{Localization.T("settings.cache.reset_default")}</a>
                 </div>
             </div>
-            
+             
             <div class='section'>
-                <h3>默认浏览器</h3>
+                <h3>{Localization.T("settings.default_browser.title")}</h3>
                 <div style='padding:12px 0;'>
-                    <button onclick='setAsDefaultBrowser()' style='padding:10px 20px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>将鲲穹AI浏览器设置为默认浏览器</button>
+                    <button onclick='setAsDefaultBrowser()' style='padding:10px 20px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.default_browser.set_default")}</button>
                 </div>
                 <div id='defaultBrowserStatus' style='font-size:13px;color:#666;'></div>
             </div>
-            
+             
             <div class='section'>
-                <h3>隐私设置</h3>
+                <h3>{Localization.T("settings.privacy.title")}</h3>
                 <div style='display:flex;gap:10px;padding:12px 0;'>
-                    <button onclick='openContentSettings()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>内容设置...</button>
-                    <button onclick='openClearBrowsingData()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>清除浏览数据...</button>
+                    <button onclick='openContentSettings()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.privacy.content_settings")}</button>
+                    <button onclick='openClearBrowsingData()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.privacy.clear_browsing_data")}</button>
                 </div>
                 <div style='padding:8px 0;'>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='checkbox' id='crashUpload' {(settings.EnableCrashUpload ? "checked" : "")} onchange='updateSetting(""crashupload"", this.checked)' style='margin-right:8px;'>
-                        <span>开启崩溃上传</span>
+                        <span>{Localization.T("settings.privacy.crash_upload")}</span>
                     </label>
-                    <div style='font-size:12px;color:#888;margin-left:24px;'>发生崩溃时自动上传错误报告以帮助改进浏览器</div>
+                    <div style='font-size:12px;color:#888;margin-left:24px;'>{Localization.T("settings.privacy.crash_upload_desc")}</div>
                 </div>
             </div>
-            
+             
             <div class='section'>
-                <h3>密码和表单</h3>
+                <h3>{Localization.T("settings.passwords.title")}</h3>
                 <div style='padding:8px 0;'>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='checkbox' id='enableAutofill' {(settings.EnableAutofill ? "checked" : "")} onchange='updateSetting(""enableautofill"", this.checked)' style='margin-right:8px;'>
-                        <span>启用自动填充功能后，只需点击一次即可填写网络表单。</span>
-                        <a href='#' onclick='openAutofillSettings();return false;' style='color:#1a73e8;text-decoration:none;margin-left:8px;'>管理自动填充设置</a>
+                        <span>{Localization.T("settings.passwords.autofill_desc")}</span>
+                        <a href='#' onclick='openAutofillSettings();return false;' style='color:#1a73e8;text-decoration:none;margin-left:8px;'>{Localization.T("settings.passwords.manage_autofill")}</a>
                     </label>
                     <label style='display:flex;align-items:center;padding:6px 0;cursor:pointer;'>
                         <input type='checkbox' id='savePasswords' {(settings.SavePasswords ? "checked" : "")} onchange='updateSetting(""savepasswords"", this.checked)' style='margin-right:8px;'>
-                        <span>提示我保存在网页上输入的密码。</span>
-                        <a href='#' onclick='openPasswordManager();return false;' style='color:#1a73e8;text-decoration:none;margin-left:8px;'>管理已保存的密码</a>
+                        <span>{Localization.T("settings.passwords.save_passwords_desc")}</span>
+                        <a href='#' onclick='openPasswordManager();return false;' style='color:#1a73e8;text-decoration:none;margin-left:8px;'>{Localization.T("settings.passwords.manage_saved_passwords")}</a>
                     </label>
                 </div>
             </div>
-            
+             
             <div class='section'>
-                <h3>网络内容</h3>
+                <h3>{Localization.T("settings.web_content.title")}</h3>
                 <div class='setting-item'>
-                    <div class='setting-label'>字号:</div>
+                    <div class='setting-label'>{Localization.T("settings.web_content.font_size")}</div>
                     <div style='display:flex;align-items:center;gap:10px;'>
                         <select id='fontSize' onchange='updateSetting(""fontsize"", this.value)' style='padding:6px 10px;border:1px solid #ddd;border-radius:4px;min-width:100px;'>
-                            <option value='0' {(settings.FontSize == 0 ? "selected" : "")}>极小</option>
-                            <option value='1' {(settings.FontSize == 1 ? "selected" : "")}>小</option>
-                            <option value='2' {(settings.FontSize == 2 ? "selected" : "")}>中</option>
-                            <option value='3' {(settings.FontSize == 3 ? "selected" : "")}>大</option>
-                            <option value='4' {(settings.FontSize == 4 ? "selected" : "")}>极大</option>
+                            <option value='0' {(settings.FontSize == 0 ? "selected" : "")}>{Localization.T("settings.web_content.font_size_very_small")}</option>
+                            <option value='1' {(settings.FontSize == 1 ? "selected" : "")}>{Localization.T("settings.web_content.font_size_small")}</option>
+                            <option value='2' {(settings.FontSize == 2 ? "selected" : "")}>{Localization.T("settings.web_content.font_size_medium")}</option>
+                            <option value='3' {(settings.FontSize == 3 ? "selected" : "")}>{Localization.T("settings.web_content.font_size_large")}</option>
+                            <option value='4' {(settings.FontSize == 4 ? "selected" : "")}>{Localization.T("settings.web_content.font_size_very_large")}</option>
                         </select>
-                        <button onclick='openFontSettings()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>自定义字体...</button>
+                        <button onclick='openFontSettings()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.web_content.customize_fonts")}</button>
                     </div>
                 </div>
                 <div class='setting-item'>
-                    <div class='setting-label'>网页缩放:</div>
+                    <div class='setting-label'>{Localization.T("settings.web_content.page_zoom")}</div>
                     <select id='pageZoom' onchange='updateSetting(""pagezoom"", this.value)' style='padding:6px 10px;border:1px solid #ddd;border-radius:4px;min-width:100px;'>
                         <option value='50' {(settings.PageZoom == 50 ? "selected" : "")}>50%</option>
                         <option value='75' {(settings.PageZoom == 75 ? "selected" : "")}>75%</option>
@@ -943,17 +1040,17 @@ public static class HtmlGenerator
                     </select>
                 </div>
             </div>
-            
+             
             <div class='section'>
-                <h3>网络</h3>
+                <h3>{Localization.T("settings.network.title")}</h3>
                 <div style='padding:8px 0;'>
-                    <div style='font-size:13px;color:#666;margin-bottom:10px;'>鲲穹AI浏览器会使用您计算机的系统代理设置连接到网络。</div>
+                    <div style='font-size:13px;color:#666;margin-bottom:10px;'>{Localization.T("settings.network.system_proxy_desc")}</div>
                     <button onclick='openProxySettings()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.network.proxy_change")}</button>
                 </div>
             </div>
             
             <div class='section'>
-                <h3>HTTPS/SSL</h3>
+                <h3>{Localization.T("settings.https.title")}</h3>
                 <div style='padding:8px 0;'>
                     <button onclick='openCertificateManager()' style='padding:8px 16px;border:1px solid #ddd;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;'>{Localization.T("settings.https.manage_certificates")}</button>
                 </div>
@@ -962,19 +1059,129 @@ public static class HtmlGenerator
             <div style='margin-top: 20px;'>
                 <button class='btn btn-secondary' onclick='resetSettings()'>{Localization.T("settings.reset_button")}</button>
             </div>
+            <div class='settings-action-bar' id='settingsActionBar'>
+                <div class='save-status' id='saveStatusText'>{Escape(Localization.T("settings.save.no_pending_changes"))}</div>
+                <button id='saveSettingsBtn' class='btn btn-primary save-btn' onclick='savePendingSettings()'>{Escape(Localization.T("settings.save.apply_button"))}</button>
+            </div>
         </div>
     </div>
     <script>
-        function updateSetting(key, value) {{
-            window.chrome.webview.postMessage({{ action: 'updateSetting', key: key, value: value }});
+        var saveStatusTimer = null;
 
-            // AI 模式切换时动态显示/隐藏配置项
+        function postSettingUpdate(key, value) {{
+            try {{
+                if (window.chrome && window.chrome.webview && typeof window.chrome.webview.postMessage === 'function') {{
+                    window.chrome.webview.postMessage({{ action: 'updateSetting', key: key, value: value }});
+                    return true;
+                }}
+            }} catch (err) {{
+                console.error('postSettingUpdate failed', key, err);
+            }}
+            return false;
+        }}
+
+        function setSaveBarState(text, isDirty) {{
+            var saveBtn = document.getElementById('saveSettingsBtn');
+            var statusEl = document.getElementById('saveStatusText');
+            if (saveBtn) {{
+                saveBtn.disabled = false;
+            }}
+            if (statusEl) {{
+                statusEl.className = 'save-status' + (isDirty ? ' dirty' : '');
+                statusEl.textContent = text;
+            }}
+        }}
+
+        function collectSettingsFromPage() {{
+            var collected = {{}};
+            var elements = document.querySelectorAll('input[onchange], select[onchange], textarea[onchange]');
+            elements.forEach(function(el) {{
+                var onchange = el.getAttribute('onchange') || '';
+                var firstDoubleQuote = onchange.indexOf(String.fromCharCode(34));
+                var firstSingleQuote = onchange.indexOf(String.fromCharCode(39));
+                var start = firstDoubleQuote >= 0 ? firstDoubleQuote : firstSingleQuote;
+                if (start < 0) return;
+                var quoteChar = onchange[start];
+                var end = onchange.indexOf(quoteChar, start + 1);
+                if (end < 0) return;
+
+                var key = onchange.substring(start + 1, end);
+                if (!key) return;
+
+                var tagName = (el.tagName || '').toLowerCase();
+                var type = (el.type || '').toLowerCase();
+
+                if (type === 'radio') {{
+                    if (!el.checked) return;
+                    collected[key] = el.value;
+                    return;
+                }}
+
+                if (type === 'checkbox') {{
+                    collected[key] = !!el.checked;
+                    return;
+                }}
+
+                if (tagName === 'select' || tagName === 'textarea' || type === 'text' || type === 'password' || type === 'number' || type === 'search' || type === 'url') {{
+                    collected[key] = el.value;
+                }}
+            }});
+            return collected;
+        }}
+
+        function updateSetting(key, value) {{
+            // Restore original behavior: save immediately on every change.
+            var ok = postSettingUpdate(key, value);
+
             if (key === 'aimode') {{
                 var apiSettings = document.getElementById('ai-api-settings');
                 var webSettings = document.getElementById('ai-web-settings');
                 if (apiSettings) apiSettings.style.display = (value == '1') ? 'block' : 'none';
                 if (webSettings) webSettings.style.display = (value == '0') ? 'block' : 'none';
             }}
+
+            if (!ok) {{
+                setSaveBarState('{EscapeJsString(Localization.T("settings.save.failed_channel"))}', true);
+                return;
+            }}
+
+            setSaveBarState('{EscapeJsString(Localization.T("settings.save.auto_saved"))}', false);
+            if (saveStatusTimer) clearTimeout(saveStatusTimer);
+            saveStatusTimer = setTimeout(function() {{
+                setSaveBarState('{EscapeJsString(Localization.T("settings.save.auto_hint"))}', false);
+            }}, 1200);
+        }}
+
+        function savePendingSettings() {{
+            var allCurrentSettings = collectSettingsFromPage();
+            var entries = Object.entries(allCurrentSettings);
+            if (entries.length === 0) {{
+                setSaveBarState('{EscapeJsString(Localization.T("settings.save.nothing_to_save"))}', false);
+                return;
+            }}
+
+            var languageValue = undefined;
+            var failedCount = 0;
+            entries.forEach(function(pair) {{
+                var key = pair[0];
+                var value = pair[1];
+                if (key === 'language') {{
+                    languageValue = value;
+                    return;
+                }}
+                if (!postSettingUpdate(key, value)) failedCount++;
+            }});
+
+            if (languageValue !== undefined) {{
+                if (!postSettingUpdate('language', languageValue)) failedCount++;
+            }}
+
+            if (failedCount > 0) {{
+                setSaveBarState('{EscapeJsString(Localization.T("settings.save.partial_failed"))}', true);
+                return;
+            }}
+
+            setSaveBarState('{EscapeJsString(Localization.T("settings.save.manual_applied"))}', false);
         }}
 
         var aiPresets = {{
@@ -985,17 +1192,17 @@ public static class HtmlGenerator
             'volcengine': {{
                 baseUrl: 'https://ark.cn-beijing.volces.com/api/v3',
                 models: [
-                    {{ id: 'doubao-seed-2-0-pro-260215', name: 'Doubao-Seed-2-0-pro (旗舰级)' }},
-                    {{ id: 'doubao-seed-2-0-lite-260215', name: 'Doubao-Seed-2-0-lite (均衡型)' }},
-                    {{ id: 'doubao-seed-2-0-mini-260215', name: 'Doubao-Seed-2-0-mini (低时延)' }},
-                    {{ id: 'doubao-seed-2-0-code-preview-260215', name: 'Doubao-Seed-2-0-code (编程增强)' }},
+                    {{ id: 'doubao-seed-2-0-pro-260215', name: 'Doubao-Seed-2-0-pro (flagship)' }},
+                    {{ id: 'doubao-seed-2-0-lite-260215', name: 'Doubao-Seed-2-0-lite (balanced)' }},
+                    {{ id: 'doubao-seed-2-0-mini-260215', name: 'Doubao-Seed-2-0-mini (low latency)' }},
+                    {{ id: 'doubao-seed-2-0-code-preview-260215', name: 'Doubao-Seed-2-0-code (coding enhanced)' }},
                     {{ id: 'doubao-seed-1-8-251228', name: 'Doubao-Seed-1.8' }},
                     {{ id: 'doubao-seed-1-6-251015', name: 'Doubao-Seed-1.6' }},
-                    {{ id: 'doubao-seed-1-6-vision-250815', name: 'Doubao-Seed-1.6-vision (视觉)' }},
-                    {{ id: 'glm-4-7-251222', name: 'GLM-4.7 (智谱)' }},
-                    {{ id: 'deepseek-r1', name: 'DeepSeek-R1 (方舟版)' }},
-                    {{ id: 'deepseek-v3', name: 'DeepSeek-V3 (方舟版)' }},
-                    {{ id: 'ep-2024xxxxxxxx-xxxxx', name: '手动输入推理接入点 ID (ep-xxx)' }}
+                    {{ id: 'doubao-seed-1-6-vision-250815', name: 'Doubao-Seed-1.6-vision (vision)' }},
+                    {{ id: 'glm-4-7-251222', name: 'GLM-4.7 (Zhipu)' }},
+                    {{ id: 'deepseek-r1', name: 'DeepSeek-R1 (Ark)' }},
+                    {{ id: 'deepseek-v3', name: 'DeepSeek-V3 (Ark)' }},
+                    {{ id: 'ep-2024xxxxxxxx-xxxxx', name: 'Manual endpoint ID (ep-xxx)' }}
                 ]
             }},
             'openai': {{
@@ -1017,21 +1224,21 @@ public static class HtmlGenerator
             'dashscope': {{
                 baseUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
                 models: [
-                    {{ id: 'qwen3-max', name: '通义千问 3-Max (qwen3-max)' }},
-                    {{ id: 'qwen3-max-latest', name: '通义千问 3-Max 最新版 (qwen3-max-latest)' }},
-                    {{ id: 'qwen-max', name: '通义千问 Max (qwen-max)' }},
-                    {{ id: 'qwen-max-latest', name: '通义千问 Max 最新版 (qwen-max-latest)' }},
-                    {{ id: 'qwen-plus', name: '通义千问 Plus (qwen-plus)' }},
-                    {{ id: 'qwen-plus-latest', name: '通义千问 Plus 最新版 (qwen-plus-latest)' }},
-                    {{ id: 'qwen-turbo', name: '通义千问 Turbo (qwen-turbo)' }},
-                    {{ id: 'qwen-turbo-latest', name: '通义千问 Turbo 最新版 (qwen-turbo-latest)' }},
-                    {{ id: 'qwen-long', name: '通义千问 Long (qwen-long)' }},
-                    {{ id: 'qwen-long-latest', name: '通义千问 Long 最新版 (qwen-long-latest)' }},
-                    {{ id: 'qwen-flash', name: '通义千问 Flash (qwen-flash)' }},
-                    {{ id: 'qwen-coder-plus', name: '通义千问 Coder Plus (qwen-coder-plus)' }},
-                    {{ id: 'qwen-coder-turbo', name: '通义千问 Coder Turbo (qwen-coder-turbo)' }},
+                    {{ id: 'qwen3-max', name: 'Qwen 3-Max (qwen3-max)' }},
+                    {{ id: 'qwen3-max-latest', name: 'Qwen 3-Max latest (qwen3-max-latest)' }},
+                    {{ id: 'qwen-max', name: 'Qwen Max (qwen-max)' }},
+                    {{ id: 'qwen-max-latest', name: 'Qwen Max latest (qwen-max-latest)' }},
+                    {{ id: 'qwen-plus', name: 'Qwen Plus (qwen-plus)' }},
+                    {{ id: 'qwen-plus-latest', name: 'Qwen Plus latest (qwen-plus-latest)' }},
+                    {{ id: 'qwen-turbo', name: 'Qwen Turbo (qwen-turbo)' }},
+                    {{ id: 'qwen-turbo-latest', name: 'Qwen Turbo latest (qwen-turbo-latest)' }},
+                    {{ id: 'qwen-long', name: 'Qwen Long (qwen-long)' }},
+                    {{ id: 'qwen-long-latest', name: 'Qwen Long latest (qwen-long-latest)' }},
+                    {{ id: 'qwen-flash', name: 'Qwen Flash (qwen-flash)' }},
+                    {{ id: 'qwen-coder-plus', name: 'Qwen Coder Plus (qwen-coder-plus)' }},
+                    {{ id: 'qwen-coder-turbo', name: 'Qwen Coder Turbo (qwen-coder-turbo)' }},
                     {{ id: 'qwq-plus', name: 'QwQ Plus (qwq-plus)' }},
-                    {{ id: 'qwq-plus-latest', name: 'QwQ Plus 最新版 (qwq-plus-latest)' }}
+                    {{ id: 'qwq-plus-latest', name: 'QwQ Plus latest (qwq-plus-latest)' }}
                 ]
             }},
             'ollama': {{
@@ -1045,7 +1252,7 @@ public static class HtmlGenerator
             var modelPresetSelect = document.getElementById('aiModelPreset');
             
             if (provider === 'custom') {{
-                modelPresetSelect.innerHTML = '<option value="">选择预设模型...</option>';
+                modelPresetSelect.innerHTML = '<option value="">{EscapeJsString(Localization.T("ai.api.select_preset_model"))}</option>';
                 return;
             }}
 
@@ -1054,7 +1261,7 @@ public static class HtmlGenerator
                 baseUrlInput.value = preset.baseUrl;
                 updateSetting('aiapibaseurl', preset.baseUrl);
 
-                modelPresetSelect.innerHTML = '<option value="">选择预设模型...</option>';
+                modelPresetSelect.innerHTML = '<option value="">{EscapeJsString(Localization.T("ai.api.select_preset_model"))}</option>';
                 preset.models.forEach(function(model) {{
                     var option = document.createElement('option');
                     if (typeof model === 'object') {{
@@ -1067,7 +1274,7 @@ public static class HtmlGenerator
                     modelPresetSelect.appendChild(option);
                 }});
                 
-                // 默认选择第一个模型
+                // Select the first model by default
                 if (preset.models.length > 0) {{
                     var firstModel = preset.models[0];
                     var firstModelId = typeof firstModel === 'object' ? firstModel.id : firstModel;
@@ -1084,7 +1291,7 @@ public static class HtmlGenerator
             updateSetting('aimodelname', model);
         }}
 
-        // 初始化 AI 模型下拉框
+        // Initialize AI model preset dropdown
         function initAiPresets() {{
             var provider = document.getElementById('aiProviderSelect')?.value;
             if (provider && provider !== 'custom') {{
@@ -1093,7 +1300,7 @@ public static class HtmlGenerator
                 var currentModel = document.getElementById('aiModelName')?.value;
                 
                 if (preset && modelPresetSelect) {{
-                    modelPresetSelect.innerHTML = '<option value="">选择预设模型...</option>';
+                    modelPresetSelect.innerHTML = '<option value="">{EscapeJsString(Localization.T("ai.api.select_preset_model"))}</option>';
                     preset.models.forEach(function(m) {{
                         var option = document.createElement('option');
                         var modelId = typeof m === 'object' ? m.id : m;
@@ -1108,8 +1315,18 @@ public static class HtmlGenerator
             }}
         }}
         setTimeout(initAiPresets, 500);
+        setSaveBarState('{EscapeJsString(Localization.T("settings.save.auto_hint"))}', false);
+
+        document.addEventListener('keydown', function(e) {{
+            if ((e.ctrlKey || e.metaKey) && e.key && e.key.toLowerCase() === 's') {{
+                e.preventDefault();
+                savePendingSettings();
+            }}
+        }});
+
         function resetSettings() {{
-            if (confirm('确定要恢复所有设置为默认值吗？')) {{
+            if (confirm('{EscapeJsString(Localization.T("settings.reset.confirm"))}')) {{
+                setSaveBarState('{EscapeJsString(Localization.T("settings.save.resetting_defaults"))}', false);
                 window.chrome.webview.postMessage({{ action: 'resetSettings' }});
             }}
         }}
@@ -1147,7 +1364,7 @@ public static class HtmlGenerator
             window.chrome.webview.postMessage({{ action: 'openCacheDir' }});
         }}
         function resetCachePath() {{
-            if (confirm('确定要将缓存目录设回默认位置吗？\\n\\n这将清空现有缓存，需要重启浏览器后生效。')) {{
+            if (confirm('{EscapeJsString(Localization.T("settings.cache.reset_confirm"))}')) {{
                 window.chrome.webview.postMessage({{ action: 'resetCachePath' }});
             }}
         }}
@@ -1169,9 +1386,9 @@ public static class HtmlGenerator
         function openCertificateManager() {{
             window.chrome.webview.postMessage({{ action: 'openCertificateManager' }});
         }}
-        // 页面加载时检查默认浏览器状态（延迟执行避免阻塞）
+        // Check default browser status after page load
         setTimeout(function() {{ checkDefaultBrowser(); }}, 100);
-        // 监听主页按钮复选框变化，显示/隐藏主页设置
+        // Listen to home button checkbox changes and show/hide homepage config
         document.getElementById('showHomeButton')?.addEventListener('change', function() {{
             var homePageSetting = document.getElementById('homePageSetting');
             if (homePageSetting) {{
@@ -1179,7 +1396,7 @@ public static class HtmlGenerator
             }}
         }});
         
-        // 搜索功能
+        // Search
         var originalSections = [];
         function initSearch() {{
             var sections = document.querySelectorAll('.section');
@@ -1199,7 +1416,7 @@ public static class HtmlGenerator
             
             if (!keyword || keyword.trim() === '') {{
                 clearBtn.style.display = 'none';
-                // 恢复所有 section
+                // Restore all sections
                 originalSections.forEach(function(item) {{
                     item.element.innerHTML = item.html;
                     item.element.classList.remove('hidden');
@@ -1215,10 +1432,10 @@ public static class HtmlGenerator
             originalSections.forEach(function(item) {{
                 if (item.text.includes(keyword)) {{
                     item.element.classList.remove('hidden');
-                    // 高亮匹配的文本
+                    // Highlight matched text
                     var html = item.html;
                     var regex = new RegExp('(' + escapeRegex(keyword) + ')', 'gi');
-                    // 只高亮文本节点中的内容，避免破坏 HTML 标签
+                    // Highlight text nodes only to avoid breaking HTML tags
                     html = highlightText(html, keyword);
                     item.element.innerHTML = html;
                     hasResults = true;
@@ -1231,7 +1448,7 @@ public static class HtmlGenerator
         }}
         
         function highlightText(html, keyword) {{
-            // 简单的高亮实现：只高亮可见文本
+            // Simple highlighter: only highlight visible text
             var tempDiv = document.createElement('div');
             tempDiv.innerHTML = html;
             highlightNode(tempDiv, keyword);
@@ -1239,7 +1456,7 @@ public static class HtmlGenerator
         }}
         
         function highlightNode(node, keyword) {{
-            if (node.nodeType === 3) {{ // 文本节点
+            if (node.nodeType === 3) {{ // Text node
                 var text = node.textContent;
                 var lowerText = text.toLowerCase();
                 var index = lowerText.indexOf(keyword.toLowerCase());
@@ -1261,11 +1478,11 @@ public static class HtmlGenerator
                     parent.insertBefore(afterNode, node);
                     parent.removeChild(node);
                     
-                    // 继续处理剩余文本
+                    // Continue processing remaining text
                     highlightNode(afterNode, keyword);
                 }}
             }} else if (node.nodeType === 1 && node.tagName !== 'SCRIPT' && node.tagName !== 'STYLE') {{
-                // 元素节点，递归处理子节点
+                // Element node, recursively process children
                 var children = Array.from(node.childNodes);
                 children.forEach(function(child) {{
                     highlightNode(child, keyword);
@@ -1294,8 +1511,10 @@ public static class HtmlGenerator
                 window.chrome.webview.postMessage({{ action: 'getHistory' }});
             }} else if (section === 'settings') {{
                 content.innerHTML = settingsContent;
+                setSaveBarState('{EscapeJsString(Localization.T("settings.save.auto_hint"))}', false);
             }} else if (section === 'ai') {{
                 content.innerHTML = settingsContent;
+                setSaveBarState('{EscapeJsString(Localization.T("settings.save.auto_hint"))}', false);
                 var aiSection = document.getElementById('ai-section');
                 if (aiSection) {{
                     aiSection.scrollIntoView({{ behavior: 'smooth' }});
@@ -1306,6 +1525,11 @@ public static class HtmlGenerator
         window.chrome.webview.addEventListener('message', function(e) {{
             if (e.data && e.data.action === 'historyData') {{
                 showHistoryContent(e.data.items);
+            }} else if (e.data && e.data.action === 'settingUpdateResult') {{
+                if (!e.data.success) {{
+                    var reason = e.data.error ? (' - ' + e.data.error) : '';
+                    setSaveBarState('{EscapeJsString(Localization.T("settings.save.failed"))}' + reason, true);
+                }}
             }} else if (e.data && e.data.action === 'downloadPathSelected') {{
                 var input = document.getElementById('downloadPath');
                 if (input && e.data.path) {{
@@ -1321,9 +1545,9 @@ public static class HtmlGenerator
                 var statusDiv = document.getElementById('defaultBrowserStatus');
                 if (statusDiv) {{
                     if (e.data.isDefault) {{
-                        statusDiv.innerHTML = '<span style=color:#0a0>鲲穹AI浏览器目前是默认浏览器。</span>';
+                        statusDiv.innerHTML = '<span style=color:#0a0>{EscapeJsString(Localization.T("settings.default_browser.is_default").Replace("{{app}}", AppConstants.AppName))}</span>';
                     }} else {{
-                        statusDiv.innerHTML = '鲲穹AI浏览器目前不是默认浏览器。';
+                        statusDiv.innerHTML = '{EscapeJsString(Localization.T("settings.default_browser.not_default").Replace("{{app}}", AppConstants.AppName))}';
                     }}
                 }}
             }}
@@ -1331,14 +1555,14 @@ public static class HtmlGenerator
         
         function showHistoryContent(items) {{
             var content = document.querySelector('.content');
-            var html = '<h1>历史记录</h1><div class=section><div style=display:flex;justify-content:space-between;align-items:center;margin-bottom:15px><input type=text id=historySearch placeholder=搜索... style=flex:1;margin-right:10px onkeyup=searchHistory(this.value)><button class=btn onclick=clearHistory()>清除所有</button></div><div id=historyList>';
+            var html = '<h1>{EscapeJsString(Localization.T("settings.history.title"))}</h1><div class=section><div style=display:flex;justify-content:space-between;align-items:center;margin-bottom:15px><input type=text id=historySearch placeholder=""{EscapeJsString(Localization.T("settings.history.search_placeholder"))}"" style=flex:1;margin-right:10px onkeyup=searchHistory(this.value)><button class=btn onclick=clearHistory()>{EscapeJsString(Localization.T("actions.delete_all"))}</button></div><div id=historyList>';
             if (items && items.length > 0) {{
                 for (var i = 0; i < items.length; i++) {{
                     var item = items[i];
                     html += buildHistoryItem(item);
                 }}
             }} else {{
-                html += '<p style=color:#888;padding:20px;text-align:center>暂无浏览历史记录</p>';
+                html += '<p style=color:#888;padding:20px;text-align:center>{EscapeJsString(Localization.T("settings.history.empty"))}</p>';
             }}
             html += '</div></div>';
             content.innerHTML = html;
@@ -1382,7 +1606,7 @@ public static class HtmlGenerator
         }}
         
         function clearHistory() {{
-            if (confirm('确定要清除所有历史记录吗？')) {{
+            if (confirm('{EscapeJsString(Localization.T("confirm.clear_history_all"))}')) {{
                 window.chrome.webview.postMessage({{ action: 'clearHistory' }});
             }}
         }}
@@ -1393,18 +1617,18 @@ public static class HtmlGenerator
     
     #endregion
     
-    #region 收藏夹管理页面
+    #region 鏀惰棌澶圭鐞嗛〉闈?
     
     /// <summary>
-    /// 生成收藏夹管理页面
+    /// 鐢熸垚鏀惰棌澶圭鐞嗛〉闈?
     /// </summary>
     public static string GenerateBookmarksPage()
     {
-        return @"<!DOCTYPE html>
+        var html = @"<!DOCTYPE html>
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>收藏夹管理</title>
+    <title>__L_BOOKMARKS_TITLE__</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Microsoft YaHei UI', 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; }
@@ -1444,24 +1668,24 @@ public static class HtmlGenerator
 </head>
 <body>
     <div class='container'>
-        <h1>📚 收藏夹管理</h1>
+        <h1>&#128218; __L_BOOKMARKS_TITLE__</h1>
         
         <div class='toolbar'>
             <div class='search-box'>
-                <input type='text' id='searchInput' placeholder='搜索收藏...' onkeyup='searchBookmarks(this.value)'>
+                <input type='text' id='searchInput' placeholder='__L_BOOKMARKS_SEARCH__' onkeyup='searchBookmarks(this.value)'>
             </div>
-            <button class='btn btn-primary' onclick='addFolder()'>新建文件夹</button>
-            <button class='btn btn-secondary' onclick='exportBookmarks()'>导出收藏</button>
+            <button class='btn btn-primary' onclick='addFolder()'>__L_BOOKMARKS_NEW_FOLDER__</button>
+            <button class='btn btn-secondary' onclick='exportBookmarks()'>__L_BOOKMARKS_EXPORT__</button>
         </div>
         
         <div class='breadcrumb' id='breadcrumb'>
-            <a href='#' onclick='loadBookmarks(); return false;'>收藏夹</a>
+            <a href='#' onclick='loadBookmarks(); return false;'>__L_BOOKMARKS_ROOT__</a>
         </div>
         
         <div class='bookmark-list' id='bookmarkList'>
             <div class='empty-state'>
-                <div class='icon'>⏳</div>
-                <div>正在加载...</div>
+                <div class='icon'>&#128260;</div>
+                <div>__L_COMMON_LOADING__</div>
             </div>
         </div>
     </div>
@@ -1484,15 +1708,15 @@ public static class HtmlGenerator
         }
         
         function openFolder(id, title) {
-            folderStack.push({ id: currentFolderId, title: currentFolderId ? '...' : '收藏夹' });
+            folderStack.push({ id: currentFolderId, title: currentFolderId ? '...' : '__L_BOOKMARKS_ROOT__' });
             loadBookmarks(id);
             updateBreadcrumb(title);
         }
         
         function updateBreadcrumb(title) {
-            var html = '<a href=""#"" onclick=""goToRoot(); return false;"">收藏夹</a>';
+            var html = '<a href=""#"" onclick=""goToRoot(); return false;"">__L_BOOKMARKS_ROOT__</a>';
             if (title) {
-                html += ' <span>›</span> <span>' + escapeHtml(title) + '</span>';
+                html += ' <span>&gt;</span> <span>' + escapeHtml(title) + '</span>';
             }
             document.getElementById('breadcrumb').innerHTML = html;
         }
@@ -1508,20 +1732,20 @@ public static class HtmlGenerator
         }
         
         function editBookmark(id, title, url) {
-            var newTitle = prompt('编辑名称:', title);
+            var newTitle = prompt('__L_ACTION_RENAME__:', title);
             if (newTitle !== null && newTitle.trim()) {
                 window.chrome.webview.postMessage({ action: 'updateBookmark', id: id, title: newTitle.trim() });
             }
         }
         
         function deleteBookmark(id, title) {
-            if (confirm('确定要删除 ""' + title + '"" 吗？')) {
+            if (confirm('__L_CONFIRM_DELETE_BOOKMARK__: ' + title)) {
                 window.chrome.webview.postMessage({ action: 'deleteBookmark', id: id });
             }
         }
         
         function addFolder() {
-            var name = prompt('输入文件夹名称:');
+            var name = prompt('__L_BOOKMARKS_INPUT_FOLDER__');
             if (name && name.trim()) {
                 window.chrome.webview.postMessage({ action: 'addFolder', title: name.trim(), parentId: currentFolderId });
             }
@@ -1541,7 +1765,7 @@ public static class HtmlGenerator
         function renderBookmarks(items) {
             var list = document.getElementById('bookmarkList');
             if (!items || items.length === 0) {
-                list.innerHTML = '<div class=""empty-state""><div class=""icon"">📭</div><div>暂无收藏</div></div>';
+                list.innerHTML = '<div class=""empty-state""><div class=""icon"">&#128230;</div><div>__L_BOOKMARKS_EMPTY__</div></div>';
                 return;
             }
             
@@ -1550,11 +1774,11 @@ public static class HtmlGenerator
                 var item = items[i];
                 if (item.isFolder) {
                     html += '<div class=""bookmark-item"" ondblclick=""openFolder(\'' + item.id + '\', \'' + escapeHtml(item.title) + '\')"">' +
-                        '<div class=""bookmark-icon folder-icon"">📁</div>' +
+                        '<div class=""bookmark-icon folder-icon"">&#128193;</div>' +
                         '<div class=""bookmark-info""><div class=""bookmark-title"">' + escapeHtml(item.title) + '</div></div>' +
                         '<div class=""bookmark-actions"">' +
-                        '<button class=""action-btn"" onclick=""event.stopPropagation(); editBookmark(\'' + item.id + '\', \'' + escapeHtml(item.title) + '\', \'\')"">编辑</button>' +
-                        '<button class=""action-btn delete"" onclick=""event.stopPropagation(); deleteBookmark(\'' + item.id + '\', \'' + escapeHtml(item.title) + '\')"">删除</button>' +
+                        '<button class=""action-btn"" onclick=""event.stopPropagation(); editBookmark(\'' + item.id + '\', \'' + escapeHtml(item.title) + '\', \'\')"">__L_ACTION_EDIT__</button>' +
+                        '<button class=""action-btn delete"" onclick=""event.stopPropagation(); deleteBookmark(\'' + item.id + '\', \'' + escapeHtml(item.title) + '\')"">__L_ACTION_DELETE__</button>' +
                         '</div></div>';
                 } else {
                     var favicon = item.favicon || 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(new URL(item.url).hostname) + '&sz=16';
@@ -1563,8 +1787,8 @@ public static class HtmlGenerator
                         '<div class=""bookmark-info""><div class=""bookmark-title"">' + escapeHtml(item.title) + '</div>' +
                         '<div class=""bookmark-url"">' + escapeHtml(item.url) + '</div></div>' +
                         '<div class=""bookmark-actions"">' +
-                        '<button class=""action-btn"" onclick=""event.stopPropagation(); editBookmark(\'' + item.id + '\', \'' + escapeHtml(item.title) + '\', \'' + escapeHtml(item.url) + '\')"">编辑</button>' +
-                        '<button class=""action-btn delete"" onclick=""event.stopPropagation(); deleteBookmark(\'' + item.id + '\', \'' + escapeHtml(item.title) + '\')"">删除</button>' +
+                        '<button class=""action-btn"" onclick=""event.stopPropagation(); editBookmark(\'' + item.id + '\', \'' + escapeHtml(item.title) + '\', \'' + escapeHtml(item.url) + '\')"">__L_ACTION_EDIT__</button>' +
+                        '<button class=""action-btn delete"" onclick=""event.stopPropagation(); deleteBookmark(\'' + item.id + '\', \'' + escapeHtml(item.title) + '\')"">__L_ACTION_DELETE__</button>' +
                         '</div></div>';
                 }
             }
@@ -1577,51 +1801,89 @@ public static class HtmlGenerator
             }
         });
         
-        // 初始加载
+        // 鍒濆鍔犺浇
         loadBookmarks();
     </script>
 </body>
 </html>";
+        return html
+            .Replace("__L_BOOKMARKS_TITLE__", Localization.T("bookmarks.manager.title"))
+            .Replace("__L_BOOKMARKS_SEARCH__", Localization.T("bookmarks.manager.search_placeholder"))
+            .Replace("__L_BOOKMARKS_NEW_FOLDER__", Localization.T("bookmarks.manager.new_folder"))
+            .Replace("__L_BOOKMARKS_EXPORT__", Localization.T("bookmarks.manager.export"))
+            .Replace("__L_BOOKMARKS_ROOT__", Localization.T("bookmarks.manager.root"))
+            .Replace("__L_COMMON_LOADING__", Localization.T("common.loading"))
+            .Replace("__L_ACTION_RENAME__", Localization.T("actions.rename"))
+            .Replace("__L_CONFIRM_DELETE_BOOKMARK__", Localization.T("bookmarks.manager.confirm_delete"))
+            .Replace("__L_BOOKMARKS_INPUT_FOLDER__", Localization.T("bookmarks.manager.input_folder_name"))
+            .Replace("__L_BOOKMARKS_EMPTY__", Localization.T("bookmarks.manager.empty"))
+            .Replace("__L_ACTION_EDIT__", Localization.T("actions.edit"))
+            .Replace("__L_ACTION_DELETE__", Localization.T("actions.delete"));
     }
     
     #endregion
     
-    #region 错误页面
+    #region 閿欒椤甸潰
     
     public static string GenerateInvalidUrlPage(string url) =>
-        GenerateErrorPage("无法访问此网址", "ERR_INVALID_URL",
-            $"网址 <strong>{Escape(url)}</strong> 无效或无法解析。",
-            new[] { "请检查网址是否拼写正确", "确保网址包含正确的协议（如 https://）", "尝试搜索该网站名称" });
+        GenerateErrorPage("This site can't be reached", "ERR_INVALID_URL",
+            $"The URL <strong>{Escape(url)}</strong> is invalid or could not be resolved.",
+            new[]
+            {
+                "Check if the URL is spelled correctly",
+                "Make sure the URL includes a valid protocol (for example, https://)",
+                "Try searching for the website name"
+            });
     
     public static string GenerateNetworkErrorPage(string url) =>
-        GenerateErrorPage("无法连接到网络", "ERR_NETWORK_DISCONNECTED",
-            "无法建立网络连接，请检查您的网络设置。",
-            new[] { "检查网络电缆、调制解调器和路由器", "重新连接到 Wi-Fi", "检查防火墙和代理设置" });
+        GenerateErrorPage("Unable to connect to the network", "ERR_NETWORK_DISCONNECTED",
+            "A network connection could not be established. Please check your network settings.",
+            new[]
+            {
+                "Check network cables, modem, and router",
+                "Reconnect to Wi-Fi",
+                "Check firewall and proxy settings"
+            });
     
     public static string GenerateTimeoutPage(string url) =>
-        GenerateErrorPage("连接超时", "ERR_CONNECTION_TIMED_OUT",
-            $"连接 <strong>{Escape(UrlHelper.GetHost(url))}</strong> 时超时。",
-            new[] { "网站可能暂时无法访问或太忙", "请稍后重试", "检查您的网络连接" });
+        GenerateErrorPage("Connection timed out", "ERR_CONNECTION_TIMED_OUT",
+            $"The connection to <strong>{Escape(UrlHelper.GetHost(url))}</strong> timed out.",
+            new[]
+            {
+                "The website may be temporarily unavailable or too busy",
+                "Please try again later",
+                "Check your network connection"
+            });
     
     public static string GenerateDnsErrorPage(string url) =>
-        GenerateErrorPage("找不到服务器", "ERR_NAME_NOT_RESOLVED",
-            $"找不到 <strong>{Escape(UrlHelper.GetHost(url))}</strong> 的服务器 DNS 地址。",
-            new[] { "检查网址是否正确", "尝试运行网络诊断", "检查 DNS 设置" });
+        GenerateErrorPage("Server not found", "ERR_NAME_NOT_RESOLVED",
+            $"The DNS address for <strong>{Escape(UrlHelper.GetHost(url))}</strong> could not be found.",
+            new[] { "Check if the URL is correct", "Try running network diagnostics", "Check DNS settings" });
     
     public static string GenerateConnectionRefusedPage(string url) =>
-        GenerateErrorPage("连接被拒绝", "ERR_CONNECTION_REFUSED",
-            $"<strong>{Escape(UrlHelper.GetHost(url))}</strong> 拒绝了连接请求。",
-            new[] { "网站可能暂时关闭或已永久移动", "检查防火墙和代理设置", "如果您使用代理服务器，请检查代理设置" });
+        GenerateErrorPage("Connection refused", "ERR_CONNECTION_REFUSED",
+            $"<strong>{Escape(UrlHelper.GetHost(url))}</strong> refused the connection request.",
+            new[]
+            {
+                "The site may be temporarily down or has moved permanently",
+                "Check firewall and proxy settings",
+                "If you are using a proxy server, verify your proxy settings"
+            });
     
     public static string GenerateSslErrorPage(string url) =>
-        GenerateErrorPage("您的连接不是私密连接", "ERR_CERT_AUTHORITY_INVALID",
-            $"攻击者可能正在试图从 <strong>{Escape(UrlHelper.GetHost(url))}</strong> 窃取您的信息。",
-            new[] { "此网站的安全证书存在问题", "建议不要继续访问此网站", "如果您了解风险，可以选择继续" }, true);
+        GenerateErrorPage("Your connection is not private", "ERR_CERT_AUTHORITY_INVALID",
+            $"Attackers might be trying to steal your information from <strong>{Escape(UrlHelper.GetHost(url))}</strong>.",
+            new[]
+            {
+                "This site has a problem with its security certificate",
+                "It is recommended not to continue",
+                "If you understand the risk, you can choose to proceed"
+            }, true);
     
     public static string GenerateGenericErrorPage(string url, int errorCode, string errorMessage) =>
-        GenerateErrorPage("无法访问此网站", $"ERR_FAILED ({errorCode})",
-            $"访问 <strong>{Escape(UrlHelper.GetHost(url))}</strong> 时出错：{Escape(errorMessage)}",
-            new[] { "请稍后重试", "检查您的网络连接", "检查防火墙和代理设置" });
+        GenerateErrorPage("This site can't be reached", $"ERR_FAILED ({errorCode})",
+            $"An error occurred while accessing <strong>{Escape(UrlHelper.GetHost(url))}</strong>: {Escape(errorMessage)}",
+            new[] { "Please try again later", "Check your network connection", "Check firewall and proxy settings" });
     
     public static string GenerateFromWebErrorStatus(string url, CoreWebView2WebErrorStatus status) =>
         status switch
@@ -1800,21 +2062,38 @@ public static class HtmlGenerator
                 <svg width='16' height='16' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9.663 17h4.674M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z' />
                 </svg>
-                您可以尝试以下操作
+                鎮ㄥ彲浠ュ皾璇曚互涓嬫搷浣?
             </h3>
             {suggestionsHtml}
         </div>
         
         <div class='actions'>
-            <button class='btn btn-primary' onclick='location.reload()'>重新加载页面</button>
-            <button class='btn btn-secondary' onclick='history.back()'>返回上一页</button>
+            <button class='btn btn-primary' onclick='location.reload()'>閲嶆柊鍔犺浇椤甸潰</button>
+            <button class='btn btn-secondary' onclick='history.back()'>杩斿洖涓婁竴椤?/button>
         </div>
     </div>
 </body>
 </html>";
     }
     
+    private static string LocalizeOrFallback(string key, string fallbackKey)
+    {
+        var value = Localization.T(key);
+        return string.Equals(value, key, StringComparison.Ordinal) ? Localization.T(fallbackKey) : value;
+    }
+
     private static string Escape(string text) => WebUtility.HtmlEncode(text ?? "");
+
+    private static string EscapeJsString(string? text)
+    {
+        if (string.IsNullOrEmpty(text)) return string.Empty;
+
+        return text
+            .Replace("\\", "\\\\")
+            .Replace("'", "\\'")
+            .Replace("\r", "\\r")
+            .Replace("\n", "\\n");
+    }
     
     private static string GetCachePath(BrowserSettings settings)
     {

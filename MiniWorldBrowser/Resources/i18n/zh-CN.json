@@ -3,46 +3,45 @@
     "new": "新标签页"
   },
   "menu": {
-    "new_tab": "新建标签页(T)",
-    "new_window": "新建窗口(N)",
-    "new_incognito": "新建 InPrivate 窗口(I)",
-    "bookmarks": "收藏夹(B)",
-    "show_bookmark_bar": "显示收藏栏(S)",
-    "bookmark_manager": "收藏夹管理器(B)",
-    "import_bookmarks": "导入收藏和设置...",
-    "add_bookmark": "为此网页添加收藏...",
-    "add_all_bookmarks": "为打开的网页添加收藏...",
-    "more_bookmarks": "更多收藏",
-    "no_bookmarks": "暂无收藏",
-    "history": "历史记录(H)",
-    "show_all_history": "显示全部历史记录",
-    "no_history": "暂无历史记录",
-    "clear_history": "清除浏览历史记录",
-    "downloads": "下载(D)",
+    "new_tab": "新标签页 (T)",
+    "new_window": "新窗口 (N)",
+    "new_incognito": "新无痕窗口 (I)",
+    "bookmarks": "书签 (B)",
+    "show_bookmark_bar": "显示书签栏 (S)",
+    "bookmark_manager": "书签管理器 (B)",
+    "import_bookmarks": "导入书签和设置...",
+    "add_bookmark": "为此页面添加书签...",
+    "add_all_bookmarks": "为所有打开的页面添加书签...",
+    "more_bookmarks": "更多书签",
+    "no_bookmarks": "没有书签",
+    "history": "历史记录 (H)",
+    "show_all_history": "显示所有历史记录",
+    "no_history": "没有历史记录",
+    "clear_history": "清除浏览历史",
+    "downloads": "下载 (D)",
     "media_extract": "媒体提取",
-    "extract_images": "提取本页图片",
-    "extract_videos": "提取本页视频",
-    "clear_data": "删除浏览数据",
-    "exit_incognito": "关闭隐身窗口",
-    "exit_normal": "关闭鲲穹AI浏览器",
-    "print": "打印(P)",
-    "save_page_as": "网页另存为(A)...",
-    "find_in_page": "在页面上查找",
+    "extract_images": "提取当前页面图片",
+    "extract_videos": "提取当前页面视频",
+    "clear_data": "清除浏览数据",
+    "exit_incognito": "关闭无痕窗口",
+    "exit_normal": "关闭昆仑AI浏览器",
+    "print": "打印 (P)",
+    "save_page_as": "另存为 (A)...",
+    "find_in_page": "在页面中查找",
     "more_tools": "更多工具",
-    "task_manager": "任务管理器(T)",
-    "encoding": "编码(E)",
-    "devtools": "开发者工具(D)",
-    "view_resource_log": "查看资源加载日志(L)",
-    "adblock": "广告过滤(G)",
-    "settings": "设置(S)",
+    "task_manager": "任务管理器 (T)",
+    "encoding": "编码 (E)",
+    "devtools": "开发者工具 (D)",
+    "view_resource_log": "查看资源加载日志 (L)",
+    "adblock": "广告拦截 (G)",
+    "settings": "设置 (S)",
     "feedback": "反馈",
-    "about_app": "关于鲲穹AI浏览器",
-    "about_incognito": "关于 InPrivate 浏览",
-    "exit_incognito": "关闭隐身窗口",
-    "exit_app": "关闭鲲穹AI浏览器"
+    "about_app": "关于昆仑AI浏览器",
+    "about_incognito": "关于无痕浏览",
+    "exit_app": "关闭昆仑AI浏览器"
   },
   "context": {
-    "new_tab": "打开新的标签页",
+    "new_tab": "打开新标签页",
     "reload": "重新加载",
     "duplicate": "复制",
     "pin": "固定标签页",
@@ -51,11 +50,11 @@
     "close_others": "关闭其他标签页",
     "close_left": "关闭左侧标签页",
     "close_right": "关闭右侧标签页",
-    "reopen_closed": "重新打开关闭的标签页(E)",
-    "bookmark_all": "为所有标签页添加收藏..."
+    "reopen_closed": "重新打开已关闭标签页 (E)",
+    "bookmark_all": "为所有标签页添加书签..."
   },
   "tooltips": {
-    "new_tab": "新建标签页 (Ctrl+T)",
+    "new_tab": "新标签页 (Ctrl+T)",
     "search_tabs": "搜索标签页",
     "download": "下载 (Ctrl+J)",
     "user_login": "用户/登录",
@@ -64,37 +63,97 @@
     "manage_passwords": "管理密码"
   },
   "nav": {
-    "back": "后退 (Alt+Left)",
-    "forward": "前进 (Alt+Right)",
+    "back": "后退 (Alt+左)",
+    "forward": "前进 (Alt+右)",
     "refresh": "刷新 (F5)",
     "stop": "停止 (Esc)",
     "home": "主页 (Alt+Home)"
   },
   "status": {
     "ready": "就绪",
-    "incognito": "InPrivate - 您的浏览活动不会保存到此设备",
+    "incognito": "无痕 - 您的浏览活动不会在此设备上保存",
     "downloading": "正在下载: {{file}}",
     "history_cleared": "历史记录已清除"
   },
   "ai": {
-    "assistant": "智能助手",
-    "summarize": "📝 总结此页",
+    "assistant": "助手",
+    "summarize": "📝 总结此页面",
     "mode": "AI模式",
-    "init_failed": "AI 助手初始化失败"
+    "init_failed": "助手初始化失败",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI聊天界面文件未找到</h3><p>请检查以下路径是否存在：</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "请将此页面的主要内容翻译成中文：\n\n{{text}}",
+    "translate_failed": "AI翻译失败：{{msg}}",
+    "api": {
+      "base": "API代理URL：",
+      "key": "API密钥：",
+      "model_name": "模型名称：",
+      "model_preset": "模型预设：",
+      "provider": "提供商预设：",
+      "title": "API配置",
+      "key_stored_local": "本地加密存储",
+      "base_example": "示例：https://api.deepseek.com/v1",
+      "model_desc": "可手动输入或从预设列表选择",
+      "select_preset_model": "选择预设模型..."
+    },
+    "mode.api": "自定义API模式（兼容OpenAI）",
+    "mode.title": "服务模式",
+    "mode.web": "内置网页模式（DeepSeek）",
+    "settings": {
+      "subtitle": "配置您的AI助手",
+      "title": "AI设置"
+    },
+    "tip": {
+      "compatible": "提示：支持DeepSeek、OpenAI、Ollama及其他兼容API",
+      "dashscope": "提示：DashScope兼容OpenAI的基础URL默认为https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "volcengine": "提示：火山引擎Ark V3需要格式为ep-2024xxxxxxxx-xxxxx的端点ID"
+    },
+    "web": {
+      "title": "网页模式设置",
+      "url": "AI网页URL："
+    },
+    "provider": {
+      "custom": "自定义",
+      "volcengine": "火山方舟",
+      "ollama_local": "Ollama（本地）",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic（Claude）",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
   },
   "incognito": {
     "info": {
-      "title": "InPrivate 浏览",
-      "message": "您正在使用 InPrivate 浏览模式\\n\\n✓ InPrivate 浏览的功能：\\n  • 不保存浏览历史记录\\n  • 不保存 Cookie 和网站数据\\n  • 不保存表单数据\\n  • 独立的会话环境\\n\\n✗ InPrivate 浏览不会：\\n  • 对网络管理员隐藏浏览活动\\n  • 对 Internet 服务提供商隐藏活动\\n  • 阻止网站获取您的 IP 地址\\n\\n注意：下载的文件和创建的书签会保留。"
+      "title": "无痕",
+      "message": "您正在使用无痕浏览\n\n✓ 无痕浏览可以：\n  • 不保存浏览历史\n  • 不保存Cookie和网站数据\n  • 不保存表单数据\n  • 使用隔离会话\n\n✗ 无痕浏览不会：\n  • 隐藏您的活动记录（网络管理员）\n  • 隐藏您的活动记录（ISP）\n  • 阻止网站获取您的IP地址\n\n注意：下载的文件和创建的书签会保留。"
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
     }
   },
   "confirm": {
     "title": "确认",
     "ok": "确定",
-    "clear_history_all": "确定要清除所有历史记录吗？"
+    "clear_history_all": "您确定要清除所有历史记录吗？",
+    "cancel": "取消"
   },
   "search_engine": {
-    "confirm_delete": "确定要删除搜索引擎 \"{{name}}\" 吗？"
+    "confirm_delete": "您确定要删除搜索引擎“{{name}}”吗？"
   },
   "menu_zoom": {
     "label": "缩放",
@@ -103,7 +162,7 @@
   "settings": {
     "header": {
       "title": "设置",
-      "search_placeholder": "在设置中搜索"
+      "search_placeholder": "搜索设置"
     },
     "sidebar": {
       "history": "历史记录",
@@ -113,109 +172,428 @@
       "advanced": "高级"
     },
     "set_startup_pages": "设置启动页",
-    "enter_urls_each_line": "请输入网页地址（每行一个）：",
-    "no_results": "没有找到匹配的设置项",
+    "enter_urls_each_line": "请输入网站URL（每行一个）：",
+    "no_results": "未找到匹配的设置",
     "appearance": {
       "title": "外观",
-      "show_home_button": "显示\"主页\"按钮",
+      "show_home_button": "显示“主页”按钮",
       "change": "更改",
-      "show_bookmark_bar": "总是显示收藏栏",
+      "show_bookmark_bar": "始终显示书签栏",
       "language": "语言",
       "language_auto": "跟随系统",
       "language_zhCN": "中文（简体）",
-      "language_en": "English"
+      "language_en": "English",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
     },
     "downloads": {
       "title": "下载",
-    "default_tool_label": "选择默认下载工具:",
       "location_label": "下载位置",
-      "location_desc": "文件下载的默认保存位置",
+      "location_desc": "下载默认保存位置",
       "browse": "浏览...",
-    "browse_desc": "选择下载保存位置",
-    "ask_location_label": "下载前询问保存位置",
+      "ask_location_label": "下载前询问保存位置",
+      "ask_location_desc": "下载前询问每个文件的保存位置",
+      "default_tool_label": "选择默认下载工具:",
+      "browse_desc": "选择下载保存位置",
+      "status": {
+        "downloading": "正在下载: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+        "completed": "已完成",
+        "cancelled": "已取消",
+        "failed": "下载失败",
+        "pending": "等待中..."
+      }
+    },
+    "title": "设置",
+    "search_placeholder": "搜索设置",
+    "home": {
+      "title": "主页",
+      "url": "主页URL：",
+      "use_current": "使用当前页面",
+      "use_newtab": "使用新标签页"
+    },
+    "startup": {
+      "title": "启动时",
+      "newtab": "打开新标签页",
+      "continue_last": "继续上次浏览",
+      "specific_pages": "打开特定页面或一组页面",
+      "manage_pages": "管理页面",
+      "current_setting": "当前设置："
+    },
+    "adblock": {
+      "title": "广告拦截",
+      "none": "不拦截任何广告",
+      "popup": "仅拦截弹窗广告",
+      "aggressive": "强力拦截网页广告",
+      "custom": "自定义广告拦截规则",
+      "custom_link": "自定义规则",
+      "manage_rules": "管理我的规则..."
+    },
+    "search": {
+      "title": "地址栏搜索引擎",
+      "default_label": "默认搜索引擎",
+      "desc": "地址栏使用的搜索引擎",
+      "options": {
+        "360": "360",
+        "baidu": "百度",
+        "bing": "必应",
+        "google": "谷歌"
+      },
+      "manage_button": "管理搜索引擎"
+    },
+    "show_advanced": "显示高级设置...",
+    "advanced": {
+      "back_basic": "？返回基础设置",
+      "gesture": {
+        "enable": "启用鼠标手势",
+        "title": "鼠标手势"
+      },
+      "performance": {
+        "mem_release_time": "后台标签页内存释放间隔：",
+        "title": "性能"
+      },
+      "super_drag": {
+        "enable": "启用超级拖拽"
+      },
+      "title": "高级设置"
+    },
+    "default_browser": {
+      "checking": "正在检查默认浏览器状态...",
+      "is_default": "{{app}}目前是您的默认浏览器。",
+      "not_default": "{{app}}目前不是您的默认浏览器。",
+      "set_default": "设为默认浏览器",
+      "title": "默认浏览器"
+    },
+    "history": {
+      "columns": {
+        "time": "访问时间",
+        "title": "标题",
+        "url": "网址"
+      },
+      "title": "历史记录",
+      "search_placeholder": "搜索...",
+      "empty": "暂无浏览历史"
+    },
+    "https": {
+      "manage_certificates": "管理证书...",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "更改代理设置...",
+      "title": "网络",
+      "system_proxy_desc": "鲲穹AI浏览器使用系统代理设置连接网络。"
+    },
+    "reset": {
+      "button": "将设置恢复为原始默认值",
+      "desc": "这不会影响您的书签、历史记录或已保存的密码。",
+      "title": "重置设置",
+      "confirm": "确定要将所有设置恢复为默认值吗？"
+    },
+    "reset_button": "恢复默认设置",
+    "save": {
+      "no_pending_changes": "暂无未保存更改",
+      "apply_button": "保存并应用",
+      "failed_channel": "保存失败：消息通道不可用",
+      "auto_saved": "已自动保存",
+      "auto_hint": "设置项将自动保存",
+      "nothing_to_save": "未发现可保存项",
+      "partial_failed": "保存失败：部分设置未同步",
+      "manual_applied": "已手动同步并应用",
+      "failed": "保存失败",
+      "resetting_defaults": "正在恢复默认设置..."
+    },
+    "tabs": {
+      "double_click_close": "双击关闭标签页",
+      "input_mode": {
+        "new_tab": "在新标签页中打开"
+      },
+      "input_mode.enter": "按Enter键搜索",
+      "input_mode.instant": "输入时搜索（推荐）",
+      "new_tab_position": {
+        "last": "在最后位置打开",
+        "right": "在当前标签页右侧打开"
+      },
+      "open_new": "打开新页面时：",
+      "select_all_on_click": "点击地址栏时全选URL文本",
+      "show_full_url": "在地址栏显示完整URL（按住Shift键时也显示）",
+      "title": "标签页",
+      "right_click_close_desc": "右键关闭当前标签页（按住 Shift 显示右键菜单）",
+      "open_links_background": "点击链接后在后台标签页打开",
+      "input_mode_label": "地址栏输入模式"
+    },
+    "user_data": {
+      "import": "导入书签和设置...",
+      "title": "用户数据"
+    },
+    "features": {
+      "title": "功能",
+      "mouse_gesture_label": "鼠标手势",
+      "mouse_gesture_desc": "使用鼠标手势快速执行操作",
+      "super_drag_label": "超级拖拽",
+      "super_drag_desc": "拖拽文本或链接可快速搜索或打开"
+    },
+    "web": {
+      "title": "网页设置",
+      "smooth_scrolling": "启用网页平滑滚动（重启后生效）"
+    },
+    "cache": {
+      "title": "自定义缓存",
+      "directory_label": "自定义缓存目录：",
+      "change_button": "更改...",
+      "notice": "更改后将清理当前缓存，并在重启后生效。",
+      "open_dir": "打开缓存目录",
+      "reset_default": "恢复默认",
+      "reset_confirm": "确定要将缓存目录恢复为默认吗？\n\n这将清理现有缓存，并在重启后生效。"
+    },
+    "privacy": {
+      "title": "隐私设置",
+      "content_settings": "内容设置...",
+      "clear_browsing_data": "清除浏览数据...",
+      "crash_upload": "启用崩溃报告上传",
+      "crash_upload_desc": "浏览器崩溃时自动上传错误报告，帮助改进产品。",
+      "clear_title": "清除浏览数据",
+      "clear_button": "清除浏览数据...",
+      "clear_desc": "清除浏览历史记录、Cookie、缓存等数据",
+      "exit_clear": {
+        "title": "退出时自动清除",
+        "history": "浏览历史记录",
+        "downloads": "下载记录",
+        "cache": "缓存的图片和文件",
+        "cookies": "Cookie及其他网站数据"
+      },
+      "options": {
+        "title": "隐私选项",
+        "dnt": "随浏览流量一起发送\"请勿跟踪\"请求"
+      }
+    },
+    "passwords": {
+      "title": "密码和表单",
+      "autofill_desc": "启用自动填充后，可一键填写网页表单。",
+      "manage_autofill": "管理自动填充设置",
+      "save_passwords_desc": "询问是否保存网站输入的密码。",
+      "manage_saved_passwords": "管理已保存的密码"
+    },
+    "web_content": {
+      "title": "网页内容",
+      "font_size": "字体大小：",
+      "font_size_very_small": "很小",
+      "font_size_small": "小",
+      "font_size_medium": "中",
+      "font_size_large": "大",
+      "font_size_very_large": "很大",
+      "customize_fonts": "自定义字体...",
+      "page_zoom": "页面缩放："
+    },
+    "settings": {
+      "title": "设置",
+      "search_placeholder": "在设置中搜索",
+      "home": {
+        "title": "主页",
+        "url": "主页地址:",
+        "use_current": "使用当前页",
+        "use_newtab": "使用新标签页"
+      },
+      "startup": {
+        "title": "启动时",
+        "newtab": "打开新标签页",
+        "continue_last": "继续浏览上次关闭时正在查看的网页",
+        "specific_pages": "打开特定网页或一组网页",
+        "manage_pages": "管理网页"
+      },
+      "adblock": {
+        "title": "广告过滤",
+        "none": "不过滤任何广告",
+        "popup": "仅过滤弹出窗口",
+        "aggressive": "激进过滤网页广告",
+        "custom": "自定义广告过滤规则",
+        "custom_link": "自定义规则",
+        "manage_rules": "管理我的规则..."
+      },
+      "search": {
+        "title": "地址栏搜索引擎",
+        "default_label": "默认搜索引擎",
+        "desc": "地址栏搜索使用的搜索引擎",
+        "options": {
+          "360": "360",
+          "baidu": "百度",
+          "bing": "必应",
+          "google": "Google"
+        }
+      },
+      "show_advanced": "显示高级设置..."
+    },
+    "ai": {
+      "settings": {
+        "title": "AI 设置",
+        "subtitle": "配置您的 AI 助手"
+      },
+      "mode": {
+        "title": "服务模式",
+        "web": "内置网页模式 (DeepSeek)",
+        "api": "自定义 API 模式 (支持 OpenAI 兼容接口)"
+      },
+      "api": {
+        "title": "API 配置",
+        "provider": "服务商预设:",
+        "key": "API Key:",
+        "base": "API Proxy URL:",
+        "model_preset": "模型预设:",
+        "model_name": "Model Name:"
+      },
+      "tip": {
+        "compatible": "提示：适用于 DeepSeek, OpenAI, Ollama 等兼容接口",
+        "dashscope": "提示：百炼 OpenAI 兼容接口 BaseUrl 默认 https://dashscope.aliyuncs.com/compatible-mode/v1",
+        "volcengine": "提示：火山方舟 V3 必须使用【推理接入点 ID (Endpoint ID)】，格式如 ep-2024xxxxxxxx-xxxxx"
+      },
+      "web": {
+        "title": "网页模式配置",
+        "url": "AI 网页地址:"
+      }
+    },
+    "bookmark_menu": {
+      "open": "打开",
+      "open_in_new_tab": "在新标签页打开",
+      "open_all_bookmarks": "打开所有书签"
+    },
+    "actions": {
+      "add": "添加",
+      "edit": "编辑",
+      "delete": "删除",
+      "delete_all": "全部删除",
+      "done": "完成",
+      "copy_link": "复制链接",
+      "rename": "重命名",
+      "add_bookmark": "添加书签",
+      "add_folder": "添加文件夹"
+    },
+    "permissions": {
+      "allow": "允许",
+      "block": "阻止",
+      "ask": "询问"
+    },
+    "site_settings": {
+      "desc": "您可以为特定网站设置 {{category}} 权限。",
+      "host_pattern": "主机名模式:",
+      "columns": {
+        "host_pattern": "主机名模式",
+        "behavior": "行为"
+      }
+    },
+    "time": {
+      "minute": "分钟"
+    },
+    "user": {
+      "manage_profile": "⚙  个人资料设置",
+      "logout": "⏻  退出登录",
+      "login_now": "立即登录"
+    },
+    "bookmarks": {
+      "other": "其他收藏"
+    },
+    "newtab": {
+      "title": "新标签页",
+      "search_placeholder": "搜索或输入网址",
+      "footer": "轻量 · 快速 · 简洁"
+    }
+  },
+  "downloads": {
+    "title": "下载",
+    "location_label": "下载位置",
+    "location_desc": "下载的默认保存位置",
+    "browse": "浏览...",
+    "ask_location_label": "下载前询问每个文件的保存位置",
+    "default_tool_label": "选择默认下载工具：",
+    "browse_desc": "选择下载保存文件夹",
     "status": {
-      "downloading": "正在下载: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "downloading": "下载中：{{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
       "completed": "已完成",
       "cancelled": "已取消",
       "failed": "下载失败",
-      "pending": "等待中..."
-    }
-    },
-  "settings": {
-    "user_data": {
-      "title": "用户数据",
-      "import": "导入收藏和设置..."
-    },
-    "history": {
-      "title": "历史记录",
-      "columns": {
-        "url": "网址",
-        "title": "标题",
-        "time": "访问时间"
-      }
-    },
-    "tabs": {
-      "title": "标签",
-      "show_full_url": "在地址栏显示完整URL（按住Shift时可显示完整地址）",
-      "select_all_on_click": "单击地址栏时全选URL",
-      "input_mode": "地址栏输入方式:",
-      "input_mode.instant": "输入即搜索（推荐）",
-      "input_mode.enter": "回车搜索",
-      "open_new": "新打开页面时:",
-      "new_tab_position.right": "当前标签右侧打开",
-      "new_tab_position.last": "最后位置打开",
-      "double_click_close": "双击标签页关闭"
-    },
-    "default_browser": {
-      "title": "默认浏览器",
-      "set_default": "设为默认浏览器",
-      "checking": "正在检查默认浏览器状态...",
-      "is_default": "{{app}} 目前是您的默认浏览器。",
-      "not_default": "{{app}} 目前不是默认浏览器。"
+      "pending": "待处理..."
     }
   },
-  "ai": {
-    "settings": {
-      "title": "AI 设置",
-      "subtitle": "配置您的 AI 助手"
-    },
-    "mode": {
-      "title": "服务模式",
-      "web": "内置网页模式 (DeepSeek)",
-      "api": "自定义 API 模式 (支持 OpenAI 兼容接口)"
-    },
-    "api": {
-      "title": "API 配置",
-      "provider": "服务商预设:",
-      "key": "API Key:",
-      "base": "API Proxy URL:",
-      "model_preset": "模型预设:",
-      "model_name": "Model Name:"
-    },
-    "tip": {
-      "compatible": "提示：适用于 DeepSeek, OpenAI, Ollama 等兼容接口",
-      "dashscope": "提示：百炼 OpenAI 兼容接口 BaseUrl 默认 https://dashscope.aliyuncs.com/compatible-mode/v1",
-      "volcengine": "提示：火山方舟 V3 必须使用【推理接入点 ID (Endpoint ID)】，格式如 ep-2024xxxxxxxx-xxxxx"
-    },
-    "web": {
-      "title": "网页模式配置",
-      "url": "AI 网页地址:"
+  "password_manager": {
+    "hide": "隐藏",
+    "show": "显示"
+  },
+  "import": {
+    "success": "成功导入了 {{count}} 个书签。",
+    "done": "导入完成",
+    "failed": "导入失败：{{msg}}"
+  },
+  "adblock": {
+    "allow": "允许",
+    "block": "阻止"
+  },
+  "task_manager": {
+    "tab_title": "● 标签页：{{title}}"
+  },
+  "clear": {
+    "success": "成功清除了以下数据：\n• {{items}}",
+    "done": "清除完成",
+    "failed": "清除数据时出错：{{msg}}",
+    "in_progress": "正在清除..."
+  },
+  "print": {
+    "failed": "打印失败",
+    "failed_message": "打印时出错：\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "另存为",
+      "filter": "仅 HTML 网页 (*.html)|*.html|完整网页 (*.html)|*.html|MHTML 文件 (*.mhtml)|*.mhtml|PDF 文档 (*.pdf)|*.pdf"
     }
   },
-  "privacy": {
-    "clear_title": "清除浏览数据",
-    "clear_button": "清除浏览数据...",
-    "clear_desc": "清除浏览历史记录、Cookie、缓存等数据"
-    "exit_clear": {
-      "title": "退出时自动清除",
-      "history": "浏览历史记录",
-      "downloads": "下载记录",
-      "cache": "缓存的图片和文件",
-      "cookies": "Cookie及其他网站数据"
-    },
-    "options": {
-      "title": "隐私选项",
-      "dnt": "随浏览流量一起发送\"请勿跟踪\"请求"
+  "bookmarks": {
+    "export_title": "导出书签",
+    "export_filter": "HTML 文件 (*.html)|*.html",
+    "export_success_path": "书签已导出到：\n{{path}}",
+    "other": "其他书签",
+    "added_message": "已将 {{count}} 个标签页添加到文件夹“{{folder}}”",
+    "added_status": "已将 {{count}} 个书签添加到文件夹“{{folder}}”",
+    "already": "已添加书签",
+    "batch_confirm": "将为 {{count}} 个标签页创建一个文件夹。\n\n是否继续？",
+    "batch_title": "批量添加书签",
+    "cancelled": "书签已取消",
+    "import_filter": "HTML 文件 (*.html;*.htm)|*.html;*.htm|所有文件 (*.*)|*.*",
+    "import_title": "导入书签",
+    "new_bookmark": "新建书签",
+    "unable_for_page": "无法为此页面添加书签",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
     }
   },
   "bookmark_menu": {
@@ -241,250 +619,183 @@
   },
   "site_settings": {
     "desc": "您可以为特定网站设置 {{category}} 权限。",
-    "host_pattern": "主机名模式:",
-    "columns": { "host_pattern": "主机名模式", "behavior": "行为" }
+    "host_pattern": "主机名模式：",
+    "columns": {
+      "host_pattern": "主机名模式",
+      "behavior": "行为"
+    }
   },
   "time": {
     "minute": "分钟"
   },
-  "user": {
-    "manage_profile": "⚙  个人资料设置",
-    "logout": "⏻  退出登录",
-    "login_now": "立即登录"
-  }
-  "bookmarks": {
-    "other": "其他收藏"
-  }
   "newtab": {
     "title": "新标签页",
-    "search_placeholder": "搜索或输入网址",
-    "footer": "轻量 · 快速 · 简洁"
-  },
-  "settings": {
-    "title": "设置",
-    "search_placeholder": "在设置中搜索",
-    "home": {
-      "title": "主页",
-      "url": "主页地址:",
-      "use_current": "使用当前页",
-      "use_newtab": "使用新标签页"
-    },
-    "startup": {
-      "title": "启动时",
-      "newtab": "打开新标签页",
-      "continue_last": "继续浏览上次关闭时正在查看的网页",
-      "specific_pages": "打开特定网页或一组网页",
-      "manage_pages": "管理网页"
-    },
-    "adblock": {
-      "title": "广告过滤",
-      "none": "不过滤任何广告",
-      "popup": "仅过滤弹出窗口",
-      "aggressive": "激进过滤网页广告",
-      "custom": "自定义广告过滤规则",
-      "custom_link": "自定义规则",
-      "manage_rules": "管理我的规则..."
-    },
-    "search": {
-      "title": "地址栏搜索引擎",
-      "default_label": "默认搜索引擎",
-      "desc": "地址栏搜索使用的搜索引擎",
-      "options": {
-        "360": "360",
-        "baidu": "百度",
-        "bing": "必应",
-        "google": "Google"
-      }
-    },
-    "show_advanced": "显示高级设置..."
-  }
-    "search": {
-      "manage_button": "管理搜索引擎"
-    },
-    "network": {
-      "proxy_change": "更改代理服务器设置..."
-    },
-    "https": {
-      "manage_certificates": "管理证书..."
-    },
-    "reset_button": "恢复默认设置"
-  },
-  "newtab": {
-    "title": "新标签页",
-    "search_placeholder": "搜索或输入网址",
-    "footer": "轻量 · 快速 · 简洁"
-  },
-  "ai": {
-    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>未找到 AI 聊天界面文件</h3><p>请检查以下路径是否存在:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
-    "translate_prompt": "请帮我翻译一下这个网页的主要内容为中文：\\n\\n{{text}}",
-    "translate_failed": "AI 翻译失败: {{msg}}",
-    "init_failed": "AI 初始化失败"
-  },
-  "password_popup": {
-    "ask": {
-      "title": "希望鲲穹AI浏览器保存您在此网站上使用的密码吗？",
-      "save": "保存密码",
-      "never": "一律不"
-    },
-    "saved": {
-      "title": "已保存此网站的密码：",
-      "manage": "管理已保存的密码",
-      "done": "完成"
+    "search_placeholder": "搜索或输入地址",
+    "footer": "轻量 · 快速 · 简洁",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
     }
   },
-  "password_manager": {
-    "hide": "隐藏",
-    "show": "显示"
-  },
-  "import": {
-    "success": "成功导入 {{count}} 个收藏。",
-    "done": "导入完成",
-    "failed": "导入失败：{{msg}}"
-  },
-  "adblock": {
-    "allow": "允许",
-    "block": "阻止"
-  },
-  "task_manager": {
-    "tab_title": "● 标签页: {{title}}"
-  },
-  "clear": {
-    "success": "已成功清除以下数据：\n• {{items}}",
-    "done": "清除完成",
-    "failed": "清除数据时出错：{{msg}}",
-    "in_progress": "清除中..."
-  },
-  "print": {
-    "failed": "打印失败",
-    "failed_message": "打印时出错:\n{{msg}}"
-  },
-  "dialog": {
-    "save_as": {
-      "title": "网页另存为",
-      "filter": "网页，仅HTML (*.html)|*.html|网页，完整 (*.html)|*.html|MHTML文件 (*.mhtml)|*.mhtml|PDF文档 (*.pdf)|*.pdf"
+  "privacy": {
+    "clear_title": "清除浏览数据",
+    "clear_button": "清除浏览数据...",
+    "clear_desc": "清除浏览历史、Cookie 及其他数据",
+    "exit_clear": {
+      "title": "退出时自动清除",
+      "history": "浏览历史",
+      "downloads": "下载历史",
+      "cache": "缓存的图片和文件",
+      "cookies": "Cookie 及其他网站数据"
+    },
+    "options": {
+      "title": "隐私选项",
+      "dnt": "发送‘请勿跟踪’请求"
     }
-  },
-  "status": {
-    "ready": "就绪"
-  },
-  "bookmarks": {
-    "export_title": "导出收藏",
-    "export_filter": "HTML 文件 (*.html)|*.html",
-    "export_success_path": "收藏已导出到:\n{{path}}"
   },
   "update": {
-    "updater_missing": "未找到更新程序 updater.exe"
+    "updater_missing": "未找到更新程序‘updater.exe’"
   },
   "address_dropdown": {
-    "search": "搜索 \"{{text}}\"",
-    "visit": "访问 \"{{text}}\"",
-    "empty_history": "没有找到匹配的历史记录",
-    "empty_bookmark": "没有找到匹配的收藏",
-    "empty_tabs": "没有找到匹配的标签页",
-    "empty_all": "没有找到匹配项"
+    "search": "搜索 '{{text}}'",
+    "visit": "访问 '{{text}}'",
+    "empty_history": "未找到匹配的历史记录",
+    "empty_bookmark": "未找到匹配的书签",
+    "empty_tabs": "未找到匹配的标签页",
+    "empty_all": "未找到匹配项"
   },
   "image_dialog": {
     "title": "提取图片资源",
-    "found_count": "发现 {{count}} 张图片资源",
-    "columns": { "url": "图片链接", "type": "类型" },
-    "preview": { "select": "选择图片以预览" },
-    "save_to": "下载保存至",
-    "browse": "更改目录",
-    "browse_desc": "选择下载保存目录",
+    "found_count": "找到 {{count}} 张图片",
+    "columns": {
+      "url": "图片 URL",
+      "type": "类型"
+    },
+    "preview": {
+      "select": "选择一张图片进行预览"
+    },
+    "save_to": "将下载保存到",
+    "browse": "更改文件夹",
+    "browse_desc": "选择下载保存文件夹",
     "download_now": "立即下载",
     "select_one_image": "请至少选择一张图片进行下载",
-    "select_all_toggle": "全选 / 取消",
-    "loading_preview": "正在加载预览...",
+    "select_all_toggle": "全选 / 切换",
+    "loading_preview": "加载预览...",
     "modern_preview": "现代图片格式 (WebView2 预览)",
     "modern": "现代图片格式",
-    "preview_loading_webview": "加载预览中 (WebView2 模式)...",
-    "preview_unavailable": "无法加载预览",
+    "preview_loading_webview": "加载预览 (WebView2 模式)...",
+    "preview_unavailable": "预览不可用",
     "preview_size": "{{width}} x {{height}} | {{kb}} KB"
   },
   "video_dialog": {
     "title": "选择下载格式",
-    "columns": { "resolution": "分辨率", "ext": "扩展名", "size": "大小", "note": "备注" },
-    "save_to": "下载保存至",
-    "browse": "更改目录",
-    "browse_desc": "选择下载保存目录",
-    "start_download": "开始下载",
-    "select_format_first": "请先选择一个格式",
-    "unknown_title": "未知标题",
-    "unknown": "未知",
-    "parse_failed": "解析视频信息失败: {{msg}}"
-  },
-  "confirm": {
-    "cancel": "取消"
+    "columns": {
+      "resolution": "分辨率",
+      "ext": "扩展名",
+      "size": "大小",
+      "note": "备注"
+    },
+    "save_to": "开始下载",
+    "browse": "请先选择一种格式",
+    "browse_desc": "未知标题",
+    "start_download": "未知",
+    "select_format_first": "解析视频信息失败：{{msg}}",
+    "unknown_title": "信息",
+    "unknown": "完成",
+    "parse_failed": "错误"
   },
   "common": {
-    "info": "提示",
-    "done": "完成",
-    "error": "错误",
-    "operation_failed_retry": "操作失败，请重试",
-    "empty": "(空)",
-    "in_dev": "该功能正在开发中..."
-  },
-  "bookmarks": {
-    "new_bookmark": "新书签",
-    "already": "已收藏",
-    "unable_for_page": "无法收藏此页面",
-    "cancelled": "已取消收藏",
-    "import_title": "导入收藏",
-    "import_filter": "HTML 文件 (*.html;*.htm)|*.html;*.htm|所有文件 (*.*)|*.*",
-    "batch_confirm": "将为 {{count}} 个标签页创建收藏夹\\n\\n是否继续？",
-    "batch_title": "批量添加收藏",
-    "added_status": "已添加 {{count}} 个收藏到文件夹 \"{{folder}}\"",
-    "added_message": "已将 {{count}} 个标签页添加到收藏夹 \"{{folder}}\""
-  },
-  "bookmark_manager": {
-    "confirm_delete_folder": "确定要删除文件夹 \"{{name}}\" 及其所有内容吗？",
-    "confirm_delete_item": "确定要删除 \"{{name}}\" 吗？",
-    "export_success": "导出成功！",
-    "export_failed": "导出失败：{{msg}}"
-  },
-  "images": {
-    "extracting_status": "正在提取图片资源...",
-    "none_found_status": "未发现图片资源",
-    "submitted_tasks": "已提交 {{count}} 个图片下载任务",
-    "cancelled_status": "已取消图片提取",
-    "failed_status": "图片提取失败",
-    "failed_message": "提取失败: {{msg}}"
-  },
-  "videos": {
-    "not_supported": "当前页面不支持视频提取",
-    "parsing_status": "正在解析视频信息...",
-    "extract_failed_status": "提取失败",
-    "not_detected_status": "未识别到视频资源",
-    "not_detected_title": "未识别到视频资源",
-    "not_detected_desc": "当前页面未检测到可供提取的视频资源。\\n\\n说明：该网页可能未内嵌视频，或使用了加密/DRM 播放器，因此暂无法直接提取。\\n\\n建议：请确认这是具体的视频播放页面，并在视频开始播放后再次尝试提取。"
+    "info": "操作失败，请重试",
+    "done": "(空)",
+    "error": "此功能正在开发中...",
+    "operation_failed_retry": "关于 ",
+    "empty": "版本 ",
+    "in_dev": "检查更新",
+    "loading": "Loading..."
   },
   "about": {
-    "title_prefix": "关于 ",
-    "version_prefix": "版本 ",
-    "check_update": "检查更新",
-    "checking": "检查中...",
-    "connecting": "正在连接更新服务器...",
-    "update_failed": "检查更新失败，请稍后重试。",
-    "update_found_status": "发现新版本: {{version}}",
-    "update_found_title": "发现更新",
-    "update_found_message": "发现新版本 {{version}}\\n\\n更新内容:\\n{{log}}\\n\\n是否立即更新？",
-    "latest": "当前已是最新版本。",
-    "error_prefix": "发生错误: ",
-    "simple_title": "关于",
-    "simple_message": "{{app}}\\n版本 {{version}}\\n\\n基于 WebView2 内核",
-    "copyright": "© {{year}} {{app}}. 保留所有权利。"
+    "title_prefix": "正在检查...",
+    "version_prefix": "正在连接更新服务器...",
+    "check_update": "检查更新失败。请稍后重试。",
+    "checking": "发现新版本：{{version}}",
+    "connecting": "发现更新",
+    "update_failed": "发现新版本 {{version} 已找到\n\n更新说明：\n{{log}}\n\n立即更新？",
+    "update_found_status": "您已处于最新版本。",
+    "update_found_title": "错误：",
+    "update_found_message": "关于",
+    "latest": "{{app}}\n版本 {{version}}\n\n基于 WebView2 引擎",
+    "error_prefix": "© {{year}} {{app}}。保留所有权利。",
+    "simple_title": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "simple_message": "最小",
+    "copyright": "最大"
   },
   "font": {
-    "preview_standard": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
-    "min": "最小",
-    "max": "最大",
-    "serif": "Serif 字体",
-    "sans_serif": "Sans-serif 字体",
-    "fixed_width": "宽度固定的字体",
-    "minimum_size": "最小字号",
-    "preview_generic": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
-    "preview_fixed": "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit。",
-    "preview_min": "{{size}}: Lorem ipsum dolor sit amet, consectetur"
+    "preview_standard": "衬线字体",
+    "min": "无衬线字体",
+    "max": "等宽字体",
+    "serif": "最小字体大小",
+    "sans_serif": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "fixed_width": "{{size}}: Lorem ipsum dolor sit amet, consectetur",
+    "minimum_size": "外观",
+    "preview_generic": "显示‘主页’按钮",
+    "preview_fixed": "更改",
+    "preview_min": "始终显示书签栏"
+  },
+  "appearance": {
+    "title": "语言",
+    "show_home_button": "跟随系统",
+    "change": "中文（简体）",
+    "show_bookmark_bar": "英语",
+    "language": "语言",
+    "language_auto": "跟随系统",
+    "language_zhCN": "中文（简体）",
+    "language_en": "English",
+    "hide_bookmark_bar": "导出成功！"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "图片提取已取消",
+    "confirm_delete_item": "正在提取图片资源...",
+    "export_failed": "提取失败：{{msg}}",
+    "export_success": "图片提取失败"
+  },
+  "images": {
+    "cancelled_status": "未找到图片资源",
+    "extracting_status": "已提交 {{count}} 个图片下载任务",
+    "failed_message": "从不",
+    "failed_status": "保存密码",
+    "none_found_status": "您是否希望 KunQiong AI 浏览器保存该网站的密码？",
+    "submitted_tasks": "完成"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "管理已保存的密码",
+      "save": "该网站的已保存密码：",
+      "title": "管理搜索引擎"
+    },
+    "saved": {
+      "done": "退出登录",
+      "manage": "个人资料设置",
+      "title": "提取失败"
+    }
+  },
+  "search": {
+    "manage_button": "此页面未检测到可提取的视频资源。\n\n注意：该页面可能未嵌入视频，或使用加密/DRM 播放，因此无法直接提取。\n\n建议：打开实际的视频播放页面，在播放开始后重试提取。"
+  },
+  "user": {
+    "logout": "未检测到视频资源",
+    "manage_profile": "此页面不支持视频提取"
+  },
+  "videos": {
+    "extract_failed_status": "正在解析视频信息...",
+    "not_detected_desc": "No extractable video resources were detected on this page.\\n\\nNote: The page may not embed a video, or it may use encrypted/DRM playback, so direct extraction is unavailable.\\n\\nSuggestion: Open the actual video playback page and try extraction again after playback starts.",
+    "not_detected_status": "No video resources detected",
+    "not_detected_title": "No video resources detected",
+    "not_supported": "Video extraction is not supported on this page",
+    "parsing_status": "Parsing video information..."
   },
   "raw": {
     "Program.cs.L15": "发生错误: {e.Exception.Message}\\n\\n{e.Exception.StackTrace}",

@@ -23,7 +23,7 @@
     "extract_images": "Extract images on this page",
     "extract_videos": "Extract videos on this page",
     "clear_data": "Clear browsing data",
-    "exit_incognito": "Close InPrivate Window",
+    "exit_incognito": "Close InPrivate window",
     "exit_normal": "Close KunQiong AI Browser",
     "print": "Print (P)",
     "save_page_as": "Save page as (A)...",
@@ -38,7 +38,6 @@
     "feedback": "Feedback",
     "about_app": "About Kunqiong AI Browser",
     "about_incognito": "About InPrivate",
-    "exit_incognito": "Close InPrivate window",
     "exit_app": "Close Kunqiong AI Browser"
   },
   "context": {
@@ -83,18 +82,75 @@
     "init_failed": "Assistant initialization failed",
     "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>AI chat UI file not found</h3><p>Please check these paths exist:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
     "translate_prompt": "Please translate the main content of this page into Chinese:\\n\\n{{text}}",
-    "translate_failed": "AI translation failed: {{msg}}"
+    "translate_failed": "AI translation failed: {{msg}}",
+    "api": {
+      "base": "API Proxy URL:",
+      "key": "API Key:",
+      "model_name": "Model Name:",
+      "model_preset": "Model preset:",
+      "provider": "Provider preset:",
+      "title": "API Configuration",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "Custom API mode (OpenAI-compatible)",
+    "mode.title": "Service mode",
+    "mode.web": "Built-in web mode (DeepSeek)",
+    "settings": {
+      "subtitle": "Configure your AI assistant",
+      "title": "AI Settings"
+    },
+    "tip": {
+      "compatible": "Tip: Works with DeepSeek, OpenAI, Ollama and other compatible APIs",
+      "dashscope": "Tip: DashScope OpenAI-compatible BaseUrl defaults to https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "volcengine": "Tip: Volcengine Ark V3 requires an Endpoint ID in the format ep-2024xxxxxxxx-xxxxx"
+    },
+    "web": {
+      "title": "Web mode settings",
+      "url": "AI web URL:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
   },
   "incognito": {
     "info": {
       "title": "InPrivate",
       "message": "You are using InPrivate browsing\\n\\n✓ InPrivate can:\\n  • Not save browsing history\\n  • Not save cookies and site data\\n  • Not save form data\\n  • Use isolated session\\n\\n✗ InPrivate will not:\\n  • Hide activity from network administrators\\n  • Hide activity from your ISP\\n  • Prevent websites from getting your IP address\\n\\nNote: Downloaded files and created bookmarks remain."
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
     }
   },
   "confirm": {
     "title": "Confirm",
     "ok": "OK",
-    "clear_history_all": "Are you sure you want to clear all history?"
+    "clear_history_all": "Are you sure you want to clear all history?",
+    "cancel": "Cancel"
   },
   "search_engine": {
     "confirm_delete": "Are you sure to delete search engine \"{{name}}\"?"
@@ -125,18 +181,46 @@
       "show_bookmark_bar": "Always show bookmarks bar",
       "language": "Language",
       "language_auto": "Follow system",
-      "language_zhCN": "中文（简体）",
-      "language_en": "English"
+      "language_zhCN": "Chinese (Simplified)",
+      "language_en": "English",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
     },
     "downloads": {
       "title": "Downloads",
       "location_label": "Download location",
       "location_desc": "Default save location for downloads",
       "browse": "Browse...",
-      "ask_location_label": "Ask where to save each file before downloading"
-    }
-  },
-  "settings": {
+      "ask_location_label": "Ask where to save each file before downloading",
+      "ask_location_desc": "Prompt for a save location before each download"
+    },
     "title": "Settings",
     "search_placeholder": "Search settings",
     "home": {
@@ -150,7 +234,8 @@
       "newtab": "Open New Tab",
       "continue_last": "Continue where you left off",
       "specific_pages": "Open a specific page or set of pages",
-      "manage_pages": "Manage pages"
+      "manage_pages": "Manage pages",
+      "current_setting": "Current setting:"
     },
     "adblock": {
       "title": "Ad blocking",
@@ -170,12 +255,145 @@
         "baidu": "Baidu",
         "bing": "Bing",
         "google": "Google"
-      }
+      },
+      "manage_button": "Manage search engines"
     },
-    "show_advanced": "Show advanced settings..."
-  }
+    "show_advanced": "Show advanced settings...",
+    "advanced": {
+      "back_basic": "? Back to basic settings",
+      "gesture": {
+        "enable": "Enable mouse gestures",
+        "title": "Mouse gestures"
+      },
+      "performance": {
+        "mem_release_time": "Background tab memory release interval:",
+        "title": "Performance"
+      },
+      "super_drag": {
+        "enable": "Enable super drag"
+      },
+      "title": "Advanced settings"
+    },
+    "default_browser": {
+      "checking": "Checking default browser status...",
+      "is_default": "{{app}} is currently your default browser.",
+      "not_default": "{{app}} is not currently your default browser.",
+      "set_default": "Set as default browser",
+      "title": "Default browser"
+    },
+    "history": {
+      "columns": {
+        "time": "Visited time",
+        "title": "Title",
+        "url": "URL"
+      },
+      "title": "History",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "Manage certificates...",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "Change proxy settings...",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "Restore settings to original defaults",
+      "desc": "This will not affect your bookmarks, history, or saved passwords.",
+      "title": "Reset settings",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "Restore default settings",
+    "save": {
+      "no_pending_changes": "No unsaved changes",
+      "apply_button": "Save and apply",
+      "failed_channel": "Save failed: message channel unavailable",
+      "auto_saved": "Saved automatically",
+      "auto_hint": "Settings are saved automatically",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "manual_applied": "Synced and applied",
+      "failed": "Save failed",
+      "resetting_defaults": "Restoring default settings..."
+    },
+    "tabs": {
+      "double_click_close": "Double-click to close tabs",
+      "input_mode": {
+        "new_tab": "Open in new tab"
+      },
+      "input_mode.enter": "Press Enter to search",
+      "input_mode.instant": "Search as you type (Recommended)",
+      "new_tab_position": {
+        "last": "Open at last position",
+        "right": "Open to the right of current tab"
+      },
+      "open_new": "When opening a new page:",
+      "select_all_on_click": "Select all URL text when clicking the address bar",
+      "show_full_url": "Show full URL in address bar (also shown while holding Shift)",
+      "title": "Tabs",
+      "right_click_close_desc": "Right-click closes current tab (hold Shift to show context menu)",
+      "open_links_background": "Open clicked links in background tab",
+      "input_mode_label": "Address bar input mode"
+    },
+    "user_data": {
+      "import": "Import bookmarks and settings...",
+      "title": "User data"
+    },
+    "features": {
+      "title": "Features",
+      "mouse_gesture_label": "Mouse gestures",
+      "mouse_gesture_desc": "Use mouse gestures to quickly perform actions",
+      "super_drag_label": "Super drag",
+      "super_drag_desc": "Drag text or links to quickly search or open"
+    },
+    "web": {
+      "title": "Web settings",
+      "smooth_scrolling": "Enable smooth scrolling on web pages (takes effect after restart)"
+    },
+    "cache": {
+      "title": "Custom cache",
+      "directory_label": "Custom cache directory:",
+      "change_button": "Change...",
+      "notice": "Changing this will clear current cache and take effect after restart.",
+      "open_dir": "Open cache directory",
+      "reset_default": "Reset to default",
+      "reset_confirm": "Are you sure you want to reset the cache directory to default?\\n\\nThis will clear existing cache and take effect after restart."
+    },
+    "privacy": {
+      "title": "Privacy settings",
+      "content_settings": "Content settings...",
+      "clear_browsing_data": "Clear browsing data...",
+      "crash_upload": "Enable crash report upload",
+      "crash_upload_desc": "Automatically upload error reports on crashes to help improve the browser."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    }
+  },
   "downloads": {
     "title": "Downloads",
+    "location_label": "Download location",
+    "location_desc": "Default save location for downloads",
+    "browse": "Browse...",
+    "ask_location_label": "Ask where to save each file before downloading",
     "default_tool_label": "Choose default download tool:",
     "browse_desc": "Choose download save folder",
     "status": {
@@ -189,7 +407,7 @@
   "password_manager": {
     "hide": "Hide",
     "show": "Show"
-  }
+  },
   "import": {
     "success": "Successfully imported {{count}} bookmarks.",
     "done": "Import complete",
@@ -198,16 +416,16 @@
   "adblock": {
     "allow": "Allow",
     "block": "Block"
-  }
+  },
   "task_manager": {
     "tab_title": "● Tab: {{title}}"
-  }
+  },
   "clear": {
     "success": "Successfully cleared the following data:\n• {{items}}",
     "done": "Clear complete",
     "failed": "Error while clearing data: {{msg}}",
     "in_progress": "Clearing..."
-  }
+  },
   "print": {
     "failed": "Print failed",
     "failed_message": "Error while printing:\n{{msg}}"
@@ -218,14 +436,31 @@
       "filter": "Webpage, HTML only (*.html)|*.html|Webpage, complete (*.html)|*.html|MHTML file (*.mhtml)|*.mhtml|PDF document (*.pdf)|*.pdf"
     }
   },
-  "status": {
-    "ready": "Ready"
-  },
   "bookmarks": {
     "export_title": "Export Bookmarks",
     "export_filter": "HTML Files (*.html)|*.html",
     "export_success_path": "Bookmarks exported to:\n{{path}}",
-    "other": "Other bookmarks"
+    "other": "Other bookmarks",
+    "added_message": "Added {{count}} tabs to folder \"{{folder}}\"",
+    "added_status": "Added {{count}} bookmarks to folder \"{{folder}}\"",
+    "already": "Already bookmarked",
+    "batch_confirm": "A folder will be created for {{count}} tabs.\\n\\nContinue?",
+    "batch_title": "Batch add bookmarks",
+    "cancelled": "Bookmark canceled",
+    "import_filter": "HTML Files (*.html;*.htm)|*.html;*.htm|All Files (*.*)|*.*",
+    "import_title": "Import bookmarks",
+    "new_bookmark": "New bookmark",
+    "unable_for_page": "Cannot bookmark this page",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
   },
   "bookmark_menu": {
     "open": "Open",
@@ -251,7 +486,10 @@
   "site_settings": {
     "desc": "You can set {{category}} permissions for specific sites.",
     "host_pattern": "Hostname pattern:",
-    "columns": { "host_pattern": "Hostname pattern", "behavior": "Behavior" }
+    "columns": {
+      "host_pattern": "Hostname pattern",
+      "behavior": "Behavior"
+    }
   },
   "time": {
     "minute": "minute"
@@ -259,7 +497,15 @@
   "newtab": {
     "title": "New Tab",
     "search_placeholder": "Search or enter address",
-    "footer": "Light · Fast · Simple"
+    "footer": "Light · Fast · Simple",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
   },
   "privacy": {
     "clear_title": "Clear browsing data",
@@ -281,20 +527,23 @@
     "updater_missing": "Updater executable 'updater.exe' not found"
   },
   "address_dropdown": {
-  "address_dropdown": {
     "search": "Search \"{{text}}\"",
     "visit": "Visit \"{{text}}\"",
     "empty_history": "No matching history found",
     "empty_bookmark": "No matching bookmarks found",
     "empty_tabs": "No matching tabs found",
     "empty_all": "No matches found"
-  }
-  "image_dialog": {
+  },
   "image_dialog": {
     "title": "Extract image resources",
     "found_count": "Found {{count}} images",
-    "columns": { "url": "Image URL", "type": "Type" },
-    "preview": { "select": "Select an image to preview" },
+    "columns": {
+      "url": "Image URL",
+      "type": "Type"
+    },
+    "preview": {
+      "select": "Select an image to preview"
+    },
     "save_to": "Save downloads to",
     "browse": "Change folder",
     "browse_desc": "Choose download save folder",
@@ -310,7 +559,12 @@
   },
   "video_dialog": {
     "title": "Select download format",
-    "columns": { "resolution": "Resolution", "ext": "Extension", "size": "Size", "note": "Note" },
+    "columns": {
+      "resolution": "Resolution",
+      "ext": "Extension",
+      "size": "Size",
+      "note": "Note"
+    },
     "save_to": "Save downloads to",
     "browse": "Change folder",
     "browse_desc": "Choose download save folder",
@@ -320,16 +574,14 @@
     "unknown": "Unknown",
     "parse_failed": "Failed to parse video info: {{msg}}"
   },
-  "confirm": {
-    "cancel": "Cancel"
-  },
   "common": {
     "info": "Info",
     "done": "Done",
     "error": "Error",
     "operation_failed_retry": "Operation failed, please retry",
     "empty": "(empty)",
-    "in_dev": "This feature is under development..."
+    "in_dev": "This feature is under development...",
+    "loading": "Loading..."
   },
   "about": {
     "title_prefix": "About ",
@@ -346,7 +598,7 @@
     "simple_title": "About",
     "simple_message": "{{app}}\\nVersion {{version}}\\n\\nBased on WebView2 engine",
     "copyright": "© {{year}} {{app}}. All rights reserved."
-  }
+  },
   "font": {
     "preview_standard": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
     "min": "Min",
@@ -358,5 +610,57 @@
     "preview_generic": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
     "preview_fixed": "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
     "preview_min": "{{size}}: Lorem ipsum dolor sit amet, consectetur"
+  },
+  "appearance": {
+    "title": "Appearance",
+    "show_home_button": "Show \"Home\" button",
+    "change": "Change",
+    "show_bookmark_bar": "Always show bookmarks bar",
+    "language": "Language",
+    "language_auto": "Follow system",
+    "language_zhCN": "Chinese (Simplified)",
+    "language_en": "English",
+    "hide_bookmark_bar": "Hide bookmarks bar"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "Are you sure you want to delete folder \"{{name}}\" and all its contents?",
+    "confirm_delete_item": "Are you sure you want to delete \"{{name}}\"?",
+    "export_failed": "Export failed: {{msg}}",
+    "export_success": "Export successful!"
+  },
+  "images": {
+    "cancelled_status": "Image extraction canceled",
+    "extracting_status": "Extracting image resources...",
+    "failed_message": "Extraction failed: {{msg}}",
+    "failed_status": "Image extraction failed",
+    "none_found_status": "No image resources found",
+    "submitted_tasks": "Submitted {{count}} image download tasks"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "Never",
+      "save": "Save password",
+      "title": "Do you want KunQiong AI Browser to save your password for this site?"
+    },
+    "saved": {
+      "done": "Done",
+      "manage": "Manage saved passwords",
+      "title": "Saved password for this site:"
+    }
+  },
+  "search": {
+    "manage_button": "Manage search engines"
+  },
+  "user": {
+    "logout": "Log out",
+    "manage_profile": "Profile settings"
+  },
+  "videos": {
+    "extract_failed_status": "Extraction failed",
+    "not_detected_desc": "No extractable video resources were detected on this page.\\n\\nNote: The page may not embed a video, or it may use encrypted/DRM playback, so direct extraction is unavailable.\\n\\nSuggestion: Open the actual video playback page and try extraction again after playback starts.",
+    "not_detected_status": "No video resources detected",
+    "not_detected_title": "No video resources detected",
+    "not_supported": "Video extraction is not supported on this page",
+    "parsing_status": "Parsing video information..."
   }
 }

@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "Fichu Mpya"
+  },
+  "menu": {
+    "new_tab": "Fichu Mpya (T)",
+    "new_window": "Funguo Mpya (N)",
+    "new_incognito": "Funguo Mpya ya InPrivate (I)",
+    "bookmarks": "Mabuku (B)",
+    "show_bookmark_bar": "Onyesha Mabuku ya Bar (S)",
+    "bookmark_manager": "Mwendesha Mabuku (B)",
+    "import_bookmarks": "Importa mabuku na mawazo...",
+    "add_bookmark": "Weka mabuku kwa safu hii...",
+    "add_all_bookmarks": "Weka mabuku kwa vya kila safu yenyewe...",
+    "more_bookmarks": "Mabuku mengi",
+    "no_bookmarks": "Hakuna mabuku",
+    "history": "Mazingira ya Kila Siku (H)",
+    "show_all_history": "Onyesha mazingira mengi",
+    "no_history": "Hakuna mazingira",
+    "clear_history": "Pafua mazingira ya kila siku",
+    "downloads": "Maneno ya Kuondoka (D)",
+    "media_extract": "Kuvunja Media",
+    "extract_images": "Kuvunja picha kwa safu hii",
+    "extract_videos": "Kuvunja video kwa safu hii",
+    "clear_data": "Pafua data ya kila siku",
+    "exit_incognito": "Funga Funguo ya InPrivate",
+    "exit_normal": "Funga Mazingira ya KunQiong AI Browser",
+    "print": "Piga Kati (P)",
+    "save_page_as": "Sahau safu kama (A)...",
+    "find_in_page": "Wadhibiti kwa safu",
+    "more_tools": "Zana zaidi",
+    "task_manager": "Mwendesha Mazingira (T)",
+    "encoding": "Kodi (E)",
+    "devtools": "Vifaa vya Mwendesha (D)",
+    "view_resource_log": "Angalia log ya uwezo wa mazingira (L)",
+    "adblock": "Punguza Adi (G)",
+    "settings": "Mazingira ya Kila Siku (S)",
+    "feedback": "Ushahidi",
+    "about_app": "Mazingira ya KunQiong AI Browser",
+    "about_incognito": "Mazingira ya InPrivate",
+    "exit_app": "Funga Mazingira ya KunQiong AI Browser"
+  },
+  "context": {
+    "new_tab": "Onyesha Fichu Mpya",
+    "reload": "Kushtakiwa",
+    "duplicate": "Kutoa Mara Kwanza",
+    "pin": "Kubadilisha Fichu",
+    "unpin": "Kuwakilisha Fichu",
+    "close": "Funga Fichu",
+    "close_others": "Funga Fichu zingine",
+    "close_left": "Funga Fichu kwa kati ya kati",
+    "close_right": "Funga Fichu kwa kati ya chini",
+    "reopen_closed": "Piga Fichu iliyopotea (E)",
+    "bookmark_all": "Weka mabuku kwa vya kila Fichu..."
+  },
+  "tooltips": {
+    "new_tab": "Fichu Mpya (Ctrl+T)",
+    "search_tabs": "Wadhibiti Fichu",
+    "download": "Maneno ya Kuondoka (Ctrl+J)",
+    "user_login": "Mhusika/Magano",
+    "translate_page": "Fafanua Safu Hii",
+    "zoom": "Kubwa",
+    "manage_passwords": "Mabadilisha Maneno"
+  },
+  "nav": {
+    "back": "Mbele (Alt+Kushoto)",
+    "forward": "Kati (Alt+Chini)",
+    "refresh": "Kushtakiwa (F5)",
+    "stop": "Mchongoano (Esc)",
+    "home": "Mazingira ya Kila Siku (Alt+Home)"
+  },
+  "status": {
+    "ready": "Tayari",
+    "incognito": "InPrivate - Mazingira yako ya Kila Siku haitakuwepo kwenye yenyewe",
+    "downloading": "Kwa Kila Siku: {{file}}",
+    "history_cleared": "Mazingira Yafuwa"
+  },
+  "ai": {
+    "assistant": "Mwendesha",
+    "summarize": "📝 Makumbusho ya Safu Hii",
+    "mode": "Mwenendo wa AI",
+    "init_failed": "Mabadilisha ya Mwendesha Imetekelewa",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>Fail ya UI ya Chat ya AI haifuatwa</h3><p>Tafadhali ingia vya hivi karibuni:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "Tafadhali fafanua mazingira ya kati ya safu hii kwa Kihindi:\n\n{{text}}",
+    "translate_failed": "Kwa Kila Siku ya AI Imetekelewa: {{msg}}",
+    "api": {
+      "base": "Mazingira ya API ya Proxy:",
+      "key": "Kodi ya API:",
+      "model_name": "Jina la Mfalme:",
+      "model_preset": "Mazingira ya Mfalme:",
+      "provider": "Mazingira ya Mwenzi:",
+      "title": "Mazingira ya API",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "Mwenendo wa API wa Kila Siku (OpenAI-compatible)",
+    "mode.title": "Mwenendo wa Mazingira",
+    "mode.web": "Mwenendo wa Web wa Kila Siku (DeepSeek)",
+    "settings": {
+      "subtitle": "Mabadilisha Mwendesha Yako ya AI",
+      "title": "Mazingira ya AI"
+    },
+    "tip": {
+      "compatible": "Mawazo: Inafaa na DeepSeek, OpenAI, Ollama na mazingira ya API zingine zaidi",
+      "dashscope": "Mawazo: BaseUrl ya DashScope inafaa na OpenAI inafaa ya kutoa kwa udhibiti https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "volcengine": "Mawazo: Volcengine Ark V3 inahitaji ID ya Endpoint kwa fomu ep-2024xxxxxxxx-xxxxx"
+    },
+    "web": {
+      "title": "Mazingira ya Mwenendo wa Web",
+      "url": "Mazingira ya Web ya AI:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "InPrivate",
+      "message": "Una kuchambua InPrivate browsing\n\n✓ InPrivate inafaa:\n  • Haifuatwa mazingira ya kila siku\n  • Haifuatwa maneno ya kila siku na maneno ya site\n  • Haifuatwa maneno ya fomu\n  • Kutoa mazingira yenyewe\n\n✗ InPrivate haitakuwepo:\n  • Kuharibu mazingira ya mwenzi wa kila siku\n  • Kuharibu mazingira ya ISP yako\n  • Kuhakikisha vifaa vya kila siku kuzingatia neno ya IP yako\n\nMabadilisha: Vifaa vya kila siku na mabuku yenyewe yanafaa."
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "Thibitisha",
+    "ok": "OK",
+    "clear_history_all": "Je, uwezo ni kweli uweza kuvunja historia yote?",
+    "cancel": "Kata"
+  },
+  "search_engine": {
+    "confirm_delete": "Je, unafaa kweli uweza kuondoa engine ya paka \"{{name}}\"?"
+  },
+  "menu_zoom": {
+    "label": "Zoom",
+    "reset": "Riseti"
+  },
+  "settings": {
+    "header": {
+      "title": "Mipangilio",
+      "search_placeholder": "Tafuta mipangilio"
+    },
+    "sidebar": {
+      "history": "Historia",
+      "settings": "Mipangilio",
+      "ai": "Mipangilio ya AI",
+      "privacy": "Faragha",
+      "advanced": "Ya hali ya juu"
+    },
+    "set_startup_pages": "Sitisha vipya vya kuzingatia",
+    "enter_urls_each_line": "Tafadhali ingiza URLs ya vebesi (moja kwa kila mnyama):",
+    "no_results": "Mazingira ya Kila Mtu",
+    "appearance": {
+      "title": "Kunyua pamoja ya 'Home'",
+      "show_home_button": "Badilisha",
+      "change": "Kunyua kwa kila wakati bar ya bookmarks",
+      "show_bookmark_bar": "Kithandiko",
+      "language": "Lugha",
+      "language_auto": "Fuata mfumo",
+      "language_zhCN": "Kichina (Kilichorahisishwa)",
+      "language_en": "Kiingereza",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "Mazingira ya Kutoa",
+      "location_label": "Mazingira ya kuchunguza ya kutoa kwa kila mtu",
+      "location_desc": "Kuhakikisha...",
+      "browse": "Tafadhali mashtaka ya kuchunguza ya kila faili kabla ya kutoa",
+      "ask_location_label": "Mazingira",
+      "ask_location_desc": "Mazingira"
+    },
+    "title": "Mipangilio",
+    "search_placeholder": "Tafuta mipangilio",
+    "home": {
+      "title": "URL ya Home:",
+      "url": "Kushtakiwa na safu ya sasa",
+      "use_current": "Kushtakiwa na Tab Mpya",
+      "use_newtab": "Kwa Kila Mtu"
+    },
+    "startup": {
+      "title": "Kuvunja Tab Mpya",
+      "newtab": "Kuendelea kwa ndipo ulikuwa na kila mtu",
+      "continue_last": "Kuvunja safu ndio au kiwango cha sasa ya sasa",
+      "specific_pages": "Manajia sasa",
+      "manage_pages": "Kuhakikisha ya Ad",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "Hakuna mazingira ya kila mtu ya Ad",
+      "none": "Kuhakikisha pop-ups tu",
+      "popup": "Kuhakikisha kwa makosa ya Ad ya vebesi",
+      "aggressive": "Mazingira ya Kuhakikisha Ad ya Kuwekwa",
+      "custom": "Custom ad blocking rules",
+      "custom_link": "Miazo ya Khasa",
+      "manage_rules": "Manajia miazo yangu..."
+    },
+    "search": {
+      "title": "Mazingira ya Kuchunguza ya Bar ya Umea",
+      "default_label": "Mazingira ya Kuchunguza ya Kawaida",
+      "desc": "Mazingira ya Kuchunguza yanayotekelezwa na Bar ya Umea",
+      "options": {
+        "360": "360",
+        "baidu": "Baidu",
+        "bing": "Bing",
+        "google": "Google"
+      },
+      "manage_button": "Manajia mazingira ya kuchunguza"
+    },
+    "show_advanced": "Ongeza mashtaka ya juu...",
+    "advanced": {
+      "back_basic": "? Kwa Kila mashtaka ya msingi",
+      "gesture": {
+        "enable": "Chambua mazungumzo ya kikatiba",
+        "title": "Mazungumzo ya Kikatiba"
+      },
+      "performance": {
+        "mem_release_time": "Mazingira ya Kuwafuata Uwezo wa Tabu ya Kati:",
+        "title": "Uwezo"
+      },
+      "super_drag": {
+        "enable": "Chambua drag ya juu"
+      },
+      "title": "Mashtaka ya Juu"
+    },
+    "default_browser": {
+      "checking": "Kuthibitisha hali ya browser ya kawaida...",
+      "is_default": "{{app}} ni browser ya kawaida ya sasa yako.",
+      "not_default": "{{app}} hainaweza kuwa browser ya kawaida ya sasa yako.",
+      "set_default": "Wekwa kama browser ya kawaida",
+      "title": "Browser ya Kawaida"
+    },
+    "history": {
+      "columns": {
+        "time": "Waka wa Kushtakiwa",
+        "title": "Jina",
+        "url": "URL"
+      },
+      "title": "Mazingira ya Kushtakiwa",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "Manajia sertifikit...",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "Badilisha mashtaka ya proxy...",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "Fanya mashtaka kwa msingi ya asili",
+      "desc": "Hivi haitachunguza bookmark, mazingira, au maneno ya silaha yenyewe.",
+      "title": "Reset mashtaka",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "Fanya mashtaka kwa msingi ya kawaida",
+    "tabs": {
+      "double_click_close": "Kuchunguza tabu kwa kikatiba ya kikatiba",
+      "input_mode": {
+        "new_tab": "Fungua kwenye kichupo kipya"
+      },
+      "input_mode.enter": "Piga Enter ili kuchunguza",
+      "input_mode.instant": "Kuchunguza kwa uwezo wa kuchunguza (Mtuachoni)",
+      "new_tab_position": {
+        "last": "Piga kwa mazingira ya kwanza",
+        "right": "Piga kwa kati ya tabu ya sasa"
+      },
+      "open_new": "Waka kuchunguza sasa:",
+      "select_all_on_click": "Chunguza kila maneno ya URL kwa kuchunguza bar ya umeja",
+      "show_full_url": "Ongeza kila URL kwa bar ya umeja (pia ongeshwa kwa kuchunguza Shift)",
+      "title": "Tabu",
+      "right_click_close_desc": "Bonyeza kulia hufunga kichupo cha sasa (shikilia Shift kuonyesha menyu ya muktadha)",
+      "open_links_background": "Fungua viungo vilivyobonyezwa kwenye kichupo cha nyuma",
+      "input_mode_label": "Waka kuchunguza sasa:"
+    },
+    "user_data": {
+      "import": "Import bookmarki na mashtaka...",
+      "title": "Data ya Mtu"
+    },
+    "features": {
+      "title": "Vipengele",
+      "mouse_gesture_label": "Ishara za kipanya",
+      "mouse_gesture_desc": "Tumia ishara za kipanya kutekeleza vitendo haraka",
+      "super_drag_label": "Buruta maalum",
+      "super_drag_desc": "Buruta maandishi au viungo ili kutafuta au kufungua kwa haraka"
+    },
+    "web": {
+      "title": "Mipangilio ya wavuti",
+      "smooth_scrolling": "Wezesha kusogeza laini kwenye kurasa za wavuti (huanza kufanya kazi baada ya kuwasha upya)"
+    },
+    "cache": {
+      "title": "Hifadhi mahususi",
+      "directory_label": "Saraka mahususi ya hifadhi:",
+      "change_button": "Badilisha",
+      "notice": "Kubadilisha hii itafuta kache ya sasa na kuanza kutumika baada ya kuanza tena.",
+      "open_dir": "Fungua saraka ya hifadhi",
+      "reset_default": "Badilisha iwe chaguo-msingi",
+      "reset_confirm": "Je, una uhakika unataka kubadilisha saraka ya kache iwe chaguo-msingi?\\n\\ nHii itafuta kache iliyopo na kuanza kutumika baada ya kuanza upya."
+    },
+    "privacy": {
+      "title": "Privacy settings",
+      "content_settings": "Content settings...",
+      "clear_browsing_data": "Clear browsing data...",
+      "crash_upload": "Enable crash report upload",
+      "crash_upload_desc": "Automatically upload error reports on crashes to help improve the browser."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "Hifadhi na tumia",
+      "auto_hint": "Mipangilio huhifadhiwa kiotomatiki",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "Maneno ya Kutoa",
+    "location_label": "Mahali ya Kutoa",
+    "location_desc": "Mahali ya kuchunguza kutoa kwa kawaida",
+    "browse": "Baraa...",
+    "ask_location_label": "Pata maswali kwa mahali ya kuchunguza kila faili kabla ya kutoa",
+    "default_tool_label": "Chagua vifaa vya kutoa vya kawaida:",
+    "browse_desc": "Chagua foda ya kuchunguza kutoa",
+    "status": {
+      "downloading": "Kutoa: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "Yametekelezwa",
+      "cancelled": "Yakafuwa",
+      "failed": "Kutoa kimechoka",
+      "pending": "Kufuata..."
+    }
+  },
+  "password_manager": {
+    "hide": "Punguza",
+    "show": "Kunyua"
+  },
+  "import": {
+    "success": "Imepakwa {{count}} maneno ya kutoa kwa usawa.",
+    "done": "Import imetekelezwa",
+    "failed": "Import imetachoka: {{msg}}"
+  },
+  "adblock": {
+    "allow": "Ena",
+    "block": "Kuwalika"
+  },
+  "task_manager": {
+    "tab_title": "● Pata: {{title}}"
+  },
+  "clear": {
+    "success": "Imekosea kwa usawa data zilizo na mazingira:\n• {{items}}",
+    "done": "Imekosea kwa usawa",
+    "failed": "Hatua ya kuchunguza kimechoka: {{msg}}",
+    "in_progress": "Kuzingatia..."
+  },
+  "print": {
+    "failed": "Kipya ya kurudisha kimechoka",
+    "failed_message": "Hatua ya kurudisha kimechoka:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "Chunguza Paji Kama...",
+      "filter": "Paji ya Uwezo, HTML tu (*.html)|*.html|Paji ya Uwezo, Kamili (*.html)|*.html|MHTML File (*.mhtml)|*.mhtml|Mwenendo wa PDF (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "Haraka ya Maneno ya Kutoa",
+    "export_filter": "Faili HTML (*.html)|*.html",
+    "export_success_path": "Maneno ya Kutoa yatendeka kwa:\n{{path}}",
+    "other": "Maneno ya Kutoa Wengine",
+    "added_message": "Kwa kuundwa {{count}} vipasa kwa fodi \"{{folder}}\"",
+    "added_status": "Kwa kuundwa {{count}} maneno ya kutoa kwa fodi \"{{folder}}\"",
+    "already": "Kimekosea ya kutoa",
+    "batch_confirm": "Fodi itakuzwa kwa {{count}} vipasa.\\n\\nKuendelea?",
+    "batch_title": "Kutoa maneno ya kutoa kwa mazingira",
+    "cancelled": "Maneno ya kutoa yakafwa",
+    "import_filter": "Faili HTML (*.html;*.htm)|*.html;*.htm|Mwenendo Wote (*.*)|*.*",
+    "import_title": "Haraka ya Maneno ya Kutoa",
+    "new_bookmark": "Maneno ya Kutoa Mpya",
+    "unable_for_page": "Hakuna uwezo wa kutoa ya paji hii",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "Kuingia",
+    "open_in_new_tab": "Kuingia kwa pata mpya",
+    "open_all_bookmarks": "Kuingia kila maneno ya kutoa"
+  },
+  "actions": {
+    "add": "Kutoa",
+    "edit": "Kuthibitisha",
+    "delete": "Kushtota",
+    "delete_all": "Kushtota Wote",
+    "done": "Amekwenda",
+    "copy_link": "Kopiya Uhusiano",
+    "rename": "Kushtaka jina",
+    "add_bookmark": "Kutoa maneno ya kutoa",
+    "add_folder": "Kutoa fodi"
+  },
+  "permissions": {
+    "allow": "Ena",
+    "block": "Kuwalika",
+    "ask": "Kushtaka"
+  },
+  "site_settings": {
+    "desc": "Unaweza kuthibitisha mashtaka ya {{category}} kwa mashtaka ya kila site.",
+    "host_pattern": "Mwenendo wa Hostname:",
+    "columns": {
+      "host_pattern": "Mwenendo wa Hostname",
+      "behavior": "Mwenendo"
+    }
+  },
+  "time": {
+    "minute": "dakika"
+  },
+  "newtab": {
+    "title": "Pata Mpya",
+    "search_placeholder": "Chunguza au ingiza adhresu",
+    "footer": "Vipya · Kwa Fadhili · Sawa",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "Kuzingatia mazingira ya uwezo",
+    "clear_button": "Kuzingatia mazingira ya uwezo...",
+    "clear_desc": "Kuzingatia mazingira ya uwezo, kuki, cache na zaidi",
+    "exit_clear": {
+      "title": "Kuzingatia kwa uhalifu ya kutoa",
+      "history": "Mazingira ya uwezo",
+      "downloads": "Mazingira ya kutoa",
+      "cache": "Mazingira ya cache na faili",
+      "cookies": "Kuki na data zingine za site"
+    },
+    "options": {
+      "title": "Mazingira ya uhalifu",
+      "dnt": "Kutuma ushahidi ya \"Hakuna Uhalifu\" kwa uhalifu ya uwezo"
+    }
+  },
+  "update": {
+    "updater_missing": "Programu ya kutoa 'updater.exe' haifuatwa"
+  },
+  "address_dropdown": {
+    "search": "Chunguza \"{{text}}\"",
+    "visit": "Kuendelea \"{{text}}\"",
+    "empty_history": "Hakuna mazingira ya uwezo inayotekelezwa",
+    "empty_bookmark": "Hakuna maneno ya kutoa inayotekelezwa",
+    "empty_tabs": "Hakuna vipasa vinaweza kuchunguza",
+    "empty_all": "Hakuna mazingira inafuata"
+  },
+  "image_dialog": {
+    "title": "Kuvunja mazingira ya usawa",
+    "found_count": "Kuzingatia {{count}} mazingira",
+    "columns": {
+      "url": "URL ya Mazingira",
+      "type": "Nia ya faili"
+    },
+    "preview": {
+      "select": "Chagua mazingira ya kuchunguza"
+    },
+    "save_to": "Kutoa kutoa kwa",
+    "browse": "Badili foda",
+    "browse_desc": "Chagua foda ya kuchunguza",
+    "download_now": "Download sasa",
+    "select_one_image": "Tafadhali chagua picha moja au zaidi kuchunguza",
+    "select_all_toggle": "Chagua Wote / Chambua",
+    "loading_preview": "Kushtaki muoni ya kutoa...",
+    "modern_preview": "Mfano wa picha wa hivi karibuni (WebView2 preview)",
+    "modern": "Mfano wa picha wa hivi karibuni",
+    "preview_loading_webview": "Kushtaki muoni (mwenendo wa WebView2)...",
+    "preview_unavailable": "Muoni hainawezekana",
+    "preview_size": "{{width}} x {{height}} | {{kb}} KB"
+  },
+  "video_dialog": {
+    "title": "Chagua fomati ya kuchunguza",
+    "columns": {
+      "resolution": "Resheni",
+      "ext": "Mazingira ya kila",
+      "size": "Kipya",
+      "note": "Mkataba"
+    },
+    "save_to": "Chunguza kuchunguza kwa",
+    "browse": "Badili foda",
+    "browse_desc": "Chagua foda ya kuchunguza",
+    "start_download": "Hamisha kuchunguza",
+    "select_format_first": "Tafadhali chagua fomati kabla ya kuchunguza",
+    "unknown_title": "Jina la kila",
+    "unknown": "Hakuna jinsi",
+    "parse_failed": "Kwa kila kila, kuchunguza ushahidi wa video haijadai: {{msg}}"
+  },
+  "common": {
+    "info": "Usahihi",
+    "done": "Yafai",
+    "error": "Kosa",
+    "operation_failed_retry": "Mabadiliko ya kila kila, tafadhali jaribu tena",
+    "empty": "(faa)",
+    "in_dev": "Mazingira haya yanafuata na mazingira ya kila...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "Mazingira ya kila",
+    "version_prefix": "Visho ",
+    "check_update": "Angalia kwa mabadiliko",
+    "checking": "Kuchunguza...",
+    "connecting": "Kutoa uwezo kwa server ya mabadiliko...",
+    "update_failed": "Kwa kila kila, kuchunguza kwa server ya mabadiliko haijajeshi. Tafadhali jaribu tena baadaye.",
+    "update_found_status": "Mazingira mpya imetengenezwa: {{version}}",
+    "update_found_title": "Mazingira mpya imetengenezwa",
+    "update_found_message": "Mazingira mpya {{version}} imetengenezwa\n\nMabadiliko ya mazingira:\n{{log}}\n\nHamisha mazingira ya kila?",
+    "latest": "Unaweza ni mazingira ya kila la kila",
+    "error_prefix": "Kosa: ",
+    "simple_title": "Mazingira ya kila",
+    "simple_message": "{{app}}\nVisho {{version}}\n\nKwa uwezo wa injini WebView2",
+    "copyright": "© {{year}} {{app}}. Kila haki inafuata na haki."
+  },
+  "font": {
+    "preview_standard": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "min": "Chini",
+    "max": "Mazingira",
+    "serif": "Font ya Serif",
+    "sans_serif": "Font ya Sans-Serif",
+    "fixed_width": "Font yenye uwezo wa kuzingatia",
+    "minimum_size": "Kiwango cha font cha chini",
+    "preview_generic": "{{size}}: Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "preview_fixed": "Lorem ipsum dolor sit amet,\nconsectetur adipiscing elit.",
+    "preview_min": "{{size}}: Lorem ipsum dolor sit amet, consectetur"
+  },
+  "appearance": {
+    "title": "Mazingira",
+    "show_home_button": "Kunywa botoni ya \"Home\"",
+    "change": "Badilisha",
+    "show_bookmark_bar": "Kila siku kunywa baraka ya bookmarks",
+    "language": "Lugha",
+    "language_auto": "Fuata mfumo",
+    "language_zhCN": "Kichina (Kilichorahisishwa)",
+    "language_en": "Kiingereza",
+    "hide_bookmark_bar": "Punguza baraka ya bookmarks"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "Unaweza kutoa mashtaka unafuata ya kutoa mashtaka ya folder \"{{name}}\" na mazingira yote yake?",
+    "confirm_delete_item": "Unaweza kutoa mashtaka unafuata ya kutoa mashtaka ya \"{{name}}\"?",
+    "export_failed": "Kutoa kwa makosa: {{msg}}",
+    "export_success": "Kutoa kamilifu!"
+  },
+  "images": {
+    "cancelled_status": "Kutoa picha ya kuzingatia",
+    "extracting_status": "Kutoa mazingira ya picha...",
+    "failed_message": "Kutoa kwa makosa: {{msg}}",
+    "failed_status": "Kutoa picha kwa makosa",
+    "none_found_status": "Hakuna mazingira ya picha iliyochunguwwa",
+    "submitted_tasks": "Imarishwa {{count}} mashtaka ya udhibiti wa picha"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "Hakuna kila siku",
+      "save": "Sahihisha niazi",
+      "title": "Unaweza kutoa mashtaka KunQiong AI Browser ya kutoa mashtaka niazi yako ya mfano kwa sites hii?"
+    },
+    "saved": {
+      "done": "Yafai",
+      "manage": "Mabadiliko ya niazi yenyewe za mfano",
+      "title": "Niazi yenyewe za mfano kwa sites hii:"
+    }
+  },
+  "search": {
+    "manage_button": "Mabadiliko ya mazingira ya kuzingatia"
+  },
+  "user": {
+    "logout": "Kwa mkono",
+    "manage_profile": "Mashtaka ya Mazingira ya Mtu"
+  },
+  "videos": {
+    "extract_failed_status": "Kutoa kwa makosa",
+    "not_detected_desc": "Hakuna mazingira ya video inayoweza kuchunguwwa kwenye pahu hii.\n\nMkataba: Pahu hii inaweza kuzingatia video, au inaweza kuchunguwwa kwa kila siku ya kuzingatia zaidi (encrypted/DRM), kwa hivyo kutoa kwa makosa ya kuchunguwwa kwa makosa ya kuzingatia zaidi.\n\nMtu wa kuzingatia: Kuchunguwwa kwenye pahu ya kuchunguwwa ya video na kutoa kwa makosa ya kuchunguwwa baada ya kuchunguwwa ya video kutoa.",
+    "not_detected_status": "Hakuna mazingira ya video iliyochunguwwa",
+    "not_detected_title": "Hakuna mazingira ya video iliyochunguwwa",
+    "not_supported": "Kutoa video haina udhibiti kwenye pahu hii",
+    "parsing_status": "Kutoa mazingira ya video..."
+  }
+}

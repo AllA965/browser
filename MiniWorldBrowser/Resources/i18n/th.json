@@ -1,0 +1,666 @@
+{
+  "tab": {
+    "new": "แท็บใหม่"
+  },
+  "menu": {
+    "new_tab": "แท็บใหม่ (T)",
+    "new_window": "หน้าต่างใหม่ (N)",
+    "new_incognito": "หน้าต่าง InPrivate ใหม่ (I)",
+    "bookmarks": "บุ๊คมาร์ค (B)",
+    "show_bookmark_bar": "แสดงแถบบุ๊คมาร์ค (S)",
+    "bookmark_manager": "จัดการบุ๊คมาร์ค (B)",
+    "import_bookmarks": "นำเข้าบุ๊คมาร์คและการตั้งค่า...",
+    "add_bookmark": "เพิ่มบุ๊คมาร์คสำหรับหน้านี้...",
+    "add_all_bookmarks": "เพิ่มบุ๊คมาร์คสำหรับหน้าทั้งหมดที่เปิด...",
+    "more_bookmarks": "บุ๊คมาร์คเพิ่มเติม",
+    "no_bookmarks": "ไม่มีบุ๊คมาร์ค",
+    "history": "ประวัติ (H)",
+    "show_all_history": "แสดงประวัติทั้งหมด",
+    "no_history": "ไม่มีประวัติ",
+    "clear_history": "ล้างประวัติการสื่อสาร",
+    "downloads": "ดาวน์โหลด (D)",
+    "media_extract": "ดึงข้อมูลสื่อสาร",
+    "extract_images": "ดึงภาพบนหน้านี้",
+    "extract_videos": "ดึงวิดีโอบนหน้านี้",
+    "clear_data": "ล้างข้อมูลการสื่อสาร",
+    "exit_incognito": "ปิดหน้าต่าง InPrivate",
+    "exit_normal": "ปิดเบราว์เซอร์ KunQiong AI",
+    "print": "พิมพ์ (P)",
+    "save_page_as": "บันทึกหน้าเป็น (A)...",
+    "find_in_page": "ค้นหาในหน้า",
+    "more_tools": "เครื่องมือเพิ่มเติม",
+    "task_manager": "จัดการงาน (T)",
+    "encoding": "การเข้ารหัส (E)",
+    "devtools": "เครื่องมือพัฒนา (D)",
+    "view_resource_log": "ดูบันทึกโหลดทรัพยากร (L)",
+    "adblock": "บล็อกโฆษณา (G)",
+    "settings": "การตั้งค่า (S)",
+    "feedback": "ความคิดเห็น",
+    "about_app": "เกี่ยวกับเบราว์เซอร์ Kunqiong AI",
+    "about_incognito": "เกี่ยวกับ InPrivate",
+    "exit_app": "ปิดเบราว์เซอร์ Kunqiong AI"
+  },
+  "context": {
+    "new_tab": "เปิดแท็บใหม่",
+    "reload": "รีโหลด",
+    "duplicate": "คัดลอก",
+    "pin": "ติดแท็บ",
+    "unpin": "ยกเลิกติดแท็บ",
+    "close": "ปิดแท็บ",
+    "close_others": "ปิดแท็บอื่นๆ",
+    "close_left": "ปิดแท็บทางซ้าย",
+    "close_right": "ปิดแท็บทางขวา",
+    "reopen_closed": "เปิดแท็บที่ปิดไว้ใหม่ (E)",
+    "bookmark_all": "เพิ่มบุ๊คมาร์คสำหรับแท็บทั้งหมด..."
+  },
+  "tooltips": {
+    "new_tab": "แท็บใหม่ (Ctrl+T)",
+    "search_tabs": "ค้นหาแท็บ",
+    "download": "ดาวน์โหลด (Ctrl+J)",
+    "user_login": "ผู้ใช้/เข้าสู่ระบบ",
+    "translate_page": "แปลหน้านี้",
+    "zoom": "ยูม",
+    "manage_passwords": "จัดการรหัสผ่าน"
+  },
+  "nav": {
+    "back": "กลับ (Alt+ซ้าย)",
+    "forward": "ข้างหน้า (Alt+ขวา)",
+    "refresh": "รีเฟรช (F5)",
+    "stop": "หยุด (Esc)",
+    "home": "หน้าแรก (Alt+Home)"
+  },
+  "status": {
+    "ready": "พร้อม",
+    "incognito": "InPrivate - การกดทําเบราว์เซอร์ของคุณจะไม่ได้รับการบันทึกบนอุปกรณ์นี้",
+    "downloading": "กำลังดาวน์โหลด: {{file}}",
+    "history_cleared": "ประวัติถูกล้าง"
+  },
+  "ai": {
+    "assistant": "ช่วยเหลือ",
+    "summarize": "📝 สรุปหน้านี้",
+    "mode": "โหมด AI",
+    "init_failed": "การเริ่มต้นช่วยเหลือล้มเหลว",
+    "missing_html": "<html><body style='font-family: sans-serif; padding: 20px;'><h3>ไม่พบไฟล์ UI สัมภาษณ์ AI</h3><p>โปรดตรวจสอบว่าทำตัวอย่างที่อยู่นี้มีอยู่:</p><ul><li>{{path1}}</li><li>{{path2}}</li></ul></body></html>",
+    "translate_prompt": "โปรดแปลเนื้อหาหลักของหน้านี้เป็นภาษาจีน:\n\n{{text}}",
+    "translate_failed": "การแปลโดย AI ล้มเหลว: {{msg}}",
+    "api": {
+      "base": "URL ของ API Proxy:",
+      "key": "Key ของ API:",
+      "model_name": "ชื่อโมเดล:",
+      "model_preset": "การตั้งค่ามอดีล:",
+      "provider": "การตั้งค่าผู้ให้บริการ:",
+      "title": "การตั้งค่า API",
+      "key_stored_local": "Stored encrypted locally",
+      "base_example": "Example: https://api.deepseek.com/v1",
+      "model_desc": "Enter manually or choose from preset list",
+      "select_preset_model": "Select preset model..."
+    },
+    "mode.api": "โหมด API ส่วนตัว (สอดคล้องกับ OpenAI)",
+    "mode.title": "โหมดบริการ",
+    "mode.web": "โหมดเว็บที่รวมใน (DeepSeek)",
+    "settings": {
+      "subtitle": "ตั้งค่าช่วยเหลือ AI ของคุณ",
+      "title": "การตั้งค่า AI"
+    },
+    "tip": {
+      "compatible": "คำเตือน: ใช้กับ DeepSeek, OpenAI, Ollama และ API อื่นๆ ที่สอดคล้อง",
+      "dashscope": "คำเตือน: BaseUrl สอดคล้องกับ OpenAI ของ DashScope มีค่าเริ่มต้นเป็น https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "volcengine": "คำเตือน: Volcengine Ark V3 ต้องการ ID Endpoint ในรูปแบบ ep-2024xxxxxxxx-xxxxx"
+    },
+    "web": {
+      "title": "การตั้งค่าที่โหมดเว็บ",
+      "url": "URL web AI:"
+    },
+    "provider": {
+      "custom": "Custom",
+      "volcengine": "Volcengine Ark",
+      "ollama_local": "Ollama (Local)",
+      "deepseek": "DeepSeek",
+      "openai": "OpenAI",
+      "anthropic": "Anthropic (Claude)",
+      "groq": "Groq",
+      "minimax": "MiniMax",
+      "dashscope": "DashScope"
+    }
+  },
+  "incognito": {
+    "info": {
+      "title": "InPrivate",
+      "message": "คุณกำลังใช้การเบราว์เซอร์ InPrivate\n\n✓ InPrivate สามารถ:\n  • ไม่บันทึกประวัติการเบราว์เซอร์\n  • ไม่บันทึกโค๊กและข้อมูลเว็บไซต์\n  • ไม่บันทึกข้อมูลฟอร์ม\n  •ใช้เซสชันแยก\n\n✗ InPrivate จะไม่:\n  • ซ่อนกิจการจากผู้จัดการเน็ตเวิร์ค\n  • ซ่อนกิจการจาก ISP ของคุณ\n  • ป้องกันเว็บไซต์ได้รับ IP ของคุณ\n\nหมายเหตุ: ไฟล์ดาวน์โหลดและบุ๊คมาร์คที่สร้างจะยังคงอยู่."
+    },
+    "page": {
+      "title": "InPrivate browsing",
+      "heading": "You are browsing in InPrivate mode",
+      "intro": "You can browse privately now. Other people using this device will not see your activity. However, downloaded files and bookmarks will still be saved on this device.",
+      "will_not_save": "KunQiong AI Browser will not save:",
+      "item": {
+        "history": "Your browsing history",
+        "cookies": "Cookies and site data",
+        "forms": "Information entered in forms"
+      },
+      "may_still_see": "Your activity may still be visible to:",
+      "visible": {
+        "sites": "Websites you visit",
+        "employer": "Your employer or school",
+        "isp": "Your internet service provider"
+      }
+    }
+  },
+  "confirm": {
+    "title": "ยืนยัน",
+    "ok": "ตกลง",
+    "clear_history_all": "คุณแน่ใจหรือไม่ที่ต้องการล้างประวัติทั้งหมด?",
+    "cancel": "ยกเลิก"
+  },
+  "search_engine": {
+    "confirm_delete": "คุณแน่ใจหรือไม่ที่ต้องการลบโค้ดค้นหา \"{{name}}\"?"
+  },
+  "menu_zoom": {
+    "label": "ยูม",
+    "reset": "รีเซ็ต"
+  },
+  "settings": {
+    "header": {
+      "title": "การตั้งค่า",
+      "search_placeholder": "ค้นหาการตั้งค่า"
+    },
+    "sidebar": {
+      "history": "ประวัติ",
+      "settings": "การตั้งค่า",
+      "ai": "การตั้งค่า AI",
+      "privacy": "ความเป็นส่วนตัว",
+      "advanced": "ขั้นสูง"
+    },
+    "set_startup_pages": "ตั้งหน้าเริ่มต้น",
+    "enter_urls_each_line": "โปรดป้อน URL ของเว็บไซต์ (หนึ่งต่อแถว):",
+    "no_results": "ไม่พบการตั้งค่าที่ตรงกัน",
+    "appearance": {
+      "title": "ลักษณะ",
+      "show_home_button": "แสดงปุ่ม 'หน้าแรก'",
+      "change": "เปลี่ยน",
+      "show_bookmark_bar": "แสดงแถบบุ๊คมาร์คเสมอ",
+      "language": "ภาษา",
+      "language_auto": "ตามระบบ",
+      "language_zhCN": "จีน (ตัวย่อ)",
+      "language_en": "อังกฤษ",
+      "language_names": {
+        "zh_CN": "中文（简体）",
+        "zh_TW": "中文（繁體）",
+        "en": "English",
+        "hi": "हिन्दी",
+        "es": "Español",
+        "fr": "Français",
+        "ar": "العربية",
+        "bn": "বাংলা",
+        "pt_BR": "Português (Brasil)",
+        "pt": "Português",
+        "ru": "Русский",
+        "id": "Bahasa Indonesia",
+        "ur": "اردو",
+        "de": "Deutsch",
+        "ja": "日本語",
+        "tr": "Türkçe",
+        "vi": "Tiếng Việt",
+        "ko": "한국어",
+        "th": "ไทย",
+        "it": "Italiano",
+        "fa": "فارسی",
+        "sw": "Kiswahili",
+        "tl": "Filipino",
+        "ta": "தமிழ்",
+        "jv": "Basa Jawa",
+        "ms": "Bahasa Melayu",
+        "ha": "Hausa"
+      }
+    },
+    "downloads": {
+      "title": "ดาวน์โหลด",
+      "location_label": "ที่ตั้งดาวน์โหลด",
+      "location_desc": "ที่ตั้งบันทึกค่าเริ่มต้นสำหรับดาวน์โหลด",
+      "browse": "เลือก...",
+      "ask_location_label": "ถามที่จะบันทึกแต่ละไฟล์ก่อนการดาวน์โหลด",
+      "ask_location_desc": "ถามที่จะบันทึกแต่ละไฟล์ก่อนการดาวน์โหลด"
+    },
+    "title": "การตั้งค่า",
+    "search_placeholder": "ค้นหาการตั้งค่า",
+    "home": {
+      "title": "หน้าแรก",
+      "url": "URL หน้าแรก:",
+      "use_current": "ใช้หน้าปัจจุบัน",
+      "use_newtab": "ใช้แท็บใหม่"
+    },
+    "startup": {
+      "title": "เมื่อเริ่มต้น",
+      "newtab": "เปิดแท็บใหม่",
+      "continue_last": "ต่อเนื่องที่คุณหยุด",
+      "specific_pages": "เปิดหน้าเว็บหรือเซตหน้าเว็บเฉพาะ",
+      "manage_pages": "จัดการหน้า",
+      "current_setting": "Current setting:"
+    },
+    "adblock": {
+      "title": "บล็อกโฆษณา",
+      "none": "ไม่บล็อกโฆษณาอะไรก็ได้",
+      "popup": "บล็อกเฉพาะป๊อปอัพ",
+      "aggressive": "บล็อกโฆษณาในหน้าเว็บอย่างโหดร้าย",
+      "custom": "กฎบล็อกโฆษณาเป็นที่กำหนดเอง",
+      "custom_link": "กฎเป็นที่กำหนดเอง",
+      "manage_rules": "จัดการกฎของฉัน..."
+    },
+    "search": {
+      "title": "เครื่องค้นหาในแถบที่อยู่",
+      "default_label": "เครื่องค้นหาเริ่มต้น",
+      "desc": "เครื่องค้นหาที่ใช้โดยแถบที่อยู่",
+      "options": {
+        "360": "360",
+        "baidu": "Baidu",
+        "bing": "Bing",
+        "google": "Google"
+      },
+      "manage_button": "จัดการเครื่องค้นหา"
+    },
+    "show_advanced": "แสดงการตั้งค่าขั้นสูง...",
+    "advanced": {
+      "back_basic": "? กลับไปยังการตั้งค่ามาตรฐาน",
+      "gesture": {
+        "enable": "เปิดการใช้การกระทำด้วยเมาส์",
+        "title": "การกระทำด้วยเมาส์"
+      },
+      "performance": {
+        "mem_release_time": "ช่วงเวลาปล่อยความจำของแท็บในพื้นหลัง:",
+        "title": "ประสิทธิภาพ"
+      },
+      "super_drag": {
+        "enable": "เปิดการลากที่สูง"
+      },
+      "title": "การตั้งค่าขั้นสูง"
+    },
+    "default_browser": {
+      "checking": "กำลังตรวจสอบสถานะเบราว์เซอร์ค่าเริ่มต้น...",
+      "is_default": "{{app}} เป็นเบราว์เซอร์ค่าเริ่มต้นปัจจุบันของคุณ.",
+      "not_default": "{{app}} ไม่ใช่เบราว์เซอร์ค่าเริ่มต้นปัจจุบันของคุณ.",
+      "set_default": "ตั้งเป็นเบราว์เซอร์ค่าเริ่มต้น",
+      "title": "เบราว์เซอร์ค่าเริ่มต้น"
+    },
+    "history": {
+      "columns": {
+        "time": "เวลาที่เยี่ยมชม",
+        "title": "หัวข้อ",
+        "url": "URL"
+      },
+      "title": "จัดการสิทธิ์...",
+      "search_placeholder": "Search...",
+      "empty": "No browsing history"
+    },
+    "https": {
+      "manage_certificates": "เปลี่ยนการตั้งค่าปร็อกซี...",
+      "title": "HTTPS/SSL"
+    },
+    "network": {
+      "proxy_change": "กู้คืนการตั้งค่าเป็นค่าเริ่มต้นเดิม",
+      "title": "Network",
+      "system_proxy_desc": "KunQiong AI Browser uses your system proxy settings to connect to the network."
+    },
+    "reset": {
+      "button": "นี้จะไม่ส่งผลต่อบุ๊คมาร์ค, ประวัติหรือรหัสผ่านที่บันทึกของคุณ",
+      "desc": "รีเซ็ตการตั้งค่า",
+      "title": "กู้คืนการตั้งค่าเริ่มต้น",
+      "confirm": "Are you sure you want to restore all settings to default values?"
+    },
+    "reset_button": "คลิกสองครั้งเพื่อปิดแท็บ",
+    "tabs": {
+      "double_click_close": "โหมดการป้อนข้อมูลในแถบที่อยู่:",
+      "input_mode": {
+        "new_tab": "เปิดในแท็บใหม่"
+      },
+      "input_mode.enter": "ค้นหาในขณะที่พิมพ์ (แนะนำ)",
+      "input_mode.instant": "เปิดที่ตำแหน่งสุดท้าย",
+      "new_tab_position": {
+        "last": "เปิดทางขวาของแท็บปัจจุบัน",
+        "right": "เมื่อเปิดหน้าใหม่:"
+      },
+      "open_new": "เลือกทั้งหมดข้อความ URL เมื่อคลิกแถบที่อยู่",
+      "select_all_on_click": "แสดง URL เต็มในแถบที่อยู่ (ยังแสดงเมื่อกด Shift)",
+      "show_full_url": "แท็บ",
+      "title": "นำเข้าบุ๊คมาร์คและการตั้งค่า...",
+      "right_click_close_desc": "คลิกขวาจะปิดแท็บปัจจุบัน (กด Shift ค้างไว้เพื่อแสดงเมนูบริบท)",
+      "open_links_background": "เปิดลิงก์ที่คลิกในแท็บพื้นหลัง",
+      "input_mode_label": "เลือกทั้งหมดข้อความ URL เมื่อคลิกแถบที่อยู่"
+    },
+    "user_data": {
+      "import": "ข้อมูลผู้ใช้",
+      "title": "User data"
+    },
+    "features": {
+      "title": "ฟีเจอร์",
+      "mouse_gesture_label": "à¸¡à¸¸à¸¡à¸¡à¸­à¸à¸à¸­à¸à¸à¸­à¸¥à¸à¸´à¸Name",
+      "mouse_gesture_desc": "ใช้ท่าทางของเมาส์เพื่อดำเนินการอย่างรวดเร็ว",
+      "super_drag_label": "SUPER DRAG",
+      "super_drag_desc": "ลากข้อความหรือลิงก์เพื่อค้นหาหรือเปิดอย่างรวดเร็ว"
+    },
+    "web": {
+      "title": "การตั้งค่าเว็บ",
+      "smooth_scrolling": "เปิดใช้งานการเลื่อนอย่างราบรื่นบนหน้าเว็บ (จะมีผลหลังจากรีสตาร์ท)"
+    },
+    "cache": {
+      "title": "แคชแบบกำหนดเอง",
+      "directory_label": "ไดเรกทอรีแคชที่กำหนดเอง:",
+      "change_button": "เปลี่ยน",
+      "notice": "การเปลี่ยนจะล้างแคชปัจจุบันและมีผลหลังจากรีสตาร์ท",
+      "open_dir": "เปิดไดเรกทอรีแคช",
+      "reset_default": "กลับสู่รูปแบบตั้งต้น",
+      "reset_confirm": "คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตไดเรกทอรีแคชเป็นค่าเริ่มต้น\\ n\\ n การดำเนินการนี้จะล้างแคชที่มีอยู่และมีผลหลังจากรีสตาร์ท"
+    },
+    "privacy": {
+      "title": "Privacy settings",
+      "content_settings": "Content settings...",
+      "clear_browsing_data": "Clear browsing data...",
+      "crash_upload": "Enable crash report upload",
+      "crash_upload_desc": "Automatically upload error reports on crashes to help improve the browser."
+    },
+    "passwords": {
+      "title": "Passwords and forms",
+      "autofill_desc": "When autofill is enabled, you can fill web forms with one click.",
+      "manage_autofill": "Manage autofill settings",
+      "save_passwords_desc": "Ask to save passwords entered on websites.",
+      "manage_saved_passwords": "Manage saved passwords"
+    },
+    "web_content": {
+      "title": "Web content",
+      "font_size": "Font size:",
+      "font_size_very_small": "Very small",
+      "font_size_small": "Small",
+      "font_size_medium": "Medium",
+      "font_size_large": "Large",
+      "font_size_very_large": "Very large",
+      "customize_fonts": "Customize fonts...",
+      "page_zoom": "Page zoom:"
+    },
+    "save": {
+      "apply_button": "บันทึกและใช้",
+      "auto_hint": "การตั้งค่าจะถูกบันทึกอัตโนมัติ",
+      "auto_saved": "Saved automatically",
+      "failed": "Save failed",
+      "failed_channel": "Save failed: message channel unavailable",
+      "manual_applied": "Synced and applied",
+      "no_pending_changes": "No unsaved changes",
+      "nothing_to_save": "No settings to save",
+      "partial_failed": "Save failed: some settings were not synced",
+      "resetting_defaults": "Restoring default settings..."
+    }
+  },
+  "downloads": {
+    "title": "ดาวน์โหลด",
+    "location_label": "ตำแหน่งดาวน์โหลด",
+    "location_desc": "ที่อยู่บันทึกค่าเริ่มต้นสำหรับดาวน์โหลด",
+    "browse": "เลือก...",
+    "ask_location_label": "ถามที่ไหนบันทึกไฟล์แต่ละไฟล์ก่อนการดาวน์โหลด",
+    "default_tool_label": "เลือกเครื่องมือดาวน์โหลดค่าเริ่มต้น:",
+    "browse_desc": "เลือกโฟลเดอร์บันทึกดาวน์โหลด",
+    "status": {
+      "downloading": "กำลังดาวน์โหลด: {{received}}{{#total}} / {{total}}{{/total}} ({{pct}}%)",
+      "completed": "เสร็จสิ้น",
+      "cancelled": "ยกเลิก",
+      "failed": "ดาวน์โหลดล้มเหลว",
+      "pending": "รอการดำเนินการ..."
+    }
+  },
+  "password_manager": {
+    "hide": "ซ่อน",
+    "show": "แสดง"
+  },
+  "import": {
+    "success": "นำเข้า {{count}} บุ๊คมาร์ค สำเร็จแล้ว.",
+    "done": "นำเข้าเสร็จสิ้น",
+    "failed": "นำเข้าไม่สำเร็จ: {{msg}}"
+  },
+  "adblock": {
+    "allow": "อนุญาต",
+    "block": "ปิด"
+  },
+  "task_manager": {
+    "tab_title": "● แท็บ: {{title}}"
+  },
+  "clear": {
+    "success": "ล้างข้อมูลต่อไปนี้ได้สำเร็จ:\n• {{items}}",
+    "done": "ล้างเสร็จสิ้น",
+    "failed": "เกิดข้อผิดพลาดในการล้างข้อมูล: {{msg}}",
+    "in_progress": "กำลังล้าง..."
+  },
+  "print": {
+    "failed": "พิมพ์ล้มเหลว",
+    "failed_message": "เกิดข้อผิดพลาดในการพิมพ์:\n{{msg}}"
+  },
+  "dialog": {
+    "save_as": {
+      "title": "บันทึกหน้าเว็บเป็น",
+      "filter": "หน้าเว็บ, ใช้เฉพาะ HTML (*.html)|*.html|หน้าเว็บเต็ม (*.html)|*.html|ไฟล์ MHTML (*.mhtml)|*.mhtml|เอกสาร PDF (*.pdf)|*.pdf"
+    }
+  },
+  "bookmarks": {
+    "export_title": "ส่งออกบุ๊คมาร์ค",
+    "export_filter": "ไฟล์ HTML (*.html)|*.html",
+    "export_success_path": "บุ๊คมาร์คส่งออกไปยัง:\n{{path}}",
+    "other": "บุ๊คมาร์คอื่นๆ",
+    "added_message": "เพิ่ม {{count}} แท็บไปยังโฟลเดอร์ \"{{folder}}\"",
+    "added_status": "เพิ่ม {{count}} บุ๊คมาร์คไปยังโฟลเดอร์ \"{{folder}}\"",
+    "already": "ถูกบุ๊คมาร์คแล้ว",
+    "batch_confirm": "จะสร้างโฟลเดอร์สำหรับ {{count}} แท็บ.\\n\\nต่อเนื่อง?",
+    "batch_title": "เพิ่มบุ๊คมาร์คโดยกลุ่ม",
+    "cancelled": "บุ๊คมาร์คถูกยกเลิก",
+    "import_filter": "ไฟล์ HTML (*.html;*.htm)|*.html;*.htm|ไฟล์ทั้งหมด (*.*)|*.*",
+    "import_title": "นำเข้าบุ๊คมาร์ค",
+    "new_bookmark": "บุ๊คมาร์คใหม่",
+    "unable_for_page": "ไม่สามารถบุ๊คมาร์คหน้านี้ได้",
+    "manager": {
+      "title": "Bookmark Manager",
+      "search_placeholder": "Search bookmarks...",
+      "new_folder": "New folder",
+      "export": "Export bookmarks",
+      "root": "Bookmarks",
+      "confirm_delete": "Are you sure you want to delete",
+      "input_folder_name": "Enter folder name:",
+      "empty": "No bookmarks"
+    }
+  },
+  "bookmark_menu": {
+    "open": "เปิด",
+    "open_in_new_tab": "เปิดในแท็บใหม่",
+    "open_all_bookmarks": "เปิดบุ๊คมาร์คทั้งหมด"
+  },
+  "actions": {
+    "add": "เพิ่ม",
+    "edit": "แก้ไข",
+    "delete": "ลบ",
+    "delete_all": "ลบทั้งหมด",
+    "done": "เสร็จสิ้น",
+    "copy_link": "คัดลอกลิงค์",
+    "rename": "เปลี่ยนชื่อ",
+    "add_bookmark": "เพิ่มบุ๊คมาร์ค",
+    "add_folder": "เพิ่มโฟลเดอร์"
+  },
+  "permissions": {
+    "allow": "อนุญาต",
+    "block": "ปิด",
+    "ask": "ถาม"
+  },
+  "site_settings": {
+    "desc": "คุณสามารถตั้งค่าพิเศษ {{category}} สำหรับเว็บไซต์เฉพาะได้.",
+    "host_pattern": "รูปแบบชื่อโฮสต์:",
+    "columns": {
+      "host_pattern": "รูปแบบชื่อโฮสต์",
+      "behavior": "พฤติกรรม"
+    }
+  },
+  "time": {
+    "minute": "นาที"
+  },
+  "newtab": {
+    "title": "แท็บใหม่",
+    "search_placeholder": "ค้นหาหรือใส่ที่อยู่",
+    "footer": "เบา · เร็ว · ง่าย",
+    "shortcuts": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "bilibili": "Bilibili",
+      "zhihu": "Zhihu",
+      "github": "GitHub"
+    }
+  },
+  "privacy": {
+    "clear_title": "ล้างข้อมูลการเยี่ยมชม",
+    "clear_button": "ล้างข้อมูลการเยี่ยมชม...",
+    "clear_desc": "ล้างประวัติการเยี่ยมชม, คุกกี้และแคช และอื่นๆ",
+    "exit_clear": {
+      "title": "ล้างอัตโนมัติเมื่อออกจากแอป",
+      "history": "ประวัติการเยี่ยมชม",
+      "downloads": "ประวัติการดาวน์โหลด",
+      "cache": "ภาพและไฟล์แคช",
+      "cookies": "คุกกี้และข้อมูลเว็บไซต์อื่นๆ"
+    },
+    "options": {
+      "title": "ตัวเลือกความเป็นส่วนตัว",
+      "dnt": "ส่งคำขอ \"ไม่ติดตาม\" กับ траฟฟิกการเยี่ยมชม"
+    }
+  },
+  "update": {
+    "updater_missing": "ไม่พบไฟล์ประมวลผลอัปเดต 'updater.exe'"
+  },
+  "address_dropdown": {
+    "search": "ค้นหา \"{{text}}\"",
+    "visit": "เยี่ยมชม \"{{text}}\"",
+    "empty_history": "ไม่พบประวัติที่ตรงกัน",
+    "empty_bookmark": "ไม่พบบุ๊คมาร์คที่ตรงกัน",
+    "empty_tabs": "ไม่พบแท็บที่ตรงกัน",
+    "empty_all": "ไม่พบการตรงกัน"
+  },
+  "image_dialog": {
+    "title": "ดึงข้อมูลภาพ",
+    "found_count": "พบ {{count}} ภาพ",
+    "columns": {
+      "url": "URL ภาพ",
+      "type": "ชนิด"
+    },
+    "preview": {
+      "select": "เลือกภาพเพื่อดูตัวอย่าง"
+    },
+    "save_to": "บันทึกดาวน์โหลดที่",
+    "browse": "เปลี่ยนโฟลเดอร์",
+    "browse_desc": "เลือกโฟลเดอร์บันทึกดาวน์โหลด",
+    "download_now": "ดาวน์โหลดตอนนี้",
+    "select_one_image": "โปรดเลือกภาพอย่างน้อยหนึ่งภาพเพื่อดาวน์โหลด",
+    "select_all_toggle": "เลือกทั้งหมด / สwitch",
+    "loading_preview": "กำลังโหลดตัวอย่าง...",
+    "modern_preview": "รูปแบบภาพสมัยใหม่ (คิดเห็น WebView2)",
+    "modern": "รูปแบบภาพสมัยใหม่",
+    "preview_loading_webview": "กำลังโหลดตัวอย่าง (โหมด WebView2)...",
+    "preview_unavailable": "ไม่มีตัวอย่างให้ใช้",
+    "preview_size": "{{width}} x {{height}} | {{kb}} KB"
+  },
+  "video_dialog": {
+    "title": "เลือกรูปแบบดาวน์โหลด",
+    "columns": {
+      "resolution": "ความละเอียด",
+      "ext": "ขยาย",
+      "size": "ขนาด",
+      "note": "หมายเหตุ"
+    },
+    "save_to": "บันทึกดาวน์โหลดที่",
+    "browse": "เปลี่ยนโฟลเดอร์",
+    "browse_desc": "เลือกโฟลเดอร์บันทึกดาวน์โหลด",
+    "start_download": "เริ่มดาวน์โหลด",
+    "select_format_first": "โปรดเลือกรูปแบบก่อน",
+    "unknown_title": "ชื่อไม่รู้จัก",
+    "unknown": "ไม่รู้จัก",
+    "parse_failed": "ล้มเหลวในการแยกข้อมูลวิดีโอ: {{msg}}"
+  },
+  "common": {
+    "info": "ข้อมูล",
+    "done": "เสร็จสิ้น",
+    "error": "ข้อผิดพลาด",
+    "operation_failed_retry": "การดำเนินการล้มเหลว โปรดลองอีกครั้ง",
+    "empty": "(ว่าง)",
+    "in_dev": "ฟีเจอร์นี้กำลังพัฒนา...",
+    "loading": "Loading..."
+  },
+  "about": {
+    "title_prefix": "เกี่ยวกับ ",
+    "version_prefix": "เวอร์ชัน ",
+    "check_update": "ตรวจสอบอัปเดต",
+    "checking": "กำลังตรวจสอบ...",
+    "connecting": "กำลังเชื่อมต่อเซิร์ฟเวอร์อัปเดต...",
+    "update_failed": "ล้มเหลวในการตรวจสอบอัปเดต โปรดลองอีกครั้งในภายหลัง",
+    "update_found_status": "พบเวอร์ชันใหม่: {{version}}",
+    "update_found_title": "พบอัปเดต",
+    "update_found_message": "พบเวอร์ชัน {{version}}ใหม่\\n\\nบันทึกการเปลี่ยนแปลง:\\n{{log}}\\n\\nอัปเดตตอนนี้?",
+    "latest": "คุณอยู่บนเวอร์ชันล่าสุดแล้ว.",
+    "error_prefix": "ข้อผิดพลาด: ",
+    "simple_title": "เกี่ยวกับ",
+    "simple_message": "{{app}}\\nเวอร์ชัน {{version}}\\n\\nอ้างอิงจาก движก์ WebView2",
+    "copyright": "© {{year}} {{app}}. มีสิทธิ์สําหรับทุกสิ่งอย่างทั้งหมด"
+  },
+  "font": {
+    "preview_standard": "{{size}}: เหมือนข้อความตัวอย่าง:\nconsectetur adipiscing elit.",
+    "min": "น้อยสุด",
+    "max": "มากสุด",
+    "serif": "ฟอนต์ซีริฟ",
+    "sans_serif": "ฟอนต์สันซีริฟ",
+    "fixed_width": "ฟอนต์ขนาดคงที่",
+    "minimum_size": "ขนาดฟอนต์น้อยสุด",
+    "preview_generic": "{{size}}: เหมือนข้อความตัวอย่าง: consectetur",
+    "preview_fixed": "เหมือนข้อความตัวอย่าง:\nconsectetur adipiscing elit.",
+    "preview_min": "ลักษณะ"
+  },
+  "appearance": {
+    "title": "แสดงปุ่ม \"Home\"",
+    "show_home_button": "เปลี่ยน",
+    "change": "แสดงบาร์บุ๊คมาร์คเสมอ",
+    "show_bookmark_bar": "ภาษา",
+    "language": "ภาษา",
+    "language_auto": "ตามระบบ",
+    "language_zhCN": "จีน (ตัวย่อ)",
+    "language_en": "อังกฤษ",
+    "hide_bookmark_bar": "Hide bookmarks bar"
+  },
+  "bookmark_manager": {
+    "confirm_delete_folder": "คุณแน่ใจหรือว่าต้องการลบ \"{{name}}\"?",
+    "confirm_delete_item": "ส่งออกไม่สำเร็จ: {{msg}}",
+    "export_failed": "ส่งออกสำเร็จ!",
+    "export_success": "การดึงภาพถูกยกเลิก"
+  },
+  "images": {
+    "cancelled_status": "กำลังดึงข้อมูลภาพ...",
+    "extracting_status": "การดึงข้อมูลล้มเหลว: {{msg}}",
+    "failed_message": "การดึงภาพล้มเหลว",
+    "failed_status": "ไม่พบข้อมูลภาพ",
+    "none_found_status": "ส่ง {{count}} การทำงานดาวน์โหลดภาพ",
+    "submitted_tasks": "ไม่เคย"
+  },
+  "password_popup": {
+    "ask": {
+      "never": "บันทึกรหัสผ่าน",
+      "save": "Save password",
+      "title": "เสร็จสิ้น"
+    },
+    "saved": {
+      "done": "จัดการรหัสผ่านที่บันทึก",
+      "manage": "รหัสผ่านที่บันทึกสำหรับเว็บไซต์นี้:",
+      "title": "จัดการโหลดจับค้นหา"
+    }
+  },
+  "search": {
+    "manage_button": "ออกจากระบบ"
+  },
+  "user": {
+    "logout": "การตั้งค่าภาพถ่าย",
+    "manage_profile": "การดึงข้อมูลล้มเหลว"
+  },
+  "videos": {
+    "extract_failed_status": "ไม่พบทรัพยากรวิดีโอที่สามารถดึงได้บนหน้านี้.\\n\\nหมายเหตุ: หน้านี้อาจไม่มีวิดีโอที่แทรก, หรืออาจใช้การเล่นที่เข้ารหัส/DRM, ดังนั้นการดึงตรงไปไม่ได้.\\n\\nข้อเสนอแนะ: เปิดหน้าเล่นวิดีโอจริงๆ และพยายามดึงข้อมูลอีกครั้งหลังจากการเล่นเริ่มต้น.",
+    "not_detected_desc": "ไม่พบทรัพยากรวิดีโอ",
+    "not_detected_status": "ไม่พบทรัพยากรวิดีโอ",
+    "not_detected_title": "การดึงข้อมูลวิดีโอไม่ได้รับการสนับสนุนบนหน้านี้",
+    "not_supported": "กำลังแยกข้อมูลวิดีโอ...",
+    "parsing_status": "Parsing video information..."
+  }
+}
