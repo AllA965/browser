@@ -1,0 +1,10 @@
+{
+  "HomePage": "https://www.bing.com",
+  "SearchEngine": "https://www.baidu.com/s?wd=",
+  "StartupBehavior": 1,
+  "StartupPages": [
+    "https://www.bing.com",
+    "https://www.apple.com"
+  ],
+  "LastSessionUrls": []
+}

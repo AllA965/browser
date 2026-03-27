@@ -1,0 +1,54 @@
+name: macOS Native Browser Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_version:
+        description: App version for portable zip names
+        required: false
+        default: "1.0.0"
+  push:
+    paths:
+      - "mac_app/**"
+      - "scripts/build-macos-native.sh"
+      - ".github/workflows/macos-native-dual-arch.yml"
+
+jobs:
+  build-native:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build native x64 + arm64 + universal
+        env:
+          APP_VERSION: ${{ github.event.inputs.app_version || '1.0.0' }}
+          PORTABLE_MODE: "1"
+        run: |
+          chmod +x ./scripts/build-macos-native.sh
+          ./scripts/build-macos-native.sh
+
+      - name: Upload x64 app zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-native-x64
+          path: artifacts/macos/portable/*-x64-portable-*.zip
+
+      - name: Upload arm64 app zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-native-arm64
+          path: artifacts/macos/portable/*-arm64-portable-*.zip
+
+      - name: Upload universal app zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-native-universal
+          path: artifacts/macos/portable/*-universal-portable-*.zip
+
+      - name: Upload checksums
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-native-checksums
+          path: artifacts/macos/portable/SHA256SUMS.txt
